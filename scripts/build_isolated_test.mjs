@@ -3,3 +3,8 @@ const transform=s=>s.replace(/^begin;\s*$/gm,'').replace(/^commit;\s*$/gm,'').re
 const sources=['supabase/recovery-foundation.draft.sql','supabase/recovery-batches.draft.sql'].map(p=>transform(fs.readFileSync(p,'utf8'))).join('\n');
 const sql=`-- ISOLATED TEST SCHEMA. No application API access, no changes to public tables.\nbegin;\ncreate schema recovery_test;\nrevoke all on schema recovery_test from public,anon,authenticated;\nset local search_path=recovery_test,pg_catalog;\n${sources}\nrevoke all on all tables in schema recovery_test from public,anon,authenticated;\nrevoke all on all sequences in schema recovery_test from public,anon,authenticated;\nrevoke all on all functions in schema recovery_test from public,anon,authenticated;\ncommit;\n`;
 fs.writeFileSync('supabase/recovery-isolated-test.sql',sql);
+const batchSource=fs.readFileSync('supabase/recovery-batches.draft.sql','utf8');
+const validationStart=batchSource.indexOf('create function public.recovery_validate(');
+const validationEnd=batchSource.indexOf('end $$;',validationStart)+7;
+const validation=transform(batchSource.slice(validationStart,validationEnd)).replace('create function recovery_test.recovery_validate','create or replace function recovery_test.recovery_validate');
+fs.writeFileSync('supabase/recovery-isolated-validation-update.sql','-- LOCAL PATCH: not applied to the server yet. No permission changes.\nbegin;\n'+validation+'\ncommit;\n');

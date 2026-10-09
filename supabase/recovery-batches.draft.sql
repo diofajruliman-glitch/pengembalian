@@ -84,6 +84,13 @@ begin
   select data->>'bank' bank,jsonb_build_object('obligation',coalesce(sum((data->>'amount')::bigint) filter(where record_type='obligation'),0),'payment',coalesce(sum((data->>'amount')::bigint) filter(where record_type='payment'),0)) totals
   from recovery_staging where import_id=p_batch and record_type<>'person' group by data->>'bank') q;
  if actual is distinct from b.expected_totals then raise exception 'RECAP_MISMATCH';end if;
+ -- Retaining an omitted positive payment would increase the ledger beyond the
+ -- snapshot recap. Reject before review/commit instead of waiting for rollback.
+ if exists(select 1 from recovery_payments p join recovery_obligations o on o.id=p.obligation_id
+  where p.nominal>0 and b.expected_totals ? o.bank and not exists(
+   select 1 from recovery_staging s where s.import_id=p_batch and s.record_type='payment'
+    and s.record_key=concat_ws('|',o.nip,o.bank,o.jenis,o.tahun_kewajiban,p.tahap)
+  )) then raise exception 'MISSING_HISTORY_REQUIRES_REVIEW';end if;
  select count(*) into corrections from recovery_staging s join recovery_obligations o on o.nip=s.data->>'nip' and o.bank=s.data->>'bank' and o.jenis=s.data->>'kind' and o.tahun_kewajiban=(s.data->>'year')::integer
  where s.import_id=p_batch and s.record_type='obligation' and o.nominal<>(s.data->>'amount')::bigint;
  update recovery_imports set status='validated',summary=jsonb_build_object('totals',actual,'obligationCorrections',corrections) where id=p_batch;
