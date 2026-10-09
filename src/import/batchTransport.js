@@ -6,11 +6,27 @@ export function stagingEnabled(mode,url){
 export function isolatedTestClient(client,mode,url){
  if(!client||mode!=='isolated-test')return null
  try{if(new URL(url).origin!=='https://tagokvlsirebfgltbxmq.supabase.co')return null}catch{return null}
- const allowed=new Set(['recovery_begin','recovery_append','recovery_validate','recovery_diff','recovery_commit'])
+ const allowed=new Set(['recovery_begin','recovery_append','recovery_validate','recovery_diff','recovery_commit','recovery_read_meta','recovery_read_page'])
  return {rpc:(name,args)=>{
   if(!allowed.has(name))throw Error('Operasi tidak tersedia pada schema pengujian.')
   return client.rpc('recovery_test_rpc',{p_action:name,p_payload:args})
  }}
+}
+export async function loadStoredSnapshot(client,onProgress=()=>{}){
+ const read=async(name,args={})=>{const q=await client.rpc(name,args);if(q.error)throw q.error;return q.data}
+ const start=await read('recovery_read_meta'),result={people:[],obligations:[],payments:[],issues:[]};let after=''
+ for(;;){
+  const page=await read('recovery_read_page',{p_after:after,p_limit:500})
+  if(page.revision!==start.revision)throw Error('Data berubah selama pemuatan. Muat ulang master.')
+  if(page.people.some((p,i)=>p.nip<=(i?page.people[i-1].nip:after)))throw Error('Urutan data server tidak valid.')
+  result.people.push(...page.people);result.obligations.push(...page.obligations);result.payments.push(...page.payments)
+  onProgress(result.people.length,start.people)
+  if(page.people.length<500)break
+  after=page.people.at(-1).nip
+ }
+ const end=await read('recovery_read_meta')
+ if(end.revision!==start.revision||result.people.length!==start.people)throw Error('Data berubah selama pemuatan. Muat ulang master.')
+ return {source:'database',fileName:'Master tersimpan • schema pengujian',revision:start.revision,results:[result]}
 }
 export function makeRecords(results){return results.flatMap(r=>[
  ...r.people.map(data=>({type:'person',data})),

@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {PGlite} from '@electric-sql/pglite'
-import {isolatedTestClient,stageBatch,commitBatch} from '../src/import/batchTransport.js'
+import {isolatedTestClient,stageBatch,commitBatch,loadStoredSnapshot} from '../src/import/batchTransport.js'
 test('same-project testing schema keeps production tables and API permissions isolated',async()=>{
  const db=new PGlite()
  try{
@@ -22,6 +22,10 @@ test('same-project testing schema keeps production tables and API permissions is
   const data={nip:'000000000000000901',bank:'Mandiri',kind:'TUKIN',year:2025}
   const staged=await stageBatch(adapter,{fileName:'RPC-simulasi.xlsx',sha256:'5'.repeat(64),recap:{Mandiri:{obligation:100000,payment:1}},results:[{issues:[],people:[{nip:data.nip,bank:data.bank,nama:'SIMULASI'}],obligations:[{...data,amount:100000}],payments:[{...data,stage:1,amount:1}]}]})
   await commitBatch(adapter,staged.id,'Uji API terisolasi')
+  const stored=await loadStoredSnapshot(adapter)
+  assert.equal(stored.results[0].people[0].nip,data.nip)
+  assert.equal(stored.results[0].payments[0].amount,1)
+  assert.equal(stored.results[0].payments[0].verification,'pending')
   await assert.rejects(db.query("select public.recovery_test_rpc('unapproved','{}')"),/INVALID_TEST_ACTION/)
   await assert.rejects(db.query('select * from recovery_test.recovery_people'),/permission denied/)
   await db.exec("select set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000002',false)")
