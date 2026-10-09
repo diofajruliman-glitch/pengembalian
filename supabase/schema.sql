@@ -211,3 +211,6 @@ alter sequence public.action_plans_no_seq owned by public.action_plans.no;
 alter table public.action_plans alter column no set default nextval('public.action_plans_no_seq');
 grant usage on sequence public.action_plans_no_seq to authenticated;
 commit;
+
+-- Arsip kasus SDM; hak akses mengikuti kebijakan update yang sudah ada.
+alter table public.sdm_cases add column if not exists deleted_at timestamptz;
