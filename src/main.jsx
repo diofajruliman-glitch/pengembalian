@@ -7,6 +7,7 @@ import seeds from './seed.json'
 import './style.css'
 import './glass.css'
 import ImportPreview from './import/ImportPreview.jsx'
+import {stagingEnabled} from './import/batchTransport.js'
 import RecoveryMonitor from './recovery/RecoveryMonitor.jsx'
 
 const url = import.meta.env.VITE_SUPABASE_URL
@@ -223,7 +224,7 @@ function App(){
    <main className="main">
     {demo&&<div className="notice demo-notice"><Info size={17}/><span><b>Mode pratinjau.</b> Perubahan hanya ada selama halaman terbuka. Belum memakai database dan <b>jangan masukkan data SDM riil</b>. Ikuti README untuk mengaktifkan login, database, dan Vercel.</span></div>}
     {error&&<div className="notice red-notice"><AlertTriangle size={18}/><span>{error}</span><button className="icon-btn" onClick={()=>setError('')}><X size={15}/></button></div>}
-    {page==='impor-master'&&canEdit&&<ImportPreview onSnapshot={data=>{setRecoverySnapshot(data);go('master-progress')}}/>}
+    {page==='impor-master'&&canEdit&&<ImportPreview stagingClient={stagingEnabled(import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)?supabase:null} onSnapshot={data=>{setRecoverySnapshot(data);go('master-progress')}}/>}
     {page==='master-progress'&&canEdit&&<RecoveryMonitor snapshot={recoverySnapshot} onImport={()=>go('impor-master')}/>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       <div className="stats-grid"><IconCard title="Total kewajiban" value={kpis.count?fmtRp(kpis.obligation):'Belum diisi'} subtitle="Dari rekap bank terverifikasi" icon={Landmark}/><IconCard title="Realisasi netto" value={kpis.count?fmtRp(kpis.realized):'Belum diisi'} subtitle="Penerimaan yang sudah direkonsiliasi" icon={CheckCircle2} accent="green"/><IconCard title="Sisa kewajiban" value={kpis.count?fmtRp(kpis.remaining):'Belum diisi'} subtitle="Kewajiban dikurangi realisasi" icon={TrendingUp} accent="amber"/><IconCard title="Kasus belum lunas" value={demo?'—':fmtN(openTotal)} subtitle="Tracker SDM khusus (bukan semua SDM)" icon={Users} accent="red"/></div>
@@ -257,3 +258,4 @@ function BottleneckModal({value,onClose,onSave,busy,error}){const[r,setR]=useSta
 function BankModal({value,onClose,onSave,busy}){const[r,setR]=useState({...value});const up=(k,v)=>setR(x=>({...x,[k]:v}));return <Modal title={'Rekonsiliasi Bank '+r.bank} onClose={onClose} footer={<><button className="btn secondary" onClick={onClose}>Batal</button><button className="btn primary" onClick={()=>onSave(r)} disabled={busy}><CheckCircle2 size={16}/> Simpan rekap</button></>}><div className="form-grid"><Field label="Jumlah SDM Wajib" field="jumlah_sdm" type="number" value={r.jumlah_sdm} onChange={up}/><Field label="Debit gagal terakhir (SDM)" field="gagal_terakhir" type="number" value={r.gagal_terakhir} onChange={up}/><Field label="Total kewajiban (Rp)" field="kewajiban_total" type="number" value={r.kewajiban_total} onChange={up}/><Field label="Realisasi netto (Rp)" field="realisasi_netto" type="number" value={r.realisasi_netto} onChange={up}/><Field label="Tanggal cut-off" field="cutoff" type="date" value={r.cutoff} onChange={up}/><Field label="Status eksekusi" field="status" value={r.status} onChange={up}/><Field label="Referensi bukti" field="bukti" value={r.bukti} onChange={up}/><Field label="Catatan" field="catatan" value={r.catatan} onChange={up}/></div><div className="notice amber-notice"><Info size={16}/> Jangan memasukkan angka yang belum direkonsiliasi atau menggabungkan dua tahap hasil debit tanpa pengecekan ulang.</div></Modal>}
 
 createRoot(document.getElementById('root')).render(<App />)
+

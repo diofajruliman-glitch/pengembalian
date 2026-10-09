@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {PGlite} from '@electric-sql/pglite'
+import {stageBatch,batchChanges,commitBatch} from '../src/import/batchTransport.js'
 const db=new PGlite()
 const editor='00000000-0000-0000-0000-000000000001',viewer='00000000-0000-0000-0000-000000000002'
 await db.exec(`create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key,role text);insert into auth.users values('${editor}','editor'),('${viewer}','viewer');create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;create function public.current_app_role() returns text language sql stable security definer as $$select role from auth.users where id=auth.uid()$$;grant usage on schema auth to authenticated;grant execute on function auth.uid(),public.current_app_role() to authenticated;`)
@@ -21,4 +22,15 @@ test('overpayment rejects whole batch',async()=>{const b=await batch(data(101),{
 test('late ledger failure rolls back master updates and audit together',async()=>{const records=data(0,0).slice(0,2);const b=await batch(records,{Mandiri:{obligation:0,payment:0}});await db.query('select recovery_validate($1)',[b]);const audit=(await db.query('select count(*)::integer n from recovery_changes')).rows[0].n;await assert.rejects(db.query('select recovery_commit($1,$2)',[b,'Uji rollback']),/LEDGER_OVERPAYMENT/);assert.equal((await db.query('select nominal from recovery_obligations')).rows[0].nominal,100);assert.equal((await db.query('select count(*)::integer n from recovery_changes')).rows[0].n,audit);assert.equal((await db.query('select status from recovery_imports where id=$1',[b])).rows[0].status,'validated')})
 test('missing historical payment is retained and mismatched recap blocks commit',async()=>{const b=await batch(data().slice(0,2),{Mandiri:{obligation:100,payment:0}});await db.query('select recovery_validate($1)',[b]);await assert.rejects(db.query('select recovery_commit($1,$2)',[b,'Uji histori kosong']),/LIVE_RECAP_MISMATCH/);assert.equal((await db.query('select nominal from recovery_payments')).rows[0].nominal,1)})
 test('viewer cannot start imports or write ledger directly',async()=>{await db.exec(`select set_config('request.jwt.claim.sub','${viewer}',false)`);await assert.rejects(batch(),/FORBIDDEN/);await assert.rejects(db.exec('update recovery_payments set nominal=99'),/permission denied/);await db.exec(`select set_config('request.jwt.claim.sub','${editor}',false)`);await assert.rejects(db.exec('update recovery_payments set nominal=99'),/permission denied/)})
+test('browser transport stages reviews and commits against PostgreSQL functions',async()=>{
+ const client={rpc:async(name,args)=>{try{
+  const values=Object.values(args);const params=values.map((_,i)=>'$'+(i+1)).join(',');
+  const q=await db.query(`select * from ${name}(${params})`,values.map(v=>typeof v==='object'?JSON.stringify(v):v));
+  return {data:name==='recovery_diff'?q.rows:q.rows[0]?.[name]}
+ }catch(error){return {error}}}}
+ const normalized=data(5);const results=[{issues:[],people:[normalized[0].data],obligations:[normalized[1].data],payments:[normalized[2].data]}]
+ const staged=await stageBatch(client,{fileName:'transport.xlsx',sha256:'f'.repeat(64),results,recap:{Mandiri:{obligation:100,payment:5}}})
+ const diff=await batchChanges(client,staged.id);assert.equal(diff[0].before_amount,1);assert.equal(diff[0].after_amount,5)
+ await commitBatch(client,staged.id,'Test transport');assert.equal((await db.query('select nominal from recovery_payments')).rows[0].nominal,5)
+})
 test.after(async()=>db.close())

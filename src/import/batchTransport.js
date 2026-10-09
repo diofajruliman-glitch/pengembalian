@@ -1,4 +1,8 @@
-// Not connected to UI yet. No production writes until migrations and gates pass.
+// Production remains locked while real Supabase staging verification is pending.
+export function stagingEnabled(mode,url){
+ if(mode!=='staging')return false
+ try{const parsed=new URL(url);return parsed.protocol==='https:'&&/^[a-z0-9]+\.supabase\.co$/.test(parsed.hostname)&&parsed.hostname!=='tagokvlsirebfgltbxmq.supabase.co'}catch{return false}
+}
 export function makeRecords(results){return results.flatMap(r=>[
  ...r.people.map(data=>({type:'person',data})),
  ...r.obligations.map(data=>({type:'obligation',data})),
@@ -14,3 +18,6 @@ export async function stageBatch(client,{fileName,sha256,results,recap,onProgres
  return {id,summary:check.data}
 }
 export async function commitBatch(client,id,reason){if(!reason.trim())throw Error('Alasan wajib diisi.');const q=await client.rpc('recovery_commit',{p_batch:id,p_reason:reason});if(q.error)throw q.error;return q.data}
+export async function batchChanges(client,id,offset=0){
+ const q=await client.rpc('recovery_diff',{p_batch:id,p_offset:offset,p_limit:50});if(q.error)throw q.error;return q.data||[]
+}
