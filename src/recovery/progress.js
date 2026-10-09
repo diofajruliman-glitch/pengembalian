@@ -7,10 +7,10 @@ export function indexSnapshot(results){
  for(const r of payments)byNip.get(r.nip)?.payments.push(r)
  return {people:[...byNip.values()],obligations,payments}
 }
-export function selectProgress(index,{bank='',year='',kind='',stage='',search=''}={}){
+export function selectProgress(index,{bank='',year='',kind='',stage='',search='',status=''}={}){
  const term=search.trim().toLowerCase()
  const matches=r=>(!bank||r.bank===bank)&&(!year||r.year===Number(year))&&(!kind||r.kind===kind)
- const people=index.people.filter(p=>(!bank||p.bank===bank)&&(!term||[p.nip,p.nama,p.provinsi].some(v=>String(v||'').toLowerCase().includes(term))))
+ const people=index.people.filter(p=>(!bank||p.bank===bank)&&(!status||(p.nonactive?.category||p.status_sdm||'Belum ditandai nonaktif')===status)&&(!term||[p.nip,p.nama,p.provinsi].some(v=>String(v||'').toLowerCase().includes(term))))
  const selected=[];let obligation=0,payment=0,verified=0,stagePayment=0
  for(const p of people){const os=p.obligations.filter(matches);if(!os.length)continue;const ps=p.payments.filter(matches);const kw=os.reduce((s,r)=>s+r.amount,0),real=ps.reduce((s,r)=>s+r.amount,0),checked=ps.filter(r=>r.verification==='verified').reduce((s,r)=>s+r.amount,0);const perStage=ps.filter(r=>!stage||r.stage===Number(stage)).reduce((s,r)=>s+r.amount,0)
   if(stage&&!ps.some(r=>r.stage===Number(stage)&&r.amount>0))continue

@@ -29,7 +29,8 @@ export async function loadStoredSnapshot(client,onProgress=()=>{}){
  return {source:'database',fileName:'Master tersimpan • schema pengujian',revision:start.revision,results:[result]}
 }
 export function makeRecords(results){return results.flatMap(r=>[
- ...r.people.map(data=>({type:'person',data})),
+ // Nonactive source metadata is preview-only until its own import is validated.
+ ...r.people.map(({nonactive,...data})=>({type:'person',data})),
  ...r.obligations.map(data=>({type:'obligation',data})),
  ...r.payments.filter(p=>p.amount>0||p.correctsExisting).map(data=>({type:'payment',data}))
 ])}

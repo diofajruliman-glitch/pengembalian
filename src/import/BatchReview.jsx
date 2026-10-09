@@ -1,9 +1,10 @@
 import React,{useState} from 'react'
 import {stageBatch,batchChanges,commitBatch} from './batchTransport.js'
+import {importErrorMessage} from './importErrors.js'
 const rp=n=>n===null?'Baru':'Rp '+Number(n).toLocaleString('id-ID')
 export default function BatchReview({client,snapshot,recap}){
  const [batch,setBatch]=useState(null),[rows,setRows]=useState([]),[offset,setOffset]=useState(0),[reviewed,setReviewed]=useState(false),[endSeen,setEndSeen]=useState(false),[reason,setReason]=useState(''),[busy,setBusy]=useState(false),[status,setStatus]=useState(''),[error,setError]=useState(''),[done,setDone]=useState(false)
- const run=async task=>{setBusy(true);setError('');try{await task()}catch(e){setError(e.message||'Operasi gagal. Data master belum dikonfirmasi tersimpan.')}finally{setBusy(false)}}
+ const run=async task=>{setBusy(true);setError('');try{await task()}catch(e){setStatus('');setError(importErrorMessage(e))}finally{setBusy(false)}}
  const prepare=()=>run(async()=>{const result=await stageBatch(client,{...snapshot,recap,onProgress:(n,total)=>setStatus(`Menyiapkan ${n.toLocaleString('id-ID')} / ${total.toLocaleString('id-ID')} baris…`)});const changes=await batchChanges(client,result.id);setBatch(result);setRows(changes);setOffset(0);setEndSeen(changes.length<50);setReviewed(false);setStatus('Batch lolos validasi. Tinjau perubahan terhadap database sebelum menyimpan.')})
  const next=()=>run(async()=>{const nextOffset=offset+50;const changes=await batchChanges(client,batch.id,nextOffset);setRows(changes);setOffset(nextOffset);if(changes.length<50)setEndSeen(true)})
  const save=()=>run(async()=>{await commitBatch(client,batch.id,reason);setDone(true);setStatus('Batch tersimpan di schema pengujian. Data tetap memerlukan verifikasi bukti penerimaan.')})
