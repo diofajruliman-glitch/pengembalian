@@ -10,7 +10,7 @@ self.onmessage=async({data})=>{try{
  const banks=[],results=[]
  for(const [sheet,bank] of Object.entries(BANK_SHEETS)){self.postMessage({type:'progress',text:'Memeriksa '+bank+'…'});const {summary,result}=summarizeBank(current.read(sheet),bank,old?old.read(sheet):null);banks.push(summary);results.push(result)}
  const recap=readRecap(current.read('REKAPITULASI')),checks=finalizePreview(results,recap)
- const nonactiveSheet=Object.keys(current.sheets).find(n=>n.trim().toLowerCase()==='master tidak aktif');let nonactive=null
- if(nonactiveSheet){const matched=matchNonactive(results,parseNonactive(current.read(nonactiveSheet)));nonactive=matched.summary;results.splice(0,results.length,...matched.results)}
- self.postMessage({type:'done',snapshot:{fileName:file.name,sha256,results,nonactive},report:{fileName:file.name,baselineName:baseline?.name||null,sha256,banks,checks,nonactive,mode:baseline?'comparison':'initial',writeEnabled:false}})
+ const nonactiveSheet=Object.keys(current.sheets).find(n=>n.trim().toLowerCase()==='master tidak aktif');let nonactive=null,nonactiveReview=[]
+ if(nonactiveSheet){const matched=matchNonactive(results,parseNonactive(current.read(nonactiveSheet)));nonactive=matched.summary;nonactiveReview=matched.review;results.splice(0,results.length,...matched.results)}
+ self.postMessage({type:'done',snapshot:{fileName:file.name,sha256,results,nonactive},report:{fileName:file.name,baselineName:baseline?.name||null,sha256,banks,checks,nonactive,nonactiveReview,mode:baseline?'comparison':'initial',writeEnabled:false}})
  }catch(e){self.postMessage({type:'error',message:e.message||'Workbook tidak dapat dibaca.'})}}

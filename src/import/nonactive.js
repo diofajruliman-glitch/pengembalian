@@ -18,11 +18,20 @@ export function parseNonactive(rows){
 export function matchNonactive(results,parsed){
  const byNip=new Map(),matches=new Map(),unmatched=[],nameMismatches=[]
  for(const result of results)for(const p of result.people){if(!byNip.has(p.nip))byNip.set(p.nip,[]);byNip.get(p.nip).push(p)}
- const counts={},issues=[...parsed.issues]
+ const counts={},issues=[...parsed.issues],review=[]
  for(const r of parsed.records){counts[r.category]=(counts[r.category]||0)+1;const candidates=byNip.get(r.nip)||[]
-  if(candidates.length!==1){unmatched.push(r);if(candidates.length>1)issues.push({code:'NONACTIVE_AMBIGUOUS_BANK_NIP'});continue}
-  if(normalized(candidates[0].nama)!==normalized(r.nama))nameMismatches.push(r.nip)
+  if(candidates.length!==1){unmatched.push(r);if(candidates.length>1)issues.push({code:'NONACTIVE_AMBIGUOUS_BANK_NIP'});review.push({...r,masterName:'',bank:'',matchStatus:candidates.length?'NIP ambigu':'Belum cocok'});continue}
+  const differentName=normalized(candidates[0].nama)!==normalized(r.nama)
+  if(differentName)nameMismatches.push(r.nip)
+  review.push({...r,masterName:candidates[0].nama,bank:candidates[0].bank,matchStatus:differentName?'Nama berbeda':'Cocok'})
   matches.set(r.nip,r)
  }
- return {results:results.map(r=>({...r,people:r.people.map(p=>matches.has(p.nip)?{...p,nonactive:matches.get(p.nip)}:{...p})})),summary:{records:parsed.records.length,matched:matches.size,unmatched:unmatched.length,nameMismatches:nameMismatches.length,categories:counts,issues},unmatched}
+ return {results:results.map(r=>({...r,people:r.people.map(p=>matches.has(p.nip)?{...p,nonactive:matches.get(p.nip)}:{...p})})),summary:{records:parsed.records.length,matched:matches.size,unmatched:unmatched.length,nameMismatches:nameMismatches.length,categories:counts,issues},unmatched,review}
+}
+export function selectNonactiveReview(review,{status='',category='',search=''}={}){
+ const term=normalized(search)
+ return review.filter(r=>(!status||r.matchStatus===status)&&(!category||r.category===category)&&(!term||[r.nip,r.nama,r.masterName,r.bank].some(v=>normalized(v).includes(term))))
+}
+export function nonactiveReviewExport(rows,issues=[]){
+ return {review:[['NIP','Nama sumber nonaktif','Nama master bank','Bank master','Kategori sumber','Hasil pencocokan','Tanggal berhenti (nilai mentah sumber)','Alasan sumber','Catatan tinjauan'],...rows.map(r=>[r.nip,r.nama,r.masterName,r.bank,r.category,r.matchStatus,r.endDateRaw??'',r.reasonRaw??'',r.matchStatus==='Cocok'?'Cocok berdasarkan NIP; status belum diverifikasi':r.matchStatus==='Nama berbeda'?'Periksa perbedaan nama; nama master dipertahankan':'Periksa sumber/master; jangan tambah kewajiban otomatis'])],issues:[['Masalah sumber','Baris Excel'],...issues.map(r=>[r.code,r.row??''])]}
 }
