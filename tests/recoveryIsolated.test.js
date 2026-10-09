@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import {PGlite} from '@electric-sql/pglite'
+import {isolatedTestClient,stageBatch,commitBatch} from '../src/import/batchTransport.js'
 test('same-project testing schema keeps production tables and API permissions isolated',async()=>{
  const db=new PGlite()
  try{
@@ -14,5 +15,18 @@ test('same-project testing schema keeps production tables and API permissions is
   assert.equal((await db.query("select has_function_privilege('authenticated','recovery_test.recovery_begin(text,text,integer,jsonb)','execute') allowed")).rows[0].allowed,false)
   assert.equal((await db.query("select count(*)::int n from pg_class c join pg_namespace ns on ns.oid=c.relnamespace where ns.nspname='recovery_test' and c.relkind='r' and c.relrowsecurity")).rows[0].n,9)
   assert.equal((await db.query('select nominal from recovery_test.recovery_payments')).rows[0].nominal,0)
+  await db.exec(fs.readFileSync('supabase/recovery-isolated-api.sql','utf8'))
+  await db.exec(`insert into public.profiles values('00000000-0000-0000-0000-000000000002','editor');grant usage on schema auth to authenticated;grant execute on function auth.uid() to authenticated;set role authenticated;select set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000001',false);`)
+  const client={rpc:async(name,args)=>{try{assert.equal(name,'recovery_test_rpc');const q=await db.query('select public.recovery_test_rpc($1,$2) result',[args.p_action,JSON.stringify(args.p_payload)]);return {data:q.rows[0].result}}catch(error){return {error}}}}
+  const adapter=isolatedTestClient(client,'isolated-test','https://tagokvlsirebfgltbxmq.supabase.co')
+  const data={nip:'000000000000000901',bank:'Mandiri',kind:'TUKIN',year:2025}
+  const staged=await stageBatch(adapter,{fileName:'RPC-simulasi.xlsx',sha256:'5'.repeat(64),recap:{Mandiri:{obligation:100000,payment:1}},results:[{issues:[],people:[{nip:data.nip,bank:data.bank,nama:'SIMULASI'}],obligations:[{...data,amount:100000}],payments:[{...data,stage:1,amount:1}]}]})
+  await commitBatch(adapter,staged.id,'Uji API terisolasi')
+  await assert.rejects(db.query("select public.recovery_test_rpc('unapproved','{}')"),/INVALID_TEST_ACTION/)
+  await assert.rejects(db.query('select * from recovery_test.recovery_people'),/permission denied/)
+  await db.exec("select set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000002',false)")
+  await assert.rejects(db.query("select public.recovery_test_rpc('recovery_diff','{}')"),/FORBIDDEN/)
+  await db.exec("select set_config('request.jwt.claim.sub','',false)")
+  await assert.rejects(db.query("select public.recovery_test_rpc('recovery_diff','{}')"),/FORBIDDEN/)
  }finally{await db.close()}
 })

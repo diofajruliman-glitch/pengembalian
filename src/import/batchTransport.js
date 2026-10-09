@@ -3,6 +3,15 @@ export function stagingEnabled(mode,url){
  if(mode!=='staging')return false
  try{const parsed=new URL(url);return parsed.protocol==='https:'&&/^[a-z0-9]+\.supabase\.co$/.test(parsed.hostname)&&parsed.hostname!=='tagokvlsirebfgltbxmq.supabase.co'}catch{return false}
 }
+export function isolatedTestClient(client,mode,url){
+ if(!client||mode!=='isolated-test')return null
+ try{if(new URL(url).origin!=='https://tagokvlsirebfgltbxmq.supabase.co')return null}catch{return null}
+ const allowed=new Set(['recovery_begin','recovery_append','recovery_validate','recovery_diff','recovery_commit'])
+ return {rpc:(name,args)=>{
+  if(!allowed.has(name))throw Error('Operasi tidak tersedia pada schema pengujian.')
+  return client.rpc('recovery_test_rpc',{p_action:name,p_payload:args})
+ }}
+}
 export function makeRecords(results){return results.flatMap(r=>[
  ...r.people.map(data=>({type:'person',data})),
  ...r.obligations.map(data=>({type:'obligation',data})),

@@ -1,6 +1,15 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {stagingEnabled,stageBatch,batchChanges,commitBatch} from '../src/import/batchTransport.js'
+import {stagingEnabled,isolatedTestClient,stageBatch,batchChanges,commitBatch} from '../src/import/batchTransport.js'
+test('same-project test client routes only allowed operations to the isolated RPC',async()=>{
+ const calls=[];const client={rpc:async(...args)=>{calls.push(args);return {data:[]}}}
+ assert.equal(isolatedTestClient(client,'','https://tagokvlsirebfgltbxmq.supabase.co'),null)
+ assert.equal(isolatedTestClient(client,'isolated-test','https://other.supabase.co'),null)
+ const adapter=isolatedTestClient(client,'isolated-test','https://tagokvlsirebfgltbxmq.supabase.co')
+ await adapter.rpc('recovery_diff',{p_batch:'test'})
+ assert.deepEqual(calls,[['recovery_test_rpc',{p_action:'recovery_diff',p_payload:{p_batch:'test'}}]])
+ assert.throws(()=>adapter.rpc('arbitrary_write',{}),/Operasi/)
+})
 test('production and invalid endpoints never enable staging imports',()=>{
  assert.equal(stagingEnabled('staging','https://tagokvlsirebfgltbxmq.supabase.co'),false)
  assert.equal(stagingEnabled('production','https://testing.supabase.co'),false)

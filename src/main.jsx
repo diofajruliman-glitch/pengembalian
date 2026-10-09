@@ -7,13 +7,14 @@ import seeds from './seed.json'
 import './style.css'
 import './glass.css'
 import ImportPreview from './import/ImportPreview.jsx'
-import {stagingEnabled} from './import/batchTransport.js'
+import {stagingEnabled,isolatedTestClient} from './import/batchTransport.js'
 import RecoveryMonitor from './recovery/RecoveryMonitor.jsx'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
 const configured = Boolean(url && key && !url.includes('PROJECT_ID'))
 const supabase = configured ? createClient(url, key, { auth: {persistSession:true, autoRefreshToken:true, detectSessionInUrl:true} }) : null
+const importTestClient=isolatedTestClient(supabase,import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)||(stagingEnabled(import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)?supabase:null)
 const fmtRp = n => 'Rp ' + Math.max(0,Number(n||0)).toLocaleString('id-ID', {maximumFractionDigits:0})
 const fmtN = n => Number(n||0).toLocaleString('id-ID')
 const safeDate = v => v ? new Date(`${v}T12:00:00`).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}) : '—'
@@ -224,7 +225,7 @@ function App(){
    <main className="main">
     {demo&&<div className="notice demo-notice"><Info size={17}/><span><b>Mode pratinjau.</b> Perubahan hanya ada selama halaman terbuka. Belum memakai database dan <b>jangan masukkan data SDM riil</b>. Ikuti README untuk mengaktifkan login, database, dan Vercel.</span></div>}
     {error&&<div className="notice red-notice"><AlertTriangle size={18}/><span>{error}</span><button className="icon-btn" onClick={()=>setError('')}><X size={15}/></button></div>}
-    {page==='impor-master'&&canEdit&&<ImportPreview stagingClient={stagingEnabled(import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)?supabase:null} onSnapshot={data=>{setRecoverySnapshot(data);go('master-progress')}}/>}
+    {page==='impor-master'&&canEdit&&<ImportPreview stagingClient={profile?.role==='admin'?importTestClient:null} onSnapshot={data=>{setRecoverySnapshot(data);go('master-progress')}}/>}
     {page==='master-progress'&&canEdit&&<RecoveryMonitor snapshot={recoverySnapshot} onImport={()=>go('impor-master')}/>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       <div className="stats-grid"><IconCard title="Total kewajiban" value={kpis.count?fmtRp(kpis.obligation):'Belum diisi'} subtitle="Dari rekap bank terverifikasi" icon={Landmark}/><IconCard title="Realisasi netto" value={kpis.count?fmtRp(kpis.realized):'Belum diisi'} subtitle="Penerimaan yang sudah direkonsiliasi" icon={CheckCircle2} accent="green"/><IconCard title="Sisa kewajiban" value={kpis.count?fmtRp(kpis.remaining):'Belum diisi'} subtitle="Kewajiban dikurangi realisasi" icon={TrendingUp} accent="amber"/><IconCard title="Kasus belum lunas" value={demo?'—':fmtN(openTotal)} subtitle="Tracker SDM khusus (bukan semua SDM)" icon={Users} accent="red"/></div>
