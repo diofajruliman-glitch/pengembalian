@@ -5,6 +5,7 @@ import readXlsxFile from 'read-excel-file'
 import {LayoutDashboard, Users, AlertTriangle, CalendarDays, Landmark, FileSpreadsheet, LogOut, ShieldCheck, Search, Plus, RefreshCw, Upload, Download, Menu, X, CheckCircle2, Clock3, TrendingUp, Info, LoaderCircle, Pencil, ChevronLeft, ChevronRight, LockKeyhole, FileCheck2, Filter, Eye, Bell, CircleHelp, HeartHandshake} from 'lucide-react'
 import seeds from './seed.json'
 import './style.css'
+import './glass.css'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
