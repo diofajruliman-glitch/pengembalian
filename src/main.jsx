@@ -36,6 +36,7 @@ function Modal({title,children,onClose,footer}) {return <div className="modal-ma
 function Login({onSignIn,loginError,busy}) {const[email,setEmail]=useState('');const[password,setPassword]=useState('');return <div className="auth-screen"><div className="auth-art"><div className="large-mark"><ShieldCheck size={36}/></div><span className="eyebrow white">DIT. PERLINDUNGAN SOSIAL NON KEBENCANAAN</span><h1>Pengembalian yang terkendali.<br/><em>Keputusan yang tercatat.</em></h1><p>Monitor progres penyelesaian Tukin dan Uang Makan ASN PPPK TA 2025 sampai 31 Desember 2026.</p><div className="auth-metrics"><div><strong>10</strong><span>kategori bottleneck</span></div><div><strong>15</strong><span>rencana aksi</span></div><div><strong>31 Des</strong><span>batas penyelesaian</span></div></div></div><div className="auth-form-wrap"><div className="auth-form"><div className="mobile-logo"><ShieldCheck size={26}/></div><span className="eyebrow">AKSES INTERNAL TERBATAS</span><h2>Masuk ke TukinUMrecovery</h2><p>Gunakan akun yang telah diberikan oleh administrator. Pendaftaran mandiri tidak disediakan.</p><form onSubmit={e=>{e.preventDefault();onSignIn(email,password)}}><label>Alamat email<input autoComplete="username" type="email" value={email} required onChange={e=>setEmail(e.target.value)} placeholder="nama@kemensos.go.id"/></label><label>Kata sandi<input autoComplete="current-password" type="password" value={password} required onChange={e=>setPassword(e.target.value)} placeholder="Masukkan kata sandi"/></label>{loginError&&<div className="notice red-notice">{loginError}</div>}<button type="submit" disabled={busy} className="btn primary wide">{busy?<LoaderCircle className="spin" size={17}/>:<LockKeyhole size={17}/>} Masuk aplikasi</button></form><small>Data kewajiban bersifat internal. Jangan membagikan akun atau memasukkan data riil pada lingkungan uji.</small></div></div></div>}
 function App(){
  const [session,setSession]=useState(null); const [profile,setProfile]=useState(null); const [authLoading,setAuthLoading]=useState(configured); const [loginError,setLoginError]=useState(''); const [busy,setBusy]=useState(false)
+ const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
  const [page,setPage]=useState('dashboard');const [navOpen,setNavOpen]=useState(false)
  const [editingMatrix,setEditingMatrix]=useState(null);const [deletingMatrix,setDeletingMatrix]=useState(null);const [matrixError,setMatrixError]=useState('');
  const [matrix,setMatrix]=useState(seeds.bottlenecks); const [actions,setActions]=useState(seeds.actions); const [bankData,setBankData]=useState(bankDefaults)
@@ -44,7 +45,19 @@ function App(){
  const demo=!configured && import.meta.env.DEV;const canEdit=demo?true: ['admin','editor'].includes(profile?.role)
  const isAuthorized=demo || Boolean(session && profile && ['admin','editor','viewer'].includes(profile.role))
  useEffect(()=>{if(!supabase)return;let live=true;supabase.auth.getSession().then(({data})=>{if(live){setSession(data.session);setAuthLoading(false)}}).catch(()=>setAuthLoading(false));const {data:{subscription}}=supabase.auth.onAuthStateChange((_event,s)=>setSession(s));return ()=>{live=false;subscription.unsubscribe()}},[])
- useEffect(()=>{if(!supabase){return};if(!session){setProfile(null);return};let cancelled=false;supabase.from('profiles').select('id,nama,role').eq('id',session.user.id).maybeSingle().then(({data,error})=>{if(!cancelled){setProfile(error?null:data);setLoginError(error?notify(error):(!data?'Akun belum mendapatkan hak akses. Minta administrator membuat profil dan role.':''))}});return ()=>{cancelled=true}},[session?.user?.id])
+ useEffect(()=>{
+  if(!supabase)return
+  if(!session){setProfile(null);setProfileLoading(false);return}
+  let cancelled=false;setProfileLoading(true);setLoginError('')
+  ;(async()=>{try{
+   const {data,error}=await supabase.from('profiles').select('id,nama,role').eq('id',session.user.id).maybeSingle()
+   if(cancelled)return
+   if(error)throw error
+   setProfile(data);setLoginError(!data?'Profil akun ini belum tersedia. Minta administrator menetapkan profil/role.':!['admin','editor','viewer'].includes(data.role)?'Role akun tidak valid. Hubungi administrator.':'')
+  }catch(e){if(!cancelled){setProfile(null);setLoginError('Gagal membaca profil: '+notify(e))}}finally{if(!cancelled)setProfileLoading(false)}})()
+  return()=>{cancelled=true}
+ },[session?.user?.id,profileAttempt])
+
  const fetchAll=useCallback(async()=>{
    if(!supabase||!isAuthorized)return
    setLoading(true);setError('')
@@ -160,8 +173,9 @@ function App(){
   const obj=URL.createObjectURL(new Blob([content],{type:'text/csv;charset=utf-8'}));const el=document.createElement('a');el.href=obj;el.download='tukinumrecovery-tracker-sdm-'+new Date().toISOString().slice(0,10)+'.csv';document.body.appendChild(el);el.click();el.remove();URL.revokeObjectURL(obj)
  }
  if(!configured && !demo)return <div className="loading-page"><ShieldCheck size={35}/><h2>Konfigurasi aplikasi belum lengkap</h2><p>Hubungi administrator. Koneksi Supabase harus dikonfigurasi di Vercel.</p></div>
- if(!demo && (authLoading || (session&&!profile&&!loginError)))return <div className="loading-page"><LoaderCircle className="spin"/><p>Memverifikasi akses...</p></div>
- if(!demo && (!session || !profile))return <Login onSignIn={signIn} busy={busy} loginError={session&&!profile?'Akun belum mendapatkan akses. Minta administrator menetapkan profil/role.':loginError}/>
+ if(!demo && (authLoading || profileLoading || (session&&!profile&&!loginError)))return <div className="loading-page"><LoaderCircle className="spin"/><p>Memverifikasi akses...</p></div>
+ if(!demo && session&&!isAuthorized)return <div className="auth-screen"><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">VERIFIKASI AKSES</span><h2>Akses belum dapat dimuat</h2><p>Akun masuk: <b>{session.user.email}</b></p><div className="notice red-notice" role="alert">{loginError}</div><button className="btn primary wide" onClick={()=>setProfileAttempt(x=>x+1)}><RefreshCw size={16}/> Coba lagi</button><button className="btn secondary wide" style={{marginTop:12}} onClick={signOut}><LogOut size={16}/> Keluar dan ganti akun</button></div></div></div>
+ if(!demo && !session)return <Login onSignIn={signIn} busy={busy} loginError={loginError}/>
  return <div className="shell">
    <aside className={'sidebar '+(navOpen?'is-open':'')}>
     <div className="brand"><div className="brand-symbol"><ShieldCheck size={23}/></div><div><b>TukinUM<span>recovery</span></b><small>DIT. PSNK • 2026</small></div><button className="mobile-close icon-btn" onClick={()=>setNavOpen(false)}><X size={20}/></button></div>
