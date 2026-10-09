@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import {createRoot} from 'react-dom/client'
 import {createClient} from '@supabase/supabase-js'
-import readXlsxFile from 'read-excel-file/browser'
+import readXlsxFile from 'read-excel-file'
 import {LayoutDashboard, Users, AlertTriangle, CalendarDays, Landmark, FileSpreadsheet, LogOut, ShieldCheck, Search, Plus, RefreshCw, Upload, Download, Menu, X, CheckCircle2, Clock3, TrendingUp, Info, LoaderCircle, Pencil, ChevronLeft, ChevronRight, LockKeyhole, FileCheck2, Filter, Eye, Bell, CircleHelp, HeartHandshake} from 'lucide-react'
 import seeds from './seed.json'
 import './style.css'
