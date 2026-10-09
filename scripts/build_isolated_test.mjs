@@ -1,0 +1,5 @@
+import fs from 'node:fs';
+const transform=s=>s.replace(/^begin;\s*$/gm,'').replace(/^commit;\s*$/gm,'').replace(/public\./g,'recovery_test.').replace(/recovery_test\.current_app_role/g,'public.current_app_role').replace(/set search_path=public/g,'set search_path=recovery_test,pg_catalog').replace(/^\s*grant execute.*$/gm,'').replace(/^\s*execute format\('grant select.*$/gm,'');
+const sources=['supabase/recovery-foundation.draft.sql','supabase/recovery-batches.draft.sql'].map(p=>transform(fs.readFileSync(p,'utf8'))).join('\n');
+const sql=`-- ISOLATED TEST SCHEMA. No application API access, no changes to public tables.\nbegin;\ncreate schema recovery_test;\nrevoke all on schema recovery_test from public,anon,authenticated;\nset local search_path=recovery_test,pg_catalog;\n${sources}\nrevoke all on all tables in schema recovery_test from public,anon,authenticated;\nrevoke all on all sequences in schema recovery_test from public,anon,authenticated;\nrevoke all on all functions in schema recovery_test from public,anon,authenticated;\ncommit;\n`;
+fs.writeFileSync('supabase/recovery-isolated-test.sql',sql);
