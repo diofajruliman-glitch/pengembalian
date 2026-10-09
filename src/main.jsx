@@ -6,6 +6,8 @@ import {LayoutDashboard, Users, AlertTriangle, CalendarDays, Landmark, FileSprea
 import seeds from './seed.json'
 import './style.css'
 import './glass.css'
+import ImportPreview from './import/ImportPreview.jsx'
+import RecoveryMonitor from './recovery/RecoveryMonitor.jsx'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -21,6 +23,8 @@ const menus = [
   {id:'bottleneck',name:'Matriks Bottleneck',icon:AlertTriangle},
   {id:'aksi',name:'Rencana Aksi',icon:CalendarDays},
   {id:'bank',name:'Rekap Bank',icon:Landmark},
+  {id:'master-progress',name:'Master & Progres',icon:TrendingUp},
+  {id:'impor-master',name:'Pratinjau Excel Master',icon:FileSpreadsheet},
   {id:'panduan',name:'Petunjuk',icon:CircleHelp}
 ]
 const statuses = ['Belum Mulai','Proses','Menunggu Keputusan','Selesai','Tertunda']
@@ -36,6 +40,7 @@ function Modal({title,children,onClose,footer}) {return <div className="modal-ma
 function Login({onSignIn,onReset,loginError,resetMessage,busy}) {const[email,setEmail]=useState('');const[password,setPassword]=useState('');return <div className="auth-screen"><div className="auth-art"><div className="large-mark"><ShieldCheck size={36}/></div><span className="eyebrow white">DIT. PERLINDUNGAN SOSIAL NON KEBENCANAAN</span><h1>Pengembalian yang terkendali.<br/><em>Keputusan yang tercatat.</em></h1><p>Monitor progres penyelesaian Tukin dan Uang Makan ASN PPPK TA 2025 sampai 31 Desember 2026.</p><div className="auth-metrics"><div><strong>10</strong><span>kategori bottleneck</span></div><div><strong>15</strong><span>rencana aksi</span></div><div><strong>31 Des</strong><span>batas penyelesaian</span></div></div></div><div className="auth-form-wrap"><div className="auth-form"><div className="mobile-logo"><ShieldCheck size={26}/></div><span className="eyebrow">AKSES INTERNAL TERBATAS</span><h2>Masuk ke TukinUMrecovery</h2><p>Gunakan akun yang telah diberikan oleh administrator. Pendaftaran mandiri tidak disediakan.</p><form onSubmit={e=>{e.preventDefault();onSignIn(email,password)}}><label>Alamat email<input autoComplete="username" type="email" value={email} required onChange={e=>setEmail(e.target.value)} placeholder="nama@kemensos.go.id"/></label><label>Kata sandi<input autoComplete="current-password" type="password" value={password} required onChange={e=>setPassword(e.target.value)} placeholder="Masukkan kata sandi"/></label>{loginError&&<div className="notice red-notice">{loginError}</div>}<button type="submit" disabled={busy} className="btn primary wide">{busy?<LoaderCircle className="spin" size={17}/>:<LockKeyhole size={17}/>} Masuk aplikasi</button></form><button type="button" className="btn secondary wide" disabled={busy} onClick={()=>onReset(email)}>Lupa password?</button>{resetMessage&&<p role="status">{resetMessage}</p>}<small>Data kewajiban bersifat internal. Jangan membagikan akun atau memasukkan data riil pada lingkungan uji.</small></div></div></div>}
 function App(){
  const [session,setSession]=useState(null); const [profile,setProfile]=useState(null); const [authLoading,setAuthLoading]=useState(configured); const [loginError,setLoginError]=useState(''); const [busy,setBusy]=useState(false)
+ const [recoverySnapshot,setRecoverySnapshot]=useState(null)
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
  const [page,setPage]=useState('dashboard');const [navOpen,setNavOpen]=useState(false)
@@ -49,7 +54,7 @@ function App(){
  useEffect(()=>{if(!supabase)return;let live=true;supabase.auth.getSession().then(({data})=>{if(live){setSession(data.session);setAuthLoading(false)}}).catch(()=>setAuthLoading(false));const {data:{subscription}}=supabase.auth.onAuthStateChange((event,s)=>{setSession(s);if(event==='PASSWORD_RECOVERY')setRecovering(true)});return ()=>{live=false;subscription.unsubscribe()}},[])
  useEffect(()=>{
   if(!supabase)return
-  if(!session){setProfile(null);setProfileLoading(false);return}
+  if(!session){setProfile(null);setProfileLoading(false);setRecoverySnapshot(null);return}
   let cancelled=false;setProfileLoading(true);setLoginError('')
   ;(async()=>{try{
    const {data,error}=await supabase.from('profiles').select('id,nama,role').eq('id',session.user.id).maybeSingle()
@@ -211,13 +216,15 @@ function App(){
  return <div className="shell">
    <aside className={'sidebar '+(navOpen?'is-open':'')}>
     <div className="brand"><div className="brand-symbol"><ShieldCheck size={23}/></div><div><b>TukinUM<span>recovery</span></b><small>DIT. PSNK • 2026</small></div><button className="mobile-close icon-btn" onClick={()=>setNavOpen(false)}><X size={20}/></button></div>
-    <div className="nav-label">WORKSPACE</div><nav>{menus.map(m=><button key={m.id} className={'nav-item '+(page===m.id?'active':'')} onClick={()=>go(m.id)}><m.icon size={18}/><span>{m.name}</span>{m.id==='kasus'&&caseTotal>0&&<small>{fmtN(caseTotal)}</small>}</button>)}</nav>
+    <div className="nav-label">WORKSPACE</div><nav>{menus.filter(m=>!['impor-master','master-progress'].includes(m.id)||canEdit).map(m=><button key={m.id} className={'nav-item '+(page===m.id?'active':'')} onClick={()=>go(m.id)}><m.icon size={18}/><span>{m.name}</span>{m.id==='kasus'&&caseTotal>0&&<small>{fmtN(caseTotal)}</small>}</button>)}</nav>
     <div className="nav-foot"><div className="deadline-widget"><span><Clock3 size={16}/> TENGGAT PENYELESAIAN</span><strong>31 Desember 2026</strong><div className="progress-rail"><i style={{width:kpis.pct+'%'}}/></div><small>Target pelunasan semua kewajiban</small></div><div className="nav-identity"><div className="avatar">{demo?'D':(profile?.nama||'P')[0].toUpperCase()}</div><div><b>{demo?'Mode Pratinjau':profile?.nama||session?.user?.email}</b><small>{demo?'Data simulasi':profile?.role?.toUpperCase()}</small></div>{!demo&&<button className="icon-btn" onClick={signOut} title="Keluar"><LogOut size={16}/></button>}</div></div>
    </aside>
    <div className="workspace"><header className="topbar"><div className="top-left"><button className="icon-btn hamburger" onClick={()=>setNavOpen(true)}><Menu size={22}/></button><span className="crumb">Direktorat PSNK <ChevronRight size={14}/> <b>{menus.find(m=>m.id===page)?.name}</b></span></div><div className="top-right"><span className="online-chip"><span className="green-dot"/>{demo?'PRATINJAU':'DATABASE AKTIF'}</span><span className="user-chip"><div className="avatar small">{demo?'D':(profile?.nama||'P')[0].toUpperCase()}</div>{demo?'Pratinjau':profile?.nama||'Pengguna'}</span></div></header>
    <main className="main">
     {demo&&<div className="notice demo-notice"><Info size={17}/><span><b>Mode pratinjau.</b> Perubahan hanya ada selama halaman terbuka. Belum memakai database dan <b>jangan masukkan data SDM riil</b>. Ikuti README untuk mengaktifkan login, database, dan Vercel.</span></div>}
     {error&&<div className="notice red-notice"><AlertTriangle size={18}/><span>{error}</span><button className="icon-btn" onClick={()=>setError('')}><X size={15}/></button></div>}
+    {page==='impor-master'&&canEdit&&<ImportPreview onSnapshot={data=>{setRecoverySnapshot(data);go('master-progress')}}/>}
+    {page==='master-progress'&&canEdit&&<RecoveryMonitor snapshot={recoverySnapshot} onImport={()=>go('impor-master')}/>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       <div className="stats-grid"><IconCard title="Total kewajiban" value={kpis.count?fmtRp(kpis.obligation):'Belum diisi'} subtitle="Dari rekap bank terverifikasi" icon={Landmark}/><IconCard title="Realisasi netto" value={kpis.count?fmtRp(kpis.realized):'Belum diisi'} subtitle="Penerimaan yang sudah direkonsiliasi" icon={CheckCircle2} accent="green"/><IconCard title="Sisa kewajiban" value={kpis.count?fmtRp(kpis.remaining):'Belum diisi'} subtitle="Kewajiban dikurangi realisasi" icon={TrendingUp} accent="amber"/><IconCard title="Kasus belum lunas" value={demo?'—':fmtN(openTotal)} subtitle="Tracker SDM khusus (bukan semua SDM)" icon={Users} accent="red"/></div>
       {!kpis.complete&&<div className="notice amber-notice"><Info size={18}/><span>Dashboard nominal belum lengkap: {3-kpis.count} bank belum memiliki angka kewajiban dan realisasi netto. Capaian gabungan belum dapat dinyatakan final.</span></div>}
