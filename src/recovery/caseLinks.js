@@ -28,6 +28,21 @@ export async function loadManualCases(client){
  if(rows.length!==before||await count()!==before)throw Error('Daftar kasus berubah selama pemuatan. Muat ulang pratinjau.')
  return rows
 }
+export function prepareCaseLinkPayload(snapshot,rows){
+ if(snapshot?.source!=='database')throw Error('Gunakan master tersimpan sebelum menyiapkan referensi kasus.')
+ const integer=value=>{if(typeof value==='number'&&!Number.isSafeInteger(value))throw Error('Identitas atau revisi tidak valid.');const text=String(value);if(!/^\d{1,19}$/.test(text)||BigInt(text)>9223372036854775807n)throw Error('Identitas atau revisi tidak valid.');return BigInt(text).toString()}
+ const revision=integer(snapshot.revision)
+ if(!rows.length||rows.length>500)throw Error('Pilih 1 sampai 500 kasus yang lolos tinjauan.')
+ const seen=new Set(),cases=rows.map(r=>{
+  if(r.issues.length||!r.master)throw Error('Kasus yang ditahan belum boleh dihubungkan.')
+  const caseId=integer(r.manual.id);if(caseId==='0'||seen.has(caseId))throw Error('Identitas kasus kosong atau ganda.');seen.add(caseId)
+  if(typeof r.manual.updated_at!=='string'||!Number.isFinite(Date.parse(r.manual.updated_at)))throw Error('Versi kasus belum tersedia. Muat ulang daftar kasus.')
+  return {caseId,expectedUpdatedAt:r.manual.updated_at}
+ })
+ // No financial/manual fields are sent as updates. The database captures them
+ // only to detect edits between review and commit.
+ return {p_revision:revision,p_cases:cases}
+}
 export function caseLinkExport(plan){
  return {cases:[['NIP','Nama kasus','Nama master','Hasil pratinjau','Masalah','Kewajiban manual','Pengembalian manual','Kewajiban master','Pengembalian master','Sisa master','Status manual (dipertahankan)','PIC manual (dipertahankan)','Deadline manual (dipertahankan)','Catatan manual (dipertahankan)'],...plan.rows.map(r=>[r.nip,r.manual.nama,r.master?.nama||'',r.action,r.issues.join('; '),r.manual.kewajiban_total??'',r.manual.realisasi_total??'',r.master?.obligation??'',r.master?.payment??'',r.master?.remaining??'',r.manual.status||'',r.manual.pic||'',r.manual.deadline||'',r.manual.catatan||''])],candidates:[['NIP','Nama sumber','Kategori sumber','Hasil pencocokan','Tinjauan diperlukan'],...plan.candidates.map(r=>[r.nip,r.nama,r.category,r.matchStatus,r.action])]}
 }
