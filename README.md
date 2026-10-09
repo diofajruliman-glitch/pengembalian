@@ -107,3 +107,7 @@ VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_XXXXX
 ## Batas status proyek
 
 Proyek ini disiapkan untuk di-deploy, **belum** terhubung ke Supabase, belum dibuatkan akun admin, belum di-deploy ke Vercel, dan belum diuji terhadap data produksi. Aktivasi membutuhkan akun Supabase/Vercel milik pengguna dan pengujian keamanan sebelum digunakan oleh petugas.
+
+## Pengelolaan Matriks Bottleneck
+
+Admin dan editor dapat menambah, mengedit seluruh kolom, dan menghapus kategori dari matriks. Hapus mengisi `deleted_at`; data dapat dipulihkan melalui Supabase dengan mengosongkan kolom tersebut. Nomor baris dibuat otomatis oleh sequence. Untuk database yang sudah ada, jalankan `supabase/bottleneck-crud.sql` sebelum deploy versi ini. Viewer hanya dapat melihat.
