@@ -14,3 +14,8 @@ test('bank preview distinguishes corrections and newly added stage',()=>{
  const baseline=[h,y,p],current=[[...h,'Pengembalian Tukin Tahap II',null],[...y,2025,2026], [...p.slice(0,6),20,0,5,0]]
  const report=summarizeBank(current,'Mandiri',baseline).summary;assert.equal(report.issueCount,0);assert.equal(report.comparison.corrections,1);assert.equal(report.comparison.newPayments,1);assert.deepEqual(report.comparison.newStages,[2])
 })
+
+test('inline-string workbook does not require shared strings',()=>{
+ const bytes=zipSync({'xl/workbook.xml':strToU8('<workbook><sheets><sheet name="Test" r:id="rId1"/></sheets></workbook>'),'xl/_rels/workbook.xml.rels':strToU8('<Relationships><Relationship Id="rId1" Target="worksheets/sheet1.xml"/></Relationships>'),'xl/worksheets/sheet1.xml':strToU8('<worksheet><sheetData><row r="1"><c r="A1" t="inlineStr"><is><t>Simulasi</t></is></c><c r="B1"><v>100</v></c></row></sheetData></worksheet>')})
+ assert.deepEqual(openSnapshot(bytes).read('Test'),[['Simulasi',100]])
+})
