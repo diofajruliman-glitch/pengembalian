@@ -6,7 +6,7 @@ Aplikasi monitoring pengembalian Tunjangan Kinerja (Tukin) dan Uang Makan PPPK T
 
 ## Fitur
 
-- Dashboard otomatis memuat master tersimpan untuk admin saat masuk (jika koneksi master aktif), atau memakai pratinjau master yang dipilih selama sesi. Untuk role tanpa akses master tersimpan atau jika master tidak tersedia, Dashboard memakai rekap 3 bank. Angka master tetap merupakan nominal workbook, bukan bukti penerimaan terverifikasi. Rekap Bank manual tetap terpisah dan tidak ditimpa oleh master.
+- Dashboard dan Master & Progres memuat master tersimpan untuk admin, editor, dan viewer saat masuk (jika koneksi master aktif). Jika master tidak tersedia, Dashboard memakai rekap 3 bank; hanya admin yang dapat menggunakan pratinjau master selama sesi. Angka master tetap merupakan nominal workbook, bukan bukti penerimaan terverifikasi. Rekap Bank manual tetap terpisah dan tidak ditimpa oleh master.
 - Setelah batch master berhasil disimpan, aplikasi memuat ulang revisi tersimpan dan mengaktifkannya sebagai sumber Dashboard dan Master & Progres. Jika pembacaan ulang gagal, Dashboard tidak menganggap pratinjau sebagai master tersimpan; tampilkan peringatan dan coba muat ulang.
 - Menu Rekap Bank memakai kewajiban dan pengembalian per bank dari master aktif bila tersedia; debit gagal dan cut-off ditampilkan hanya jika bersumber dari rekap manual. Tampilan master bersifat baca-saja agar tidak menimpa rekap manual.
 - Monitoring BNBA/SDM dengan satu NIP 18 digit teks, status, sisa otomatis, bank, PIC, tenggat, bukti/NTPN.
@@ -48,6 +48,8 @@ values ('UUID_AKUN_ADMIN', 'Administrator PSNK', 'admin');
 Untuk petugas lainnya, buat profil dengan role `editor` (dapat memperbarui) atau `viewer` (hanya melihat). **Jangan memberikan role kepada akun yang belum diverifikasi.**
 
 > **Penting:** Akun Auth saja tidak otomatis mendapat akses data; harus ada profil yang sah di `public.profiles`. RLS membatasi pembacaan dan perubahan. `audit_events` hanya dapat dibaca admin di SQL Editor.
+
+Setelah aktivasi master produksi, metadata sumber, dan tindak lanjut selesai, jalankan `supabase/recovery-role-read-access.sql` sekali melalui SQL Editor agar editor/viewer dapat membaca master, metadata, dan data penghubung. Migrasi ini hanya membuka operasi baca; impor, perubahan master, dan pratinjau/impor Excel tetap khusus admin. Untuk menetapkan dua akun yang sudah dibuat, jalankan `supabase/timtlhp-pimpinan-profiles.sql`; skrip tersebut menetapkan `timtlhp@gmail.com` sebagai editor dan `pimpinan@gmail.com` sebagai viewer. Pastikan email akun Auth cocok sebelum menjalankan skrip. Setelah SQL berhasil, keluar lalu masuk kembali pada aplikasi.
 
 ## 3. Konfigurasi koneksi
 
