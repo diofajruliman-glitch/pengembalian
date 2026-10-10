@@ -1,6 +1,6 @@
-import {BANK_SHEETS,mapColumns,parseBankSheet,comparePayments,obligationKey,paymentKey,reconcileBanks} from './masterWorkbook.js'
+﻿import {BANK_SHEETS,mapColumns,parseBankSheet,comparePayments,obligationKey,paymentKey,reconcileBanks,parseNumericAmount} from './masterWorkbook.js'
 export function readRecap(rows){
- const recap={};for(const row of rows){const bank=Object.values(BANK_SHEETS).find(x=>x.toUpperCase()===String(row?.[1]||'').trim().toUpperCase());if(!bank||recap[bank])continue;if(Number.isSafeInteger(row[6])&&Number.isSafeInteger(row[11]))recap[bank]={obligation:row[6],payment:row[11]}}
+ const recap={};for(const row of rows){const bank=Object.values(BANK_SHEETS).find(x=>x.toUpperCase()===String(row?.[1]||'').trim().toUpperCase());if(!bank||recap[bank])continue;const obligation=parseNumericAmount(row?.[6]);const payment=parseNumericAmount(row?.[11]);if(Number.isFinite(obligation)&&Number.isFinite(payment)&&obligation>=0&&payment>=0)recap[bank]={obligation,payment}}
  return recap
 }
 export function summarizeBank(rows,bank,baseline){

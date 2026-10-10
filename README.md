@@ -6,7 +6,8 @@ Aplikasi monitoring pengembalian Tunjangan Kinerja (Tukin) dan Uang Makan PPPK T
 
 ## Fitur
 
-- Dashboard kewajiban, realisasi netto, sisa kewajiban, capaian pelunasan nominal dari rekap 3 bank.
+- Dashboard otomatis memuat master tersimpan untuk admin saat masuk (jika koneksi master aktif), atau memakai pratinjau master yang dipilih selama sesi. Untuk role tanpa akses master tersimpan atau jika master tidak tersedia, Dashboard memakai rekap 3 bank. Angka master tetap merupakan nominal workbook, bukan bukti penerimaan terverifikasi. Rekap Bank manual tetap terpisah dan tidak ditimpa oleh master.
+- Setelah batch master berhasil disimpan, aplikasi memuat ulang revisi tersimpan dan mengaktifkannya sebagai sumber Dashboard dan Master & Progres. Jika pembacaan ulang gagal, Dashboard tidak menganggap pratinjau sebagai master tersimpan; tampilkan peringatan dan coba muat ulang.
 - Monitoring BNBA/SDM dengan satu NIP 18 digit teks, status, sisa otomatis, bank, PIC, tenggat, bukti/NTPN.
 - Matriks 10 bottleneck, status yang dapat diperbarui oleh editor/admin.
 - 15 rencana aksi bertahap Oktober–Desember 2026 dengan status dan progres.

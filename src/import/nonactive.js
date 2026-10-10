@@ -1,5 +1,10 @@
-const categories=new Map(['SP3','Mengundurkan Diri','Meninggal Dunia','BUP'].map(v=>[v.toUpperCase(),v]))
+﻿const categories=new Map(['SP3','Mengundurkan Diri','Meninggal Dunia','BUP'].map(v=>[v.toUpperCase(),v]))
 const normalized=v=>String(v??'').trim().replace(/\s+/g,' ').toUpperCase()
+const normalizeNip = value => {
+ if(value===null||value===undefined) return ''
+ if(typeof value === 'number') return Number.isSafeInteger(value) ? String(value) : ''
+ return String(value).replace(/\s+/g,'').trim()
+}
 export function parseNonactive(rows){
  const header=rows.findIndex(r=>r.some(v=>normalized(v)==='NIP'))
  if(header<0)return {records:[],issues:[{code:'NONACTIVE_HEADER_MISSING'}]}
@@ -7,8 +12,8 @@ export function parseNonactive(rows){
  if(columns.some(c=>c<0))return {records:[],issues:[{code:'NONACTIVE_REQUIRED_COLUMN_MISSING'}]}
  const [nipCol,nameCol,categoryCol,dateCol,reasonCol]=columns,records=[],issues=[],seen=new Set(),duplicates=new Set()
  for(let i=header+1;i<rows.length;i++){
-  const r=rows[i],nip=r[nipCol];if(r.every(v=>v===null||v===undefined||v===''))continue
-  if(typeof nip!=='string'||!/^\d{18}$/.test(nip)){issues.push({code:'NONACTIVE_INVALID_NIP',row:i+1});continue}
+  const r=rows[i],nip=normalizeNip(r[nipCol]);if(r.every(v=>v===null||v===undefined||v===''))continue
+  if(!/^\d{18}$/.test(nip)){issues.push({code:'NONACTIVE_INVALID_NIP',row:i+1});continue}
   if(seen.has(nip)){duplicates.add(nip);issues.push({code:'NONACTIVE_DUPLICATE_NIP',row:i+1});continue}seen.add(nip)
   const category=categories.get(normalized(r[categoryCol]));if(!category){issues.push({code:'NONACTIVE_UNKNOWN_CATEGORY',row:i+1});continue}
   records.push({nip,nama:String(r[nameCol]??'').trim(),category,endDateRaw:r[dateCol]??null,reasonRaw:r[reasonCol]??null})

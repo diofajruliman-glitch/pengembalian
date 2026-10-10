@@ -1,7 +1,12 @@
-// Pure mapping: no database writes, no dependency on physical column positions.
+﻿// Pure mapping: no database writes, no dependency on physical column positions.
 const roman = {I:1,II:2,III:3,IV:4,V:5,VI:6,VII:7,VIII:8,IX:9,X:10}
 const clean = value => String(value ?? '').replace(/\s+/g,' ').trim()
 const normalize = value => clean(value).toUpperCase()
+const normalizeNip = value => {
+ if(value===null||value===undefined) return ''
+ if(typeof value === 'number') return Number.isSafeInteger(value) ? String(value) : ''
+ return String(value).replace(/\s+/g,'').trim()
+}
 export const BANK_SHEETS = {'BNBA PENGEMBALIAN MANDIRI':'Mandiri','BNBA PENGEMBALIAN BRI':'BRI','BNBA PENGEMBALIAN BSI':'BSI'}
 export function mapColumns(rows) {
  const first = rows[0] || [], second = rows[1] || []
@@ -26,7 +31,33 @@ export function mapColumns(rows) {
  for(const kind of ['TUKIN','UM'])for(const year of years)if(!columns.some(c=>c.type==='obligation'&&c.kind===kind&&c.year===year))issues.push({code:'MISSING_OBLIGATION',kind,year})
  return {columns,issues}
 }
-function amount(value){if(value===null||value===undefined||value==='')return null;if(typeof value!=='number'||!Number.isSafeInteger(value)||value<0)throw Error('INVALID_AMOUNT');return value}
+export function parseNumericAmount(value){
+ if(value===null||value===undefined||value==='')return null
+ if(typeof value === 'number'){if(!Number.isFinite(value)||value<0)throw Error('INVALID_AMOUNT');return value}
+ let source=String(value).trim()
+ if(!source||source==='null'||source==='undefined')return null
+ source=source.replace(/Rp|IDR/gi,'').replace(/\s+/g,'')
+ if(!source||source==='-'||source==='.'||source==='-.')return null
+ if(source.includes(',')&&source.includes('.')){
+  const lastComma=source.lastIndexOf(',');const lastDot=source.lastIndexOf('.')
+  const decimalSeparator=lastComma>lastDot?',':'.'
+  const thousandsSeparator=decimalSeparator===','?'.':','
+  source=source.split(thousandsSeparator).join('').replace(decimalSeparator,'.')
+ } else if(source.includes(',')){
+  const parts=source.split(',')
+  const lastPart=parts.at(-1)
+  source = parts.length>1 && lastPart.length===3 && source.indexOf(',')===source.lastIndexOf(',') && !source.includes('.') ? parts.join('') : source.replace(/,/g,'.')
+ } else if(source.includes('.')){
+  const parts=source.split('.')
+  if(parts.length>2 && parts.every(p=>p.length===3) && !source.includes(',') && !/\.\d{3}$/.test(source))source=parts.join('')
+ }
+ const numeric=Number(source)
+ if(!Number.isFinite(numeric)||numeric<0)throw Error('INVALID_AMOUNT')
+ return numeric
+}
+function amount(value){
+ return parseNumericAmount(value)
+}
 export const obligationKey = r => [r.nip,r.bank,r.kind,r.year].join('|')
 export const paymentKey = r => [obligationKey(r),r.stage].join('|')
 export function parseBankSheet(rows,bank,{keepZeroPayments=true,zeroPaymentKeys=new Set()}={}){
@@ -39,8 +70,8 @@ export function parseBankSheet(rows,bank,{keepZeroPayments=true,zeroPaymentKeys=
   const row=rows[i]||[], raw=row[nipCol];if(raw===null||raw===undefined||raw==='')continue
   // Ignore summary/header rows, but flag all numeric identifiers (precision is unsafe).
   if(typeof raw==='string'&&['NIP','TOTAL','JUMLAH'].includes(normalize(raw)))continue
-  const nip=clean(raw)
-  if(typeof raw!=='string'||!/^\d{18}$/.test(nip)){issues.push({code:'INVALID_NIP',row:i+1});continue}
+  const nip=normalizeNip(raw)
+  if(!/^\d{18}$/.test(nip)){issues.push({code:'INVALID_NIP',row:i+1});continue}
   if(seen.has(nip)){issues.push({code:'DUPLICATE_NIP',row:i+1});continue}seen.add(nip)
   if(!clean(row[nameCol])){issues.push({code:'MISSING_NAME',row:i+1});continue}
   people.push({nip,nama:clean(row[nameCol]),provinsi:clean(row[provinceCol]),bank})
