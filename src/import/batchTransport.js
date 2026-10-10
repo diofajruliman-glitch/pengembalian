@@ -34,16 +34,32 @@ export function makeRecords(results){return results.flatMap(r=>[
  ...r.obligations.map(data=>({type:'obligation',data})),
  ...r.payments.filter(p=>p.amount>0||p.correctsExisting).map(data=>({type:'payment',data}))
 ])}
+async function rpcWithRetry(client,name,args){
+ for(let attempt=0;;attempt++){
+  let q
+  try{q=await client.rpc(name,args)}catch(error){q={error}}
+  const message=String(q.error?.message||'')
+  const network=/failed to fetch|fetch failed|networkerror|network request failed|connection failed/i.test(message)
+  if(client.scope!=='production'||!network||q.error?.code||attempt>=2)return q
+  console.warn('Permintaan master diulang setelah gangguan jaringan',{operation:name,attempt:attempt+1})
+  await new Promise(resolve=>setTimeout(resolve,1000*(attempt+1)))
+ }
+}
 export async function stageBatch(client,{fileName,sha256,results,recap,onProgress=()=>{}}){
  if(results.some(r=>r.issues.length))throw Error('Data bermasalah tidak boleh disimpan.')
  const records=makeRecords(results)
- const begin=await client.rpc('recovery_begin',{p_name:fileName,p_hash:sha256,p_rows:records.length,p_totals:recap});if(begin.error)throw begin.error
+ const begin=await rpcWithRetry(client,'recovery_begin',{p_name:fileName,p_hash:sha256,p_rows:records.length,p_totals:recap});if(begin.error)throw begin.error
  const id=begin.data
- for(let i=0;i<records.length;i+=500){const q=await client.rpc('recovery_append',{p_batch:id,p_records:records.slice(i,i+500)});if(q.error)throw q.error;onProgress(Math.min(i+500,records.length),records.length)}
- const check=await client.rpc('recovery_validate',{p_batch:id});if(check.error)throw check.error
+ if(client.scope==='production'){
+  const existing=await rpcWithRetry(client,'recovery_validate',{p_batch:id})
+  if(!existing.error)return {id,summary:existing.data}
+  if(!String(existing.error.message).includes('INCOMPLETE_BATCH'))throw existing.error
+ }
+ for(let i=0;i<records.length;i+=500){const q=await rpcWithRetry(client,'recovery_append',{p_batch:id,p_records:records.slice(i,i+500)});if(q.error)throw q.error;onProgress(Math.min(i+500,records.length),records.length)}
+ const check=await rpcWithRetry(client,'recovery_validate',{p_batch:id});if(check.error)throw check.error
  return {id,summary:check.data}
 }
-export async function commitBatch(client,id,reason){if(!reason.trim())throw Error('Alasan wajib diisi.');const q=await client.rpc('recovery_commit',{p_batch:id,p_reason:reason});if(q.error)throw q.error;return q.data}
+export async function commitBatch(client,id,reason){if(!reason.trim())throw Error('Alasan wajib diisi.');const q=await rpcWithRetry(client,'recovery_commit',{p_batch:id,p_reason:reason});if(q.error)throw q.error;return q.data}
 export async function batchChanges(client,id,offset=0){
  const q=await client.rpc('recovery_diff',{p_batch:id,p_offset:offset,p_limit:50});if(q.error)throw q.error;return q.data||[]
 }

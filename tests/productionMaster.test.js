@@ -66,3 +66,46 @@ test('production package preserves existing tables and supports atomic import, r
   assert.equal((await db.query('select count(*)::int n from recovery_live.case_link_audit')).rows[0].n,1)
  }finally{await db.close()}
 })
+test('lost begin, append and commit responses retry the same batch without duplicate ledger or audit rows',async()=>{
+ const db=new PGlite(),lost=new Set(),ids=[]
+ try{
+  await db.exec(setup);await db.exec(sql)
+  await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${admin}',false)`)
+  const client=productionMasterClient({rpc:async(name,args)=>{
+   try{
+    const q=await db.query('select public.recovery_master_rpc($1,$2) result',[args.p_action,JSON.stringify(args.p_payload)])
+    if(args.p_action==='recovery_begin')ids.push(q.rows[0].result)
+    if(['recovery_begin','recovery_append','recovery_commit'].includes(args.p_action)&&!lost.has(args.p_action)){
+     lost.add(args.p_action);return {error:Error('Failed to fetch')}
+    }
+    return {data:q.rows[0].result}
+   }catch(error){return {error}}
+  }},'production-master',url)
+  const b=await stageBatch(client,{fileName:'RETRY LOKAL.xlsx',sha256:'5'.repeat(64),results:sample(),recap:{BRI:{obligation:300,payment:50}}})
+  assert.equal(new Set(ids).size,1);await commitBatch(client,b.id,'Uji respons jaringan hilang')
+  await db.exec('reset role')
+  assert.equal((await db.query('select count(*)::int n from recovery_live.recovery_imports')).rows[0].n,1)
+  assert.equal((await db.query('select count(*)::int n from recovery_live.recovery_payments')).rows[0].n,2)
+  assert.equal((await db.query('select count(*)::int n from recovery_live.recovery_changes')).rows[0].n,5)
+  assert.equal((await db.query('select revision from recovery_live.recovery_revision')).rows[0].revision,1)
+ }finally{await db.close()}
+})
+test('partially staged imports resume their original batch and reject a changed manifest',async()=>{
+ const db=new PGlite(),hash='6'.repeat(64)
+ try{
+  await db.exec(setup);await db.exec(sql)
+  await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${admin}',false)`)
+  const call=async(action,payload)=>{const q=await db.query('select public.recovery_master_rpc($1,$2) result',[action,JSON.stringify(payload)]);return q.rows[0].result}
+  const id=await call('recovery_begin',{p_name:'RESUME LOKAL.xlsx',p_hash:hash,p_rows:6,p_totals:{BRI:{obligation:300,payment:50}}})
+  await call('recovery_append',{p_batch:id,p_records:[{type:'person',data:sample()[0].people[0]}]})
+  await assert.rejects(call('recovery_begin',{p_name:'RESUME LOKAL.xlsx',p_hash:hash,p_rows:7,p_totals:{BRI:{obligation:300,payment:50}}}),/MANIFEST_REQUIRES_REVIEW/)
+  const client=productionMasterClient({rpc:async(name,args)=>{try{return {data:await call(args.p_action,args.p_payload)}}catch(error){return {error}}}},'production-master',url)
+  const resumed=await stageBatch(client,{fileName:'RESUME LOKAL.xlsx',sha256:hash,results:sample(),recap:{BRI:{obligation:300,payment:50}}})
+  assert.equal(resumed.id,id)
+  const validated=await stageBatch(client,{fileName:'RESUME LOKAL.xlsx',sha256:hash,results:sample(),recap:{BRI:{obligation:300,payment:50}}})
+  assert.equal(validated.id,id)
+  await db.exec('reset role')
+  assert.equal((await db.query('select count(*)::int n from recovery_live.recovery_imports')).rows[0].n,1)
+  assert.equal((await db.query('select count(*)::int n from recovery_live.recovery_staging')).rows[0].n,6)
+ }finally{await db.close()}
+})
