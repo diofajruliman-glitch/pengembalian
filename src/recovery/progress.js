@@ -20,7 +20,7 @@ export function selectProgress(index,{bank='',year='',kind='',stage='',search=''
 }
 export function detailBalances(person){const paid=new Map();for(const r of person.payments){const k=obligationKey(r);paid.set(k,(paid.get(k)||0)+r.amount)}return person.obligations.filter(r=>r.amount>0).map(r=>({...r,payment:paid.get(obligationKey(r))||0,remaining:r.amount-(paid.get(obligationKey(r))||0)}))}
 export function exportRows(selection,stage=''){
- const summary=[['NIP','Nama','Provinsi','Bank','Kewajiban','Pengembalian Excel','Penerimaan terverifikasi','Sisa menurut Excel','Pengembalian tahap terpilih','Tahun SP2D'],...selection.rows.map(p=>[p.nip,p.nama,p.provinsi,p.bank,p.obligation,p.payment,p.verified,p.remaining,p.stagePayment,[...new Set(p.obligations.filter(r=>r.amount>0).map(r=>r.year))].sort().join(', ')])]
+ const summary=[['NIP','Nama','Provinsi','Bank','Kewajiban','Pengembalian Excel','Penerimaan terverifikasi','Sisa menurut Excel','Pengembalian tahap terpilih','Tahun SP2D','Status SDM (sumber)'],...selection.rows.map(p=>[p.nip,p.nama,p.provinsi,p.bank,p.obligation,p.payment,p.verified,p.remaining,p.stagePayment,[...new Set(p.obligations.filter(r=>r.amount>0).map(r=>r.year))].sort().join(', '),p.nonactive?.category||p.status_sdm||'Belum ditandai nonaktif'])]
  const transactions=[['NIP','Nama','Bank','Jenis','Tahun SP2D','Tahap','Nominal','Status verifikasi','Tanggal pengembalian'],...selection.rows.flatMap(p=>p.payments.filter(r=>!stage||r.stage===Number(stage)).map(r=>[p.nip,p.nama,r.bank,r.kind,r.year,r.stage,r.amount,r.verification||'pending',r.paymentDate||'']))]
  return {summary,transactions}
 }

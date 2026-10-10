@@ -5,12 +5,12 @@ const foundation=privateSql(fs.readFileSync('supabase/recovery-foundation.draft.
 let batches=privateSql(fs.readFileSync('supabase/recovery-batches.draft.sql','utf8'))
 batches=batches.replace('declare batch uuid; rev bigint;','declare batch uuid; rev bigint; previous recovery_imports;')
 batches=batches.replace(" if exists(select 1 from recovery_imports where file_sha256=p_hash and status='committed')", " perform pg_advisory_xact_lock(hashtextextended(auth.uid()::text||'|'||p_hash,0));\n if exists(select 1 from recovery_imports where file_sha256=p_hash and status='committed')")
-batches=batches.replace(' select revision into rev from recovery_revision where id=1;',` select revision into rev from recovery_revision where id=1;
+batches=batches.replace(' select revision into rev from recovery_revision where id=1;',` select revision into rev from recovery_revision where id=1 for share;
  select * into previous from recovery_imports where actor=auth.uid() and file_sha256=p_hash and status in ('preview','validated') order by created_at desc limit 1 for update;
  if found then
-  if previous.base_revision<>rev then raise exception 'STALE_PREVIEW';end if;
   if previous.expected_rows<>p_rows or previous.expected_totals is distinct from p_totals then raise exception 'MANIFEST_REQUIRES_REVIEW';end if;
-  return previous.id;
+  if previous.base_revision=rev then return previous.id;end if;
+  update recovery_imports set status='rejected',summary=summary||jsonb_build_object('restaged',true,'restaged_at',now(),'restaged_revision',rev) where id=previous.id;
  end if;`)
 const summary="jsonb_build_object('totals',actual,'obligationCorrections',corrections)"
 const detailed=`jsonb_build_object('totals',actual,'obligationCorrections',corrections,
@@ -57,4 +57,4 @@ commit;
 fs.writeFileSync('supabase/recovery-production-activation.sql',sql)
 const beginStart=batches.indexOf('create function recovery_live.recovery_begin(')
 const beginEnd=batches.indexOf('end $$;',beginStart)+7
-fs.writeFileSync('supabase/recovery-production-resume.sql',`-- Retry-safe begin; same permissions and same import workflow. Does not alter data.\nbegin;\n${batches.slice(beginStart,beginEnd).replace('create function','create or replace function')}\ncommit;\n`)
+fs.writeFileSync('supabase/recovery-production-resume.sql',`-- Retry-safe begin and fresh review after master changes. Existing ledger is preserved.\nbegin;\n${batches.slice(beginStart,beginEnd).replace('create function','create or replace function')}\ncommit;\n`)
