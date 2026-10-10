@@ -1,0 +1,38 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import fs from 'node:fs'
+import {integratedDatabase,localApis} from './helpers/recoveryHarness.js'
+import {metadataClient,prepareMetadataPayload,prepareMetadata,commitMetadata,attachStoredMetadata} from '../src/recovery/sourceMetadataApi.js'
+import {loadStoredSnapshot,makeRecords} from '../src/import/batchTransport.js'
+import {selectProgress,indexSnapshot} from '../src/recovery/progress.js'
+const admin='00000000-0000-0000-0000-000000000001',editor='00000000-0000-0000-0000-000000000002',viewer='00000000-0000-0000-0000-000000000003',a='000000000000000001',b='000000000000000002'
+test('metadata activation, review and persisted overlay preserve financial data, hold errors, audit once and deny non-admin access',async()=>{
+ const db=await integratedDatabase();try{
+  const sql=fs.readFileSync('supabase/recovery-source-metadata-activation.sql','utf8');await assert.rejects(db.exec(sql.replace(/commit;\s*$/,'select 1/0;commit;')));await db.exec('rollback');assert.equal((await db.query("select to_regclass('recovery_live.person_source_metadata') name")).rows[0].name,null);await db.exec(sql);
+  await db.exec(`insert into recovery_live.recovery_imports(id,file_name,file_sha256,status,actor) values('${admin}','SIMULASI','${'a'.repeat(64)}','committed','${admin}');insert into recovery_live.recovery_people(nip,nama,bank,status_sdm) values('${a}','Satu','Mandiri',null),('${b}','Dua','Mandiri','Meninggal Dunia');insert into recovery_live.recovery_obligations(nip,bank,jenis,tahun_kewajiban,nominal,source_import) values('${a}','Mandiri','TUKIN',2025,100,'${admin}'),('${b}','Mandiri','TUKIN',2025,200,'${admin}');insert into recovery_live.recovery_payments(obligation_id,tahap,nominal,source_import) values(1,1,30,'${admin}');`)
+  const before=(await db.query("select (select jsonb_agg(to_jsonb(t)) from recovery_live.recovery_obligations t) obligations,(select jsonb_agg(to_jsonb(t)) from recovery_live.recovery_payments t) payments,(select jsonb_agg(to_jsonb(t)) from public.action_plans t) plans,(select jsonb_agg(to_jsonb(t)) from public.bottlenecks t) matrix")).rows[0];
+  await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${admin}',false)`);
+  const transport={rpc:async(name,args)=>{try{return {data:(await db.query('select public.recovery_metadata_rpc($1,$2) data',[args.p_action,JSON.stringify(args.p_payload)])).rows[0].data}}catch(error){return {error}}}};const api=metadataClient(transport,'production-metadata','https://tagokvlsirebfgltbxmq.supabase.co'),master=localApis(db).master;const stored=await loadStoredSnapshot(master);
+  const source={sha256:'d'.repeat(64),fileName:'SIMULASI.xlsx',sourceMetadata:{ntpnReferences:[{bank:'Mandiri',kind:'TUKIN',year:2025,stage:1,code:'TESTNTPN00000001',scope:'payment-stage',verification:'pending',sheet:'Mandiri',row:3,column:6}]},results:[{people:[{...stored.results[0].people[0],sourceMetadata:{status:'Mengundurkan Diri',needsReview:false,sources:[{sheet:'Mandiri',raw:'Resign',status:'Mengundurkan Diri'}]}},{...stored.results[0].people[1],sourceMetadata:{status:'Perlu pemeriksaan',needsReview:true,sources:[{sheet:'Mandiri',raw:'#N/A',status:'Perlu pemeriksaan'}]}}],obligations:[],payments:[]}]};
+  const {payload}=prepareMetadataPayload(stored,source,'11111111-1111-4111-8111-111111111111');const prepared=await prepareMetadata(api,payload);assert.equal(prepared.count,2);assert.equal(prepared.references,1);
+  const altered=structuredClone(payload);altered.records[0].nama='Berbeda';await assert.rejects(prepareMetadata(api,altered),/REQUEST_CONFLICT/);
+  const tampered=structuredClone(payload);tampered.requestId='22222222-2222-4222-8222-222222222222';tampered.records[1].metadata.needsReview=false;await assert.rejects(prepareMetadata(api,tampered),/REVIEW_GUARD_REQUIRED/);
+  const verified=structuredClone(payload);verified.requestId='55555555-5555-4555-8555-555555555555';verified.references[0].verification='verified';await assert.rejects(prepareMetadata(api,verified),/INVALID_NTPN_REFERENCE/);
+  const committed=await commitMetadata(api,prepared.id,'Tinjauan metadata simulasi');assert.equal(committed.revision,1);assert.equal((await commitMetadata(api,prepared.id,'Ulangi permintaan sama')).alreadyCommitted,true);
+  const repeated=structuredClone(payload);repeated.requestId='44444444-4444-4444-8444-444444444444';repeated.revision=1;assert.equal((await prepareMetadata(api,repeated)).committed,true);
+  const loaded=await loadStoredSnapshot({...master,metadataApi:api});assert.equal(loaded.metadataLoaded,true);assert.equal(loaded.results[0].people[1].status_sdm,'Meninggal Dunia');assert.equal(loaded.results[0].people[1].sourceMetadata.needsReview,true);assert.equal(selectProgress(indexSnapshot(loaded.results),{worklist:'nonactive'}).totals.people,1);assert.equal(loaded.results[0].payments[0].ntpnReferences.length,1);assert.equal(loaded.results[0].payments[0].verification,'pending');
+  const financial=makeRecords([{...loaded.results[0],issues:[]}]);assert(financial.every(r=>!('sourceMetadata'in r.data)&&!('ntpnReferences'in r.data)));
+  await assert.rejects(db.query('select * from recovery_live.person_source_metadata'),/permission denied/);
+  const stale=structuredClone(payload);stale.requestId='33333333-3333-4333-8333-333333333333';stale.revision=1;stale.records[0].metadata={status:'BUP',needsReview:false,sources:[{sheet:'Mandiri',raw:'BUP',status:'BUP'}]};const review2=await prepareMetadata(api,stale);
+  await db.exec(`reset role;update recovery_live.recovery_people set nama='Nama diubah setelah tinjauan' where nip='${b}';set role authenticated`);await assert.rejects(commitMetadata(api,review2.id,'Uji rollback identitas berubah'),/IDENTITY_REVIEW_REQUIRED/);
+  const still=await attachStoredMetadata(await loadStoredSnapshot(master),api);assert.equal(still.results[0].people[0].sourceMetadata.status,'Mengundurkan Diri');
+  await db.exec(`reset role;update recovery_live.recovery_people set nama='Dua' where nip='${b}';update recovery_live.recovery_revision set revision=2 where id=1;set role authenticated`);await assert.rejects(commitMetadata(api,review2.id,'Uji master berubah'),/STALE_MASTER/);
+  await db.exec('reset role');const after=(await db.query("select (select jsonb_agg(to_jsonb(t)) from recovery_live.recovery_obligations t) obligations,(select jsonb_agg(to_jsonb(t)) from recovery_live.recovery_payments t) payments,(select jsonb_agg(to_jsonb(t)) from public.action_plans t) plans,(select jsonb_agg(to_jsonb(t)) from public.bottlenecks t) matrix")).rows[0];assert.deepEqual(after,before);assert.equal((await db.query('select count(*)::int n from recovery_live.source_metadata_changes')).rows[0].n,3);
+  assert.equal((await db.query("select count(*)::int n from pg_class c join pg_namespace n on n.oid=c.relnamespace where n.nspname='recovery_live' and c.relkind='r' and c.relrowsecurity")).rows[0].n,23);
+  for(const user of [editor,viewer]){await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${user}',false)`);await assert.rejects(prepareMetadata(api,payload),/FORBIDDEN/);await assert.rejects(attachStoredMetadata(loaded,api),/FORBIDDEN/);await db.exec('reset role')}
+ }finally{await db.close()}
+})
+test('metadata adapter stays off unless exact project and explicit mode are selected',()=>{
+ assert.equal(metadataClient({},undefined,'https://tagokvlsirebfgltbxmq.supabase.co'),null);assert.equal(metadataClient({},'production-metadata','https://other.supabase.co'),null);
+ const api=metadataClient({rpc:()=>{throw Error('Unexpected transport')}},'production-metadata','https://tagokvlsirebfgltbxmq.supabase.co');assert.throws(()=>api.rpc('delete'),/tidak diizinkan/);
+})

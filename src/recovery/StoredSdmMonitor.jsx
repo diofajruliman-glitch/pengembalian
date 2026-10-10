@@ -8,6 +8,6 @@ export default function StoredSdmMonitor({snapshot,loading,error,isAdmin,onMaste
  return <section aria-label="Progres seluruh SDM dari master tersimpan">
   <div className="notice demo-notice">Progres SDM dan Dashboard memakai master tersimpan yang sama. Kasus khusus di bawah digunakan untuk penagihan dan tindak lanjut. Status nonaktif yang belum disimpan tetap perlu direkonsiliasi.</div>
   {error&&<p role="alert" className="notice amber-notice">{error}</p>}
-  <RecoveryMonitor key={`${snapshot.scope}-${snapshot.revision}`} snapshot={snapshot} onImport={onMaster}/>
+  <RecoveryMonitor key={`${snapshot.scope}-${snapshot.revision}`} snapshot={snapshot} onImport={onMaster} initialWorklist="nonactive"/>
  </section>
 }

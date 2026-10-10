@@ -1,4 +1,5 @@
 // Production remains locked while real Supabase staging verification is pending.
+import {attachStoredMetadata} from '../recovery/sourceMetadataApi.js'
 export function stagingEnabled(mode,url){
  if(mode!=='staging')return false
  try{const parsed=new URL(url);return parsed.protocol==='https:'&&/^[a-z0-9]+\.supabase\.co$/.test(parsed.hostname)&&parsed.hostname!=='tagokvlsirebfgltbxmq.supabase.co'}catch{return false}
@@ -26,13 +27,14 @@ export async function loadStoredSnapshot(client,onProgress=()=>{}){
  }
  const end=await read('recovery_read_meta')
  if(end.revision!==start.revision||result.people.length!==start.people)throw Error('Data berubah selama pemuatan. Muat ulang master.')
- return {source:'database',...(client.scope?{scope:client.scope}:{}),fileName:client.masterLabel||'Master tersimpan • schema pengujian',revision:start.revision,results:[result]}
+ const snapshot={source:'database',...(client.scope?{scope:client.scope}:{}),fileName:client.masterLabel||'Master tersimpan • schema pengujian',revision:start.revision,results:[result]}
+ return client.metadataApi?attachStoredMetadata(snapshot,client.metadataApi):snapshot
 }
 export function makeRecords(results){return results.flatMap(r=>[
  // Nonactive source metadata is preview-only until its own import is validated.
- ...r.people.map(({nonactive,...data})=>({type:'person',data})),
+ ...r.people.map(({nonactive,sourceMetadata,...data})=>({type:'person',data})),
  ...r.obligations.map(data=>({type:'obligation',data})),
- ...r.payments.filter(p=>p.amount>0||p.correctsExisting).map(data=>({type:'payment',data}))
+ ...r.payments.filter(p=>p.amount>0||p.correctsExisting).map(({ntpnReferences,...data})=>({type:'payment',data}))
 ])}
 async function rpcWithRetry(client,name,args){
  for(let attempt=0;;attempt++){

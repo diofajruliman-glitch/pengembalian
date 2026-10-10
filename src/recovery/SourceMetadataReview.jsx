@@ -1,0 +1,22 @@
+import React,{useRef,useState} from 'react'
+import {prepareMetadataPayload,prepareMetadata,commitMetadata} from './sourceMetadataApi.js'
+export default function SourceMetadataReview({snapshot,source,client,onSaved}){
+ const [batch,setBatch]=useState(null),[page,setPage]=useState(0),[seen,setSeen]=useState(0),[reason,setReason]=useState(''),[approved,setApproved]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[done,setDone]=useState(false),[held,setHeld]=useState(null),[locked,setLocked]=useState(false)
+ const request=useRef(null),commitReason=useRef(null)
+ if(!source?.sourceMetadata)return null
+ const run=async(fn)=>{setBusy(true);setError('');try{await fn()}catch(e){setError(`Penyimpanan belum dapat dikonfirmasi. Ulangi permintaan yang sama atau muat ulang master sebelum tinjauan baru. ${e.message||''}`)}finally{setBusy(false)}}
+ const prepare=()=>run(async()=>{
+  if(!request.current){const plan=prepareMetadataPayload(snapshot,source,crypto.randomUUID());request.current=plan.payload;setHeld(plan)}
+  const result=await prepareMetadata(client,request.current);if(result.committed){setDone(true);await onSaved?.();return}setBatch(result);setPage(0);setSeen(0)
+ })
+ const save=()=>run(async()=>{if(commitReason.current===null)commitReason.current=reason;setLocked(true);await commitMetadata(client,batch.id,commitReason.current);setDone(true);await onSaved?.()})
+ const pages=Math.ceil((batch?.review.length||0)/15)
+ return <section className="panel" aria-label="Tinjauan penyimpanan metadata sumber"><h2>Simpan status sumber dan referensi NTPN</h2><p>Status yang ditahan tetap menjadi Perlu pemeriksaan. NTPN sumber tahap tidak menambah pembayaran atau membuat penerimaan terverifikasi.</p>
+ {!client&&<p>API metadata belum diaktifkan. Pratinjau ini tidak menyimpan perubahan ke Supabase.</p>}
+ {!batch&&!done&&<button className="btn secondary" disabled={!client||snapshot?.source!=='database'||busy} onClick={prepare}>Siapkan tinjauan metadata</button>}
+ {held&&<p>{held.heldIdentity.length} identitas dan {held.heldReferences.length} referensi tanpa pembayaran tahap ditahan dari batch.</p>}
+ {batch&&!done&&<><p>{batch.count} metadata SDM dan {batch.references} referensi NTPN diperiksa di server. Tinjau semua halaman dan sumbernya.</p><div className="table-scroll"><table><thead><tr><th>SDM / Referensi</th><th>Sebelumnya</th><th>Sesudah / Sumber</th></tr></thead><tbody>{batch.review.slice(page*15,page*15+15).map(r=><tr key={r.key}><td>{r.nama||'NTPN tahap'}<small>{r.nip||r.key}</small><small>{r.bank}</small></td><td>{r.before?.status||r.before?.code||'Belum tercatat'}</td><td>{r.after.status||r.after.code}<small>{r.after.needsReview?'Ditahan untuk pemeriksaan':'Metadata sumber'}</small>{r.after.sources?<details><summary>Lihat semua sumber</summary><ul>{r.after.sources.map((s,i)=><li key={i}>{s.sheet} • baris {s.row||'—'} / kolom {s.column||'—'}: {s.raw||'Kosong (Aktif)'} → {s.status}</li>)}</ul></details>:<small>{r.after.bank} / {r.after.kind} / {r.after.year} / tahap {r.after.stage} • {r.after.sheet} baris {r.after.row}, kolom {r.after.column}</small>}</td></tr>)}</tbody></table></div><div className="pagination"><span>Halaman {page+1} / {pages}</span><button className="btn secondary" disabled={!page||busy} onClick={()=>setPage(p=>p-1)}>Sebelumnya</button><button className="btn secondary" disabled={page+1>=pages||busy} onClick={()=>{setPage(p=>p+1);setSeen(v=>Math.max(v,page+1))}}>Berikutnya</button></div><label className="form-field"><span>Alasan penyimpanan metadata</span><textarea disabled={busy||locked} value={reason} onChange={e=>setReason(e.target.value)}/></label><label><input type="checkbox" disabled={busy||seen<pages-1} checked={approved} onChange={e=>setApproved(e.target.checked)}/> Saya telah meninjau seluruh metadata dan sumbernya.</label><div className="toolbar"><button className="btn primary" disabled={!approved||busy||reason.trim().length<3} onClick={save}>Simpan metadata sumber</button><button className="btn secondary" disabled={busy} onClick={()=>{setBatch(null);setApproved(false);setReason('');setHeld(null);setLocked(false);request.current=null;commitReason.current=null}}>Batalkan tinjauan metadata</button></div></>}
+ {done&&<p role="status">Metadata telah tersimpan. Saldo master dan kegiatan tetap utuh; muat ulang master untuk melihat status dan referensi tersimpan.</p>}
+ {error&&<p role="alert">{error}</p>}
+ </section>
+}
