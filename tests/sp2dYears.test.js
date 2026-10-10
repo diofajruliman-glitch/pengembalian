@@ -1,23 +1,33 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {inspectSp2dYears} from '../src/import/sp2dYears.js'
+import {summarizeSp2dYears} from '../src/import/sp2dYears.js'
 import {makeRecords} from '../src/import/batchTransport.js'
-const nip='000000000000000001'
-const header=['NIP','Tahun Sp2d','Nama sk','NAMA BANK','TGL PROSES DEBET']
-const results=[{people:[{nip,nama:'Uji',bank:'Mandiri'}],obligations:[{nip,bank:'Mandiri',kind:'TUKIN',year:2025,amount:100}],payments:[]}]
-test('SP2D source year review does not change master totals, dates or import payload',()=>{
- const before=JSON.stringify(results), payload=makeRecords(results)
- const review=inspectSp2dYears({Sheet1:[header,[nip,2025,'Uji','BANK MANDIRI',20260901]]},results)[0]
- assert.equal(review.matched,1);assert.deepEqual(review.years,{2025:1})
+import {indexSnapshot,selectProgress,exportRows,detailBalances} from '../src/recovery/progress.js'
+const people=[{nip:'000000000000000001',nama:'Dua tahun',bank:'BRI'},{nip:'000000000000000002',nama:'Hanya 2026',bank:'BRI'},{nip:'000000000000000003',nama:'Kosong',bank:'BRI'}]
+const obligation=(i,year,amount,kind='TUKIN')=>({nip:people[i].nip,bank:'BRI',year,amount,kind})
+const results=[{people,obligations:[obligation(0,2025,100),obligation(0,2026,200),obligation(0,2025,0,'UM'),obligation(1,2025,0),obligation(1,2026,50,'UM'),obligation(2,2025,0)],payments:[{...obligation(0,2025,20),stage:1},{...obligation(0,2026,30),stage:2},{...obligation(1,2026,10,'UM'),stage:1}]}]
+test('positive year columns establish SP2D years; zero-only and blank years do not count as SDM',()=>{
+ const index=indexSnapshot(results)
+ assert.equal(selectProgress(index,{year:2025}).totals.people,1)
+ assert.equal(selectProgress(index,{year:2026}).totals.people,2)
+ assert.equal(selectProgress(index,{year:2025,kind:'UM'}).totals.people,0)
+ assert.equal(selectProgress(index).totals.people,2)
+ assert.equal(selectProgress(index,{year:2024}).totals.people,0)
+ assert.equal(detailBalances(index.people[2]).length,0)
+})
+test('one SDM can belong to both years while annual payments and balances remain separate',()=>{
+ const years=summarizeSp2dYears(results)
+ assert.deepEqual(years.map(y=>[y.year,y.people,y.obligation,y.payment,y.remaining]),[[2025,1,100,20,80],[2026,2,250,40,210]])
+ assert.equal(years.reduce((s,y)=>s+y.obligation,0),selectProgress(indexSnapshot(results)).totals.obligation)
+ const selected=selectProgress(indexSnapshot(results),{year:2026,kind:'UM',stage:1})
+ assert.equal(selected.totals.obligation,50);assert.equal(selected.totals.payment,10)
+ const exported=exportRows(selected,1)
+ assert.equal(exported.transactions[0][4],'Tahun SP2D');assert.equal(exported.transactions[1][4],2026)
+})
+test('year selection preserves ledger zero corrections and does not change import payload or source identity',()=>{
+ const before=JSON.stringify(results),payload=makeRecords(results)
+ summarizeSp2dYears(results);selectProgress(indexSnapshot(results),{year:2025})
  assert.equal(JSON.stringify(results),before);assert.deepEqual(makeRecords(results),payload)
- assert.equal(review.tanggal,undefined);assert.equal(review.nomor,undefined)
-})
-test('numeric identifiers, missing years, duplicate rows and identity conflicts cannot corroborate a year',()=>{
- const review=inspectSp2dYears({Sheet1:[header,[123,2025,'Uji','BANK MANDIRI'],[nip,null,'Uji','BANK MANDIRI'],[nip,2025,'Uji','BANK MANDIRI'],[nip,2025,'Uji','BANK MANDIRI'],[nip,2026,'Uji','BANK MANDIRI'],['000000000000000002',2025,'Lain','BANK BRI']]},results)[0]
- assert.equal(review.rows,6);assert.equal(review.invalid,2);assert.equal(review.duplicateRows,2);assert.equal(review.held,4);assert.equal(review.matched,0)
-})
-test('repeated stages stay separate source observations and missing source columns are explicit',()=>{
- const row=[nip,'2025',' Uji ','Bank Mandiri']
- const report=inspectSp2dYears({Sheet1:[header,row],Sheet12:[header,row],Other:[['NIP'],[nip]]},results)
- assert.equal(report[0].matched,1);assert.equal(report[1].matched,1);assert.equal(report[2].missingHeaders,true)
+ assert.ok(payload.some(r=>r.type==='obligation'&&r.data.amount===0))
+ assert.deepEqual(summarizeSp2dYears([{people,obligations:[obligation(0,2025,0)],payments:[]}]),[])
 })
