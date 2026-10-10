@@ -1,0 +1,4 @@
+import fs from 'node:fs';
+const paths=['supabase/recovery-case-links.draft.sql','supabase/recovery-case-read.draft.sql','supabase/recovery-case-api.draft.sql'];
+const sql=paths.map(p=>fs.readFileSync(p,'utf8').replace(/^begin;\s*$/gm,'').replace(/^commit;\s*$/gm,'')).join('\n');
+fs.writeFileSync('supabase/recovery-case-test-activation.sql',`-- REVIEWED TEST ACTIVATION: existing project, admin-only, no updates to public.sdm_cases.\n-- No real-case fixtures are inserted by this script.\nbegin;\ndo $$begin\n if to_regclass('recovery_test.recovery_people') is null or to_regprocedure('public.current_app_role()') is null then raise exception 'TEST_PREREQUISITES_MISSING';end if;\n if to_regclass('recovery_test.case_master_links') is not null then raise exception 'CASE_TEST_ALREADY_INITIALIZED_REVIEW_REQUIRED';end if;\nend $$;\n${sql}\ncommit;\n`);
