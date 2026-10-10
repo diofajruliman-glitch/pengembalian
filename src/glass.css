@@ -30,3 +30,6 @@ thead{background:#edf3fbc7}th{padding:18px;color:#58708d;font-size:10px}td{paddi
 .sidebar>.brand,.sidebar>.nav-label,.sidebar>nav,.sidebar>.nav-foot{flex-shrink:0}
 .top-right{gap:12px}.logout-button{flex-shrink:0}
 @media(max-width:730px){.top-right{gap:6px}.logout-button{padding:8px;gap:5px;font-size:10px}.topbar .crumb{flex-wrap:wrap}}
+
+.notice>.btn{flex-shrink:0;align-self:center}
+@media(max-width:730px){.notice:has(>.btn){flex-wrap:wrap}.notice>.btn{margin-left:28px;white-space:normal}.panel-heading>.btn{white-space:normal}}
