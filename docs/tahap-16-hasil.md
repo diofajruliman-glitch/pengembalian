@@ -13,3 +13,5 @@ Skrip aktivasi gabungan: supabase/recovery-case-test-activation.sql. Satu transa
 Kendala berikutnya: izin API baru perlu konfirmasi saat aktivasi melalui dashboard, lalu uji autentikasi/browser asli. Tabel kasus utama sebelumnya kosong; skrip tidak menciptakan kasus contoh di sana. Pengujian simpan yang berhasil memerlukan kasus nyata yang telah ditinjau atau lingkungan data kasus simulasi yang terisolasi secara eksplisit. API tidak boleh dinyatakan siap produksi berdasarkan tes PGlite saja.
 
 Pemetaan SP2D masih menunggu informasi sumber nomor/tanggal/tahun dari pengguna. Tidak ada push atau deployment pada tahap ini.
+
+Skrip aktivasi gabungan juga diuji langsung di PostgreSQL lokal: aktivasi pertama berhasil, pengulangan berhenti CASE_TEST_ALREADY_INITIALIZED tanpa reset data.

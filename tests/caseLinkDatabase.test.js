@@ -13,7 +13,7 @@ test('reference payload requires a persisted revision and reviewed versioned cas
 test('PostgreSQL reference commit preserves manual data, audits once and rolls back stale cases atomically',async()=>{
  const db=new PGlite();try{
  await db.exec(`create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key,role text);insert into auth.users values('00000000-0000-0000-0000-000000000001','admin'),('00000000-0000-0000-0000-000000000002','editor');create function auth.uid() returns uuid language sql stable as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;create function public.current_app_role() returns text language sql stable security definer as $$select role from auth.users where id=auth.uid()$$;create table public.sdm_cases(id bigint primary key,nip text,nama text,bank text,status text,pic text,deadline date,catatan text,bukti text,kewajiban_total numeric,realisasi_total numeric,updated_at timestamptz not null,deleted_at timestamptz);`);
- await db.exec(fs.readFileSync('supabase/recovery-isolated-test.sql','utf8'));await db.exec(fs.readFileSync('supabase/recovery-case-links.draft.sql','utf8'));await db.exec(fs.readFileSync('supabase/recovery-case-read.draft.sql','utf8'));await db.exec(fs.readFileSync('supabase/recovery-case-api.draft.sql','utf8'));
+ await db.exec(fs.readFileSync('supabase/recovery-isolated-test.sql','utf8'));await db.exec(fs.readFileSync('supabase/recovery-case-test-activation.sql','utf8'));await assert.rejects(db.exec(fs.readFileSync('supabase/recovery-case-test-activation.sql','utf8')),/CASE_TEST_ALREADY_INITIALIZED/);await db.exec('rollback');
  await db.exec(`select set_config('request.jwt.claim.sub','00000000-0000-0000-0000-000000000001',false);insert into recovery_test.recovery_imports(id,file_name,file_sha256,actor,status) values('00000000-0000-0000-0000-000000000010','SIMULASI.xlsx',repeat('1',64),'00000000-0000-0000-0000-000000000001','committed');update recovery_test.recovery_revision set revision=1;
  insert into recovery_test.recovery_people(nip,nama,bank) values('000000000000000901','SDM SIMULASI 1','Mandiri'),('000000000000000902','SDM SIMULASI 2','BRI'),('000000000000000903','SDM SIMULASI 3','BSI');
  insert into recovery_test.recovery_obligations(nip,bank,jenis,tahun_kewajiban,nominal,source_import) select nip,bank,'TUKIN',2025,100000,'00000000-0000-0000-0000-000000000010' from recovery_test.recovery_people;
@@ -47,3 +47,4 @@ test('PostgreSQL reference commit preserves manual data, audits once and rolls b
  await db.exec('set role authenticated');await assert.rejects(db.query('select * from recovery_test.case_master_links'),/permission denied/);
  }finally{await db.close()}
 })
+
