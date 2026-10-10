@@ -6,6 +6,7 @@ export function caseTestClient(client,mode,url){
  return {rpc:(name,args={})=>{if(!allowed.has(name))throw Error('Operasi kasus tidak diizinkan.');return client.rpc('recovery_case_test_rpc',{p_action:name,p_payload:args})}}
 }
 export async function prepareReferences(client,snapshot,rows){
+ if(client.scope&&snapshot.scope!==client.scope)throw Error('Sumber master dan tujuan referensi berbeda. Muat ulang master yang sesuai.')
  const q=await client.rpc('case_prepare',prepareCaseLinkPayload(snapshot,rows));if(q.error)throw q.error;return q.data
 }
 export async function commitReferences(client,id,reason){

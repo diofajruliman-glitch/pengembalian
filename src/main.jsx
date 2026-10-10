@@ -11,13 +11,15 @@ import {stagingEnabled,isolatedTestClient} from './import/batchTransport.js'
 import RecoveryWorkspace from './recovery/RecoveryWorkspace.jsx'
 import CaseLinkPreview from './recovery/CaseLinkPreview.jsx'
 import {caseTestClient} from './recovery/caseApi.js'
+import {productionMasterClient} from './import/productionClient.js'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
 const configured = Boolean(url && key && !url.includes('PROJECT_ID'))
 const supabase = configured ? createClient(url, key, { auth: {persistSession:true, autoRefreshToken:true, detectSessionInUrl:true} }) : null
-const importTestClient=isolatedTestClient(supabase,import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)||(stagingEnabled(import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)?supabase:null)
-const caseApiClient=caseTestClient(supabase,import.meta.env.VITE_RECOVERY_CASE_MODE,url)
+const productionClient=productionMasterClient(supabase,import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)
+const importTestClient=productionClient||isolatedTestClient(supabase,import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)||(stagingEnabled(import.meta.env.VITE_RECOVERY_IMPORT_MODE,url)?supabase:null)
+const caseApiClient=productionClient||caseTestClient(supabase,import.meta.env.VITE_RECOVERY_CASE_MODE,url)
 const fmtRp = n => 'Rp ' + Math.max(0,Number(n||0)).toLocaleString('id-ID', {maximumFractionDigits:0})
 const fmtN = n => Number(n||0).toLocaleString('id-ID')
 const safeDate = v => v ? new Date(`${v}T12:00:00`).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}) : '—'

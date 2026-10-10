@@ -26,7 +26,7 @@ export async function loadStoredSnapshot(client,onProgress=()=>{}){
  }
  const end=await read('recovery_read_meta')
  if(end.revision!==start.revision||result.people.length!==start.people)throw Error('Data berubah selama pemuatan. Muat ulang master.')
- return {source:'database',fileName:'Master tersimpan • schema pengujian',revision:start.revision,results:[result]}
+ return {source:'database',...(client.scope?{scope:client.scope}:{}),fileName:client.masterLabel||'Master tersimpan • schema pengujian',revision:start.revision,results:[result]}
 }
 export function makeRecords(results){return results.flatMap(r=>[
  // Nonactive source metadata is preview-only until its own import is validated.
