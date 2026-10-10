@@ -24,3 +24,9 @@ thead{background:#edf3fbc7}th{padding:18px;color:#58708d;font-size:10px}td{paddi
 @media(max-width:730px){.sidebar{inset:10px auto 10px 10px;width:280px;transform:translateX(-110%);border-radius:25px}.sidebar.is-open{transform:translateX(0)}.brand b{font-size:16px}.workspace{margin-left:0;padding:10px 10px 0}.topbar{padding:0 13px;border-radius:21px;min-height:62px;gap:8px}.crumb{font-size:10px;gap:5px}.top-left{min-width:0}.online-chip{font-size:8px;padding:7px}.main{padding:23px 0}.page-title h1{font-size:25px}.page-title p{font-size:12px}.page-title>div:last-child{max-width:100%;display:flex;flex-wrap:wrap;gap:8px}.stat-card{padding:17px 13px;border-radius:21px}.stat-card .stat-head{font-size:10px;gap:5px}.stat-card svg{padding:4px;width:15px;height:15px}.stat-card small{font-size:10px}.panel{padding:21px;border-radius:23px}.panel.table-panel{padding:0}.footer{padding:16px 3px;font-size:9px}.modal{border-radius:26px 26px 0 0}.modal-main{padding:21px}.auth-screen{padding:12px;gap:12px}.auth-art{padding:34px 24px;border-radius:26px}.auth-form-wrap{padding:32px 23px;border-radius:26px}.auth-art h1{font-size:31px}.auth-form h2{font-size:24px}.mobile-overlay{background:#1c315a66;backdrop-filter:blur(5px)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
 @media(prefers-reduced-transparency:reduce){.sidebar,.topbar,.panel,.stat-card,.plan-row,.bank-card,.modal,.auth-form-wrap{background:#f8fbff;backdrop-filter:none;-webkit-backdrop-filter:none}}
+
+/* Keep account controls reachable on short screens and mobile. */
+.sidebar{overflow-y:auto;overscroll-behavior:contain}
+.sidebar>.brand,.sidebar>.nav-label,.sidebar>nav,.sidebar>.nav-foot{flex-shrink:0}
+.top-right{gap:12px}.logout-button{flex-shrink:0}
+@media(max-width:730px){.top-right{gap:6px}.logout-button{padding:8px;gap:5px;font-size:10px}.topbar .crumb{flex-wrap:wrap}}
