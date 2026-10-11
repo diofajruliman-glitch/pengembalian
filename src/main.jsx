@@ -21,6 +21,7 @@ import CaseLinkPreview from './recovery/CaseLinkPreview.jsx'
 import {indexSnapshot,selectProgress} from './recovery/progress.js'
 import {caseTestClient} from './recovery/caseApi.js'
 import {productionMasterClient} from './import/productionClient.js'
+import AdjustmentMonitor from './adjustments/AdjustmentMonitor.jsx'
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -46,6 +47,7 @@ const menus = [
   {id:'aksi',name:'Rencana Aksi',icon:CalendarDays},
   {id:'bank',name:'Rekap Bank',icon:Landmark},
   {id:'master-progress',name:'Master & Progres',icon:TrendingUp},
+  {id:'perubahan-pengembalian',name:'Perubahan Pengembalian',icon:FileCheck2},
   {id:'impor-master',name:'Pratinjau Excel Master',icon:FileSpreadsheet},
   {id:'panduan',name:'Petunjuk',icon:CircleHelp}
 ]
@@ -68,7 +70,7 @@ function App(){
  const [masterLoading,setMasterLoading]=useState(false);const [masterLoadError,setMasterLoadError]=useState('')
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
- const [page,setPage]=useState('dashboard');const [navOpen,setNavOpen]=useState(false)
+ const [page,setPage]=useState(()=>window.location.hash==='#perubahan-pengembalian'?'perubahan-pengembalian':'dashboard');const [navOpen,setNavOpen]=useState(false)
  const [editingAction,setEditingAction]=useState(null);const [deletingAction,setDeletingAction]=useState(null);const [actionError,setActionError]=useState('');
  const [editingMatrix,setEditingMatrix]=useState(null);const [deletingMatrix,setDeletingMatrix]=useState(null);const [matrixError,setMatrixError]=useState('');
  const [matrix,setMatrix]=useState(seeds.bottlenecks); const [actions,setActions]=useState(seeds.actions); const [bankData,setBankData]=useState(bankDefaults)
@@ -291,10 +293,11 @@ function App(){
    </aside>
    <div className="workspace"><header className="topbar"><div className="top-left"><button className="icon-btn hamburger" onClick={()=>setNavOpen(true)}><Menu size={22}/></button><span className="crumb">Direktorat PSNK <ChevronRight size={14}/> <b>{menus.find(m=>m.id===page)?.name}</b></span></div><div className="top-right"><span className="online-chip"><span className="green-dot"/>{demo?'PRATINJAU':'DATABASE AKTIF'}</span><span className="user-chip"><div className="avatar small">{demo?'D':(profile?.nama||'P')[0].toUpperCase()}</div>{demo?'Pratinjau':profile?.nama||'Pengguna'}</span>{!demo&&<button type="button" className="btn secondary logout-button" onClick={signOut} aria-label="Keluar dari aplikasi"><LogOut size={16}/><span>Keluar</span></button>}</div></header>
    <main className="main">
-    {demo&&<div className="notice demo-notice"><Info size={17}/><span><b>Mode pratinjau.</b> Perubahan hanya ada selama halaman terbuka. Belum memakai database dan <b>jangan masukkan data SDM riil</b>. Ikuti README untuk mengaktifkan login, database, dan Vercel.</span></div>}
+    {demo&&page!=='perubahan-pengembalian'&&<div className="notice demo-notice"><Info size={17}/><span><b>Mode pratinjau.</b> Perubahan hanya ada selama halaman terbuka. Belum memakai database dan <b>jangan masukkan data SDM riil</b>. Ikuti README untuk mengaktifkan login, database, dan Vercel.</span></div>}
     {error&&<div className="notice red-notice"><AlertTriangle size={18}/><span>{error}</span><button className="icon-btn" onClick={()=>setError('')}><X size={15}/></button></div>}
     {page==='impor-master'&&canImport&&<ImportPreview metadataClient={profile?.role==='admin'?sourceMetadataClient:null} storedSnapshot={profile?.role==='admin'?masterSnapshot:null} sdmClient={profile?.role==='admin'?sdmStatusClient:null} stagingClient={profile?.role==='admin'?importTestClient:null} onMasterCommitted={refreshCommittedMaster} onSnapshot={data=>{setRecoverySnapshot(data);activateMaster(data);go('master-progress')}}/>}
     {page==='master-progress'&&<RecoveryWorkspace client={importTestClient} snapshot={recoverySnapshot} onImport={canImport?()=>go('impor-master'):undefined} onMasterLoaded={activateMaster}/>}
+    {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}
       {masterLoadError&&<div className="notice amber-notice"><Info size={18}/><span>{masterLoadError}</span></div>}
@@ -327,4 +330,6 @@ function ActionModal({value,onClose,onSave,busy,error}){const[r,setR]=useState({
 function BottleneckModal({value,onClose,onSave,busy,error}){const[r,setR]=useState({...value});const up=(k,v)=>setR(x=>({...x,[k]:v}));return <Modal title={value.no?'Edit Bottleneck':'Tambah Bottleneck'} onClose={onClose} footer={<><button className="btn secondary" disabled={busy} onClick={onClose}>Batal</button><button className="btn primary" disabled={busy} onClick={()=>onSave(r)}>{busy?'Menyimpan...':'Simpan'}</button></>}><div className="form-grid">{[['kategori','Kategori'],['risiko','Risiko'],['tindak_lanjut','Tindak Lanjut'],['jalur','Jalur Penyelesaian'],['pic','PIC'],['koordinasi','Koordinasi'],['output','Output / Bukti'],['keputusan','Keputusan']].map(([k,label])=><Field key={k} label={label} field={k} value={r[k]} onChange={up}/>)}<Field label="Deadline" field="deadline" type="date" value={r.deadline} onChange={up}/><Field label="Prioritas"><select value={r.prioritas||'Tinggi'} onChange={e=>up('prioritas',e.target.value)}>{[...new Set(['Kritis','Tinggi','Sedang','Rendah',r.prioritas].filter(Boolean))].map(x=><option key={x}>{x}</option>)}</select></Field><Field label="Status"><select value={r.status||'Belum Mulai'} onChange={e=>up('status',e.target.value)}>{statuses.map(x=><option key={x}>{x}</option>)}</select></Field></div>{error&&<p role="alert" className="notice red-notice">{error}</p>}</Modal>}
 function BankModal({value,onClose,onSave,busy}){const[r,setR]=useState({...value});const up=(k,v)=>setR(x=>({...x,[k]:v}));return <Modal title={'Rekonsiliasi Bank '+r.bank} onClose={onClose} footer={<><button className="btn secondary" onClick={onClose}>Batal</button><button className="btn primary" onClick={()=>onSave(r)} disabled={busy}><CheckCircle2 size={16}/> Simpan rekap</button></>}><div className="form-grid"><Field label="Jumlah SDM Wajib" field="jumlah_sdm" type="number" value={r.jumlah_sdm} onChange={up}/><Field label="Debit gagal terakhir (SDM)" field="gagal_terakhir" type="number" value={r.gagal_terakhir} onChange={up}/><Field label="Total kewajiban (Rp)" field="kewajiban_total" type="number" value={r.kewajiban_total} onChange={up}/><Field label="Realisasi netto (Rp)" field="realisasi_netto" type="number" value={r.realisasi_netto} onChange={up}/><Field label="Tanggal cut-off" field="cutoff" type="date" value={r.cutoff} onChange={up}/><Field label="Status eksekusi" field="status" value={r.status} onChange={up}/><Field label="Referensi bukti" field="bukti" value={r.bukti} onChange={up}/><Field label="Catatan" field="catatan" value={r.catatan} onChange={up}/></div><div className="notice amber-notice"><Info size={16}/> Jangan memasukkan angka yang belum direkonsiliasi atau menggabungkan dua tahap hasil debit tanpa pengecekan ulang.</div></Modal>}
 
-createRoot(document.getElementById('root')).render(<App />)
+const appRoot=import.meta.hot?.data.appRoot||createRoot(document.getElementById('root'))
+if(import.meta.hot)import.meta.hot.data.appRoot=appRoot
+appRoot.render(<App />)
