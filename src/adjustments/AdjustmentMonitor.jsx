@@ -5,6 +5,7 @@ import {REASONS,primaryReason,sourcePriorityChanged,aggregate} from './model.js'
 import {latestHistoryRows,collectFilteredRows,saveAdjustmentExcel} from './export.js'
 import './adjustments.css'
 import ChronologyRecap from './ChronologyRecap.jsx'
+import BnbaDialog from './BnbaDialog.jsx'
 
 const money=v=>v===null||v===undefined?'Kosong':'Rp '+Number(v).toLocaleString('id-ID',{maximumFractionDigits:2})
 const count=v=>Number(v||0).toLocaleString('id-ID')
@@ -56,6 +57,7 @@ export default function AdjustmentMonitor({supabase,local=false}){
  const [manifest,setManifest]=useState(null),[filters,setFilters]=useState(initialFilters),[page,setPage]=useState(0)
  const [result,setResult]=useState(null),[error,setError]=useState(''),[loading,setLoading]=useState(true),[refresh,setRefresh]=useState(0),[nip,setNip]=useState(null),[recapMode,setRecapMode]=useState('transition')
  const [queryFilters,setQueryFilters]=useState(filters)
+ const [bnbaSelection,setBnbaSelection]=useState(null)
  const [exportProgress,setExportProgress]=useState(null),exportController=useRef(null)
  useEffect(()=>()=>exportController.current?.abort(),[])
  async function exportFiltered(){
@@ -83,7 +85,7 @@ export default function AdjustmentMonitor({supabase,local=false}){
   {manifest&&<div className="notice demo-notice"><FileSpreadsheet size={18}/><span><b>{manifest.fileName}</b> · {count(manifest.expectedRows)} data · {count(manifest.summary?.people)} SDM unik.<br/>{local?'Sumber lokal privat di komputer ini.':'Sumber lampiran tersimpan di Supabase.'} Angka mengikuti rincian workbook; alasan zona/absensi mengikuti aturan yang ditetapkan.</span></div>}
   {manifest?.warnings?.map((w,i)=><div key={i} className="notice amber-notice"><span>{w.description}<br/>Rincian: {money(w.detail)} · rekap workbook: {money(w.cached)}.</span></div>)}
   {error&&<div role="alert" className="notice red-notice">{error}</div>}
-  {manifest&&<ChronologyRecap api={api} version={manifest.preparedAt} refresh={refresh} onSelect={preset=>{setFilters({...initialFilters,...preset});setPage(0);setResult(null)}}/>}
+  {manifest&&<ChronologyRecap api={api} version={manifest.preparedAt} refresh={refresh} onSelect={(preset,label)=>setBnbaSelection({filters:{...initialFilters,...preset},label})}/>}
   <section className="panel"><div className="panel-heading"><h2>Filter data dan rekap</h2><button className="btn secondary" onClick={()=>{setFilters(initialFilters);setPage(0);setResult(null)}}>Reset filter</button></div><div className="adjustment-filters">
    <label className="form-field adjustment-search"><span>Cari nama / NIP</span><div className="search-box"><Search size={16}/><input aria-label="Cari nama atau NIP" value={filters.search} onChange={e=>filter('search',e.target.value)} placeholder="Nama atau NIP 18 digit"/></div></label>
    {select('sp2dOld','STATUS SP2D (lama)')}{select('sp2dUpdated','STATUS SP2D UPDATE')}{select('bpk','STATUS SEND BPK')}{select('month','Bulan')}
@@ -100,6 +102,7 @@ export default function AdjustmentMonitor({supabase,local=false}){
    <div className="panel-heading"><button className="btn secondary" disabled={loading||!!exportProgress||JSON.stringify(filters)!==JSON.stringify(queryFilters)} onClick={exportFiltered}><FileSpreadsheet size={16}/> Ekspor Excel sesuai filter</button>{exportProgress&&<><span role="status">Mengambil {count(exportProgress.done)} dari {count(exportProgress.total)} data. Ekspor banyak data memerlukan waktu; persempit filter untuk mempercepat.</span><button className="btn secondary" onClick={()=>exportController.current?.abort()}>Batalkan ekspor</button></>}</div>
    <section className="panel table-panel"><div className="panel-heading"><h2>BNBA sesuai filter</h2><span>{count(summary.rows)} data</span></div><div className="table-scroll"><table><thead><tr><th>SDM / periode</th><th>SP2D lama → update</th><th>Status SEND BPK</th><th>Pengembalian awal</th><th>Pengembalian final</th><th>Selisih</th><th>Alasan perubahan</th><th>Riwayat</th></tr></thead><tbody>{result.rows.map(r=><tr key={r.sourceRow}><td><b>{r.name}</b><span className="mono">{r.nip}</span><small>{r.month} {r.periodYear} · {r.province}<br/>{r.district} · {value(r.zone)}</small></td><td>{value(r.sp2dOld)} → {value(r.sp2dUpdated)}</td><td>{value(r.bpk)}</td><td>{money(r.initial)}<small>{value(r.statusInitial)}</small></td><td>{money(r.final)}<small>{value(r.statusFinal)}</small></td><td className={r.delta<0?'danger-text':''}>{money(r.delta)}</td><td><ReasonTags row={r}/></td><td><button className="btn secondary" aria-label={`Riwayat ${r.name}`} onClick={()=>setNip(r.nip)}><History size={15}/> Per SDM</button></td></tr>)}{!result.rows.length&&<tr><td colSpan={8} className="empty">Tidak ada data yang cocok. Sesuaikan filter.</td></tr>}</tbody></table></div><div className="pagination"><span>Halaman {result.page+1} dari {Math.max(1,Math.ceil(summary.rows/result.pageSize))}. Rekap mencakup seluruh hasil filter.</span><div><button className="btn secondary" disabled={result.page===0} aria-label="Halaman sebelumnya" onClick={()=>setPage(result.page-1)}><ChevronLeft size={16}/></button><button className="btn secondary" disabled={(result.page+1)*result.pageSize>=summary.rows} aria-label="Halaman berikutnya" onClick={()=>setPage(result.page+1)}><ChevronRight size={16}/></button></div></div></section>
   </>}
+  {bnbaSelection&&<BnbaDialog api={api} selection={bnbaSelection} suspended={!!nip} onClose={()=>setBnbaSelection(null)} onHistory={setNip}/>}
   {nip&&<SdmHistory api={api} nip={nip} onClose={()=>setNip(null)}/>}
  </div>
 }
