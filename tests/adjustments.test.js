@@ -78,6 +78,7 @@ test('Supabase migration preserves existing tables, enforces roles, commits comp
  try{
   await db.exec(`create role anon;create role authenticated;create schema auth;create table auth.users(id uuid primary key,role text);insert into auth.users values('${admin}','admin'),('${viewer}','viewer');create function auth.uid() returns uuid language sql as $$select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid$$;create function public.current_app_role() returns text language sql security definer as $$select role from auth.users where id=auth.uid()$$;create table public.sentinel(value integer);insert into public.sentinel values(42);`)
   await db.exec(fs.readFileSync('supabase/recovery-adjustments.sql','utf8'))
+  await db.exec(fs.readFileSync('supabase/recovery-adjustments-performance.sql','utf8'))
   const call=async(name,action,payload={})=>(await db.query(`select public.${name}($1,$2) result`,[action,JSON.stringify(payload)])).rows[0].result
   const write=(a,p)=>call('recovery_adjustment_import',a,p),read=(a,p)=>call('recovery_adjustment_read',a,p)
   await db.exec(`set role authenticated;select set_config('request.jwt.claim.sub','${admin}',false)`)
@@ -94,6 +95,10 @@ test('Supabase migration preserves existing tables, enforces roles, commits comp
   const filters={sp2dOld:'2025',sp2dUpdated:'2026',reason:'WITA',bpk:'BELUM MASUK BPK'}
   const online=await read('query',{filters,page:0}),local=queryRows(rows,filters)
   assert.deepEqual(online.summary,local.summary);assert.deepEqual(online.recaps,local.recaps)
+  for(const extraFilter of [{},{sp2dOld:'',sp2dUpdated:'',search:''},{sp2dOld:'__EMPTY__'},{change:'amount'},{change:'any'},{change:'unchanged'},{change:'missing'},{month:'November'},{zone:'WITA'},{sourcePriority:'changed'},{primaryReason:'UNCHANGED'},{search:'SDM'}]){
+   const actual=await read('query',{filters:extraFilter,page:999}),expected=queryRows(rows,extraFilter,999)
+   assert.deepEqual(actual.summary,expected.summary);assert.deepEqual(actual.recaps,expected.recaps);assert.equal(actual.page,expected.page)
+  }
   const overlap=row({'STATUS TENDIK':'tendik','cek selisih':'PENYESUAIAN TENDIK','S':'Penyesuaian absen tendik'})
   await db.exec('reset role')
   assert.equal((await db.query('select recovery_adjustments.primary_reason($1::jsonb) reason',[JSON.stringify(overlap)])).rows[0].reason,primaryReason(overlap))
