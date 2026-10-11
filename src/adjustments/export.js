@@ -1,9 +1,9 @@
 import {aggregate,primaryReason,REASONS} from './model.js'
 const labels={...REASONS,UNCHANGED:'Tidak berubah nominal',MISSING:'Nominal belum lengkap'}
 
-export function latestHistoryRows(rows){
+export function latestHistoryRows(rows,activeImportId){
  const versions=rows.map(r=>Number(r.importId||0))
- const latest=Math.max(0,...versions)
+ const latest=activeImportId??Math.max(0,...versions)
  return rows.filter(r=>Number(r.importId||0)===latest)
 }
 export function reasonBasis(row){

@@ -16,5 +16,9 @@ export function adjustmentApi(supabase,{local=false}={}){
   if(error)throw Error(error.code==='PGRST202'?'Menu sudah tersedia; tabel lampiran Supabase belum diaktifkan.':error.message)
   return data
  }
- return {manifest:signal=>call('manifest',{},signal),query:(filters,page,signal)=>call('query',{filters,page},signal),history:(nip,signal)=>call('history',{nip},signal)}
+ return {manifest:signal=>call('manifest',{},signal),query:(filters,page,signal)=>call('query',{filters,page},signal),history:async(nip,signal)=>{
+  const manifest=await call('manifest',{},signal),history=await call('history',{nip},signal),after=await call('manifest',{},signal)
+  if(manifest.importId!==after.importId||manifest.preparedAt!==after.preparedAt)throw Error('Versi workbook baru diaktifkan. Buka ulang riwayat untuk memuat data terbaru.')
+  return {...history,activeImportId:manifest.importId??0}
+ }}
 }

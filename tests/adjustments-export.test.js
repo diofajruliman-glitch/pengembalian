@@ -9,6 +9,8 @@ test('export preserves text NIP and missing amounts, groups people, and newest h
  assert.equal(tables.detail[1][0],'000000000000000001');assert.equal(tables.detail[2][7],null)
  assert.deepEqual(tables.summary[1].slice(2),[2,100,85,-20,1,0,1])
  assert.deepEqual(latestHistoryRows([row(2,{importId:1}),row(2,{importId:2})]).map(r=>r.importId),[2])
+ assert.deepEqual(latestHistoryRows([row(2,{importId:1})],2),[])
+ assert.equal(latestHistoryRows([row(2,{importId:1,final:500}),row(2,{importId:2,final:null})],2)[0].final,null)
 })
 test('export collects all pages and rejects snapshot changes or incomplete data',async()=>{
  const api={manifest:async()=>({sha256:'same',preparedAt:'version'}),query:async(f,page)=>({rows:page===0?[row(2),row(3)]:[row(4)],page,pageSize:2,summary:{rows:3,initial:300,final:240,delta:-60}})}
