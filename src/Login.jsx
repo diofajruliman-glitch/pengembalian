@@ -2,6 +2,12 @@ import React, {useState} from 'react'
 import {ArrowRight, CalendarDays, Check, Eye, EyeOff, FileCheck2, LockKeyhole, Mail, Pause, Play, ShieldCheck, Users, LoaderCircle} from 'lucide-react'
 import './login.css'
 
+const dataRoutes = [
+  'M131 66H161Q179 66 179 84V99Q179 115 195 115H230',
+  'M343 111H299Q284 111 274 115H230',
+  'M119 208V188Q119 174 135 174H197Q215 174 215 156V131Q215 115 230 115'
+]
+
 export default function Login({onSignIn, onReset, loginError, resetMessage, busy}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -15,7 +21,7 @@ export default function Login({onSignIn, onReset, loginError, resetMessage, busy
         <div className="login-glow login-glow-secondary" aria-hidden="true"/>
         <div className="login-particles" aria-hidden="true"><i/><i/><i/><i/><i/><i/></div>
         <div className="login-brand">
-          <span className="login-brand-mark"><ShieldCheck size={25} aria-hidden="true"/></span>
+          <span className="login-brand-mark"><ShieldCheck size={25} aria-hidden="true"/><span className="login-brand-scan" aria-hidden="true"/><span className="login-mobile-flow" aria-hidden="true"><i/><i/><i/></span></span>
           <div><strong>TukinUM<span>recovery</span></strong><span className="login-brand-subtitle">DIREKTORAT PSNK</span></div>
           <button type="button" className="login-motion-toggle" aria-label={animationPaused ? 'Lanjutkan animasi' : 'Jeda animasi'} title={animationPaused ? 'Lanjutkan animasi' : 'Jeda animasi'} onClick={() => setAnimationPaused(value => !value)}>{animationPaused ? <Play size={15} aria-hidden="true"/> : <Pause size={15} aria-hidden="true"/>}</button>
         </div>
@@ -27,9 +33,13 @@ export default function Login({onSignIn, onReset, loginError, resetMessage, busy
         </div>
 
         <div className="login-illustration" aria-hidden="true">
+          <svg className="login-data-flow" viewBox="0 0 460 230" preserveAspectRatio="none" fill="none" focusable="false">
+            <g className="login-data-track">{dataRoutes.map(route => <path key={route} d={route} vectorEffect="non-scaling-stroke"/>)}</g>
+            <g className="login-data-stream">{dataRoutes.map(route => <path key={route} d={route} pathLength="100" vectorEffect="non-scaling-stroke"/>)}</g>
+          </svg>
           <div className="login-orbit login-orbit-outer"/>
           <div className="login-orbit login-orbit-inner"/>
-          <div className="login-shield"><ShieldCheck size={47} strokeWidth={1.4}/><span className="login-shield-check"><Check size={12} strokeWidth={3}/></span></div>
+          <div className="login-shield"><ShieldCheck size={47} strokeWidth={1.4}/><span className="login-shield-scan"/><span className="login-shield-check"><Check size={12} strokeWidth={3}/></span></div>
           <div className="login-float login-float-monitor"><span className="login-float-icon"><Users size={18}/></span><div><small>TERINTEGRASI</small><strong>Monitoring SDM</strong></div></div>
           <div className="login-float login-float-recap"><span className="login-float-icon"><FileCheck2 size={18}/></span><div><small>TERSTRUKTUR</small><strong>Rekonsiliasi</strong></div></div>
           <div className="login-float login-float-action"><span className="login-float-icon"><Check size={16}/></span><strong>Tindak lanjut</strong><span className="login-mini-dots"><i/><i/><i/></span></div>
@@ -55,6 +65,7 @@ export default function Login({onSignIn, onReset, loginError, resetMessage, busy
               <div className="login-input-wrap">
                 <Mail size={18} aria-hidden="true"/>
                 <input id="login-email" name="email" autoComplete="username" type="email" value={email} required onChange={event => setEmail(event.target.value)} placeholder="nama@kemensos.go.id" disabled={busy}/>
+                <span className="login-input-signal" aria-hidden="true"/>
               </div>
             </div>
 
@@ -64,6 +75,7 @@ export default function Login({onSignIn, onReset, loginError, resetMessage, busy
                 <LockKeyhole size={18} aria-hidden="true"/>
                 <input id="login-password" name="password" autoComplete="current-password" type={showPassword ? 'text' : 'password'} value={password} required onChange={event => setPassword(event.target.value)} placeholder="Masukkan kata sandi" disabled={busy}/>
                 <button type="button" className="login-password-toggle" aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'} aria-pressed={showPassword} aria-controls="login-password" disabled={busy} onClick={() => setShowPassword(value => !value)}>{showPassword ? <EyeOff size={18} aria-hidden="true"/> : <Eye size={18} aria-hidden="true"/>}</button>
+                <span className="login-input-signal" aria-hidden="true"/>
               </div>
             </div>
 
