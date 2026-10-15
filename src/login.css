@@ -106,6 +106,7 @@
 .login-illustration { position: relative; height: 230px; width: 100%; margin: 20px 0 22px; pointer-events: none; }
 .login-illustration::before { content: ''; position: absolute; inset: -30px 35px; background: radial-gradient(ellipse, #438bff25, transparent 64%); }
 .login-data-flow { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.login-data-flow-mobile { display: none; }
 .login-data-track path { stroke: #91caff42; stroke-width: 1; stroke-linecap: round; }
 .login-data-stream path { stroke: #b5f0ff; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 3 22; stroke-dashoffset: 50; filter: drop-shadow(0 0 3px #6ed8ff); animation: login-data-transfer 2.8s linear infinite; }
 .login-data-stream path:nth-child(2) { animation-delay: -1.1s; animation-duration: 2.4s; stroke: #a8e8db; }
@@ -258,7 +259,29 @@
   .login-intro h1 { font-size: 31px; line-height: 1.25; letter-spacing: -1.1px; margin: 13px 0 12px; }
   .login-intro h1 em br { display: none; }
   .login-intro p { max-width: 400px; font-size: 12px; }
-  .login-illustration, .login-deadline { display: none; }
+  .login-illustration { display: block; height: 200px; margin: 16px 0 4px; }
+  .login-data-flow-desktop { display: none; }
+  .login-data-flow-mobile { display: block; }
+  .login-orbit-outer { width: 174px; height: 174px; }
+  .login-orbit-inner { width: 126px; height: 126px; }
+  .login-shield { width: 64px; height: 64px; border-radius: 20px; }
+  .login-shield > svg { width: 34px; height: 34px; }
+  .login-shield::before { inset: -8px; border-radius: 26px; }
+  .login-shield-check { width: 19px; height: 19px; border-width: 2px; right: -4px; bottom: 6px; }
+  .login-float { --float-x: 2px; --float-y: -4px; --float-turn: -1deg; gap: 6px; min-height: 38px; padding: 7px 8px; border-radius: 10px; }
+  .login-float > div { min-width: 0; }
+  .login-float small { font-size: 6.5px; letter-spacing: .7px; margin-bottom: 3px; }
+  .login-float strong { font-size: clamp(8px, 2.25vw, 10px); white-space: nowrap; }
+  .login-float-icon { width: 20px; height: 20px; flex-shrink: 0; border-radius: 6px; }
+  .login-float-icon > svg { width: 13px; height: 13px; }
+  .login-float-monitor { left: 0; top: 12px; width: 43.5%; }
+  .login-float-recap { --float-x: -2px; --float-y: 4px; --float-turn: 1deg; right: 0; top: 12px; width: 36.3%; }
+  .login-float-action { --float-x: 2px; --float-y: -4px; --float-turn: .7deg; left: calc(50% - 63px); bottom: 0; width: 126px; min-height: 32px; padding: 6px 8px; }
+  .login-float-action strong { font-size: 9px; }
+  .login-float-action .login-float-icon { width: 18px; height: 18px; }
+  .login-mini-dots { gap: 2px; margin-left: 4px; }
+  .login-mini-dots i { width: 2px; height: 2px; }
+  .login-deadline { display: none; }
   .login-main { padding: 27px 32px 24px; }
   .login-access-label { justify-content: flex-start; }
   .login-form-content { max-width: none; padding: 24px 0 29px; }

@@ -7,6 +7,11 @@ const dataRoutes = [
   'M343 111H299Q284 111 274 115H230',
   'M119 208V188Q119 174 135 174H197Q215 174 215 156V131Q215 115 230 115'
 ]
+const mobileDataRoutes = [
+  'M134 30H146Q160 30 160 46V100',
+  'M209 30H189Q174 30 174 46V86Q174 100 160 100',
+  'M160 176V100'
+]
 
 export default function Login({onSignIn, onReset, loginError, resetMessage, busy}) {
   const [email, setEmail] = useState('')
@@ -33,9 +38,13 @@ export default function Login({onSignIn, onReset, loginError, resetMessage, busy
         </div>
 
         <div className="login-illustration" aria-hidden="true">
-          <svg className="login-data-flow" viewBox="0 0 460 230" preserveAspectRatio="none" fill="none" focusable="false">
+          <svg className="login-data-flow login-data-flow-desktop" viewBox="0 0 460 230" preserveAspectRatio="none" fill="none" focusable="false">
             <g className="login-data-track">{dataRoutes.map(route => <path key={route} d={route} vectorEffect="non-scaling-stroke"/>)}</g>
             <g className="login-data-stream">{dataRoutes.map(route => <path key={route} d={route} pathLength="100" vectorEffect="non-scaling-stroke"/>)}</g>
+          </svg>
+          <svg className="login-data-flow login-data-flow-mobile" viewBox="0 0 320 200" preserveAspectRatio="none" fill="none" focusable="false">
+            <g className="login-data-track">{mobileDataRoutes.map(route => <path key={route} d={route} vectorEffect="non-scaling-stroke"/>)}</g>
+            <g className="login-data-stream">{mobileDataRoutes.map(route => <path key={route} d={route} pathLength="100" vectorEffect="non-scaling-stroke"/>)}</g>
           </svg>
           <div className="login-orbit login-orbit-outer"/>
           <div className="login-orbit login-orbit-inner"/>
