@@ -24,7 +24,7 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
  const [search,setSearch]=useState(''),[assessment,setAssessment]=useState('Terbukti'),[category,setCategory]=useState(''),[period,setPeriod]=useState('after'),[availability,setAvailability]=useState(''),[selected,setSelected]=useState(null)
  const [preview,setPreview]=useState(null),[datasets,setDatasets]=useState([]),[dbNotice,setDbNotice]=useState(''),[archiveReview,setArchiveReview]=useState(false),[auditPage,setAuditPage]=useState(0)
  const [activeFinding,setActiveFinding]=useState(null),[auditStatusFilter,setAuditStatusFilter]=useState('all'),[auditSearch,setAuditSearch]=useState('')
- const worker=useRef(null),alive=useRef(true),autoLoaded=useRef(false)
+ const worker=useRef(null),alive=useRef(true),autoLoaded=useRef(false),snapshotRef=useRef(snapshot)
  const storage=useMemo(()=>supabase?disciplineStorage(supabase):null,[supabase])
  const version=snapshot?.kind==='analysis'?snapshot.versions[snapshot.active]:null
  const result=version?.result,rows=result?.rows||[],archived=version?.status==='archived'
