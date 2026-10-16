@@ -36,7 +36,7 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
  const selectedRow=focused.find(r=>r.nik===selected)
  const counts=useMemo(()=>Object.fromEntries(FOCUSED_ASSESSMENTS.map(s=>[s,focused.filter(r=>r.hasilPenilaian===s).length])),[focused])
  const filteredIds=useMemo(()=>new Set(filtered.map(r=>r.nik)),[filtered])
- const filteredAudits=useMemo(()=>(result?.audits||[]).filter(a=>filteredIds.has(a.nik)),[result,filteredIds])
+ const filteredAudits=useMemo(()=>(result?.audits||[]).filter(a=>!a.nik||filteredIds.has(a.nik)),[result,filteredIds])
  const displayedAudits=useMemo(()=>{
   let list=filteredAudits
   if(auditStatusFilter==='open')list=list.filter(a=>!a.resolved)
@@ -154,6 +154,95 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
  async function download(){setBusy(true);setError('');try{await exportDiscipline({rows:filtered,rules:result.rules,version:version.number,filename:snapshot.filename,source:result.source,filters});if(alive.current)setMessage('Hasil sesuai filter diekspor beserta kelengkapan data, parameter, dan audit SDM terpilih.')}catch(err){if(alive.current)setError(err.message)}finally{if(alive.current)setBusy(false)}}
  function changeFilters(patch){if('assessment' in patch)setAssessment(patch.assessment);if('category' in patch)setCategory(patch.category);if('period' in patch)setPeriod(patch.period);if('search' in patch)setSearch(patch.search);if('availability' in patch)setAvailability(patch.availability);setSelected(null)}
  function resetFilters(){setSearch('');setAssessment('Terbukti');setCategory('');setPeriod('after');setAvailability('');setSelected(null)}
+ async function saveCorrection(payload){
+  if(!canEdit||archived)return
+  setBusy(true);setError('');setMessage('Menerapkan koreksi validasi dan menghitung ulang…')
+  try{
+   const currentCorrections=snapshot.source?.corrections||result?.metadata?.corrections||[]
+   const updatedCorrections=[...currentCorrections.filter(c=>c.id!==payload.id&&!(c.row!=null&&c.row===payload.row)&&!(c.key&&c.key===payload.key)),payload]
+
+   if(snapshot.source){
+    const updatedSource={...snapshot.source,corrections:updatedCorrections}
+    const data=await runWorker({action:'analyze',source:updatedSource,rules:result.rules})
+    if(!alive.current)return
+    const updatedResult={...data.result,source:result.source}
+    updateVersion({result:updatedResult})
+    onSnapshot({
+     ...snapshot,
+     source:updatedSource,
+     versions:snapshot.versions.map((v,i)=>i===snapshot.active?{...v,result:updatedResult}:v)
+    })
+   }else{
+    const updatedAudits=(result.audits||[]).map(a=>{
+     const match=(payload.row!=null&&a.row===payload.row)||(payload.nik&&`${a.type}-nik-${a.nik}`===`${payload.type}-nik-${payload.nik}`)||(payload.key&&a.type==='time-tie'&&a.nik===payload.nik)
+     if(match){
+      return {...a,resolved:payload.resolved,resolution:payload,resolutionNote:payload.reason}
+     }
+     return a
+    })
+    const updatedResult={
+     ...result,
+     audits:updatedAudits,
+     metadata:{...(result.metadata||{}),corrections:updatedCorrections}
+    }
+    updateVersion({result:updatedResult})
+   }
+   setActiveFinding(null)
+   setMessage('Koreksi validasi berhasil disimpan dan skor dihitung ulang.')
+  }catch(err){
+   if(alive.current)setError(err.message)
+  }finally{
+   if(alive.current)setBusy(false)
+  }
+ }
+ async function removeCorrection(target){
+  if(!canEdit||archived)return
+  setBusy(true);setError('');setMessage('Membatalkan koreksi dan mengembalikan nilai sumber asli…')
+  try{
+   const targetId=typeof target==='string'?target:(target?.id||target?.resolution?.id)
+   const targetRow=target?.row
+   const currentCorrections=snapshot.source?.corrections||result?.metadata?.corrections||[]
+   const updatedCorrections=currentCorrections.filter(c=>{
+    if(targetId&&c.id===targetId)return false
+    if(targetRow!=null&&c.row===targetRow)return false
+    return true
+   })
+
+   if(snapshot.source){
+    const updatedSource={...snapshot.source,corrections:updatedCorrections}
+    const data=await runWorker({action:'analyze',source:updatedSource,rules:result.rules})
+    if(!alive.current)return
+    const updatedResult={...data.result,source:result.source}
+    updateVersion({result:updatedResult})
+    onSnapshot({
+     ...snapshot,
+     source:updatedSource,
+     versions:snapshot.versions.map((v,i)=>i===snapshot.active?{...v,result:updatedResult}:v)
+    })
+   }else{
+    const updatedAudits=(result.audits||[]).map(a=>{
+     const match=(targetRow!=null&&a.row===targetRow)||(targetId&&a.resolution?.id===targetId)
+     if(match){
+      const {resolved,resolution,resolutionNote,...rest}=a
+      return rest
+     }
+     return a
+    })
+    const updatedResult={
+     ...result,
+     audits:updatedAudits,
+     metadata:{...(result.metadata||{}),corrections:updatedCorrections}
+    }
+    updateVersion({result:updatedResult})
+   }
+   setActiveFinding(null)
+   setMessage('Koreksi dibatalkan. Nilai sumber asli dipulihkan.')
+  }catch(err){
+   if(alive.current)setError(err.message)
+  }finally{
+   if(alive.current)setBusy(false)
+  }
+ }
  if(legacy)return <div className="judol-module"><button className="btn secondary" onClick={()=>setLegacy(false)}>Kembali ke analisis transaksi</button><LegacyJudolModule snapshot={snapshot?.kind==='legacy'?snapshot.data:null} onSnapshot={data=>onSnapshot({kind:'legacy',data})} canImport={canImport}/></div>
  return <div className="judol-module discipline-module">
   <div className="page-title"><div><span className="eyebrow">TINDAK LANJUT INDIKASI JUDI ONLINE</span><h1>Kategorisasi Disiplin ASN</h1><p>Acuan Nodin Sekjen Nomor 3513 · Pairing Sekjen, sebelum ASN, dan sesudah ASN.</p></div><div className="discipline-toolbar">{canImport&&<label className="btn primary judol-upload">{busy?'Sedang memproses…':'Unggah workbook final'}<input type="file" accept=".xlsx" disabled={busy} onChange={importWorkbook} aria-label="Unggah workbook final analisis disiplin"/></label>}<button className="btn secondary" disabled={busy} onClick={()=>setLegacy(true)}>Baca hasil Excel lama</button></div></div>
