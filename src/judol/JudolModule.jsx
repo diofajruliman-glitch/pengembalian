@@ -267,12 +267,73 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
    <RulePanel key={`${version.number}-${version.id||'local'}-${snapshot.active}`} rules={result.rules} version={version.number} canImport={canImport} canCalculate={Boolean(snapshot.source)} archived={archived} onCalculate={calculate} onRestoreSource={e=>importWorkbook(e,true)} onDraftChange={()=>{setPreview(null);setMessage('')}} busy={busy}/>
    {preview&&<section className="panel"><h2>Tinjau pratinjau sebelum menetapkan versi</h2><p>{number(preview.rows.filter((r,i)=>isFocusedAssessment(r)&&(r.before.kategori!==rows[i]?.before?.kategori||r.after.kategori!==rows[i]?.after?.kategori||r.before.total!==rows[i]?.before?.total||r.after.total!==rows[i]?.after?.total)).length)} SDM Terbukti/Tidak Terbukti mengalami perubahan skor atau kategori. Hasil Pairing Sekjen asli dipertahankan.</p><p>Daftar pratinjau mengikuti filter analisis aktif, termasuk kelengkapan data dan hasil klarifikasi.</p><ComparisonTable key={`${assessment}-${period}-${category}-${search}-${availability}`} rows={filterDisciplineRows(preview.rows,filters)} onSelect={setSelected}/>{selected&&preview.rows.find(r=>r.nik===selected&&isFocusedAssessment(r))&&<ComparisonDetail row={preview.rows.find(r=>r.nik===selected)} onClose={()=>setSelected(null)} onHandleValidation={(f,p)=>setActiveFinding({finding:f,person:p||preview.rows.find(r=>r.nik===selected)})}/>}<div className="discipline-toolbar"><button className="btn primary" disabled={busy} onClick={acceptPreview}>Tetapkan sebagai versi baru</button><button className="btn secondary" disabled={busy} onClick={()=>{setPreview(null);setSelected(null)}}>Batalkan pratinjau</button></div></section>}
   </>}
-  {tab==='audit'&&version&&<section className="panel"><h2>Audit & kelengkapan sumber</h2><p>{number(filteredAudits.length)} catatan untuk {number(filtered.length)} SDM sesuai filter aktif. Seluruh {number(result.audits?.length)} catatan workbook tetap tersimpan pada snapshot sumber.</p><div className="table-scroll"><table><thead><tr><th>Jenis</th><th>NIK</th><th>Temuan</th><th>Baris sumber</th></tr></thead><tbody>{filteredAudits.slice(currentAuditPage*50,currentAuditPage*50+50).map((a,i)=><tr key={i}><td>{a.type==='time-from-pairing'?'Acuan waktu Hasil pairing':a.type==='missing-transaction-details'?'Rincian transaksi belum tersedia':a.type}</td><td>{a.nik?`${a.nik.slice(0,4)}••••••••${a.nik.slice(-4)}`:'—'}</td><td>{a.message}</td><td>{a.row??'—'}</td></tr>)}</tbody></table></div>{!filteredAudits.length&&<p>Tidak ada catatan audit untuk SDM sesuai filter.</p>}<div className="judol-pagination"><button className="btn secondary" disabled={currentAuditPage===0} onClick={()=>setAuditPage(currentAuditPage-1)}>Sebelumnya</button><span>Halaman {currentAuditPage+1}</span><button className="btn secondary" disabled={(currentAuditPage+1)*50>=filteredAudits.length} onClick={()=>setAuditPage(currentAuditPage+1)}>Berikutnya</button></div></section>}
+   {tab==='audit'&&version&&<section className="panel">
+    <div className="panel-heading">
+     <h2>Audit & kelengkapan sumber</h2>
+     <button className="btn secondary" disabled={busy||!filtered.length} onClick={download}>Ekspor audit & hasil</button>
+    </div>
+    <p>{number(filteredAudits.length)} catatan audit untuk {number(filtered.length)} SDM sesuai filter aktif. Temuan anomali jam, tanggal, nominal, dan NIK dapat ditangani langsung melalui tombol Tangani di bawah.</p>
+    <div className="judol-stats">
+     <section className="panel"><span>Total temuan audit</span><strong>{number(filteredAudits.length)}</strong></section>
+     <section className="panel"><span>Perlu tindakan</span><strong style={{color:'#b45309'}}>{number(filteredAudits.filter(a=>!a.resolved).length)}</strong></section>
+     <section className="panel"><span>Telah diselesaikan</span><strong style={{color:'#15803d'}}>{number(filteredAudits.filter(a=>a.resolved).length)}</strong></section>
+     <section className="panel"><span>Koreksi aktif</span><strong>{number((result.metadata?.corrections||[]).length)}</strong></section>
+    </div>
+    <div className="discipline-rule-grid" style={{marginBottom:'16px'}}>
+     <label>Status temuan
+      <select value={auditStatusFilter} onChange={e=>{setAuditStatusFilter(e.target.value);setAuditPage(0)}}>
+       <option value="all">Semua status temuan</option>
+       <option value="open">Perlu tindakan saja</option>
+       <option value="resolved">Telah diselesaikan saja</option>
+      </select>
+     </label>
+     <label>Cari temuan / NIK / alasan
+      <input value={auditSearch} placeholder="Ketik kata kunci…" onChange={e=>{setAuditSearch(e.target.value);setAuditPage(0)}}/>
+     </label>
+    </div>
+    <div className="table-scroll">
+     <table>
+      <thead>
+       <tr>
+        <th>Jenis</th>
+        <th>NIK & Nama</th>
+        <th>Temuan</th>
+        <th>Baris</th>
+        <th>Status</th>
+        <th>Aksi</th>
+       </tr>
+      </thead>
+      <tbody>
+       {displayedAudits.slice(currentAuditPage*50,currentAuditPage*50+50).map((a,i)=>{
+        const p=rows.find(r=>r.nik===a.nik)
+        return <tr key={i}>
+         <td>{a.type==='time-from-pairing'?'Acuan waktu Hasil pairing':a.type==='missing-transaction-details'?'Rincian transaksi belum tersedia':a.type==='invalid-time'?'Format jam tidak valid':a.type==='invalid-date'?'Tanggal tidak valid':a.type==='invalid-amount'?'Nominal tidak valid':a.type==='time-tie'?'Aktivitas seri':a.type}</td>
+         <td>{a.nik?<div><b>{p?p.nama:'—'}</b><br/><small>{a.nik.slice(0,4)}••••••••{a.nik.slice(-4)}</small></div>:'—'}</td>
+         <td>
+          {a.message}
+          {a.resolved&&a.resolution?.reason&&<small style={{display:'block',color:'#166534',marginTop:'4px'}}>Koreksi: {a.resolution.reason}{a.resolution.evidenceRef&&` · Ref: ${a.resolution.evidenceRef}`}{a.resolution.resolvedBy&&` · Oleh: ${a.resolution.resolvedBy}`}</small>}
+         </td>
+         <td>{a.row??'—'}</td>
+         <td><span className={'validation-badge '+(a.resolved?'resolved':'open')}>{a.resolved?'Diselesaikan':'Perlu tindakan'}</span></td>
+         <td><button type="button" className="btn secondary btn-small" disabled={busy} onClick={()=>setActiveFinding({finding:a,person:p})}>{a.resolved?'Lihat koreksi':'Tangani'}</button></td>
+        </tr>
+       })}
+      </tbody>
+     </table>
+    </div>
+    {!displayedAudits.length&&<p>Tidak ada catatan audit yang sesuai dengan filter/pencarian ini.</p>}
+    <div className="judol-pagination">
+     <button className="btn secondary" disabled={currentAuditPage===0} onClick={()=>setAuditPage(currentAuditPage-1)}>Sebelumnya</button>
+     <span>Halaman {currentAuditPage+1} dari {Math.max(1,Math.ceil(displayedAudits.length/50))} ({number(displayedAudits.length)} catatan)</span>
+     <button className="btn secondary" disabled={(currentAuditPage+1)*50>=displayedAudits.length} onClick={()=>setAuditPage(currentAuditPage+1)}>Berikutnya</button>
+    </div>
+   </section>}
   {tab==='audit'&&version?.id&&<section className="panel"><div className="panel-heading"><h2>Jejak perubahan online</h2><button className="btn secondary" disabled={busy} onClick={loadEvents}>Muat jejak perubahan</button></div><p>Impor, versi parameter, perubahan tindak lanjut, dan pengarsipan dicatat oleh server.</p><div className="table-scroll"><table><thead><tr><th>Tindakan</th><th>Waktu (WIB)</th><th>Identitas akun pencatat</th></tr></thead><tbody>{(version.auditEvents||[]).map(event=><tr key={event.id}><td>{event.action}</td><td>{date(event.occurredAt)}</td><td>{event.actor}</td></tr>)}</tbody></table></div></section>}
-  {tab==='followup'&&version&&<><section className="panel"><h2>Penanganan SDM</h2><label>SDM<select value={selected||''} disabled={busy} onChange={e=>setSelected(e.target.value||null)}><option value="">Pilih SDM…</option>{focused.map(r=><option key={r.nik} value={r.nik}>{r.nama} · {r.hasilPenilaian}</option>)}</select></label></section>{selectedRow&&<FollowupForm key={`${version.number}-${selected}-${version.id||'local'}`} row={selectedRow} value={version.followups?.find(f=>f.nik===selected)} canEdit={canEdit} archived={archived} online={Boolean(version.id)} busy={busy} onSave={saveFollowup} onReloadLatest={loadLatestFollowup}/>}</>}
+  {tab==='followup'&&version&&<><section className="panel"><h2>Penanganan SDM</h2><label>SDM<select value={selected||''} disabled={busy} onChange={e=>setSelected(e.target.value||null)}><option value="">Pilih SDM…</option>{focused.map(r=><option key={r.nik} value={r.nik}>{r.nama} · {r.hasilPenilaian}</option>)}</select></label></section>{selectedRow&&<FollowupForm key={`${version.number}-${selected}-${version.id||'local'}`} row={selectedRow} value={version.followups?.find(f=>f.nik===selected)} canEdit={canEdit} archived={archived} online={Boolean(version.id)} busy={busy} onSave={saveFollowup} onReloadLatest={loadLatestFollowup} onHandleValidation={(f,p)=>setActiveFinding({finding:f,person:p||selectedRow})}/>}</>}
   {tab==='datasets'&&<>
    {version&&<section className="panel"><h2>Dataset aktif</h2><p><b>Sumber:</b> {snapshot.filename}</p>{result.source?.sha256&&<p className="discipline-hash">SHA-256: {result.source.sha256}</p>}<label>Nama dataset<input value={snapshot.name} maxLength={120} disabled={!canImport||nameLocked||archived||busy} onChange={e=>onSnapshot({...snapshot,name:e.target.value})}/></label>{nameLocked&&!version.id&&<p>Nama dikunci setelah percobaan simpan agar pengiriman ulang tetap merujuk pada versi yang sama.</p>}<p>{version.id?'Versi tersimpan online.':'Versi hanya tersedia selama sesi browser; muat ulang atau keluar menghapus data yang belum disimpan.'}</p>{!archived&&(canImport||(canEdit&&version.id&&pendingFollowups))&&<div className="discipline-toolbar"><button className="btn primary" disabled={busy||!storage||(Boolean(version.id)&&!pendingFollowups)||!snapshot.name.trim()} onClick={save}>{version.id?(pendingFollowups?'Kirim ulang catatan tertunda':'Sudah tersimpan online'):'Simpan versi online'}</button>{canImport&&<button className="btn secondary" disabled={busy||!version.id||pendingFollowups} onClick={()=>setArchiveReview(true)}>Arsipkan versi ini</button>}</div>}{!version.id&&<p>Simpan versi online sebelum mengarsipkan. Versi pendahulu yang belum tersimpan akan disimpan berurutan.</p>}{archiveReview&&!archived&&<div className="notice amber-notice"><span>Versi {version.number} akan menjadi baca-saja. Parameter dan tindak lanjut versi arsip tidak dapat diubah.</span><button className="btn secondary" disabled={busy} onClick={()=>setArchiveReview(false)}>Batal</button><button className="btn primary" disabled={busy} onClick={archive}>Tetapkan arsip baca-saja</button></div>}</section>}
    <section className="panel"><div className="panel-heading"><h2>Riwayat dataset online</h2><button className="btn secondary" disabled={!storage||busy} onClick={async()=>{setBusy(true);try{await reloadDatasets()}catch(err){setDbNotice(err.message)}finally{setBusy(false)}}}>Muat ulang daftar</button></div>{!storage&&<p>Penyimpanan online belum tersedia pada pratinjau lokal. Analisis dapat diuji tanpa mengubah database.</p>}{dbNotice&&<p role="status" className="notice amber-notice">{dbNotice}</p>}<div className="table-scroll"><table><thead><tr><th>Nama</th><th>Versi</th><th>Status</th><th>Tanggal</th><th>Buka</th></tr></thead><tbody>{datasets.map(d=><tr key={d.id}><td>{d.name}</td><td>{d.version}</td><td>{d.status==='archived'?'Arsip baca-saja':'Aktif'}</td><td>{date(d.createdAt)}</td><td><button className="btn secondary" disabled={busy} onClick={()=>openDataset(d.id)}>Buka</button></td></tr>)}</tbody></table></div>{!datasets.length&&<p>Belum ada dataset online yang dimuat.</p>}</section>
   </>}
+   {activeFinding&&<ValidationModal finding={activeFinding.finding} person={activeFinding.person} onSave={saveCorrection} onRemove={removeCorrection} onClose={()=>setActiveFinding(null)} canEdit={canEdit} archived={archived}/>}
  </div>
 }

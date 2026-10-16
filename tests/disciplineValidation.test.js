@@ -86,3 +86,55 @@ test('anomalous transaction causes Perlu validasi until corrected with reason an
   assert.equal(resolvedAudits[0].resolution.evidenceRef, correction.evidenceRef)
   assert.equal(resolvedAudits[0].resolution.resolvedBy, correction.resolvedBy)
 })
+
+test('handling duplicate and identity conflict overrides restores valid category without touching hasilPenilaian', () => {
+  const nikConflict = '1122334455667788'
+  const personConflict = {nik: nikConflict, nama: 'Pegawai Konflik Identitas', nip: '198001012010011001', hasilPenilaian: 'Tidak Terbukti', hasilAsli: 'Tidak Terbukti', keterangan: '', baris: 3}
+  const rawTx = {
+    nik: nikConflict,
+    date: '2025-10-15',
+    time: '10:00:00',
+    timeRaw: '10:00:00',
+    amount: 500000,
+    row: 10,
+    duplicate: true,
+    identityConflict: true
+  }
+
+  const sourceData = {
+    people: [personConflict],
+    history: {[nikConflict]: {frekuensi: 1, nominal: 500000, kategori: 'Ringan', total: 10, sourceRow: 3}},
+    transactions: [rawTx],
+    audits: [
+      {type: 'duplicate-transaction', nik: nikConflict, message: 'Nomor transaksi sumber berulang', row: 10},
+      {type: 'identity-conflict', nik: nikConflict, message: 'NIK kolom B berbeda dari NIK_PEMAIN', row: 10}
+    ],
+    metadata: {transactionCount: 1}
+  }
+
+  const initial = analyzeDiscipline(sourceData)
+  assert.equal(initial.rows[0].after.kategori, 'Perlu validasi')
+  assert.equal(initial.rows[0].hasilPenilaian, 'Tidak Terbukti') // Unchanged!
+
+  // Apply ignoreDuplicate & ignoreIdentityConflict correction
+  const correction = {
+    id: 'corr-10',
+    row: 10,
+    nik: nikConflict,
+    type: 'identity-conflict',
+    ignoreDuplicate: true,
+    ignoreIdentityConflict: true,
+    reason: 'Verifikasi bank mengonfirmasi NIK_PEMAIN adalah rekening tabungan sah ybs dan bukan mutasi ganda',
+    evidenceRef: 'Surat Keterangan Bank No. SK/098/2026',
+    resolved: true,
+    resolvedBy: 'Auditor Disiplin',
+    resolvedAt: '2026-10-16T21:00:00Z',
+    history: [{updatedAt: '2026-10-16T21:00:00Z', updatedBy: 'Auditor Disiplin', reason: 'Koreksi terverifikasi'}]
+  }
+
+  const corrected = analyzeDiscipline({...sourceData, corrections: [correction]})
+  assert.equal(corrected.rows[0].after.kategori, 'Ringan')
+  assert.equal(corrected.rows[0].hasilPenilaian, 'Tidak Terbukti') // Still unchanged!
+  assert.equal(corrected.metadata.corrections.length, 1)
+})
+
