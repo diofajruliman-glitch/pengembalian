@@ -114,6 +114,19 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
    resetFilters();setTab('analysis');setAuditPage(0);setMessage('Dataset dimuat. Untuk menghitung ulang, unggah workbook asli sebagai dataset analisis baru.')
   }catch(err){if(alive.current)setError(err.message)}finally{if(alive.current)setBusy(false)}
  }
+ async function removeDataset(d){
+  if(!storage||!canImport||busy)return
+  const ok=window.confirm(`Hapus dataset "${d.name}" (versi ${d.version}) dari riwayat online?\n\nPerhatian: Data ini beserta catatan tindak lanjut dan jejak perubahannya akan dihapus permanen.`)
+  if(!ok)return
+  setBusy(true);setError('');setMessage(`Menghapus dataset ${d.name}…`)
+  try{
+   await storage.deleteDataset(d.id)
+   if(!alive.current)return
+   setMessage(`Dataset "${d.name}" (versi ${d.version}) berhasil dihapus dari riwayat online.`)
+   if(version?.id===d.id)updateVersion({id:null})
+   await reloadDatasets()
+  }catch(err){if(alive.current)setError(err.message)}finally{if(alive.current)setBusy(false)}
+ }
  async function archive(){
   if(!version.id){setError('Simpan dataset online sebelum mengarsipkan agar arsip tetap tersedia.');return}
   if(version.followups?.some(f=>f.pending)){setError('Simpan kembali catatan tindak lanjut yang belum terkirim sebelum mengarsipkan.');return}

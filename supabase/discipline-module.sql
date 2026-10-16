@@ -220,7 +220,7 @@ begin
  actor := auth.uid(); app_role := public.current_app_role();
  if actor is null or app_role is null or app_role not in ('admin','editor','viewer') then raise exception 'DISCIPLINE_FORBIDDEN'; end if;
  if p_payload is null or jsonb_typeof(p_payload)<>'object' then raise exception 'DISCIPLINE_INVALID_INPUT'; end if;
- if p_action in ('save_version','archive') and app_role<>'admin' then raise exception 'DISCIPLINE_FORBIDDEN'; end if;
+ if p_action in ('save_version','archive','delete') and app_role<>'admin' then raise exception 'DISCIPLINE_FORBIDDEN'; end if;
  if p_action='save_followup' and app_role not in ('admin','editor') then raise exception 'DISCIPLINE_FORBIDDEN'; end if;
 
  if p_action='list' then
@@ -280,7 +280,7 @@ begin
   return public.discipline_dataset_meta(d)||jsonb_build_object('result',d.result);
  end if;
 
- if p_action not in ('load','archive','followups','save_followup') then raise exception 'DISCIPLINE_INVALID_INPUT'; end if;
+ if p_action not in ('load','archive','followups','save_followup','delete') then raise exception 'DISCIPLINE_INVALID_INPUT'; end if;
  begin target_dataset_id := coalesce(p_payload->>'datasetId',p_payload->>'id')::uuid;
  exception when invalid_text_representation then raise exception 'DISCIPLINE_INVALID_INPUT'; end;
  -- All mutation operations lock the dataset: archival and writes serialize.
@@ -293,6 +293,12 @@ begin
  elsif p_action='followups' then
   select coalesce(jsonb_agg(public.discipline_followup_json(x) order by x.nik),'[]'::jsonb) into output from public.discipline_followups x where x.dataset_id=d.id;
   return output;
+ elsif p_action='delete' then
+  update public.discipline_datasets set parent_id=d.parent_id where parent_id=d.id;
+  delete from public.discipline_followups where dataset_id=d.id;
+  delete from public.discipline_audit where dataset_id=d.id;
+  delete from public.discipline_datasets where id=d.id;
+  return jsonb_build_object('deleted',true,'id',d.id);
  end if;
  if d.status='archived' then raise exception 'DISCIPLINE_ARCHIVED'; end if;
  if p_action='archive' then

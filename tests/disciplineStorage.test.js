@@ -507,3 +507,41 @@ test('missing migration and transport failures have actionable errors without so
  api=disciplineStorage({rpc:async()=>{throw Error('private source token')}})
  await assert.rejects(api.listDatasets(),e=>e.code==='DISCIPLINE_STORAGE_ERROR'&&!e.message.includes('private'))
 })
+
+test('admin can delete dataset, cascading followups and reparenting child versions, while non-admin is forbidden',async()=>{
+ const {db,client,as}=await database()
+ try{
+  const v1=await client.saveVersion({name:'Dataset V1',filename:'sumber.xlsx',result:sample()})
+  const v2=await client.saveVersion({name:'Dataset V2',filename:'sumber.xlsx',result:sample(),parentId:v1.id})
+  await client.saveFollowup({datasetId:v1.id,nik,patch:{notes:'Catatan V1'}})
+  assert.equal((await client.listDatasets()).length,2)
+
+  // Viewer cannot delete
+  await as(viewer)
+  await assert.rejects(client.deleteDataset(v1.id),error=>error.code==='DISCIPLINE_FORBIDDEN')
+
+  // Editor cannot delete
+  await as(editor)
+  await assert.rejects(client.deleteDataset(v1.id),error=>error.code==='DISCIPLINE_FORBIDDEN')
+
+  // Admin can delete v1
+  await as(admin)
+  const res=await client.deleteDataset(v1.id)
+  assert.equal(res.deleted,true)
+  assert.equal(res.id,v1.id)
+
+  // v1 is gone from list, only v2 remains
+  const remaining=await client.listDatasets()
+  assert.equal(remaining.length,1)
+  assert.equal(remaining[0].id,v2.id)
+
+  // v2's parent was reparented to null (v1's parent)
+  const loadedV2=await client.loadDataset(v2.id)
+  assert.equal(loadedV2.parentId,null)
+
+  // Admin can also delete v2
+  await client.deleteDataset(v2.id)
+  assert.equal((await client.listDatasets()).length,0)
+ }finally{await db.close()}
+})
+

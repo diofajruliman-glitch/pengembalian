@@ -37,6 +37,7 @@ export function disciplineStorage(supabase){
   loadDataset:id=>call('load',{id}),
   saveVersion:({name,filename,result,parentId=null,requestId})=>call('save_version',{name,filename:String(filename||'').split(/[\\/]/).at(-1),result,parentId,...(requestId===undefined?{}:{requestId})}),
   archiveDataset:id=>call('archive',{id}),
+  deleteDataset:id=>call('delete',{id}),
   saveFollowup:input=>call('save_followup',{datasetId:input.datasetId,nik:input.nik,patch:followupPatch(input.patch),...(Object.hasOwn(input,'expectedUpdatedAt')?{expectedUpdatedAt:input.expectedUpdatedAt}:{})}),
   loadFollowups:datasetId=>call('followups',{datasetId})
  }

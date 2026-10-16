@@ -43,3 +43,10 @@ test('a rejected transport is wrapped without discarding a recognized conflict c
  const client=disciplineStorage({rpc:async()=>{throw Error('DISCIPLINE_FOLLOWUP_CONFLICT')}})
  await assert.rejects(client.saveFollowup({datasetId:'dataset',nik:'0000000000000001',patch:{notes:'Draft'}}),error=>error.code==='DISCIPLINE_FOLLOWUP_CONFLICT')
 })
+
+test('deleteDataset invokes discipline_rpc with delete action and target id',async()=>{
+ const {client,calls}=makeClient()
+ await client.deleteDataset('target-id-123')
+ assert.deepEqual(calls,[{name:'discipline_rpc',p_action:'delete',p_payload:{id:'target-id-123'}}])
+})
+
