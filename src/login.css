@@ -93,8 +93,9 @@
   background: linear-gradient(145deg, #3c68b260, #28447c60);
   box-shadow: inset 0 1px 0 #ffffff12;
 }
-.login-brand strong { display: block; font-size: 19px; font-weight: 750; letter-spacing: -.7px; }
-.login-brand strong span { color: #a4c6f5; font-weight: 500; }
+.login-brand-copy { min-width: 0; }
+.login-brand strong { display: block; font-size: 17px; font-weight: 750; letter-spacing: -.4px; line-height: 1.4; overflow-wrap: anywhere; }
+.login-brand strong span { display: block; color: #a4c6f5; font-size: 12px; font-weight: 500; letter-spacing: 0; }
 .login-brand-subtitle { display: block; margin-top: 5px; font-size: 9px; letter-spacing: 2.1px; color: #9daecc; }
 .login-brand-scan, .login-mobile-flow { display: none; }
 .login-intro { margin-top: 47px; animation: login-enter .8s .12s both; }
@@ -250,7 +251,8 @@
   .login-mobile-flow i:nth-child(2) { inset: 5px; animation-delay: -2s; animation-direction: reverse; }
   .login-mobile-flow i:nth-child(2)::after { background: #a8e8db; }
   .login-mobile-flow i:nth-child(3) { animation-delay: -4s; }
-  .login-brand strong { font-size: 17px; }
+  .login-brand strong { font-size: 15px; }
+  .login-brand strong span { font-size: 11px; }
   .login-brand-subtitle { font-size: 8px; }
   .login-glow { top: -200px; right: -240px; width: 500px; height: 500px; }
   .login-glow-secondary { top: auto; right: auto; bottom: -250px; left: -200px; }

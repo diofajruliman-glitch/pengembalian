@@ -27,14 +27,14 @@ export default function Login({onSignIn, onReset, loginError, resetMessage, busy
         <div className="login-particles" aria-hidden="true"><i/><i/><i/><i/><i/><i/></div>
         <div className="login-brand">
           <span className="login-brand-mark"><ShieldCheck size={25} aria-hidden="true"/><span className="login-brand-scan" aria-hidden="true"/><span className="login-mobile-flow" aria-hidden="true"><i/><i/><i/></span></span>
-          <div><strong>TukinUM<span>recovery</span></strong><span className="login-brand-subtitle">DIREKTORAT PSNK</span></div>
+          <div className="login-brand-copy"><strong>Pokja SD Tim TLHP <span>— Monitoring Tindak Lanjut</span></strong><span className="login-brand-subtitle">DIREKTORAT PSNK</span></div>
           <button type="button" className="login-motion-toggle" aria-label={animationPaused ? 'Lanjutkan animasi' : 'Jeda animasi'} title={animationPaused ? 'Lanjutkan animasi' : 'Jeda animasi'} onClick={() => setAnimationPaused(value => !value)}>{animationPaused ? <Play size={15} aria-hidden="true"/> : <Pause size={15} aria-hidden="true"/>}</button>
         </div>
 
         <div className="login-intro">
-          <span className="login-kicker"><span/> MONITORING PENGEMBALIAN · TA 2025</span>
+          <span className="login-kicker"><span/> MONITORING TINDAK LANJUT</span>
           <h1 id="login-intro-title">Progres terpantau.<br/><em>Tindak lanjut{' '}<br/>lebih terarah.</em></h1>
-          <p>Satu ruang untuk memantau pengembalian Tukin dan Uang Makan ASN PPPK, dari rekonsiliasi hingga penyelesaian.</p>
+          <p>Satu ruang untuk memantau pengembalian, validasi data, dan tindak lanjut permasalahan SDM, dari pemeriksaan hingga penyelesaian.</p>
         </div>
 
         <div className="login-illustration" aria-hidden="true">
@@ -102,6 +102,6 @@ export default function Login({onSignIn, onReset, loginError, resetMessage, busy
         <div className="login-form-footer">DIT. PERLINDUNGAN SOSIAL NON KEBENCANAAN</div>
       </section>
     </div>
-    <p className="login-page-footer">TukinUMrecovery <span>·</span> Ruang kerja internal Direktorat PSNK</p>
+    <p className="login-page-footer">Pokja SD Tim TLHP — Monitoring Tindak Lanjut <span>·</span> Ruang kerja internal Direktorat PSNK</p>
   </main>
 }

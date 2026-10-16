@@ -1,4 +1,8 @@
-# TukinUMrecovery PSNK
+# Pokja SD Tim TLHP — Monitoring Tindak Lanjut
+
+Aplikasi tindak lanjut internal Direktorat PSNK. Fungsi pengembalian Tukin/Uang Makan tetap tersedia; modul **Kategorisasi Disiplin ASN** menambahkan analisis indikasi judi online berdasarkan Data Olah, Hasil pairing Sekjen, serta transaksi sebelum dan sesudah ASN.
+
+Panduan modul dan parameter: [Kategorisasi Disiplin ASN](docs/kategorisasi-judol.md). Aktivasi penyimpanan khusus modul: [penyimpanan disiplin](docs/discipline-storage.md). Nama paket teknis lama dipertahankan agar konfigurasi build tetap kompatibel.
 
 **Versi MVP 0.1 — sumber deploy Vercel, belum dipublikasikan.**
 
