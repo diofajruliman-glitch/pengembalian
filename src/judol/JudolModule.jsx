@@ -58,8 +58,23 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
   return summary
  },{before:0,after:0,people:0}),[filtered])
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;worker.current?.terminate()}},[])
+ useEffect(()=>{snapshotRef.current=snapshot},[snapshot])
  useEffect(()=>{setAuditPage(0)},[assessment,category,period,search,availability])
- useEffect(()=>{let live=true;if(storage)storage.listDatasets().then(data=>{if(live){setDatasets(data);setDbNotice('')}}).catch(err=>{if(live)setDbNotice(err.message)});return()=>{live=false}},[storage])
+ useEffect(()=>{
+  let live=true
+  if(storage){
+   storage.listDatasets().then(async data=>{
+    if(!live)return
+    setDatasets(data)
+    setDbNotice('')
+    if(!autoLoaded.current&&!snapshotRef.current&&data.length>0){
+     autoLoaded.current=true
+     await openDataset(data[0].id,{auto:true})
+    }
+   }).catch(err=>{if(live)setDbNotice(err.message)})
+  }
+  return ()=>{live=false}
+ },[storage])
  async function reloadDatasets(){if(storage){const data=await storage.listDatasets();if(alive.current){setDatasets(data);setDbNotice('')}}}
  function runWorker(payload){return new Promise((resolve,reject)=>{
   const current=new Worker(new URL('./analysis.worker.js',import.meta.url),{type:'module'});worker.current=current
@@ -106,12 +121,13 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
    try{await reloadDatasets()}catch{if(alive.current)setDbNotice('Hasil tersimpan; muat ulang daftar dataset untuk memperbarui tampilan.')}
   }catch(err){if(alive.current)setError(err.message)}finally{if(alive.current)setBusy(false)}
  }
- async function openDataset(id){
+ async function openDataset(id,{auto=false}={}){
   setBusy(true);setError('');setPreview(null);setArchiveReview(false)
   try{
    const [data,followups]=await Promise.all([storage.loadDataset(id),storage.loadFollowups(id)]);if(!alive.current)return
    onSnapshot({kind:'analysis',name:data.name,filename:data.filename,source:null,active:0,versions:[{id:data.id,number:data.version,createdAt:data.createdAt,status:data.status,result:data.result,followups,auditEvents:data.auditEvents||[]}]})
-   resetFilters();setTab('analysis');setAuditPage(0);setMessage('Dataset dimuat. Untuk menghitung ulang, unggah workbook asli sebagai dataset analisis baru.')
+   resetFilters();setTab('analysis');setAuditPage(0)
+   setMessage(auto?`Dataset online "${data.name}" (versi ${data.version}) otomatis dimuat.`:'Dataset dimuat. Untuk menghitung ulang, unggah workbook asli sebagai dataset analisis baru.')
   }catch(err){if(alive.current)setError(err.message)}finally{if(alive.current)setBusy(false)}
  }
  async function removeDataset(d){
