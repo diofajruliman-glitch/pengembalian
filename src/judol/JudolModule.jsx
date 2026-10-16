@@ -8,6 +8,7 @@ import {persistVersionChain} from './versions.js'
 import ComparisonTable,{ComparisonDetail} from './ComparisonTable.jsx'
 import RulePanel from './RulePanel.jsx'
 import FollowupForm from './FollowupForm.jsx'
+import ValidationModal from './ValidationModal.jsx'
 import LegacyJudolModule from './LegacyJudolModule.jsx'
 import './judol.css'
 
@@ -22,6 +23,7 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
  const [tab,setTab]=useState('analysis'),[legacy,setLegacy]=useState(snapshot?.kind==='legacy'),[busy,setBusy]=useState(false),[message,setMessage]=useState(''),[error,setError]=useState('')
  const [search,setSearch]=useState(''),[assessment,setAssessment]=useState('Terbukti'),[category,setCategory]=useState(''),[period,setPeriod]=useState('after'),[availability,setAvailability]=useState(''),[selected,setSelected]=useState(null)
  const [preview,setPreview]=useState(null),[datasets,setDatasets]=useState([]),[dbNotice,setDbNotice]=useState(''),[archiveReview,setArchiveReview]=useState(false),[auditPage,setAuditPage]=useState(0)
+ const [activeFinding,setActiveFinding]=useState(null),[auditStatusFilter,setAuditStatusFilter]=useState('all'),[auditSearch,setAuditSearch]=useState('')
  const worker=useRef(null),alive=useRef(true)
  const storage=useMemo(()=>supabase?disciplineStorage(supabase):null,[supabase])
  const version=snapshot?.kind==='analysis'?snapshot.versions[snapshot.active]:null
@@ -35,7 +37,17 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
  const counts=useMemo(()=>Object.fromEntries(FOCUSED_ASSESSMENTS.map(s=>[s,focused.filter(r=>r.hasilPenilaian===s).length])),[focused])
  const filteredIds=useMemo(()=>new Set(filtered.map(r=>r.nik)),[filtered])
  const filteredAudits=useMemo(()=>(result?.audits||[]).filter(a=>filteredIds.has(a.nik)),[result,filteredIds])
- const currentAuditPage=Math.min(auditPage,Math.max(0,Math.ceil(filteredAudits.length/50)-1))
+ const displayedAudits=useMemo(()=>{
+  let list=filteredAudits
+  if(auditStatusFilter==='open')list=list.filter(a=>!a.resolved)
+  else if(auditStatusFilter==='resolved')list=list.filter(a=>Boolean(a.resolved))
+  if(auditSearch.trim()){
+   const q=auditSearch.trim().toLowerCase()
+   list=list.filter(a=>`${a.type} ${a.nik||''} ${a.message||''} ${a.resolution?.reason||''}`.toLowerCase().includes(q))
+  }
+  return list
+ },[filteredAudits,auditStatusFilter,auditSearch])
+ const currentAuditPage=Math.min(auditPage,Math.max(0,Math.ceil(displayedAudits.length/50)-1))
  const missingRows=useMemo(()=>filtered.filter(r=>getTransactionAvailability(r)==='missing'),[filtered])
  const referenceRows=useMemo(()=>filtered.filter(hasPairingCategoryReference),[filtered])
  const unrecordedRows=useMemo(()=>focused.filter(r=>getTransactionAvailability(r)==='unrecorded').length,[focused])

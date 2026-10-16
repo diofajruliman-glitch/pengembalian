@@ -2,7 +2,7 @@ import React,{useReducer,useState} from 'react'
 import {followupStatuses} from './storage.js'
 import {createFollowupDraft,followupDraftReducer,followupFields,followupValues} from './followupDraft.js'
 
-export default function FollowupForm({row,value,canEdit,archived,onSave,onReloadLatest,online=false,busy}){
+export default function FollowupForm({row,value,canEdit,archived,onSave,onReloadLatest,onHandleValidation,online=false,busy}){
  // The parent key identifies a dataset + SDM, not updatedAt. Incoming server
  // refreshes must not silently rebase an in-progress draft onto another edit.
  const [state,dispatch]=useReducer(followupDraftReducer,null,()=>createFollowupDraft(value,online))
@@ -27,8 +27,22 @@ export default function FollowupForm({row,value,canEdit,archived,onSave,onReload
  }
  return <form onSubmit={submit} className="panel">
   <h2>Tindak lanjut: {row.nama}</h2><p>Catat hasil pemeriksaan dan tindak lanjut. Keputusan hukuman diisi berdasarkan dokumen pemeriksaan, tidak dihasilkan otomatis dari skor.</p>
+  {row.audits?.length>0&&<div className="validation-finding-box" style={{marginBottom:'16px'}}>
+   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',flexWrap:'wrap',gap:'8px'}}>
+    <strong>Temuan Validasi Data SDM ini ({row.audits.length}):</strong>
+    {onHandleValidation&&<button type="button" className="btn secondary btn-small" onClick={()=>onHandleValidation(row.audits[0],row)}>Tangani temuan</button>}
+   </div>
+   <ul style={{margin:'8px 0 0 16px',padding:0}}>
+    {row.audits.map((a,i)=><li key={i} style={{marginBottom:'4px'}}>
+     <span className={'validation-badge '+(a?.resolved?'resolved':'open')} style={{marginRight:'6px'}}>{a?.resolved?'Diselesaikan':'Perlu tindakan'}</span>
+     <span>{typeof a==='string'?a:a.message}</span>
+     {a?.resolution?.reason&&<small style={{display:'block',color:'#166534'}}>Alasan: {a.resolution.reason}</small>}
+    </li>)}
+   </ul>
+  </div>}
   {value?.pending&&<p role="alert" className="notice amber-notice">Catatan ini belum terkirim online. Simpan kembali sebelum mengarsipkan dataset.</p>}
   <fieldset className="discipline-fields" disabled={disabled}>
+
    <legend>Catatan penanganan</legend>
    <div className="discipline-rule-grid">
     <label>Status<select name="status" value={draft.status} onChange={edit}>{followupStatuses.map(s=><option key={s}>{s}</option>)}</select></label>
