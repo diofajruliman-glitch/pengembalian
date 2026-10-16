@@ -309,5 +309,5 @@ export function analyzeDiscipline(source,input=DEFAULT_RULES){
  },{aktif:0,frekuensi:0,nominal:0,missingDetails:0,knownDataOnly:false,referenceCount:0,referenceCategories:{Ringan:0,Sedang:0,Berat:0},categories:Object.fromEntries(DISCIPLINE_CATEGORIES.map(category=>[category,0]))})
  const resolvedCount=audits.filter(a=>a.resolved).length,pendingCount=audits.filter(a=>!a.resolved).length
  const stats={total:rows.length,terbukti:rows.filter(r=>r.hasilPenilaian==='Terbukti').length,tidakTerbukti:rows.filter(r=>r.hasilPenilaian==='Tidak Terbukti').length,belumDitetapkan:rows.filter(r=>r.hasilPenilaian==='Belum ditetapkan').length,transactions:source.transactions.length,matchedTransactions,unmatchedTransactions,outsideRange,before:summary('before'),after:summary('after'),auditCount:audits.length,resolvedAudits:resolvedCount,pendingAudits:pendingCount,correctionCount:corrections.length}
- return {rows,audits,stats,rules,corrections,metadata:{...(source.metadata||{}),corrections}}
+ return {rows,audits,stats,rules,metadata:{...(source.metadata||{}),corrections}}
 }
