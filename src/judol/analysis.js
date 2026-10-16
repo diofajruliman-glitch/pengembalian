@@ -193,11 +193,40 @@ function addTransaction(p,tx,rules){
 export function analyzeDiscipline(source,input=DEFAULT_RULES){
  const rules=validateRules(input)
  if(!source||!Array.isArray(source.people)||!Array.isArray(source.transactions)||!source.history)throw Error('Sumber analisis belum lengkap.')
- const audits=(source.audits||[]).filter(a=>a.type!=='invalid-time'),rows=source.people.map(p=>({...p,historical:source.history[p.nik]||null,sourceTransactionCount:0,missingTransactionDetails:false,categoryFromPairing:false,before:emptyPeriod(),after:emptyPeriod(),audits:[]})),index=new Map(rows.map(r=>[r.nik,r]))
+ const corrections=Array.isArray(source.corrections)?source.corrections:(Array.isArray(source.metadata?.corrections)?source.metadata.corrections:(Array.isArray(input.corrections)?input.corrections:[]))
+ const correctionByRow=new Map(),correctionByKey=new Map()
+ for(const c of corrections){
+  if(c.row!=null)correctionByRow.set(c.row,c)
+  const key=c.key||(c.row!=null?`${c.type}-row-${c.row}`:`${c.type}-nik-${c.nik}`)
+  correctionByKey.set(key,c)
+ }
+ const audits=(source.audits||[]).filter(a=>a.type!=='invalid-time').map(a=>{
+  const item={...a}
+  const corr=a.row!=null?correctionByRow.get(a.row):correctionByKey.get(`${a.type}-nik-${a.nik}`)
+  if(corr&&corr.resolved){
+   item.resolved=true
+   item.resolution=corr
+   if(corr.reason)item.resolutionNote=corr.reason
+  }
+  return item
+ })
+ const rows=source.people.map(p=>({...p,historical:source.history[p.nik]||null,sourceTransactionCount:0,missingTransactionDetails:false,categoryFromPairing:false,before:emptyPeriod(),after:emptyPeriod(),audits:[]})),index=new Map(rows.map(r=>[r.nik,r]))
  let matchedTransactions=0,unmatchedTransactions=0,outsideRange=0
  const unmatched=new Map()
  for(const original of source.transactions){
+  const corr=correctionByRow.get(original.row)
   const tx={...original,...(Object.hasOwn(original,'timeRaw')?{time:parseTime(original.timeRaw,rules.compactTime)}:{})}
+  if(corr&&corr.resolved){
+   if(corr.correctedDate!=null&&corr.correctedDate!=='')tx.date=parseDate(corr.correctedDate)
+   if(corr.correctedTime!=null&&corr.correctedTime!==''){
+    tx.time=parseTime(corr.correctedTime,rules.compactTime)
+    tx.timeRaw=corr.correctedTime
+   }
+   if(corr.correctedAmount!=null&&corr.correctedAmount!=='')tx.amount=parseAmount(corr.correctedAmount)
+   if(corr.correctedNik!=null&&corr.correctedNik!=='')tx.nik=String(corr.correctedNik).trim()
+   if(corr.ignoreDuplicate)tx.duplicate=false
+   if(corr.ignoreIdentityConflict)tx.identityConflict=false
+  }
   const row=index.get(tx.nik)
   if(tx.time===null){
    const historicalTime=normalized(row?.historical?.categoryTime)
@@ -205,7 +234,14 @@ export function analyzeDiscipline(source,input=DEFAULT_RULES){
    if(canUsePairing&&['DALAM JAM KERJA','LUAR JAM KERJA'].includes(historicalTime)){
     tx.timeFromPairingCategory=historicalTime==='DALAM JAM KERJA'?'Dalam Jam Kerja':'Luar Jam Kerja'
     audits.push(audit('time-from-pairing',tx.nik,`Jam sumber "-" diasumsikan ${tx.timeFromPairingCategory} mengikuti kategori waktu Hasil pairing baris ${row.historical.sourceRow??'tidak tercatat'}; jam asli tetap belum diketahui.`,tx.row))
-   }else audits.push(audit('invalid-time',tx.nik,'Jam transaksi tidak valid/tidak tersedia menurut parameter format jam.',tx.row))
+   }else{
+    const aItem=audit('invalid-time',tx.nik,'Jam transaksi tidak valid/tidak tersedia menurut parameter format jam.',tx.row)
+    if(corr&&corr.resolved){aItem.resolved=true;aItem.resolution=corr}
+    audits.push(aItem)
+   }
+  }else if(corr&&corr.resolved&&(corr.correctedTime||corr.type==='invalid-time')){
+   const aItem=audit('invalid-time',tx.nik,`Jam transaksi dikoreksi menjadi ${corr.correctedTime}.`,tx.row)
+   aItem.resolved=true;aItem.resolution=corr;audits.push(aItem)
   }
   if(!row){unmatchedTransactions++;unmatched.set(tx.nik,(unmatched.get(tx.nik)||0)+1);continue}
   matchedTransactions++
@@ -227,8 +263,32 @@ export function analyzeDiscipline(source,input=DEFAULT_RULES){
   }
   classifyPeriod(row.before,rules);classifyPeriod(row.after,rules)
   if(!row.historical)audits.push(audit('missing-history',row.nik,'Hasil pairing asli tidak tersedia atau NIK duplikat; hasil periode dihitung secara mandiri.'))
-  if(row.before.categoryTime==='Perlu validasi (seri)')audits.push(audit('time-tie',row.nik,'Jumlah aktivitas sebelum ASN dalam/luar jam sama; menunggu validasi.'))
-  if(row.after.categoryTime==='Perlu validasi (seri)')audits.push(audit('time-tie',row.nik,'Jumlah aktivitas sesudah ASN dalam/luar jam sama; menunggu validasi.'))
+  if(row.before.categoryTime==='Perlu validasi (seri)'){
+   const tieCorr=correctionByKey.get(`time-tie-before-${row.nik}`)||correctionByKey.get(`time-tie-${row.nik}`)
+   if(tieCorr&&tieCorr.resolved&&tieCorr.decision){
+    const inside=tieCorr.decision==='inside'
+    row.before.categoryTime=inside?'Dalam Jam Kerja':'Luar Jam Kerja'
+    row.before.scoreTime=rounded((inside?rules.timeInside:rules.timeOutside)*rules.weightTime/100)
+    row.before.total=rounded(row.before.scoreFrequency+row.before.scoreDeposit+row.before.scoreTime)
+    row.before.kategori=row.before.total>=rules.categoryHigh?'Berat':row.before.total>=rules.categoryMedium?'Sedang':'Ringan'
+    row.before.status='Koreksi validasi seri'
+    const aItem=audit('time-tie',row.nik,`Aktivitas sebelum ASN seri diselesaikan sebagai ${row.before.categoryTime}.`)
+    aItem.resolved=true;aItem.resolution=tieCorr;audits.push(aItem)
+   }else audits.push(audit('time-tie',row.nik,'Jumlah aktivitas sebelum ASN dalam/luar jam sama; menunggu validasi.'))
+  }
+  if(row.after.categoryTime==='Perlu validasi (seri)'){
+   const tieCorr=correctionByKey.get(`time-tie-after-${row.nik}`)||correctionByKey.get(`time-tie-${row.nik}`)
+   if(tieCorr&&tieCorr.resolved&&tieCorr.decision){
+    const inside=tieCorr.decision==='inside'
+    row.after.categoryTime=inside?'Dalam Jam Kerja':'Luar Jam Kerja'
+    row.after.scoreTime=rounded((inside?rules.timeInside:rules.timeOutside)*rules.weightTime/100)
+    row.after.total=rounded(row.after.scoreFrequency+row.after.scoreDeposit+row.after.scoreTime)
+    row.after.kategori=row.after.total>=rules.categoryHigh?'Berat':row.after.total>=rules.categoryMedium?'Sedang':'Ringan'
+    row.after.status='Koreksi validasi seri'
+    const aItem=audit('time-tie',row.nik,`Aktivitas sesudah ASN seri diselesaikan sebagai ${row.after.categoryTime}.`)
+    aItem.resolved=true;aItem.resolution=tieCorr;audits.push(aItem)
+   }else audits.push(audit('time-tie',row.nik,'Jumlah aktivitas sesudah ASN dalam/luar jam sama; menunggu validasi.'))
+  }
   if(row.historical&&rules.start===DEFAULT_RULES.start&&rules.end===DEFAULT_RULES.end){
    const f=row.before.frekuensi+row.after.frekuensi,n=rounded(row.before.nominal+row.after.nominal)
    if(row.historical.frekuensi!==f)audits.push(audit('historical-frequency-difference',row.nik,`Frekuensi Hasil pairing (${row.historical.frekuensi}) berbeda dari ${f} transaksi pada periode analisis.`))
@@ -247,6 +307,7 @@ export function analyzeDiscipline(source,input=DEFAULT_RULES){
   s.categories[p.kategori]++
   return s
  },{aktif:0,frekuensi:0,nominal:0,missingDetails:0,knownDataOnly:false,referenceCount:0,referenceCategories:{Ringan:0,Sedang:0,Berat:0},categories:Object.fromEntries(DISCIPLINE_CATEGORIES.map(category=>[category,0]))})
- const stats={total:rows.length,terbukti:rows.filter(r=>r.hasilPenilaian==='Terbukti').length,tidakTerbukti:rows.filter(r=>r.hasilPenilaian==='Tidak Terbukti').length,belumDitetapkan:rows.filter(r=>r.hasilPenilaian==='Belum ditetapkan').length,transactions:source.transactions.length,matchedTransactions,unmatchedTransactions,outsideRange,before:summary('before'),after:summary('after'),auditCount:audits.length}
- return {rows,audits,stats,rules,metadata:source.metadata||{}}
+ const resolvedCount=audits.filter(a=>a.resolved).length,pendingCount=audits.filter(a=>!a.resolved).length
+ const stats={total:rows.length,terbukti:rows.filter(r=>r.hasilPenilaian==='Terbukti').length,tidakTerbukti:rows.filter(r=>r.hasilPenilaian==='Tidak Terbukti').length,belumDitetapkan:rows.filter(r=>r.hasilPenilaian==='Belum ditetapkan').length,transactions:source.transactions.length,matchedTransactions,unmatchedTransactions,outsideRange,before:summary('before'),after:summary('after'),auditCount:audits.length,resolvedAudits:resolvedCount,pendingAudits:pendingCount,correctionCount:corrections.length}
+ return {rows,audits,stats,rules,corrections,metadata:{...(source.metadata||{}),corrections}}
 }
