@@ -563,6 +563,84 @@
   margin-bottom: 2px;
 }
 
+/* Modal Overlay Progress Pembuatan PDF */
+.pdf-progress-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.pdf-progress-modal {
+  background: #0f172a;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(56, 189, 248, 0.15);
+  border-radius: 12px;
+  padding: 24px 28px;
+  width: 90%;
+  max-width: 460px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.pdf-progress-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pdf-progress-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pdf-progress-info h4 {
+  margin: 0;
+  color: #f8fafc;
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+
+.pdf-progress-info p {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.pdf-progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.pdf-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38bdf8, #0284c7);
+  border-radius: 999px;
+  transition: width 0.15s ease-out;
+}
+
+.pdf-progress-stat {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  margin-top: 2px;
+}
+
 /* ============================================================== */
 /* ATURAN KHUSUS CETAK (@media print)                             */
 /* ============================================================== */
