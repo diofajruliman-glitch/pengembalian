@@ -153,6 +153,75 @@
   color: #94a3b8;
 }
 
+/* Card Konteks & Filter Populasi / Bottleneck */
+.letter-context-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.letter-context-card b {
+  color: #f1f5f9;
+}
+
+.letter-filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.letter-pill-btn {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #94a3b8;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.letter-pill-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.letter-pill-btn.active {
+  background: #0284c7;
+  color: #ffffff;
+  border-color: #38bdf8;
+}
+
+.quick-action-btn {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.quick-action-btn:hover {
+  background: rgba(56, 189, 248, 0.25);
+  color: #ffffff;
+}
+
 /* Toolbar Aksi Atas Pratinjau */
 .letter-preview-toolbar {
   display: flex;
@@ -332,25 +401,49 @@
   line-height: 1.5;
 }
 
-/* Tabel Entri Identitas Dua Kolom */
+/* Tabel Entri Identitas Dua Kolom (Bersih Tanpa Garis Halus Web) */
+.sheet-a4 table {
+  border-collapse: collapse;
+}
+
+.sheet-a4 .doc-entry-table,
+.sheet-a4 .doc-entry-table tr,
+.sheet-a4 .doc-entry-table td,
+.sheet-a4 .doc-entry-table th {
+  border: none !important;
+  border-bottom: none !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  color: #111827 !important;
+}
+
 .doc-entry-table {
   width: 100%;
   border-collapse: collapse;
   margin: 6px 0 12px 18px;
+  border: none !important;
 }
 
 .doc-entry-table tr td {
-  padding: 2.5px 4px;
+  padding: 3px 4px !important;
   vertical-align: top;
   font-size: 10.5pt;
+  border: none !important;
+  border-bottom: none !important;
+  color: #111827 !important;
 }
 
 .doc-entry-table td.col-label {
-  width: 125px;
+  width: 130px;
+  white-space: nowrap;
 }
 
 .doc-entry-table td.col-sep {
-  width: 15px;
+  width: 18px;
   text-align: center;
 }
 

@@ -11,6 +11,8 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
     "fflate": "0.7.5",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^4.2.1",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
