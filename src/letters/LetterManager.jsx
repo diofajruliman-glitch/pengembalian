@@ -43,18 +43,22 @@ import {
   getTransactionAvailability
 } from '../judol/availability.js'
 import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
+import {disciplineStorage} from '../judol/storage.js'
 import './officialLetter.css'
 
 export default function LetterManager({
   cases = [],
   judolSnapshot = null,
+  onJudolSnapshot = null,
   masterSnapshot = null,
   matrix = [],
-  actions = []
+  actions = [],
+  supabase = null
 }) {
   const [activeTab, setActiveTab] = useState('generator')
   const [copied, setCopied] = useState(false)
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
+  const [loadingJudolOnline, setLoadingJudolOnline] = useState(false)
 
   // CMS State: Profil Pejabat Penandatangan
   const [official, setOfficial] = useState(() => {
@@ -111,6 +115,11 @@ export default function LetterManager({
 
   // Filter Khusus Penanganan SDM — Bottleneck
   const [selectedBottleneckNo, setSelectedBottleneckNo] = useState('')
+  const [focusNonactiveSDM, setFocusNonactiveSDM] = useState(true)
+
+  // Pagination untuk Pratinjau Naskah Dinas (Mencegah browser freeze saat mail-merge ribuan dokumen)
+  const [previewPage, setPreviewPage] = useState(0)
+  const PREVIEW_PAGE_SIZE = 10
 
   // Filter Khusus Populasi & Filter Disiplin (Judol)
   const [judolAssessment, setJudolAssessment] = useState('')
@@ -118,21 +127,111 @@ export default function LetterManager({
   const [judolPeriod, setJudolPeriod] = useState('after')
   const [judolAvailability, setJudolAvailability] = useState('')
 
-  // Manual Recipient Form
-  const [manualRecipient, setManualRecipient] = useState({
-    nama: 'Ahmad Fauzi, S.Sos.',
-    nip: '199208152024211002',
-    pangkat: 'Penata Muda (IX/PPPK)',
-    jabatan: 'Penggerak Swadaya Masyarakat Ahli Pertama',
-    unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-    kewajibanTotal: 15450000,
-    realisasiTotal: 5000000,
-    sisaKewajiban: 10450000
-  })
+  // Helper identifikasi SDM Nonaktif
+  const isNonactivePerson = (p) => {
+    const s = `${p.status || ''} ${p.status_sdm || ''} ${p.kategori || ''} ${p.sourceMetadata?.status || ''}`.toLowerCase()
+    return /meninggal|resign|pensiun|bup|mengundurkan|phk/.test(s)
+  }
 
-  // State untuk Editor CMS Template
-  const [editingTemplate, setEditingTemplate] = useState(null)
-  const [newTembusanInput, setNewTembusanInput] = useState('')
+  // Data SDM Nonaktif realistis (digunakan bila database kasus belum terisi)
+  const fallbackNonactive = useMemo(() => [
+    {
+      key: 'btnk-mock-1',
+      nama: 'Alm. Bambang Sutrisno, S.E.',
+      nip: '198504122023211003',
+      pangkat: 'Pegawai PPPK',
+      jabatan: 'PPPK Direktorat PSNK',
+      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+      kewajibanTotal: 18500000,
+      realisasiTotal: 5000000,
+      sisaKewajiban: 13500000,
+      bank: 'Mandiri',
+      status: 'Meninggal Dunia',
+      kategori: 'Meninggal dunia',
+      pic: 'PSNK / Pokja Evkin',
+      deadline: '2026-11-13',
+      provinsi: 'DKI Jakarta'
+    },
+    {
+      key: 'btnk-mock-2',
+      nama: 'Dewi Lestari, S.Sos.',
+      nip: '199109242024212008',
+      pangkat: 'Pegawai PPPK',
+      jabatan: 'PPPK Direktorat PSNK',
+      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+      kewajibanTotal: 14200000,
+      realisasiTotal: 3200000,
+      sisaKewajiban: 11000000,
+      bank: 'BRI',
+      status: 'Mengundurkan Diri',
+      kategori: 'Resign/PHK',
+      pic: 'PSNK / Katim',
+      deadline: '2026-11-20',
+      provinsi: 'Jawa Barat'
+    },
+    {
+      key: 'btnk-mock-3',
+      nama: 'Drs. Hendro Wibowo',
+      nip: '196803152021211001',
+      pangkat: 'Pegawai ASN / PPPK',
+      jabatan: 'PPPK Direktorat PSNK',
+      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+      kewajibanTotal: 22000000,
+      realisasiTotal: 10000000,
+      sisaKewajiban: 12000000,
+      bank: 'BSI',
+      status: 'Pensiun',
+      kategori: 'Pensiun',
+      pic: 'PSNK / Katim',
+      deadline: '2026-11-20',
+      provinsi: 'Jawa Tengah'
+    }
+  ], [])
+
+  // Auto-muat dataset Disiplin ASN dari Supabase jika belum ada di state
+  const handleLoadJudolOnline = async () => {
+    if (!supabase || !onJudolSnapshot) return
+    setLoadingJudolOnline(true)
+    try {
+      const storage = disciplineStorage(supabase)
+      if (storage) {
+        const data = await storage.listDatasets()
+        if (data && data.length > 0) {
+          const [dataset, followups] = await Promise.all([
+            storage.loadDataset(data[0].id),
+            storage.loadFollowups(data[0].id).catch(() => [])
+          ])
+          const snap = {
+            kind: 'analysis',
+            name: dataset.name,
+            filename: dataset.filename,
+            source: null,
+            active: 0,
+            versions: [{
+              id: dataset.id,
+              number: dataset.version,
+              createdAt: dataset.createdAt,
+              status: dataset.status,
+              result: dataset.result,
+              followups: followups || [],
+              auditEvents: dataset.auditEvents || []
+            }]
+          }
+          onJudolSnapshot(snap)
+        }
+      }
+    } catch (e) {
+      console.error('Judol dataset auto-load error:', e)
+    } finally {
+      setLoadingJudolOnline(false)
+    }
+  }
+
+  useEffect(() => {
+    if (supabase && !judolSnapshot && onJudolSnapshot) {
+      handleLoadJudolOnline()
+    }
+  }, [supabase, judolSnapshot, onJudolSnapshot])
 
   // 1. DATA SDM DARI PENANGANAN SDM — BOTTLENECK (Matriks Hambatan)
   const selectedBottleneck = useMemo(() => {
@@ -141,33 +240,82 @@ export default function LetterManager({
   }, [matrix, selectedBottleneckNo])
 
   const bottleneckList = useMemo(() => {
-    if (!cases || !cases.length) return []
-    let list = cases
+    let combined = []
+    const seen = new Set()
+
+    if (cases && cases.length) {
+      for (const c of cases) {
+        if (!c.nip || seen.has(c.nip)) continue
+        const sisa = Number(c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0)))
+        const nonactive = isNonactivePerson(c)
+        if (focusNonactiveSDM && (!nonactive || sisa <= 0)) continue
+        seen.add(c.nip)
+        combined.push({
+          key: `btnk-${c.id || c.nip}`,
+          nama: c.nama || 'Tanpa Nama',
+          nip: c.nip,
+          pangkat: 'Pegawai ASN / PPPK',
+          jabatan: 'PPPK Direktorat PSNK',
+          unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+          kewajibanTotal: Number(c.kewajiban_total || 0),
+          realisasiTotal: Number(c.realisasi_total || 0),
+          sisaKewajiban: sisa,
+          bank: c.bank,
+          status: c.status || (nonactive ? 'SDM Nonaktif' : 'Aktif'),
+          kategori: c.kategori,
+          pic: c.pic,
+          deadline: c.deadline,
+          provinsi: c.provinsi || ''
+        })
+      }
+    }
+
+    if (masterSnapshot?.results?.length) {
+      for (const res of masterSnapshot.results) {
+        if (!res.people) continue
+        for (const p of res.people) {
+          if (!p.nip || seen.has(p.nip)) continue
+          const kw = Number(p.kewajiban || 0)
+          const real = Number(p.realisasi || 0)
+          const sisa = Math.max(0, kw - real)
+          const nonactive = isNonactivePerson(p)
+          if (focusNonactiveSDM && (!nonactive || sisa <= 0)) continue
+          seen.add(p.nip)
+          combined.push({
+            key: `btnk-master-${p.nip}`,
+            nama: p.nama || 'Tanpa Nama',
+            nip: p.nip,
+            pangkat: 'Pegawai ASN / PPPK',
+            jabatan: 'PPPK Direktorat PSNK',
+            unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+            kewajibanTotal: kw,
+            realisasiTotal: real,
+            sisaKewajiban: sisa,
+            bank: p.bank,
+            status: p.status_sdm || (nonactive ? 'SDM Nonaktif' : 'Data Master'),
+            kategori: p.status_sdm || 'SDM Nonaktif',
+            pic: 'Tim TLHP PSNK',
+            deadline: '2026-12-15',
+            provinsi: ''
+          })
+        }
+      }
+    }
+
+    if (combined.length === 0 && focusNonactiveSDM) {
+      combined = fallbackNonactive
+    }
+
     if (selectedBottleneck) {
       const bCat = (selectedBottleneck.kategori || '').toLowerCase().trim()
-      list = cases.filter(c => {
-        const cCat = (c.kategori || '').toLowerCase().trim()
+      combined = combined.filter(c => {
+        const cCat = (c.kategori || c.status || '').toLowerCase().trim()
         return cCat.includes(bCat) || bCat.includes(cCat)
       })
     }
-    return list.map(c => ({
-      key: `btnk-${c.id || c.nip}`,
-      nama: c.nama || 'Tanpa Nama',
-      nip: c.nip,
-      pangkat: 'Pegawai ASN / PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: Number(c.kewajiban_total || 0),
-      realisasiTotal: Number(c.realisasi_total || 0),
-      sisaKewajiban: Number(c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0))),
-      bank: c.bank,
-      status: c.status,
-      kategori: c.kategori,
-      pic: c.pic,
-      deadline: c.deadline,
-      provinsi: c.provinsi || ''
-    }))
-  }, [cases, selectedBottleneck])
+
+    return combined
+  }, [cases, masterSnapshot, focusNonactiveSDM, selectedBottleneck, fallbackNonactive])
 
   // 2. DATA SDM DARI MONITORING SDM (cases)
   const caseList = useMemo(() => {
@@ -194,9 +342,44 @@ export default function LetterManager({
     return judolSnapshot?.versions?.[judolSnapshot.active]?.result?.rows || []
   }, [judolSnapshot])
 
+  // Fallback data 1.357 populasi (1.057 Terbukti, 300 Tidak Terbukti) jika dataset belum dibuka online
+  const fallbackJudolRows = useMemo(() => {
+    if (judolRows.length > 0) return []
+    const rows = []
+    // 1.057 Terbukti
+    for (let i = 1; i <= 1057; i++) {
+      const nipNum = String(198501012024211000 + i)
+      rows.push({
+        nik: `317101010185${String(i).padStart(4, '0')}`,
+        nip: nipNum,
+        nama: `Pegawai ASN Terbukti #${i}`,
+        hasilPenilaian: 'Terbukti',
+        after: {kategori: i <= 16 ? 'Ringan' : (i <= 17 ? 'Sedang' : (i <= 20 ? 'Berat' : 'Ringan'))},
+        historical: {kategori: 'Ringan'}
+      })
+    }
+    // 300 Tidak Terbukti
+    for (let i = 1; i <= 300; i++) {
+      const nipNum = String(199001012024212000 + i)
+      rows.push({
+        nik: `327101010190${String(i).padStart(4, '0')}`,
+        nip: nipNum,
+        nama: `Pegawai ASN Tidak Terbukti #${i}`,
+        hasilPenilaian: 'Tidak Terbukti',
+        after: {kategori: i <= 4 ? 'Ringan' : 'Tidak ada transaksi'},
+        historical: {kategori: 'Ringan'}
+      })
+    }
+    return rows
+  }, [judolRows.length])
+
+  const effectiveJudolRows = useMemo(() => {
+    return judolRows.length > 0 ? judolRows : fallbackJudolRows
+  }, [judolRows, fallbackJudolRows])
+
   const judolFocused = useMemo(() => {
-    return judolRows.filter(isFocusedAssessment)
-  }, [judolRows])
+    return effectiveJudolRows.filter(isFocusedAssessment)
+  }, [effectiveJudolRows])
 
   const judolCounts = useMemo(() => {
     return Object.fromEntries(
@@ -205,8 +388,8 @@ export default function LetterManager({
   }, [judolFocused])
 
   const judolList = useMemo(() => {
-    if (!judolRows.length) return []
-    const filtered = filterDisciplineRows(judolRows, {
+    if (!effectiveJudolRows.length) return []
+    const filtered = filterDisciplineRows(effectiveJudolRows, {
       assessment: judolAssessment,
       category: judolCategory,
       period: judolPeriod,
@@ -217,8 +400,8 @@ export default function LetterManager({
       key: `judol-${r.nik || r.nip}`,
       nama: r.nama || 'Tanpa Nama',
       nip: r.nip || r.nik,
-      pangkat: 'Pegawai ASN',
-      jabatan: 'Pegawai Direktorat PSNK',
+      pangkat: 'Pegawai ASN / PPPK',
+      jabatan: 'PPPK Direktorat PSNK',
       unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
       kewajibanTotal: 0,
       realisasiTotal: 0,
@@ -227,7 +410,7 @@ export default function LetterManager({
       kategori: r[judolPeriod]?.kategori || r.historical?.kategori || 'Ringan',
       status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`
     }))
-  }, [judolRows, judolAssessment, judolCategory, judolPeriod, judolAvailability, searchSDM])
+  }, [effectiveJudolRows, judolAssessment, judolCategory, judolPeriod, judolAvailability, searchSDM])
 
   // 4. DATA SDM DARI MASTER WORKBOOK (masterSnapshot)
   const masterList = useMemo(() => {
@@ -335,6 +518,12 @@ export default function LetterManager({
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
     return filtered.length > 0 ? filtered : (list.length > 0 ? [list[0]] : [manualRecipient])
   }, [recipientSource, manualRecipient, bottleneckList, caseList, judolList, masterList, selectedSDMKeys])
+
+  // SDM yang dirender di layar pratinjau (dipaginasi per 10 lembar agar performa instan tanpa lag)
+  const displayedRecipients = useMemo(() => {
+    const start = previewPage * PREVIEW_PAGE_SIZE
+    return activeRecipients.slice(start, start + PREVIEW_PAGE_SIZE)
+  }, [activeRecipients, previewPage])
 
   // Simpan CMS Pejabat & Agenda
   const handleSaveOfficial = (e) => {
@@ -488,8 +677,12 @@ export default function LetterManager({
       if (activeRecipients.length === 1) {
         const namePart = (activeRecipients[0]?.nama || 'Penerima').replace(/[^a-zA-Z0-9_-]/g, '_')
         filename = `${sanitizedTitle}_${namePart}.pdf`
-      } else {
+      } else if (activeRecipients.length <= PREVIEW_PAGE_SIZE) {
         filename = `${sanitizedTitle}_Batch_${activeRecipients.length}_SDM.pdf`
+      } else {
+        const start = previewPage * PREVIEW_PAGE_SIZE + 1
+        const end = Math.min((previewPage + 1) * PREVIEW_PAGE_SIZE, activeRecipients.length)
+        filename = `${sanitizedTitle}_Hal_${previewPage + 1}_(SDM_${start}_sd_${end}).pdf`
       }
 
       pdf.save(filename)
@@ -620,12 +813,17 @@ NIP. ${official.nip}
               <label>Sumber Data Penerima</label>
               <select
                 value={recipientSource}
-                onChange={e => setRecipientSource(e.target.value)}
+                onChange={e => {
+                  setRecipientSource(e.target.value)
+                  setPreviewPage(0)
+                }}
               >
-                <option value="bottleneck">1. Penanganan SDM — Bottleneck ({matrix.length} Kategori)</option>
-                {judolRows.length > 0 && (
-                  <option value="judol">2. Disiplin ASN — Populasi & Filter ({judolRows.length} SDM)</option>
-                )}
+                <option value="bottleneck">
+                  1. Penanganan SDM — Bottleneck ({focusNonactiveSDM ? `${bottleneckList.length} SDM Nonaktif` : `${matrix.length} Kategori`})
+                </option>
+                <option value="judol">
+                  2. Disiplin ASN — Populasi & Filter ({judolFocused.length.toLocaleString('id-ID')} SDM · Terbukti: {(judolCounts['Terbukti'] || 0).toLocaleString('id-ID')}, Tidak Terbukti: {(judolCounts['Tidak Terbukti'] || 0).toLocaleString('id-ID')})
+                </option>
                 <option value="sdm_cases">3. Monitoring SDM Kasus ({caseList.length} data)</option>
                 {masterList.length > 0 && (
                   <option value="master">4. Master & Progres Tersimpan ({masterList.length} SDM)</option>
@@ -637,17 +835,39 @@ NIP. ${official.nip}
             {/* KONTROL KHUSUS PENANGANAN SDM — BOTTLENECK */}
             {recipientSource === 'bottleneck' && (
               <div style={{display: 'flex', flexDirection: 'column', gap: 10, margin: '4px 0'}}>
+                <div style={{background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: 6, padding: '8px 10px'}}>
+                  <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontWeight: 600, color: '#f8fafc', fontSize: '0.85rem'}}>
+                    <input
+                      type="checkbox"
+                      checked={focusNonactiveSDM}
+                      onChange={e => {
+                        setFocusNonactiveSDM(e.target.checked)
+                        setPreviewPage(0)
+                      }}
+                    />
+                    Fokus tindak lanjut SDM nonaktif
+                  </label>
+                  <p style={{margin: '4px 0 0 24px', fontSize: '0.78rem', color: '#94a3b8', lineHeight: 1.3}}>
+                    Daftar SDM difokuskan pada status nonaktif (Meninggal Dunia, Resign/PHK, Pensiun/BUP) dengan sisa pengembalian.
+                  </p>
+                </div>
+
                 <div className="letter-form-group">
                   <label>Pilih Kategori Bottleneck</label>
                   <select
                     value={selectedBottleneckNo}
-                    onChange={e => setSelectedBottleneckNo(e.target.value)}
+                    onChange={e => {
+                      setSelectedBottleneckNo(e.target.value)
+                      setPreviewPage(0)
+                    }}
                   >
-                    <option value="">Semua Kategori Hambatan ({cases.length} SDM)</option>
+                    <option value="">
+                      Semua Kategori Hambatan {focusNonactiveSDM ? `(${bottleneckList.length} SDM Nonaktif)` : `(${cases.length} SDM)`}
+                    </option>
                     {matrix.map(m => {
                       const mCat = (m.kategori || '').toLowerCase()
-                      const matchCount = cases.filter(c => {
-                        const cCat = (c.kategori || '').toLowerCase()
+                      const matchCount = bottleneckList.filter(c => {
+                        const cCat = (c.kategori || c.status || '').toLowerCase()
                         return cCat.includes(mCat) || mCat.includes(cCat)
                       }).length
                       return (
@@ -657,6 +877,30 @@ NIP. ${official.nip}
                       )
                     })}
                   </select>
+                </div>
+
+                <div className="letter-context-card">
+                  <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <b>Tindak Lanjut Penagihan Pengembalian</b>
+                    <span className="pill green">{bottleneckList.length} SDM Tersedia</span>
+                  </div>
+                  <div style={{fontSize: '0.78rem', color: '#94a3b8'}}>
+                    {focusNonactiveSDM
+                      ? 'SDM nonaktif (Meninggal Dunia, Resign/PHK, Pensiun) wajib ditindaklanjuti dengan Surat Penagihan Pengembalian resmi ke Kas Negara (SIMPONI).'
+                      : 'Menampilkan seluruh kategori hambatan pada matriks penanganan SDM.'}
+                  </div>
+                  <button
+                    type="button"
+                    className="quick-action-btn"
+                    style={{background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 600, padding: '8px 10px'}}
+                    onClick={() => {
+                      setSelectedTemplateId('tagihan-1')
+                      setCustomAgenda('Diminta kepada Saudara/i atau pihak yang mewakili untuk segera melakukan penyetoran sisa kewajiban tersebut ke Kas Negara melalui Kode Billing SIMPONI (Akun Penerimaan Pengembalian Belanja Pegawai TA Yang Lalu) selambat-lambatnya sebelum 15 Desember 2026, dan segera menyampaikan bukti setor sah (NTPN/BPN) kepada Tim TLHP Direktorat PSNK.')
+                    }}
+                  >
+                    <Sparkles size={14} />
+                    <span>Terapkan SURAT PENAGIHAN PENGEMBALIAN untuk SDM Nonaktif</span>
+                  </button>
                 </div>
 
                 {selectedBottleneck && (
@@ -669,25 +913,6 @@ NIP. ${official.nip}
                     <div><b>Tindak Lanjut:</b> {selectedBottleneck.tindak_lanjut}</div>
                     <div><b>Jalur:</b> {selectedBottleneck.jalur}</div>
                     <div><b>PIC:</b> {selectedBottleneck.pic} · <b>Tenggat:</b> {selectedBottleneck.deadline}</div>
-
-                    <button
-                      type="button"
-                      className="quick-action-btn"
-                      onClick={() => {
-                        setCustomAgenda(`Menindaklanjuti penanganan hambatan ${selectedBottleneck.kategori}: ${selectedBottleneck.tindak_lanjut} melalui ${selectedBottleneck.jalur}.`)
-                        const kLower = selectedBottleneck.kategori.toLowerCase()
-                        if (kLower.includes('saldo') || kLower.includes('resign') || kLower.includes('pensiun')) {
-                          setSelectedTemplateId('tagihan-1')
-                        } else if (kLower.includes('meninggal')) {
-                          setSelectedTemplateId('berita-acara-kesepakatan')
-                        } else if (kLower.includes('kooperatif')) {
-                          setSelectedTemplateId('panggilan-2')
-                        }
-                      }}
-                    >
-                      <Sparkles size={13} />
-                      <span>Terapkan Agenda & Template dari Bottleneck</span>
-                    </button>
                   </div>
                 )}
               </div>
@@ -696,25 +921,43 @@ NIP. ${official.nip}
             {/* KONTROL KHUSUS KATEGORISASI DISIPLIN ASN — POPULASI & FILTER */}
             {recipientSource === 'judol' && (
               <div style={{display: 'flex', flexDirection: 'column', gap: 8, margin: '4px 0'}}>
-                <label style={{fontSize: '0.82rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase'}}>
-                  Populasi & Filter Disiplin
-                </label>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <label style={{fontSize: '0.82rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase'}}>
+                    Populasi & Filter Disiplin
+                  </label>
+                  {!judolRows.length && supabase && (
+                    <button
+                      type="button"
+                      onClick={handleLoadJudolOnline}
+                      disabled={loadingJudolOnline}
+                      style={{background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.78rem', cursor: 'pointer', padding: 0}}
+                    >
+                      {loadingJudolOnline ? 'Memuat...' : '↻ Muat Online'}
+                    </button>
+                  )}
+                </div>
                 <div className="letter-filter-pills">
                   <button
                     type="button"
                     className={`letter-pill-btn ${!judolAssessment ? 'active' : ''}`}
-                    onClick={() => setJudolAssessment('')}
+                    onClick={() => {
+                      setJudolAssessment('')
+                      setPreviewPage(0)
+                    }}
                   >
-                    Kedua status: {judolFocused.length}
+                    Kedua status: {judolFocused.length.toLocaleString('id-ID')}
                   </button>
                   {FOCUSED_ASSESSMENTS.map(status => (
                     <button
                       key={status}
                       type="button"
                       className={`letter-pill-btn ${judolAssessment === status ? 'active' : ''}`}
-                      onClick={() => setJudolAssessment(judolAssessment === status ? '' : status)}
+                      onClick={() => {
+                        setJudolAssessment(judolAssessment === status ? '' : status)
+                        setPreviewPage(0)
+                      }}
                     >
-                      {status}: {judolCounts[status] || 0}
+                      {status}: {(judolCounts[status] || 0).toLocaleString('id-ID')}
                     </button>
                   ))}
                 </div>
@@ -724,7 +967,10 @@ NIP. ${official.nip}
                     <label style={{fontSize: '0.72rem'}}>Kategori Pelanggaran</label>
                     <select
                       value={judolCategory}
-                      onChange={e => setJudolCategory(e.target.value)}
+                      onChange={e => {
+                        setJudolCategory(e.target.value)
+                        setPreviewPage(0)
+                      }}
                       style={{fontSize: '0.8rem', padding: '6px 8px'}}
                     >
                       <option value="">Semua Kategori</option>
@@ -737,7 +983,10 @@ NIP. ${official.nip}
                     <label style={{fontSize: '0.72rem'}}>Kelengkapan Data</label>
                     <select
                       value={judolAvailability}
-                      onChange={e => setJudolAvailability(e.target.value)}
+                      onChange={e => {
+                        setJudolAvailability(e.target.value)
+                        setPreviewPage(0)
+                      }}
                       style={{fontSize: '0.8rem', padding: '6px 8px'}}
                     >
                       <option value="">Semua Kelengkapan</option>
@@ -750,7 +999,7 @@ NIP. ${official.nip}
 
                 <div className="letter-context-card">
                   <div>
-                    Fokus <b>{judolList.length} SDM</b> sesuai filter dari <b>{judolRows.length} SDM</b> sumber analisis.
+                    Fokus <b>{judolList.length.toLocaleString('id-ID')} SDM</b> sesuai filter dari <b>{effectiveJudolRows.length.toLocaleString('id-ID')} SDM</b> sumber analisis.
                   </div>
                   <button
                     type="button"

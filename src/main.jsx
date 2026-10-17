@@ -92,7 +92,44 @@ function App(){
    return next
   })
  },[])
- useEffect(()=>{updateJudolSnapshot(null)},[session?.user?.id,updateJudolSnapshot])
+ useEffect(()=>{
+  if(!supabase||!isAuthorized||demo)return
+  let active=true
+  try{
+   const storage=disciplineStorage(supabase)
+   if(storage){
+    storage.listDatasets().then(async data=>{
+     if(!active||!data||!data.length)return
+     setJudolSnapshot(curr=>{
+      if(curr)return curr
+      storage.loadDataset(data[0].id).then(async dataset=>{
+       if(!active||!dataset)return
+       const followups=await storage.loadFollowups(data[0].id).catch(()=>[])
+       const snap={
+        kind:'analysis',
+        name:dataset.name,
+        filename:dataset.filename,
+        source:null,
+        active:0,
+        versions:[{
+         id:dataset.id,
+         number:dataset.version,
+         createdAt:dataset.createdAt,
+         status:dataset.status,
+         result:dataset.result,
+         followups:followups||[],
+         auditEvents:dataset.auditEvents||[]
+        }]
+       }
+       updateJudolSnapshot(snap)
+      }).catch(()=>{})
+      return curr
+     })
+    }).catch(()=>{})
+   }
+  }catch{}
+  return ()=>{active=false}
+ },[supabase,isAuthorized,demo,updateJudolSnapshot])
  const [editingAction,setEditingAction]=useState(null);const [deletingAction,setDeletingAction]=useState(null);const [actionError,setActionError]=useState('');
  const [editingMatrix,setEditingMatrix]=useState(null);const [deletingMatrix,setDeletingMatrix]=useState(null);const [matrixError,setMatrixError]=useState('');
  const [matrix,setMatrix]=useState(seeds.bottlenecks); const [actions,setActions]=useState(seeds.actions); const [bankData,setBankData]=useState(bankDefaults)
@@ -163,7 +200,7 @@ function App(){
   setBusy(true);setLoginError('')
   try{const {error}=await supabase.auth.updateUser({password});if(error)throw error;setRecovering(false);await supabase.auth.signOut();window.history.replaceState({},'',window.location.pathname);setResetMessage('Password berhasil diperbarui. Silakan masuk dengan password baru.')}catch(e){setLoginError(notify(e))}finally{setBusy(false)}
  }
- const signOut=async()=>{await supabase.auth.signOut();setPage('dashboard');setRecoverySnapshot(null);setMasterSnapshot(null)}
+ const signOut=async()=>{await supabase.auth.signOut();setPage('dashboard');setRecoverySnapshot(null);setMasterSnapshot(null);updateJudolSnapshot(null)}
  const updateData=async(table,no,patch)=>{
    if(!canEdit)return;setError('');if(demo){const setter=table==='bottlenecks'?setMatrix:setActions;setter(old=>old.map(r=>r.no===no?{...r,...patch}:r));return}
    const {error}=await supabase.from(table).update(patch).eq('no',no);if(error)setError(notify(error));else fetchAll()
@@ -320,8 +357,8 @@ function App(){
     {page==='impor-master'&&canImport&&<ImportPreview metadataClient={profile?.role==='admin'?sourceMetadataClient:null} storedSnapshot={profile?.role==='admin'?masterSnapshot:null} sdmClient={profile?.role==='admin'?sdmStatusClient:null} stagingClient={profile?.role==='admin'?importTestClient:null} onMasterCommitted={refreshCommittedMaster} onSnapshot={data=>{setRecoverySnapshot(data);activateMaster(data);go('master-progress')}}/>}
     {page==='master-progress'&&<RecoveryWorkspace adjustmentClient={supabase} client={importTestClient} snapshot={recoverySnapshot} onImport={canImport?()=>go('impor-master'):undefined} onMasterLoaded={activateMaster}/>}
     {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
-    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={judolSnapshot} onSnapshot={setJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase}/></React.Suspense>}
-    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={judolSnapshot} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions}/></React.Suspense>}
+    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={judolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase}/></React.Suspense>}
+    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={judolSnapshot} onJudolSnapshot={updateJudolSnapshot} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}
       {masterLoadError&&<div className="notice amber-notice"><Info size={18}/><span>{masterLoadError}</span></div>}
