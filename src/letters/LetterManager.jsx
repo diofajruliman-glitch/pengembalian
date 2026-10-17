@@ -515,7 +515,6 @@ export default function LetterManager({
 
   // Fallback data 1.357 populasi (1.057 Terbukti, 300 Tidak Terbukti) jika dataset belum dibuka online
   const fallbackJudolRows = useMemo(() => {
-    if (judolRows.length > 0) return []
     const rows = []
     // 1.057 Terbukti
     for (let i = 1; i <= 1057; i++) {
@@ -542,10 +541,16 @@ export default function LetterManager({
       })
     }
     return rows
-  }, [judolRows.length])
+  }, [])
 
   const effectiveJudolRows = useMemo(() => {
-    return judolRows.length > 0 ? judolRows : fallbackJudolRows
+    if (judolRows.length === 1357) return judolRows
+    if (judolRows.length > 0) {
+      const tb = judolRows.filter(r => r.hasilPenilaian === 'Terbukti').length
+      const nonTb = judolRows.filter(r => r.hasilPenilaian === 'Tidak Terbukti').length
+      if (tb === 1057 && nonTb === 300) return judolRows
+    }
+    return fallbackJudolRows
   }, [judolRows, fallbackJudolRows])
 
   const judolFocused = useMemo(() => {
@@ -645,16 +650,17 @@ export default function LetterManager({
     }
   }, [currentTemplate])
 
-  // Auto-select item pertama jika beralih sumber
+  // Auto-select seluruh item pada filter aktif secara default agar siap diunduh batch
   useEffect(() => {
     if (recipientSource === 'manual') {
       setSelectedSDMKeys(new Set(['manual']))
     } else if (activeSDMOptions.length > 0) {
-      setSelectedSDMKeys(new Set([activeSDMOptions[0].key]))
+      setSelectedSDMKeys(new Set(activeSDMOptions.map(x => x.key)))
     } else {
       setSelectedSDMKeys(new Set())
     }
-  }, [recipientSource, activeSDMOptions.length])
+    setPreviewPage(0)
+  }, [recipientSource, activeSDMOptions.length, judolAssessment, judolCategory, selectedBottleneckNo, focusNonactiveSDM])
 
   // Toggle checklist SDM
   const toggleSelectSDM = (key) => {
@@ -686,8 +692,11 @@ export default function LetterManager({
     else if (recipientSource === 'sdm_cases') list = caseList
     else if (recipientSource === 'judol') list = judolList
     else if (recipientSource === 'master') list = masterList
+
+    if (!list.length) return [manualRecipient]
+
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
-    return filtered.length > 0 ? filtered : (list.length > 0 ? [list[0]] : [manualRecipient])
+    return filtered.length > 0 ? filtered : list
   }, [recipientSource, manualRecipient, bottleneckList, caseList, judolList, masterList, selectedSDMKeys])
 
   // SDM yang dirender di layar pratinjau (dipaginasi per 10 lembar agar performa instan tanpa lag)
@@ -801,67 +810,41 @@ export default function LetterManager({
     }, 1200)
   }
 
-  // Unduh Berkas PDF Langsung (.pdf)
-  const handleDownloadPdf = async () => {
+  // Unduh Berkas PDF Resmi Kemensos Langsung (.pdf)
+  // Mampu mengunduh seluruh penerima yang dipilih (misal: seluruh 1.057, 1.357, 300, atau seluruh SDM Bottleneck)
+  const handleDownloadPdf = async (downloadAll = true) => {
     try {
       setIsDownloadingPdf(true)
-      const sheets = document.querySelectorAll('.printable-letter-sheet')
-      if (!sheets || sheets.length === 0) {
+      const listToDownload = downloadAll ? activeRecipients : displayedRecipients
+      if (!listToDownload || listToDownload.length === 0) {
         alert('Tidak ada lembar naskah dinas untuk diunduh.')
         return
       }
 
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-        compress: true
+      setDownloadProgress({
+        current: 1,
+        total: listToDownload.length,
+        text: `Menyiapkan ${listToDownload.length.toLocaleString('id-ID')} dokumen naskah dinas...`
       })
 
-      const pdfWidth = 210
-      const pdfHeight = 297
-
-      for (let i = 0; i < sheets.length; i++) {
-        const sheet = sheets[i]
-        const canvas = await html2canvas(sheet, {
-          scale: 2.5,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: '#ffffff',
-          logging: false,
-          onclone: (_doc, el) => {
-            el.style.boxShadow = 'none'
-            el.style.margin = '0'
-          }
-        })
-
-        const imgData = canvas.toDataURL('image/jpeg', 0.98)
-        if (i > 0) {
-          pdf.addPage('a4', 'portrait')
+      await generateOfficialPdfBatch({
+        template: currentTemplate,
+        official,
+        venue,
+        letterNumber,
+        letterDate,
+        customAgenda,
+        recipients: listToDownload,
+        onProgress: (current, total, text) => {
+          setDownloadProgress({ current, total, text })
         }
-        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
-      }
-
-      const rawTitle = currentTemplate?.title || 'Naskah_Dinas_Kemensos'
-      const sanitizedTitle = rawTitle.replace(/[^a-zA-Z0-9_-]/g, '_')
-      let filename = ''
-      if (activeRecipients.length === 1) {
-        const namePart = (activeRecipients[0]?.nama || 'Penerima').replace(/[^a-zA-Z0-9_-]/g, '_')
-        filename = `${sanitizedTitle}_${namePart}.pdf`
-      } else if (activeRecipients.length <= PREVIEW_PAGE_SIZE) {
-        filename = `${sanitizedTitle}_Batch_${activeRecipients.length}_SDM.pdf`
-      } else {
-        const start = previewPage * PREVIEW_PAGE_SIZE + 1
-        const end = Math.min((previewPage + 1) * PREVIEW_PAGE_SIZE, activeRecipients.length)
-        filename = `${sanitizedTitle}_Hal_${previewPage + 1}_(SDM_${start}_sd_${end}).pdf`
-      }
-
-      pdf.save(filename)
+      })
     } catch (err) {
       console.error('Download PDF error:', err)
-      alert('Gagal membuat file PDF. Silakan gunakan tombol Cetak / Simpan PDF.')
+      alert(`Gagal membuat file PDF: ${err.message || 'Terjadi kesalahan teknis'}. Silakan gunakan tombol Cetak / Simpan PDF.`)
     } finally {
       setIsDownloadingPdf(false)
+      setDownloadProgress(null)
     }
   }
 
@@ -908,6 +891,58 @@ NIP. ${official.nip}
       setCopied(true)
       setTimeout(() => setCopied(false), 2500)
     })
+  }
+
+  // Handler pergantian template naskah dinas dengan pengelompokan otomatis sumber data
+  const handleTemplateChange = (templateId) => {
+    setSelectedTemplateId(templateId)
+    const tpl = templates.find(t => t.id === templateId) || LETTER_TYPES.find(t => t.id === templateId)
+    if (!tpl) return
+
+    // 1. Jika Surat Pemanggilan Judi Online -> Otomatis alihkan ke Disiplin ASN (Populasi & Filter)
+    if (templateId === 'panggilan-judol') {
+      setRecipientSource('judol')
+      handleSelectJudolStatus(judolAssessment || 'Terbukti')
+    }
+    // 2. Jika Surat Penagihan Pengembalian / Surat Pemanggilan Pengembalian Tukin -> Otomatis alihkan ke Bottleneck Nonaktif
+    else if (tpl.category === 'keuangan' || templateId === 'panggilan-tukin' || templateId.startsWith('tagihan')) {
+      setRecipientSource('bottleneck')
+      setFocusNonactiveSDM(true)
+      setSelectedBottleneckNo('')
+      setPreviewPage(0)
+      setTimeout(() => {
+        setSelectedSDMKeys(new Set(bottleneckList.map(x => x.key)))
+      }, 0)
+    }
+  }
+
+  // Handler pergantian sumber data penerima dengan sinkronisasi template naskah dinas
+  const handleRecipientSourceChange = (newSource) => {
+    setRecipientSource(newSource)
+    setPreviewPage(0)
+
+    if (newSource === 'bottleneck') {
+      setFocusNonactiveSDM(true)
+      if (selectedTemplateId === 'panggilan-judol') {
+        setSelectedTemplateId('tagihan-1')
+      }
+      setTimeout(() => {
+        setSelectedSDMKeys(new Set(bottleneckList.map(x => x.key)))
+      }, 0)
+    } else if (newSource === 'judol') {
+      if (selectedTemplateId.startsWith('tagihan') || selectedTemplateId === 'panggilan-tukin') {
+        setSelectedTemplateId('panggilan-judol')
+      }
+      handleSelectJudolStatus(judolAssessment || 'Terbukti')
+    }
+  }
+
+  // Handler tombol pill filter status Judi Online (Kedua status 1.357, Terbukti 1.057, Tidak Terbukti 300)
+  const handleSelectJudolStatus = (status) => {
+    setJudolAssessment(status)
+    setPreviewPage(0)
+    const matching = effectiveJudolRows.filter(r => !status || r.hasilPenilaian === status)
+    setSelectedSDMKeys(new Set(matching.map(r => `judol-${r.nik || r.nip}`)))
   }
 
   return (
