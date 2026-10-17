@@ -1757,6 +1757,9 @@ NIP. ${official.nip}
                   letterNumber={letterNumber}
                   letterDate={letterDate}
                   customAgenda={customAgenda}
+                  showClassification={showClassification}
+                  classificationPosition={classificationPosition}
+                  classificationText={classificationText}
                 />
               ))}
             </div>
@@ -1764,141 +1767,423 @@ NIP. ${official.nip}
         </div>
       )}
 
-      {/* 3. TAB CMS PEJABAT & VENUE AGENDA */}
+      {/* 3. TAB CMS PEJABAT & VENUE AGENDA (FLEKSIBEL: TAMBAH, EDIT, HAPUS, GANTI AKTIF) */}
       {activeTab === 'cms-official' && (
-        <div className="letter-sidebar-panel" style={{maxWidth: 760, margin: '0 auto'}}>
-          <h3><UserCheck size={20} color="#38bdf8" /> CMS Profil Pejabat Penandatangan & Agenda</h3>
-          <p style={{fontSize: '0.88rem', color: '#94a3b8', margin: 0}}>
-            Ubah nama pejabat pemanggil/pemeriksa, NIP, pangkat, jabatan, serta waktu dan lokasi pertemuan luring maupun sesi Zoom. Seluruh perubahan otomatis tersimpan di browser.
-          </p>
-
-          <form onSubmit={handleSaveOfficial} style={{display: 'flex', flexDirection: 'column', gap: 14, marginTop: 8}}>
-            <h4 style={{margin: '8px 0 0 0', color: '#f1f5f9', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6}}>
-              Identitas Pejabat yang Menghadapkan
-            </h4>
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12}}>
-              <div className="letter-form-group">
-                <label>Nama Pejabat</label>
-                <input
-                  type="text"
-                  value={official.nama}
-                  required
-                  onChange={e => setOfficial({...official, nama: e.target.value})}
-                />
+        <div style={{display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 1040, margin: '0 auto', width: '100%'}}>
+          {/* SECTION 1: PROFIL PEJABAT PENANDATANGAN */}
+          <div className="letter-sidebar-panel" style={{width: '100%'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10}}>
+              <div>
+                <h3><UserCheck size={20} color="#38bdf8" /> Profil Pejabat Penandatangan Naskah Dinas</h3>
+                <p style={{fontSize: '0.85rem', color: '#94a3b8', margin: '4px 0 0 0'}}>
+                  Kelola daftar pejabat yang berwenang menandatangani surat panggilan, berita acara, maupun surat penagihan.
+                </p>
               </div>
-              <div className="letter-form-group">
-                <label>NIP Pejabat</label>
-                <input
-                  type="text"
-                  value={official.nip}
-                  required
-                  onChange={e => setOfficial({...official, nip: e.target.value})}
-                />
+              <div style={{display: 'flex', gap: 8}}>
+                <button
+                  type="button"
+                  className="btn secondary"
+                  onClick={handleResetOfficials}
+                  title="Kembalikan daftar pejabat ke standar bawaan Kemensos"
+                >
+                  <RotateCcw size={15} /> Reset Default
+                </button>
+                <button
+                  type="button"
+                  className="btn primary"
+                  onClick={handleCreateOfficial}
+                >
+                  <Plus size={15} /> Tambah Pejabat
+                </button>
               </div>
-              <div className="letter-form-group">
-                <label>Pangkat / Golongan</label>
-                <input
-                  type="text"
-                  value={official.pangkatSingkat}
-                  required
-                  onChange={e => setOfficial({...official, pangkatSingkat: e.target.value, pangkat: e.target.value})}
-                />
-              </div>
-              <div className="letter-form-group">
-                <label>Kota Titimangsa</label>
-                <input
-                  type="text"
-                  value={official.kota}
-                  required
-                  onChange={e => setOfficial({...official, kota: e.target.value})}
-                />
-              </div>
-            </div>
-            <div className="letter-form-group">
-              <label>Jabatan Lengkap</label>
-              <input
-                type="text"
-                value={official.jabatan}
-                required
-                onChange={e => setOfficial({...official, jabatan: e.target.value})}
-              />
-            </div>
-            <div className="letter-form-group">
-              <label>Unit Kerja</label>
-              <input
-                type="text"
-                value={official.unitKerja}
-                required
-                onChange={e => setOfficial({...official, unitKerja: e.target.value})}
-              />
             </div>
 
-            <h4 style={{margin: '16px 0 0 0', color: '#f1f5f9', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: 6}}>
-              Jadwal, Lokasi Luring & Sesi Zoom Default
-            </h4>
-            <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12}}>
-              <div className="letter-form-group">
-                <label>Hari</label>
-                <input
-                  type="text"
-                  value={venue.hari}
-                  onChange={e => setVenue({...venue, hari: e.target.value})}
-                />
-              </div>
-              <div className="letter-form-group">
-                <label>Tanggal Pertemuan</label>
-                <input
-                  type="text"
-                  value={venue.tanggal}
-                  onChange={e => setVenue({...venue, tanggal: e.target.value})}
-                />
-              </div>
-              <div className="letter-form-group">
-                <label>Jam Pelaksanaan</label>
-                <input
-                  type="text"
-                  value={venue.jam}
-                  onChange={e => setVenue({...venue, jam: e.target.value})}
-                />
-              </div>
-            </div>
-            <div className="letter-form-group">
-              <label>Tempat Pertemuan (Luring)</label>
-              <input
-                type="text"
-                value={venue.tempat}
-                onChange={e => setVenue({...venue, tempat: e.target.value})}
-              />
-            </div>
-            <div className="letter-form-group">
-              <label>Tautan Link Zoom / Sesi Daring</label>
-              <input
-                type="text"
-                value={venue.linkZoom}
-                onChange={e => setVenue({...venue, linkZoom: e.target.value})}
-                placeholder="Kosongkan jika tidak ada sesi daring"
-              />
-            </div>
-
-            <div style={{display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 16}}>
-              <button
-                type="button"
-                className="btn secondary"
-                onClick={() => {
-                  setOfficial(DEFAULT_OFFICIAL)
-                  setVenue(DEFAULT_VENUE)
-                  localStorage.removeItem('kemensos_tlhp_official')
-                  localStorage.removeItem('kemensos_tlhp_venue')
-                  alert('Reset ke pengaturan bawaan Kemensos berhasil!')
+            {/* FORM EDIT / TAMBAH PEJABAT */}
+            {editingOfficial && (
+              <form
+                onSubmit={handleSaveOfficialForm}
+                style={{
+                  background: 'rgba(15, 23, 42, 0.9)',
+                  border: '1px solid #0284c7',
+                  borderRadius: 8,
+                  padding: 16,
+                  margin: '12px 0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12
                 }}
               >
-                Reset Bawaan
-              </button>
-              <button type="submit" className="btn primary">
-                Simpan Profil Pejabat & Agenda
-              </button>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <h4 style={{margin: 0, color: '#38bdf8', fontSize: '0.95rem'}}>
+                    <Pencil size={15} style={{display: 'inline', marginRight: 6}} />
+                    Edit Profil: {editingOfficial.nama}
+                  </h4>
+                  <button
+                    type="button"
+                    className="btn secondary"
+                    style={{padding: '3px 8px', fontSize: '0.78rem'}}
+                    onClick={() => setEditingOfficial(null)}
+                  >
+                    Batal
+                  </button>
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10}}>
+                  <div className="letter-form-group">
+                    <label>Nama Pejabat (Dengan Gelar)</label>
+                    <input
+                      type="text"
+                      value={editingOfficial.nama}
+                      required
+                      onChange={e => setEditingOfficial({...editingOfficial, nama: e.target.value})}
+                    />
+                  </div>
+                  <div className="letter-form-group">
+                    <label>NIP Pejabat</label>
+                    <input
+                      type="text"
+                      value={editingOfficial.nip}
+                      required
+                      onChange={e => setEditingOfficial({...editingOfficial, nip: e.target.value})}
+                    />
+                  </div>
+                  <div className="letter-form-group">
+                    <label>Pangkat / Golongan</label>
+                    <input
+                      type="text"
+                      value={editingOfficial.pangkat}
+                      required
+                      placeholder="Pembina Tingkat I (IV/c)"
+                      onChange={e => setEditingOfficial({...editingOfficial, pangkat: e.target.value, pangkatSingkat: e.target.value})}
+                    />
+                  </div>
+                  <div className="letter-form-group">
+                    <label>Kota Titimangsa</label>
+                    <input
+                      type="text"
+                      value={editingOfficial.kota}
+                      required
+                      placeholder="Jakarta"
+                      onChange={e => setEditingOfficial({...editingOfficial, kota: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10}}>
+                  <div className="letter-form-group">
+                    <label>Jabatan Lengkap</label>
+                    <input
+                      type="text"
+                      value={editingOfficial.jabatan}
+                      required
+                      placeholder="Direktur Perlindungan Sosial Non Kebencanaan"
+                      onChange={e => setEditingOfficial({...editingOfficial, jabatan: e.target.value})}
+                    />
+                  </div>
+                  <div className="letter-form-group">
+                    <label>Unit Kerja</label>
+                    <input
+                      type="text"
+                      value={editingOfficial.unitKerja}
+                      required
+                      placeholder="Direktorat Perlindungan Sosial Non Kebencanaan"
+                      onChange={e => setEditingOfficial({...editingOfficial, unitKerja: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div style={{display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 4}}>
+                  <button
+                    type="button"
+                    className="btn secondary"
+                    onClick={() => setEditingOfficial(null)}
+                  >
+                    Batal
+                  </button>
+                  <button type="submit" className="btn primary">
+                    <Save size={15} /> Simpan Profil Pejabat
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* DAFTAR CARD PROFIL PEJABAT */}
+            <div className="cms-card-grid">
+              {officials.map(o => {
+                const isActive = o.id === selectedOfficialId
+                return (
+                  <div key={o.id} className={`cms-item-card ${isActive ? 'is-active' : ''}`}>
+                    <div className="cms-item-header">
+                      <div>
+                        <div className="cms-item-title">{o.nama}</div>
+                        <div className="cms-item-subtitle">{o.jabatan}</div>
+                      </div>
+                      {isActive && (
+                        <span className="cms-active-pill">
+                          <Check size={12} /> Penandatangan Aktif
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="cms-item-body">
+                      <div><b>NIP:</b> {o.nip}</div>
+                      <div><b>Pangkat:</b> {o.pangkat || o.pangkatSingkat}</div>
+                      <div><b>Unit:</b> {o.unitKerja}</div>
+                      <div><b>Titimangsa:</b> {o.kota}</div>
+                    </div>
+
+                    <div className="cms-item-actions">
+                      {!isActive ? (
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{fontSize: '0.78rem', padding: '4px 10px', color: '#38bdf8', borderColor: 'rgba(56,189,248,0.3)'}}
+                          onClick={() => handleSelectOfficial(o.id)}
+                        >
+                          Pilih Sebagai Aktif
+                        </button>
+                      ) : (
+                        <span style={{fontSize: '0.75rem', color: '#22c55e', fontWeight: 600}}>
+                          ✓ Sedang Digunakan
+                        </span>
+                      )}
+                      <div style={{display: 'flex', gap: 6}}>
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{padding: '4px 8px', fontSize: '0.78rem'}}
+                          onClick={() => setEditingOfficial({...o})}
+                          title="Edit profil pejabat ini"
+                        >
+                          <Pencil size={13} /> Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{padding: '4px 8px', fontSize: '0.78rem', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)'}}
+                          onClick={() => handleDeleteOfficial(o.id)}
+                          disabled={officials.length <= 1}
+                          title={officials.length <= 1 ? 'Minimal harus ada 1 pejabat' : 'Hapus profil pejabat ini'}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-          </form>
+          </div>
+
+          {/* SECTION 2: PRESET AGENDA & LOKASI PERTEMUAN */}
+          <div className="letter-sidebar-panel" style={{width: '100%'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10}}>
+              <div>
+                <h3><Calendar size={20} color="#38bdf8" /> Preset Jadwal, Lokasi & Sesi Zoom Pertemuan</h3>
+                <p style={{fontSize: '0.85rem', color: '#94a3b8', margin: '4px 0 0 0'}}>
+                  Kelola jadwal pemeriksaan/klarifikasi luring di kantor maupun tautan video conference Zoom.
+                </p>
+              </div>
+              <div style={{display: 'flex', gap: 8}}>
+                <button
+                  type="button"
+                  className="btn secondary"
+                  onClick={handleResetVenues}
+                  title="Kembalikan daftar agenda ke standar bawaan Kemensos"
+                >
+                  <RotateCcw size={15} /> Reset Default
+                </button>
+                <button
+                  type="button"
+                  className="btn primary"
+                  onClick={handleCreateVenue}
+                >
+                  <Plus size={15} /> Tambah Preset Lokasi
+                </button>
+              </div>
+            </div>
+
+            {/* FORM EDIT / TAMBAH AGENDA */}
+            {editingVenue && (
+              <form
+                onSubmit={handleSaveVenueForm}
+                style={{
+                  background: 'rgba(15, 23, 42, 0.9)',
+                  border: '1px solid #0284c7',
+                  borderRadius: 8,
+                  padding: 16,
+                  margin: '12px 0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 12
+                }}
+              >
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <h4 style={{margin: 0, color: '#38bdf8', fontSize: '0.95rem'}}>
+                    <Pencil size={15} style={{display: 'inline', marginRight: 6}} />
+                    Edit Preset: {editingVenue.name}
+                  </h4>
+                  <button
+                    type="button"
+                    className="btn secondary"
+                    style={{padding: '3px 8px', fontSize: '0.78rem'}}
+                    onClick={() => setEditingVenue(null)}
+                  >
+                    Batal
+                  </button>
+                </div>
+
+                <div className="letter-form-group">
+                  <label>Nama Label Preset</label>
+                  <input
+                    type="text"
+                    value={editingVenue.name || ''}
+                    required
+                    placeholder="Misal: Gedung A Kemensos Salemba + Sesi Zoom"
+                    onChange={e => setEditingVenue({...editingVenue, name: e.target.value})}
+                  />
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10}}>
+                  <div className="letter-form-group">
+                    <label>Hari Pelaksanaan</label>
+                    <input
+                      type="text"
+                      value={editingVenue.hari}
+                      required
+                      placeholder="Senin"
+                      onChange={e => setEditingVenue({...editingVenue, hari: e.target.value})}
+                    />
+                  </div>
+                  <div className="letter-form-group">
+                    <label>Tanggal Pertemuan</label>
+                    <input
+                      type="text"
+                      value={editingVenue.tanggal}
+                      required
+                      placeholder="26 Oktober 2026"
+                      onChange={e => setEditingVenue({...editingVenue, tanggal: e.target.value})}
+                    />
+                  </div>
+                  <div className="letter-form-group">
+                    <label>Jam Pelaksanaan</label>
+                    <input
+                      type="text"
+                      value={editingVenue.jam}
+                      required
+                      placeholder="10.00 WIB"
+                      onChange={e => setEditingVenue({...editingVenue, jam: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div className="letter-form-group">
+                  <label>Tempat Pertemuan (Luring)</label>
+                  <input
+                    type="text"
+                    value={editingVenue.tempat}
+                    required
+                    placeholder="Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos"
+                    onChange={e => setEditingVenue({...editingVenue, tempat: e.target.value})}
+                  />
+                </div>
+
+                <div className="letter-form-group">
+                  <label>Tautan Link Zoom / Sesi Daring (Opsional)</label>
+                  <input
+                    type="text"
+                    value={editingVenue.linkZoom || ''}
+                    placeholder="https://zoom.us/j/... (Kosongkan jika hanya luring)"
+                    onChange={e => setEditingVenue({...editingVenue, linkZoom: e.target.value})}
+                  />
+                </div>
+
+                <div style={{display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 4}}>
+                  <button
+                    type="button"
+                    className="btn secondary"
+                    onClick={() => setEditingVenue(null)}
+                  >
+                    Batal
+                  </button>
+                  <button type="submit" className="btn primary">
+                    <Save size={15} /> Simpan Preset Agenda
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* DAFTAR CARD PRESET AGENDA */}
+            <div className="cms-card-grid">
+              {venues.map(v => {
+                const isActive = v.id === selectedVenueId
+                return (
+                  <div key={v.id} className={`cms-item-card ${isActive ? 'is-active' : ''}`}>
+                    <div className="cms-item-header">
+                      <div>
+                        <div className="cms-item-title">{v.name || 'Preset Agenda'}</div>
+                        <div className="cms-item-subtitle">{v.hari}, {v.tanggal} ({v.jam})</div>
+                      </div>
+                      {isActive && (
+                        <span className="cms-active-pill">
+                          <Check size={12} /> Agenda Aktif
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="cms-item-body">
+                      <div><b>Tempat:</b> {v.tempat}</div>
+                      {v.linkZoom ? (
+                        <div style={{color: '#38bdf8', wordBreak: 'break-all'}}>
+                          <b>Zoom:</b> {v.linkZoom}
+                        </div>
+                      ) : (
+                        <div style={{color: '#64748b'}}><b>Sesi Daring:</b> Tidak ada (Hanya luring)</div>
+                      )}
+                    </div>
+
+                    <div className="cms-item-actions">
+                      {!isActive ? (
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{fontSize: '0.78rem', padding: '4px 10px', color: '#38bdf8', borderColor: 'rgba(56,189,248,0.3)'}}
+                          onClick={() => handleSelectVenue(v.id)}
+                        >
+                          Gunakan Lokasi Ini
+                        </button>
+                      ) : (
+                        <span style={{fontSize: '0.75rem', color: '#22c55e', fontWeight: 600}}>
+                          ✓ Sedang Digunakan
+                        </span>
+                      )}
+                      <div style={{display: 'flex', gap: 6}}>
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{padding: '4px 8px', fontSize: '0.78rem'}}
+                          onClick={() => setEditingVenue({...v})}
+                          title="Edit preset agenda ini"
+                        >
+                          <Pencil size={13} /> Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{padding: '4px 8px', fontSize: '0.78rem', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)'}}
+                          onClick={() => handleDeleteVenue(v.id)}
+                          disabled={venues.length <= 1}
+                          title={venues.length <= 1 ? 'Minimal harus ada 1 agenda' : 'Hapus preset agenda ini'}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </div>
       )}
 
