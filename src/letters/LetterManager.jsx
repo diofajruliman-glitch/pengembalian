@@ -983,7 +983,7 @@ NIP. ${official.nip}
               <label>Jenis Naskah Dinas</label>
               <select
                 value={selectedTemplateId}
-                onChange={e => setSelectedTemplateId(e.target.value)}
+                onChange={e => handleTemplateChange(e.target.value)}
               >
                 {templates.map(t => (
                   <option key={t.id} value={t.id}>
@@ -1019,10 +1019,7 @@ NIP. ${official.nip}
               <label>Sumber Data Penerima</label>
               <select
                 value={recipientSource}
-                onChange={e => {
-                  setRecipientSource(e.target.value)
-                  setPreviewPage(0)
-                }}
+                onChange={e => handleRecipientSourceChange(e.target.value)}
               >
                 <option value="bottleneck">
                   1. Penanganan SDM — Bottleneck ({focusNonactiveSDM ? `${bottleneckList.length} SDM Nonaktif` : `${matrix.length} Kategori`})
@@ -1041,6 +1038,11 @@ NIP. ${official.nip}
             {/* KONTROL KHUSUS PENANGANAN SDM — BOTTLENECK */}
             {recipientSource === 'bottleneck' && (
               <div style={{display: 'flex', flexDirection: 'column', gap: 10, margin: '4px 0'}}>
+                <div style={{background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.35)', borderRadius: 6, padding: '8px 10px', fontSize: '0.8rem', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: 8}}>
+                  <ShieldCheck size={16} />
+                  <span><strong>Terhubung Khusus:</strong> Surat Penagihan Pengembalian ke Kas Negara (SIMPONI)</span>
+                </div>
+
                 <div style={{background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: 6, padding: '8px 10px'}}>
                   <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontWeight: 600, color: '#f8fafc', fontSize: '0.85rem'}}>
                     <input
@@ -1058,31 +1060,44 @@ NIP. ${official.nip}
                   </p>
                 </div>
 
-                <div className="letter-form-group">
-                  <label>Pilih Kategori Bottleneck</label>
-                  <select
-                    value={selectedBottleneckNo}
-                    onChange={e => {
-                      setSelectedBottleneckNo(e.target.value)
-                      setPreviewPage(0)
-                    }}
-                  >
-                    <option value="">
-                      Semua Kategori Hambatan {focusNonactiveSDM ? `(${bottleneckList.length} SDM Nonaktif)` : `(${cases.length} SDM)`}
-                    </option>
-                    {matrix.map(m => {
-                      const mCat = (m.kategori || '').toLowerCase()
+                {/* Filter Pills Bottleneck Nonaktif */}
+                <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+                  <label style={{fontSize: '0.82rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase'}}>
+                    Filter Penanganan Bottleneck
+                  </label>
+                  <div className="letter-filter-pills">
+                    <button
+                      type="button"
+                      className={`letter-pill-btn ${!selectedBottleneckNo ? 'active' : ''}`}
+                      onClick={() => {
+                        setSelectedBottleneckNo('')
+                        setPreviewPage(0)
+                        setSelectedSDMKeys(new Set(bottleneckList.map(x => x.key)))
+                      }}
+                    >
+                      Semua Nonaktif ({bottleneckList.length})
+                    </button>
+                    {matrix.filter(m => [1, 2, 3].includes(Number(m.no))).map(m => {
                       const matchCount = bottleneckList.filter(c => {
                         const cCat = (c.kategori || c.status || '').toLowerCase()
-                        return cCat.includes(mCat) || mCat.includes(cCat)
+                        return cCat.includes(m.kategori.toLowerCase()) || m.kategori.toLowerCase().includes(cCat)
                       }).length
                       return (
-                        <option key={m.no} value={String(m.no)}>
-                          {String(m.no).padStart(2, '0')}. {m.kategori} ({matchCount} SDM)
-                        </option>
+                        <button
+                          key={m.no}
+                          type="button"
+                          className={`letter-pill-btn ${selectedBottleneckNo === String(m.no) ? 'active' : ''}`}
+                          onClick={() => {
+                            const newNo = selectedBottleneckNo === String(m.no) ? '' : String(m.no)
+                            setSelectedBottleneckNo(newNo)
+                            setPreviewPage(0)
+                          }}
+                        >
+                          {m.kategori} ({matchCount})
+                        </button>
                       )
                     })}
-                  </select>
+                  </div>
                 </div>
 
                 <div className="letter-context-card">
@@ -1127,6 +1142,11 @@ NIP. ${official.nip}
             {/* KONTROL KHUSUS KATEGORISASI DISIPLIN ASN — POPULASI & FILTER */}
             {recipientSource === 'judol' && (
               <div style={{display: 'flex', flexDirection: 'column', gap: 8, margin: '4px 0'}}>
+                <div style={{background: 'rgba(56, 189, 248, 0.12)', border: '1px solid rgba(56, 189, 248, 0.35)', borderRadius: 6, padding: '8px 10px', fontSize: '0.8rem', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: 8}}>
+                  <ShieldCheck size={16} />
+                  <span><strong>Terhubung Khusus:</strong> Surat Pemanggilan Disiplin ASN — Indikasi Judi Online</span>
+                </div>
+
                 <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                   <label style={{fontSize: '0.82rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase'}}>
                     Populasi & Filter Disiplin
@@ -1146,10 +1166,7 @@ NIP. ${official.nip}
                   <button
                     type="button"
                     className={`letter-pill-btn ${!judolAssessment ? 'active' : ''}`}
-                    onClick={() => {
-                      setJudolAssessment('')
-                      setPreviewPage(0)
-                    }}
+                    onClick={() => handleSelectJudolStatus('')}
                   >
                     Kedua status: {judolFocused.length.toLocaleString('id-ID')}
                   </button>
@@ -1158,10 +1175,7 @@ NIP. ${official.nip}
                       key={status}
                       type="button"
                       className={`letter-pill-btn ${judolAssessment === status ? 'active' : ''}`}
-                      onClick={() => {
-                        setJudolAssessment(judolAssessment === status ? '' : status)
-                        setPreviewPage(0)
-                      }}
+                      onClick={() => handleSelectJudolStatus(status)}
                     >
                       {status}: {(judolCounts[status] || 0).toLocaleString('id-ID')}
                     </button>
