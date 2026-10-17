@@ -16,13 +16,15 @@ export default function LetterDocument({
   customClosing = '',
   showClassification = true,
   classificationPosition = 'left',
-  classificationText = ''
+  classificationText = '',
+  showRank = false
 }) {
   const isTagihan = template.category === 'keuangan'
   const isBeritaAcara = template.category === 'berita-acara'
   const effectiveShowClassification = showClassification ?? template.showClassification ?? true
   const effectivePosition = classificationPosition || template.classificationPosition || 'left'
   const effectiveClassification = classificationText || template.classification || 'RAHASIA'
+  const effectiveShowRank = showRank ?? template.showRank ?? false
 
   const openingText = customOpening || template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'
   const agendaText = customAgenda || template.agendaDefault
@@ -150,11 +152,13 @@ export default function LetterDocument({
                 <td className="col-sep">:</td>
                 <td className="col-val">{official.nip}</td>
               </tr>
-              <tr>
-                <td className="col-label">Pangkat/Gol</td>
-                <td className="col-sep">:</td>
-                <td className="col-val">{official.pangkat || official.pangkatSingkat}</td>
-              </tr>
+              {effectiveShowRank && (
+                <tr>
+                  <td className="col-label">Pangkat/Gol</td>
+                  <td className="col-sep">:</td>
+                  <td className="col-val">{official.pangkat || official.pangkatSingkat}</td>
+                </tr>
+              )}
               <tr>
                 <td className="col-label">Jabatan</td>
                 <td className="col-sep">:</td>
@@ -176,11 +180,13 @@ export default function LetterDocument({
                 <td className="col-sep">:</td>
                 <td className="col-val">{recipient.nip || '«NIP»'}</td>
               </tr>
-              <tr>
-                <td className="col-label">Pangkat/Gol</td>
-                <td className="col-sep">:</td>
-                <td className="col-val">{recipient.pangkat || 'Penata Muda (III/a)'}</td>
-              </tr>
+              {effectiveShowRank && (
+                <tr>
+                  <td className="col-label">Pangkat/Gol</td>
+                  <td className="col-sep">:</td>
+                  <td className="col-val">{recipient.pangkat || 'Penata Muda (III/a)'}</td>
+                </tr>
+              )}
               <tr>
                 <td className="col-label">Jabatan</td>
                 <td className="col-sep">:</td>
@@ -221,11 +227,13 @@ export default function LetterDocument({
                 <td className="col-sep">:</td>
                 <td className="col-val">{recipient.nip || '«NIP »'}</td>
               </tr>
-              <tr>
-                <td className="col-label">Pangkat</td>
-                <td className="col-sep">:</td>
-                <td className="col-val">{recipient.pangkat || '«pangkat»'}</td>
-              </tr>
+              {effectiveShowRank && (
+                <tr>
+                  <td className="col-label">Pangkat</td>
+                  <td className="col-sep">:</td>
+                  <td className="col-val">{recipient.pangkat || '«pangkat»'}</td>
+                </tr>
+              )}
               <tr>
                 <td className="col-label">Jabatan</td>
                 <td className="col-sep">:</td>
