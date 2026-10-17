@@ -29,7 +29,12 @@ import {
   ShieldCheck,
   AlertTriangle,
   Layers,
-  ArrowRight
+  ArrowRight,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  Shield,
+  Files
 } from 'lucide-react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
@@ -747,15 +752,177 @@ export default function LetterManager({
     return activeRecipients.slice(start, start + PREVIEW_PAGE_SIZE)
   }, [activeRecipients, previewPage])
 
-  // Simpan CMS Pejabat & Agenda
-  const handleSaveOfficial = (e) => {
-    e.preventDefault()
+  // Helper Simpan Officials ke localStorage
+  const saveOfficialsList = (newList) => {
+    setOfficials(newList)
     try {
-      localStorage.setItem('kemensos_tlhp_official', JSON.stringify(official))
-      localStorage.setItem('kemensos_tlhp_venue', JSON.stringify(venue))
-      alert('Pengaturan Profil Pejabat & Agenda berhasil disimpan!')
+      localStorage.setItem('kemensos_tlhp_officials', JSON.stringify(newList))
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  // Helper Simpan Venues ke localStorage
+  const saveVenuesList = (newList) => {
+    setVenues(newList)
+    try {
+      localStorage.setItem('kemensos_tlhp_venues', JSON.stringify(newList))
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  // Pilih Pejabat Aktif
+  const handleSelectOfficial = (id) => {
+    setSelectedOfficialId(id)
+    try {
+      localStorage.setItem('kemensos_tlhp_selected_official_id', id)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  // Tambah Pejabat Baru
+  const handleCreateOfficial = () => {
+    const newId = `off-${Date.now()}`
+    const newOfficial = {
+      id: newId,
+      nama: 'Nama Pejabat Baru',
+      nip: '19800101 200501 1 001',
+      pangkat: 'Pembina (IV/a)',
+      pangkatSingkat: 'IV/a',
+      jabatan: 'Koordinator / Pejabat Penandatangan',
+      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+      kota: 'Jakarta'
+    }
+    const updated = [...officials, newOfficial]
+    saveOfficialsList(updated)
+    setEditingOfficial(newOfficial)
+    handleSelectOfficial(newId)
+  }
+
+  // Simpan Edit Pejabat
+  const handleSaveOfficialForm = (e) => {
+    e.preventDefault()
+    if (!editingOfficial) return
+    const updated = officials.map(o => o.id === editingOfficial.id ? editingOfficial : o)
+    saveOfficialsList(updated)
+    setEditingOfficial(null)
+    alert('Profil pejabat penandatangan berhasil disimpan!')
+  }
+
+  // Hapus Pejabat
+  const handleDeleteOfficial = (id) => {
+    if (officials.length <= 1) {
+      alert('Minimal harus ada 1 profil pejabat penandatangan.')
+      return
+    }
+    if (confirm('Apakah Anda yakin ingin menghapus profil pejabat ini?')) {
+      const updated = officials.filter(o => o.id !== id)
+      saveOfficialsList(updated)
+      if (selectedOfficialId === id) {
+        handleSelectOfficial(updated[0].id)
+      }
+      if (editingOfficial?.id === id) setEditingOfficial(null)
+    }
+  }
+
+  // Reset Pejabat ke Default
+  const handleResetOfficials = () => {
+    if (confirm('Kembalikan seluruh profil pejabat penandatangan ke setelan bawaan Kementerian Sosial?')) {
+      saveOfficialsList(DEFAULT_OFFICIALS)
+      handleSelectOfficial(DEFAULT_OFFICIALS[0].id)
+      setEditingOfficial(null)
+      localStorage.removeItem('kemensos_tlhp_officials')
+      localStorage.removeItem('kemensos_tlhp_selected_official_id')
+      alert('Profil pejabat telah dikembalikan ke standar bawaan!')
+    }
+  }
+
+  // Pilih Venue/Agenda Aktif
+  const handleSelectVenue = (id) => {
+    setSelectedVenueId(id)
+    try {
+      localStorage.setItem('kemensos_tlhp_selected_venue_id', id)
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  // Tambah Venue Baru
+  const handleCreateVenue = () => {
+    const newId = `ven-${Date.now()}`
+    const newVenue = {
+      id: newId,
+      name: 'Preset Agenda / Pertemuan Baru',
+      tempat: 'Ruang Rapat Direktorat PSNK Lt. 3 Kemensos',
+      alamatLuring: 'Jl. Salemba Raya No. 28 Jakarta Pusat',
+      linkZoom: '',
+      jam: '09.30 WIB',
+      hari: 'Senin',
+      tanggal: '26 Oktober 2026',
+      includeZoom: false
+    }
+    const updated = [...venues, newVenue]
+    saveVenuesList(updated)
+    setEditingVenue(newVenue)
+    handleSelectVenue(newId)
+  }
+
+  // Simpan Edit Venue
+  const handleSaveVenueForm = (e) => {
+    e.preventDefault()
+    if (!editingVenue) return
+    const updated = venues.map(v => v.id === editingVenue.id ? editingVenue : v)
+    saveVenuesList(updated)
+    setEditingVenue(null)
+    alert('Preset agenda dan lokasi berhasil disimpan!')
+  }
+
+  // Hapus Venue
+  const handleDeleteVenue = (id) => {
+    if (venues.length <= 1) {
+      alert('Minimal harus ada 1 preset lokasi/agenda pertemuan.')
+      return
+    }
+    if (confirm('Apakah Anda yakin ingin menghapus preset lokasi/agenda ini?')) {
+      const updated = venues.filter(v => v.id !== id)
+      saveVenuesList(updated)
+      if (selectedVenueId === id) {
+        handleSelectVenue(updated[0].id)
+      }
+      if (editingVenue?.id === id) setEditingVenue(null)
+    }
+  }
+
+  // Reset Venues ke Default
+  const handleResetVenues = () => {
+    if (confirm('Kembalikan seluruh preset lokasi & sesi agenda ke setelan bawaan Kementerian Sosial?')) {
+      saveVenuesList(DEFAULT_VENUES)
+      handleSelectVenue(DEFAULT_VENUES[0].id)
+      setEditingVenue(null)
+      localStorage.removeItem('kemensos_tlhp_venues')
+      localStorage.removeItem('kemensos_tlhp_selected_venue_id')
+      alert('Preset agenda telah dikembalikan ke standar bawaan!')
+    }
+  }
+
+  // Duplikat Template Naskah Dinas di CMS
+  const handleDuplicateTemplate = (tpl) => {
+    const newId = `copy-${tpl.id}-${Date.now().toString().slice(-4)}`
+    const duplicated = {
+      ...tpl,
+      id: newId,
+      name: `${tpl.name} (Salinan)`
+    }
+    const updated = [...templates, duplicated]
+    setTemplates(updated)
+    try {
+      localStorage.setItem('kemensos_tlhp_templates', JSON.stringify(updated))
+      alert(`Template "${tpl.name}" berhasil diduplikat menjadi "${duplicated.name}"!`)
+      setEditingTemplate(duplicated)
     } catch {
-      alert('Gagal menyimpan ke penyimpanan browser.')
+      alert('Gagal menduplikat template.')
     }
   }
 
@@ -783,6 +950,8 @@ export default function LetterManager({
       name: 'Template Surat Kustom Baru',
       code: 'KP.06.04',
       classification: 'RAHASIA',
+      showClassification: true,
+      classificationPosition: 'left',
       title: 'SURAT PANGGILAN',
       openingText: 'Bersama ini diminta dengan hormat kehadiran Saudara:',
       agendaDefault: 'Untuk diperiksa/dimintai keterangan sehubungan dengan agenda tindak lanjut pengawasan.',
@@ -877,6 +1046,9 @@ export default function LetterManager({
         letterDate,
         customAgenda,
         recipients: listToDownload,
+        showClassification,
+        classificationPosition,
+        classificationText,
         onProgress: (current, total, text) => {
           setDownloadProgress({ current, total, text })
         }
