@@ -30,5 +30,5 @@ export function filterDisciplineRows(rows,{assessment='',category='',period='aft
   (!assessment||row.hasilPenilaian===assessment)&&
   (!category||row[period]?.kategori===category)&&
   (!availability||getTransactionAvailability(row)===availability)&&
-  (!query||`${row.nama??''} ${row.nik??''} ${row.nip??''}`.toLowerCase().includes(query)))
+  (!query||`${row.nama??''} ${row.nik??''} ${row.nip??''} ${row.provinsi??''} ${row.kabKota??''}`.toLowerCase().includes(query)))
 }

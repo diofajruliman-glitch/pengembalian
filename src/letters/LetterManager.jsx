@@ -1044,9 +1044,11 @@ NIP. ${official.nip}
   const handleRecipientSourceChange = (newSource) => {
     setRecipientSource(newSource)
     setPreviewPage(0)
+    setSearchSDM('')
 
     if (newSource === 'bottleneck') {
       setFocusNonactiveSDM(true)
+      setSelectedBottleneckNo('')
       if (selectedTemplateId === 'panggilan-judol') {
         setSelectedTemplateId('tagihan-1')
       }
@@ -1058,6 +1060,16 @@ NIP. ${official.nip}
         setSelectedTemplateId('panggilan-judol')
       }
       handleSelectJudolStatus(judolAssessment || 'Terbukti')
+    } else if (newSource === 'sdm_cases') {
+      setTimeout(() => {
+        setSelectedSDMKeys(new Set(caseList.map(x => x.key)))
+      }, 0)
+    } else if (newSource === 'master') {
+      setTimeout(() => {
+        setSelectedSDMKeys(new Set(masterList.map(x => x.key)))
+      }, 0)
+    } else if (newSource === 'manual') {
+      setSelectedSDMKeys(new Set(['manual']))
     }
   }
 
