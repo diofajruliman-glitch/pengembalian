@@ -257,17 +257,17 @@ export default function LetterDocument({
                 <colgroup>
                   <col style={{width: '36px'}} />
                   <col style={{width: 'auto'}} />
-                  <col style={{width: '130px'}} />
-                  <col style={{width: '130px'}} />
-                  <col style={{width: '145px'}} />
+                  <col style={{width: '120px'}} />
+                  <col style={{width: '120px'}} />
+                  <col style={{width: '165px'}} />
                 </colgroup>
                 <thead>
                   <tr>
                     <th style={{width: '36px', textAlign: 'center'}}>No</th>
                     <th style={{textAlign: 'center'}}>Uraian Kewajiban</th>
-                    <th style={{width: '130px', textAlign: 'center'}}>Kewajiban Awal</th>
-                    <th style={{width: '130px', textAlign: 'center'}}>Telah Disetor</th>
-                    <th style={{width: '145px', textAlign: 'center'}}>Sisa yang Wajib Disetor</th>
+                    <th style={{width: '120px', textAlign: 'center'}}>Kewajiban Awal</th>
+                    <th style={{width: '120px', textAlign: 'center'}}>Telah Disetor</th>
+                    <th className="col-sisa" style={{width: '165px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -282,7 +282,7 @@ export default function LetterDocument({
                     </td>
                     <td className="num">{fmtRp(recipient.kewajibanTotal || 0)}</td>
                     <td className="num">{fmtRp(recipient.realisasiTotal || 0)}</td>
-                    <td className="num remaining-val">{fmtRp(recipient.sisaKewajiban || 0)}</td>
+                    <td className="num remaining-val col-sisa">{fmtRp(recipient.sisaKewajiban || 0)}</td>
                   </tr>
                 </tbody>
                 <tfoot>
@@ -290,7 +290,7 @@ export default function LetterDocument({
                     <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '6px 10px'}}>
                       Total Sisa Kewajiban :
                     </th>
-                    <th className="num remaining-val" style={{textAlign: 'right', fontSize: '10.5pt', padding: '6px 10px'}}>
+                    <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10.5pt', padding: '6px 10px'}}>
                       {fmtRp(recipient.sisaKewajiban || 0)}
                     </th>
                   </tr>
