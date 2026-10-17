@@ -26,6 +26,7 @@ import AdjustmentMonitor from './adjustments/AdjustmentMonitor.jsx'
 import {disciplineStorage} from './judol/storage.js'
 const JudolModule=React.lazy(()=>import('./judol/JudolModule.jsx'))
 const LetterManager=React.lazy(()=>import('./letters/LetterManager.jsx'))
+const InterviewMonitor=React.lazy(()=>import('./interviews/InterviewMonitor.jsx'))
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -53,6 +54,7 @@ const menus = [
   {id:'master-progress',name:'Master & Progres',icon:TrendingUp},
   {id:'perubahan-pengembalian',name:'Perubahan Pengembalian',icon:FileCheck2},
   {id:'kategorisasi-judol',name:'Kategorisasi Disiplin ASN',icon:ShieldCheck},
+  {id:'monitoring-wawancara',name:'Monitoring Wawancara',icon:Users},
   {id:'surat-tlhp',name:'Persuratan & Dokumen TLHP',icon:FileText},
   {id:'impor-master',name:'Pratinjau Excel Master',icon:FileSpreadsheet},
   {id:'panduan',name:'Petunjuk',icon:CircleHelp}
@@ -75,7 +77,7 @@ function App(){
  const [masterLoading,setMasterLoading]=useState(false);const [masterLoadError,setMasterLoadError]=useState('')
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
- const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
+ const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp','#monitoring-wawancara'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
  const [judolSnapshot,setJudolSnapshot]=useState(()=>{
   try{
    const saved=sessionStorage.getItem('cached_judol_snapshot')
@@ -357,7 +359,8 @@ function App(){
     {page==='impor-master'&&canImport&&<ImportPreview metadataClient={profile?.role==='admin'?sourceMetadataClient:null} storedSnapshot={profile?.role==='admin'?masterSnapshot:null} sdmClient={profile?.role==='admin'?sdmStatusClient:null} stagingClient={profile?.role==='admin'?importTestClient:null} onMasterCommitted={refreshCommittedMaster} onSnapshot={data=>{setRecoverySnapshot(data);activateMaster(data);go('master-progress')}}/>}
     {page==='master-progress'&&<RecoveryWorkspace adjustmentClient={supabase} client={importTestClient} snapshot={recoverySnapshot} onImport={canImport?()=>go('impor-master'):undefined} onMasterLoaded={activateMaster}/>}
     {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
-    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={judolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase}/></React.Suspense>}
+    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={judolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase} onOpenInterviews={()=>go('monitoring-wawancara')}/></React.Suspense>}
+    {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={judolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')}/></React.Suspense>}
     {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={judolSnapshot} onJudolSnapshot={updateJudolSnapshot} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}

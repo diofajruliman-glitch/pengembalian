@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {loadWorkspace,saveWorkspace,validateWorkspace} from '../src/interviews/storage.js'
+import {loadWorkspace,saveWorkspace,validateWorkspace,recoverWorkspace} from '../src/interviews/storage.js'
 
 class FakeStorage{
  constructor(){this.values=new Map();this.writes=0;this.readError=null;this.writeError=null}
@@ -118,4 +118,84 @@ test('missing account or source never reads or writes an unscoped draft',()=>{
   assert.throws(()=>saveWorkspace(storage,id,key,draft(),0),isCode('INTERVIEW_STORAGE_SCOPE'))
  }
  assert.equal(storage.values.size,0)
+})
+
+const scopedKey='tlhp_interviews_v1:'+encodeURIComponent(account)+':'+encodeURIComponent(source)
+
+test('explicit corrupt-draft recovery preserves the exact old raw value before writing revision one',()=>{
+ const events=[],raw='{damaged workspace',storage=new FakeStorage()
+ storage.values.set(scopedKey,raw)
+ const write=storage.setItem.bind(storage)
+ storage.setItem=(key,value)=>{events.push({key,value});write(key,value)}
+ const candidate={...draft(),revision:53},recovered=recoverWorkspace(storage,account,source,candidate)
+ assert.equal(recovered.revision,1)
+ assert.equal(candidate.revision,53)
+ assert.equal(events.length,2)
+ assert.match(events[0].key,new RegExp(':recovery:\\d+$'))
+ assert.equal(events[0].value,raw)
+ assert.equal(events[1].key,scopedKey)
+ assert.deepEqual(loadWorkspace(storage,account,source),recovered)
+ assert.equal(storage.getItem(events[0].key),raw)
+})
+
+test('recovery does not overwrite a prior recovery copy with the same timestamp',t=>{
+ t.mock.method(Date,'now',()=>1234567)
+ const storage=new FakeStorage(),oldCopy=scopedKey+':recovery:1234567'
+ storage.values.set(scopedKey,'{broken')
+ storage.values.set(oldCopy,'prior preserved copy')
+ recoverWorkspace(storage,account,source,draft())
+ assert.equal(storage.getItem(oldCopy),'prior preserved copy')
+ assert.equal(storage.getItem(scopedKey+':recovery:1234568'),'{broken')
+})
+
+test('recovery cannot bypass optimistic revisions for valid drafts or initialize missing drafts',()=>{
+ for(const raw of [null,JSON.stringify({...draft(),revision:7})]){
+  const storage=new FakeStorage()
+  if(raw!==null)storage.values.set(scopedKey,raw)
+  assert.throws(()=>recoverWorkspace(storage,account,source,draft()),isCode('INTERVIEW_STORAGE_RECOVERY_NOT_NEEDED'))
+  assert.equal(storage.writes,0)
+  assert.equal(storage.getItem(scopedKey),raw)
+ }
+})
+
+test('invalid candidates and unavailable reads cannot start corrupt-draft recovery',()=>{
+ const storage=new FakeStorage()
+ storage.values.set(scopedKey,'{broken')
+ assert.throws(()=>recoverWorkspace(storage,account,source,{entries:[],revision:0}),isCode('INTERVIEW_WORKSPACE_INVALID'))
+ assert.equal(storage.values.size,1)
+ storage.readError=new Error('browser private details')
+ assert.throws(()=>recoverWorkspace(storage,account,source,draft()),isCode('INTERVIEW_STORAGE_UNAVAILABLE'))
+ assert.equal(storage.writes,0)
+})
+
+test('failure to preserve corrupt data leaves the scoped draft untouched and does not restore',()=>{
+ const storage=new FakeStorage(),raw='{broken and must be retained'
+ storage.values.set(scopedKey,raw)
+ storage.writeError=new Error('QuotaExceededError private details')
+ assert.throws(()=>recoverWorkspace(storage,account,source,draft()),error=>isCode('INTERVIEW_STORAGE_RECOVERY_FAILED')(error)&&!error.message.includes('private details'))
+ assert.equal(storage.getItem(scopedKey),raw)
+ assert.equal(storage.writes,0)
+ assert.equal(storage.values.size,1)
+})
+
+test('failed replacement retains both the original draft and its recovery copy',()=>{
+ const storage=new FakeStorage(),raw='{broken',write=storage.setItem.bind(storage)
+ storage.values.set(scopedKey,raw)
+ storage.setItem=(key,value)=>{if(key===scopedKey)throw Error('QuotaExceededError');write(key,value)}
+ assert.throws(()=>recoverWorkspace(storage,account,source,draft()),error=>isCode('INTERVIEW_STORAGE_WRITE_FAILED')(error)&&/salinan pemulihannya tetap tersimpan/.test(error.message))
+ assert.equal(storage.getItem(scopedKey),raw)
+ const copies=[...storage.values].filter(([key])=>key.startsWith(scopedKey+':recovery:'))
+ assert.equal(copies.length,1)
+ assert.equal(copies[0][1],raw)
+ assert.equal(storage.writes,1)
+})
+
+test('a draft changed by another tab during preservation cannot be overwritten by recovery',()=>{
+ const storage=new FakeStorage(),raw='{broken',write=storage.setItem.bind(storage),other=JSON.stringify({...draft(),revision:8})
+ storage.values.set(scopedKey,raw)
+ storage.setItem=(key,value)=>{write(key,value);if(key.startsWith(scopedKey+':recovery:'))storage.values.set(scopedKey,other)}
+ assert.throws(()=>recoverWorkspace(storage,account,source,draft()),isCode('INTERVIEW_WORKSPACE_CONFLICT'))
+ assert.equal(storage.getItem(scopedKey),other)
+ assert.equal(storage.writes,1)
+ assert.equal([...storage.values].find(([key])=>key.startsWith(scopedKey+':recovery:'))[1],raw)
 })

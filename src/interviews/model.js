@@ -24,7 +24,7 @@ function minutes(value) {
  return match?Number(match[1])*60+Number(match[2]):null
 }
 function integer(value,min,max,label) {
- if(value===''||value===null||value===undefined||!Number.isInteger(Number(value))||Number(value)<min||Number(value)>max)throw Error(`${label} harus bilangan bulat ${min}–${max}.`)
+ if(!['number','string'].includes(typeof value)||text(value)===''||!Number.isInteger(Number(value))||Number(value)<min||Number(value)>max)throw Error(`${label} harus bilangan bulat ${min}–${max}.`)
  return Number(value)
 }
 function assignmentWindow(entry) {
@@ -105,8 +105,8 @@ export function createSchedule(population,existingEntries={},rooms=DEFAULT_ROOMS
  if(start===null)throw Error('Waktu mulai harus valid (HH:MM).')
  const duration=integer(settings.duration??40,1,480,'Durasi wawancara')
  const gap=integer(settings.gap??5,0,240,'Jeda pergantian')
- const perDay=integer(settings.perDay??11,1,500,'Total peserta per hari')
- if(start+duration>1440)throw Error('Wawancara harus selesai sebelum pergantian tanggal.')
+ const perDay=integer(settings.perDay??11,1,500,'Peserta per room per hari')
+ if(start+(perDay-1)*(duration+gap)+duration>1440)throw Error('Seluruh sesi harian harus selesai sebelum pergantian tanggal. Kurangi peserta per room, durasi, atau jeda.')
  const activeRooms=validRooms(rooms)
  if(!activeRooms.length)throw Error('Aktifkan setidaknya satu room.')
  if(activeRooms.some(room=>!text(room.interviewer)))throw Error('Isi pewawancara utama pada setiap room aktif.')
@@ -124,17 +124,19 @@ export function createSchedule(population,existingEntries={},rooms=DEFAULT_ROOMS
   const weekday=new Date(day).getUTCDay()
   if(settings.skipWeekends!==false&&(weekday===0||weekday===6)){day+=86400000;continue}
   const date=new Date(day).toISOString().slice(0,10)
-  let count=entryList(entries).filter(entry=>entry.date===date&&entry.status!=='Belum dijadwalkan'&&entry.status!=='Jadwal ulang').length
-  for(let time=start,session=1;time+duration<=1440&&count<perDay&&personIndex<people.length;time+=duration+gap,session++) {
+  const counts=new Map()
+  for(const entry of entryList(entries))if(entry.date===date&&entry.status!=='Belum dijadwalkan'&&entry.status!=='Jadwal ulang')counts.set(entry.roomId,(counts.get(entry.roomId)||0)+1)
+  for(let time=start,session=1;session<=perDay&&personIndex<people.length;time+=duration+gap,session++) {
    const firstRoom=cursor
-   for(let step=0;step<activeRooms.length&&count<perDay&&personIndex<people.length;step++) {
+   for(let step=0;step<activeRooms.length&&personIndex<people.length;step++) {
     const roomIndex=(firstRoom+step)%activeRooms.length,room=activeRooms[roomIndex]
+    if((counts.get(room.id)||0)>=perDay)continue
     const nik=text(people[personIndex].nik)
     const assignment={nik,date,session,roomId:room.id,time:`${String(Math.floor(time/60)).padStart(2,'0')}:${String(time%60).padStart(2,'0')}`,duration,status:'Terjadwal'}
     try{validateAssignment(assignment,entries,rooms)}catch{continue}
     entries[nik]=assignment
     generated.push(assignment)
-    personIndex++;count++;cursor=(roomIndex+1)%activeRooms.length
+    personIndex++;counts.set(room.id,(counts.get(room.id)||0)+1);cursor=(roomIndex+1)%activeRooms.length
    }
   }
   day+=86400000

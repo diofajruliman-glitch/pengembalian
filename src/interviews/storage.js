@@ -106,10 +106,11 @@ function keyFor(accountId,sourceKey){
  try{return `${PREFIX}:${encodeURIComponent(accountId)}:${encodeURIComponent(sourceKey)}`}
  catch{throw fail('INTERVIEW_STORAGE_SCOPE','Identitas akun atau sumber data wawancara tidak valid.')}
 }
-function read(storage,key){
- let raw
- try{if(!storage||typeof storage.getItem!=='function')throw Error();raw=storage.getItem(key)}
+function readRaw(storage,key){
+ try{if(!storage||typeof storage.getItem!=='function')throw Error();return storage.getItem(key)}
  catch{throw fail('INTERVIEW_STORAGE_UNAVAILABLE','Draf wawancara lokal tidak dapat dibaca. Periksa izin penyimpanan browser lalu coba kembali.')}
+}
+function parseRaw(raw){
  if(raw===null)return empty()
  try{
   if(typeof raw!=='string')throw invalid()
@@ -120,6 +121,7 @@ function read(storage,key){
   throw fail('INTERVIEW_STORAGE_CORRUPT','Draf wawancara lokal rusak atau formatnya tidak dikenali. Data lama tetap tersimpan; pulihkan cadangan sebelum menyimpan lagi.')
  }
 }
+const read=(storage,key)=>parseRaw(readRaw(storage,key))
 
 export function loadWorkspace(storage,accountId,sourceKey){return read(storage,keyFor(accountId,sourceKey))}
 
@@ -134,5 +136,42 @@ export function saveWorkspace(storage,accountId,sourceKey,workspace,expectedRevi
   if(typeof storage.setItem!=='function')throw Error()
   storage.setItem(key,JSON.stringify(next))
  }catch{throw fail('INTERVIEW_STORAGE_WRITE_FAILED','Draf wawancara belum tersimpan. Penyimpanan browser penuh atau tidak diizinkan; simpan cadangan dan coba kembali.')}
+ return next
+}
+
+// Recovery is an explicit repair path for corrupt data, never an alternative to
+// revision checks for a valid workspace. Keep the exact old value for inspection.
+export function recoverWorkspace(storage,accountId,sourceKey,workspace){
+ const key=keyFor(accountId,sourceKey)
+ const next=validateWorkspace({...validateWorkspace(workspace),revision:1})
+ const previous=readRaw(storage,key)
+ try{
+  parseRaw(previous)
+  throw fail('INTERVIEW_STORAGE_RECOVERY_NOT_NEEDED','Draf wawancara saat ini dapat dibaca. Muat draf terbaru lalu gunakan penyimpanan biasa agar revisi tetap diperiksa.')
+ }catch(error){if(error.code!=='INTERVIEW_STORAGE_CORRUPT')throw error}
+ let recoveryKey,stamp=Date.now()
+ for(let attempt=0;attempt<100;attempt++,stamp++){
+  const candidate=`${key}:recovery:${stamp}`
+  if(readRaw(storage,candidate)===null){recoveryKey=candidate;break}
+ }
+ if(!recoveryKey)throw fail('INTERVIEW_STORAGE_RECOVERY_FAILED','Pemulihan belum dilakukan karena lokasi salinan pemulihan tidak tersedia. Draf lama tetap tersimpan; coba kembali.')
+ const unchanged=()=>{
+  if(readRaw(storage,key)!==previous)throw fail('INTERVIEW_WORKSPACE_CONFLICT','Draf wawancara berubah di tab lain saat pemulihan. Muat ulang kondisi terbaru sebelum mencoba lagi; salinan pemulihan yang sudah dibuat tetap tersimpan.')
+ }
+ unchanged()
+ try{
+  if(typeof storage.setItem!=='function')throw Error()
+  storage.setItem(recoveryKey,previous)
+  if(readRaw(storage,recoveryKey)!==previous)throw Error()
+ }catch{
+  throw fail('INTERVIEW_STORAGE_RECOVERY_FAILED','Pemulihan belum dilakukan karena salinan draf lama gagal disimpan. Draf lama tetap tersimpan; periksa ruang dan izin penyimpanan browser.')
+ }
+ unchanged()
+ try{storage.setItem(key,JSON.stringify(next))}
+ catch{
+  // localStorage.setItem is atomic on failure; retain both the original value
+  // and its recovery copy rather than removing either during a failed repair.
+  throw fail('INTERVIEW_STORAGE_WRITE_FAILED','Draf wawancara belum dipulihkan karena penyimpanan gagal. Draf lama dan salinan pemulihannya tetap tersimpan; periksa ruang penyimpanan browser.')
+ }
  return next
 }
