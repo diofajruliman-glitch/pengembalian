@@ -189,7 +189,7 @@ function App(){
    if(error)setError(notify(error)); else {setCases(data||[]);setCaseSearchTotal(count||0)}
  },[casesPage,search,isAuthorized])
  useEffect(()=>{if(isAuthorized&&!demo)fetchAll()},[isAuthorized,fetchAll,demo])
- useEffect(()=>{if(isAuthorized&&!demo&&page==='kasus')fetchCases()},[isAuthorized,fetchCases,demo,page])
+ useEffect(()=>{if(isAuthorized&&!demo&&(page==='kasus'||page==='surat-tlhp'))fetchCases()},[isAuthorized,fetchCases,demo,page])
  const signIn=async(email,password)=>{setBusy(true);setLoginError(''); const {error}=await supabase.auth.signInWithPassword({email,password}); if(error)setLoginError(notify(error));setBusy(false)}
  const resetPassword=async(email)=>{
   if(!email?.trim())return setLoginError('Isi alamat email terlebih dahulu.')

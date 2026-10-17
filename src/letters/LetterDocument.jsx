@@ -323,11 +323,13 @@ export default function LetterDocument({
                 <td className="col-sep">:</td>
                 <td className="col-val">{official.nip}</td>
               </tr>
-              <tr>
-                <td className="col-label">Pangkat</td>
-                <td className="col-sep">:</td>
-                <td className="col-val">{official.pangkatSingkat || 'IV/c'}</td>
-              </tr>
+              {effectiveShowRank && (
+                <tr>
+                  <td className="col-label">Pangkat</td>
+                  <td className="col-sep">:</td>
+                  <td className="col-val">{official.pangkatSingkat || 'IV/c'}</td>
+                </tr>
+              )}
               <tr>
                 <td className="col-label">Jabatan</td>
                 <td className="col-sep">:</td>
