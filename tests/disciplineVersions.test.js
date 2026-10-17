@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {persistVersionChain} from '../src/judol/versions.js'
+import {persistVersionChain,removeVersionFromSnapshot} from '../src/judol/versions.js'
 const snapshot=()=>({name:'Uji',filename:'sumber.xlsx',active:2,versions:[{number:1,result:{rules:{threshold:1}},followups:[]},{number:2,parentIndex:0,result:{rules:{threshold:2}},followups:[]},{number:3,parentIndex:1,result:{rules:{threshold:3}},followups:[]}]})
 const requestIds=()=>{let number=0;return()=>`00000000-0000-4000-8000-${String(++number).padStart(12,'0')}`}
 test('saving unsaved version 3 saves its ancestors in order and preserves parameter snapshots',async()=>{
@@ -132,4 +132,21 @@ test('saved id and pending draft are published before followup requests, and fol
  assert.equal(result.cancelled,true);assert.equal(progress,2)
  assert.equal(current.versions[0].followups[0].notes,'Local')
  assert.equal(current.versions[0].followups[0].pending,true)
+})
+test('removeVersionFromSnapshot removes a version, reparents descendants, and updates active index',()=>{
+ const input=snapshot()
+ const res1=removeVersionFromSnapshot(input,1)
+ assert.equal(res1.versions.length,2)
+ assert.equal(res1.versions[0].number,1)
+ assert.equal(res1.versions[1].number,3)
+ assert.equal(res1.versions[1].parentIndex,0)
+ assert.equal(res1.active,1)
+
+ const res2=removeVersionFromSnapshot(input,2)
+ assert.equal(res2.versions.length,2)
+ assert.equal(res2.active,1)
+
+ const single={name:'Uji',versions:[{number:1}],active:0}
+ const res3=removeVersionFromSnapshot(single,0)
+ assert.equal(res3,null)
 })

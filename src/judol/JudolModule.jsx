@@ -4,7 +4,7 @@ import {FOCUSED_ASSESSMENTS,filterDisciplineRows,getTransactionAvailability,hasP
 import DisciplineFilters from './DisciplineFilters.jsx'
 import {disciplineStorage} from './storage.js'
 import {exportDiscipline} from './export.js'
-import {persistVersionChain} from './versions.js'
+import {persistVersionChain,removeVersionFromSnapshot} from './versions.js'
 import ComparisonTable,{ComparisonDetail} from './ComparisonTable.jsx'
 import RulePanel from './RulePanel.jsx'
 import FollowupForm from './FollowupForm.jsx'
@@ -141,6 +141,27 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
    setMessage(`Dataset "${d.name}" (versi ${d.version}) berhasil dihapus dari riwayat online.`)
    if(version?.id===d.id)updateVersion({id:null})
    await reloadDatasets()
+  }catch(err){if(alive.current)setError(err.message)}finally{if(alive.current)setBusy(false)}
+ }
+ async function removeVersion(idx){
+  if(!canImport||busy||!snapshot?.versions?.[idx])return
+  const target=snapshot.versions[idx]
+  const isOnly=snapshot.versions.length===1
+  const confirmMsg=isOnly
+   ? `Hapus Versi ${target.number}?\n\nIni adalah satu-satunya versi dalam sesi. Menghapusnya akan menutup dataset aktif${target.id?' dan menghapusnya dari riwayat online':''}.`
+   : `Hapus Versi ${target.number} dari riwayat versi?${target.id?'\n\nPerhatian: Versi ini tersimpan online dan akan dihapus permanen dari riwayat online.':''}`
+  if(!window.confirm(confirmMsg))return
+  setBusy(true);setError('');setMessage(`Menghapus versi ${target.number}…`)
+  try{
+   if(target.id&&storage){
+    await storage.deleteDataset(target.id)
+    await reloadDatasets()
+   }
+   if(!alive.current)return
+   const next=removeVersionFromSnapshot(snapshot,idx)
+   onSnapshot(next)
+   setSelected(null);setPreview(null);setAuditPage(0)
+   setMessage(next?`Versi ${target.number} berhasil dihapus.${target.id?' Data online telah diperbarui.':''}`:`Versi ${target.number} berhasil dihapus. Dataset ditutup.`)
   }catch(err){if(alive.current)setError(err.message)}finally{if(alive.current)setBusy(false)}
  }
  async function archive(){
@@ -292,8 +313,8 @@ export default function JudolModule({snapshot,onSnapshot,canImport,canEdit=false
    {selectedRow&&<ComparisonDetail row={selectedRow} onClose={()=>setSelected(null)} onHandleValidation={(f,p)=>setActiveFinding({finding:f,person:p||selectedRow})}/>}
   </>}
   {tab==='rules'&&version&&<>
-   <section className="panel"><h2>Riwayat versi dalam sesi</h2><div className="judol-categories">{snapshot.versions.map((v,i)=><button key={`${v.number}-${i}`} className={'btn '+(i===snapshot.active?'primary':'secondary')} disabled={busy} onClick={()=>{onSnapshot({...snapshot,active:i});setPreview(null);setArchiveReview(false);setSelected(null);setAuditPage(0);setError('');setMessage(`Menampilkan versi ${v.number}. Hasil dan parameter versi ini tetap tersimpan dalam riwayat.`)}}>Versi {v.number}{v.status==='archived'?' · arsip':''}</button>)}</div><p>Versi baru mempertahankan hasil lama. Catatan tindak lanjut terikat pada versi dataset masing-masing.</p></section>
-   <RulePanel key={`${version.number}-${version.id||'local'}-${snapshot.active}`} rules={result.rules} version={version.number} canImport={canImport} canCalculate={Boolean(snapshot.source)} archived={archived} onCalculate={calculate} onRestoreSource={e=>importWorkbook(e,true)} onDraftChange={()=>{setPreview(null);setMessage('')}} busy={busy}/>
+   <section className="panel"><div className="panel-heading"><h2>Riwayat versi dalam sesi</h2>{canImport&&<button type="button" className="btn secondary" style={{color:'#b91c1c'}} disabled={busy} onClick={()=>removeVersion(snapshot.active)}>Hapus versi {version.number}</button>}</div><div className="judol-categories">{snapshot.versions.map((v,i)=><div key={`${v.number}-${i}`} style={{display:'inline-flex',alignItems:'center'}}><button type="button" className={'btn '+(i===snapshot.active?'primary':'secondary')} style={canImport&&snapshot.versions.length>1?{borderTopRightRadius:0,borderBottomRightRadius:0,marginRight:0}:undefined} disabled={busy} onClick={()=>{onSnapshot({...snapshot,active:i});setPreview(null);setArchiveReview(false);setSelected(null);setAuditPage(0);setError('');setMessage(`Menampilkan versi ${v.number}. Hasil dan parameter versi ini tetap tersimpan dalam riwayat.`)}}>Versi {v.number}{v.status==='archived'?' · arsip':''}</button>{canImport&&snapshot.versions.length>1&&<button type="button" className="btn secondary" style={{color:'#b91c1c',padding:'0 8px',borderTopLeftRadius:0,borderBottomLeftRadius:0,borderLeft:'none'}} title={`Hapus Versi ${v.number}`} aria-label={`Hapus Versi ${v.number}`} disabled={busy} onClick={e=>{e.stopPropagation();removeVersion(i)}}>✕</button>}</div>)}</div><p>Versi baru mempertahankan hasil lama. Catatan tindak lanjut terikat pada versi dataset masing-masing.</p></section>
+   <RulePanel key={`${version.number}-${version.id||'local'}-${snapshot.active}`} rules={result.rules} version={version.number} canImport={canImport} canCalculate={Boolean(snapshot.source)} archived={archived} onCalculate={calculate} onRestoreSource={e=>importWorkbook(e,true)} onDraftChange={()=>{setPreview(null);setMessage('')}} onDeleteVersion={()=>removeVersion(snapshot.active)} busy={busy}/>
    {preview&&<section className="panel"><h2>Tinjau pratinjau sebelum menetapkan versi</h2><p>{number(preview.rows.filter((r,i)=>isFocusedAssessment(r)&&(r.before.kategori!==rows[i]?.before?.kategori||r.after.kategori!==rows[i]?.after?.kategori||r.before.total!==rows[i]?.before?.total||r.after.total!==rows[i]?.after?.total)).length)} SDM Terbukti/Tidak Terbukti mengalami perubahan skor atau kategori. Hasil Pairing Sekjen asli dipertahankan.</p><p>Daftar pratinjau mengikuti filter analisis aktif, termasuk kelengkapan data dan hasil klarifikasi.</p><ComparisonTable key={`${assessment}-${period}-${category}-${search}-${availability}`} rows={filterDisciplineRows(preview.rows,filters)} onSelect={setSelected}/>{selected&&preview.rows.find(r=>r.nik===selected&&isFocusedAssessment(r))&&<ComparisonDetail row={preview.rows.find(r=>r.nik===selected)} onClose={()=>setSelected(null)} onHandleValidation={(f,p)=>setActiveFinding({finding:f,person:p||preview.rows.find(r=>r.nik===selected)})}/>}<div className="discipline-toolbar"><button className="btn primary" disabled={busy} onClick={acceptPreview}>Tetapkan sebagai versi baru</button><button className="btn secondary" disabled={busy} onClick={()=>{setPreview(null);setSelected(null)}}>Batalkan pratinjau</button></div></section>}
   </>}
    {tab==='audit'&&version&&<section className="panel">

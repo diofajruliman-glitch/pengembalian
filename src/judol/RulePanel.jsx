@@ -11,7 +11,7 @@ const fields=[
  ['baseLow','Bobot kategori Rendah','number'],['baseMedium','Bobot kategori Sedang','number'],['baseHigh','Bobot kategori Tinggi','number'],
  ['timeOutside','Bobot aktivitas luar jam','number'],['timeInside','Bobot aktivitas dalam jam','number']
 ]
-export default function RulePanel({rules,version,canImport,canCalculate,onCalculate,onRestoreSource,onDraftChange,busy,archived}){
+export default function RulePanel({rules,version,canImport,canCalculate,onCalculate,onRestoreSource,onDraftChange,onDeleteVersion,busy,archived}){
  const currentRules={...DEFAULT_RULES,...rules,missingTimePolicy:rules?.missingTimePolicy??'validate'}
  const [draft,setDraft]=useState(()=>currentRules),[error,setError]=useState('')
  function edit(patch){setDraft(d=>({...d,...patch}));onDraftChange?.()}
@@ -27,7 +27,7 @@ export default function RulePanel({rules,version,canImport,canCalculate,onCalcul
    <p>Hari libur, shift, cuti, dan zona waktu belum dikoreksi otomatis. Skor tidak menetapkan keputusan hukuman.</p>
    {error&&<p className="notice red-notice" role="alert">{error}</p>}
    {!canCalculate&&<><p>Untuk menghitung ulang hasil tersimpan, lampirkan workbook sumber yang sama. SHA-256 diperiksa sebelum data dipasangkan. Transaksi mentah tidak disimpan online.</p>{canImport&&!archived&&<label className="btn secondary judol-upload">Lampirkan kembali sumber asli<input type="file" accept=".xlsx" disabled={busy} onChange={onRestoreSource} aria-label="Lampirkan sumber asli untuk hitung ulang"/></label>}</>}
-   {canImport&&!archived&&<div className="discipline-toolbar"><button type="submit" className="btn primary" disabled={busy||!canCalculate}>{busy?'Menghitung…':'Hitung pratinjau versi baru'}</button><button type="button" className="btn secondary" disabled={busy} onClick={()=>{setDraft(currentRules);onDraftChange?.();setError('')}}>Pulihkan parameter versi ini</button>{changed&&<span>Perubahan belum dihitung atau disimpan.</span>}</div>}
+   {canImport&&<div className="discipline-toolbar">{!archived&&<button type="submit" className="btn primary" disabled={busy||!canCalculate}>{busy?'Menghitung…':'Hitung pratinjau versi baru'}</button>}{!archived&&<button type="button" className="btn secondary" disabled={busy} onClick={()=>{setDraft(currentRules);onDraftChange?.();setError('')}}>Pulihkan parameter versi ini</button>}{onDeleteVersion&&<button type="button" className="btn secondary" style={{color:'#b91c1c'}} disabled={busy} onClick={onDeleteVersion}>Hapus versi {version}</button>}{changed&&!archived&&<span>Perubahan belum dihitung atau disimpan.</span>}</div>}
   </form>
  </section>
 }

@@ -51,3 +51,26 @@ export async function persistVersionChain({snapshot,storage,isActive=()=>true,on
  await persist(snapshot.active)
  return {versions,pending,cancelled}
 }
+
+export function removeVersionFromSnapshot(snapshot, index){
+ if(!snapshot?.versions || !Number.isInteger(index) || index < 0 || index >= snapshot.versions.length){
+  return snapshot
+ }
+ if(snapshot.versions.length <= 1){
+  return null
+ }
+ const nextVersions = snapshot.versions.filter((_, i) => i !== index).map(v => {
+  if(v.parentIndex == null) return v
+  if(v.parentIndex === index) return { ...v, parentIndex: index > 0 ? index - 1 : null }
+  if(v.parentIndex > index) return { ...v, parentIndex: v.parentIndex - 1 }
+  return v
+ })
+ const nextActive = index === snapshot.active
+  ? Math.min(index, nextVersions.length - 1)
+  : (index < snapshot.active ? snapshot.active - 1 : snapshot.active)
+ return {
+  ...snapshot,
+  versions: nextVersions,
+  active: nextActive
+ }
+}
