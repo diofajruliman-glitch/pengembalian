@@ -115,7 +115,7 @@ export function BulkDistributionDialog({population, entries, rooms, settings, se
  </Modal>
 }
 
-export function ScheduleImportDialog({population, entries, rooms, revision, onApply, onClose}) {
+export function ScheduleImportDialog({population, entries, rooms, settings, revision, onApply, onClose}) {
  const fileInput = useRef(null)
  const request = useRef(0)
  const [loading, setLoading] = useState(false)
@@ -138,7 +138,7 @@ export function ScheduleImportDialog({population, entries, rooms, revision, onAp
    if (currentRequest !== request.current) return
    setWarnings(parsed.warnings || [])
    if (parsed.errors?.length) {setErrors(parsed.errors); return}
-   const plan = prepareScheduleImport({population, entries, rooms, rows:parsed.rows})
+   const plan = prepareScheduleImport({population, entries, rooms, rows:parsed.rows, settings})
    if (plan.errors?.length) {setErrors(plan.errors); return}
    if (!plan.entries) throw Error('Berkas belum menghasilkan jadwal yang valid. Periksa isian dan impor kembali.')
    setPreview({plan, expectedRevision})
@@ -155,7 +155,7 @@ export function ScheduleImportDialog({population, entries, rooms, revision, onAp
  }
  return <Modal title="Impor jadwal SDM" onClose={onClose}>
   <p>Unggah jadwal yang sudah disiapkan dalam CSV atau Excel (.xlsx). NIK atau NIP harus cocok dengan BNBA ASN Terbukti pada sumber aktif.</p>
-  <div className="interview-distribution-help"><p><b>Gunakan template:</b> isi NIK atau NIP, Tanggal (YYYY-MM-DD), Jadwal (HH:MM WIB), Sesi, Room atau Pewawancara Utama, dan Durasi (menit).</p><p>Simpan NIK/NIP sebagai <b>teks</b> agar seluruh digit tetap utuh. Nama saja tidak cukup untuk mencocokkan SDM. Berkas Excel dibaca dari lembar pertama.</p><p>Nama room dan pewawancara mengikuti Penugasan & parameter. Pratinjau memeriksa identitas, bentrok jadwal, dan catatan wawancara yang telah berjalan.</p></div>
+  <div className="interview-distribution-help"><p><b>Gunakan template:</b> isi NIK atau NIP, Tanggal (YYYY-MM-DD), Jadwal (HH:MM WIB), Sesi, Room atau Pewawancara Utama, dan Durasi (menit).</p><p>Simpan NIK/NIP sebagai <b>teks</b> agar seluruh digit tetap utuh. Nama saja tidak cukup untuk mencocokkan SDM. Berkas Excel dibaca dari lembar pertama.</p><p>Nama room dan pewawancara mengikuti Penugasan & parameter. Pratinjau memeriksa identitas, bentrok jadwal, dan catatan wawancara yang telah berjalan.{settings?.perDay ? ` Batas harian: ${number(settings.perDay)} SDM per room.` : ''}</p></div>
   <div className="interview-form-actions"><button className="btn secondary" type="button" onClick={() => downloadBlob(scheduleImportTemplateCsv(), 'template-jadwal-sdm.csv', 'text/csv;charset=utf-8')}><Download size={14}/>Unduh template CSV</button><button className="btn primary" type="button" disabled={loading} onClick={() => fileInput.current.click()}><FileUp size={14}/>{loading ? 'Membaca jadwal…' : 'Pilih berkas jadwal'}</button><input ref={fileInput} type="file" hidden disabled={loading} accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={readFile}/></div>
   {filename && <p className="interview-muted" role="status">{filename}{loading ? ' · sedang dibaca' : ''}</p>}
   <ErrorList items={warnings} warning/>
