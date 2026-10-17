@@ -1142,11 +1142,41 @@ NIP. ${official.nip}
           {/* SISI KANAN: WADAH PRATINJAU A4 RESMI DENGAN KOP GAMBAR ASLI */}
           <div>
             <div className="letter-preview-toolbar no-print">
-              <div style={{color: '#f8fafc', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8}}>
+              <div style={{color: '#f8fafc', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap'}}>
                 <FileCheck2 size={19} color="#22c55e" />
-                <span>Pratinjau ({activeRecipients.length} Lembar Naskah Dinas)</span>
+                <span>Pratinjau ({activeRecipients.length.toLocaleString('id-ID')} Lembar Naskah Dinas)</span>
+                {activeRecipients.length > PREVIEW_PAGE_SIZE && (
+                  <span style={{fontSize: '0.82rem', color: '#94a3b8', fontWeight: 'normal', marginLeft: 4}}>
+                    · Menampilkan {previewPage * PREVIEW_PAGE_SIZE + 1}–{Math.min((previewPage + 1) * PREVIEW_PAGE_SIZE, activeRecipients.length)}
+                  </span>
+                )}
               </div>
               <div className="preview-actions">
+                {activeRecipients.length > PREVIEW_PAGE_SIZE && (
+                  <div style={{display: 'flex', alignItems: 'center', gap: 6, marginRight: 8}}>
+                    <button
+                      type="button"
+                      className="btn secondary"
+                      style={{padding: '5px 9px', fontSize: '0.8rem'}}
+                      disabled={previewPage === 0}
+                      onClick={() => setPreviewPage(p => Math.max(0, p - 1))}
+                    >
+                      ← Sebelumnya
+                    </button>
+                    <span style={{fontSize: '0.8rem', color: '#cbd5e1', padding: '0 4px'}}>
+                      {previewPage + 1} / {Math.ceil(activeRecipients.length / PREVIEW_PAGE_SIZE)}
+                    </span>
+                    <button
+                      type="button"
+                      className="btn secondary"
+                      style={{padding: '5px 9px', fontSize: '0.8rem'}}
+                      disabled={(previewPage + 1) * PREVIEW_PAGE_SIZE >= activeRecipients.length}
+                      onClick={() => setPreviewPage(p => p + 1)}
+                    >
+                      Selanjutnya →
+                    </button>
+                  </div>
+                )}
                 <button
                   type="button"
                   className="btn secondary"
@@ -1180,9 +1210,9 @@ NIP. ${official.nip}
             </div>
 
             <div className="letter-preview-stage">
-              {activeRecipients.map((rec, index) => (
+              {displayedRecipients.map((rec, index) => (
                 <LetterDocument
-                  key={rec.key || index}
+                  key={rec.key || (previewPage * PREVIEW_PAGE_SIZE + index)}
                   template={currentTemplate}
                   recipient={rec}
                   official={official}
