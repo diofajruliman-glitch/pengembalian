@@ -1,0 +1,521 @@
+import { jsPDF } from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import kopImage from '../assets/kop-kemensos.png'
+
+const fmtRp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID', { maximumFractionDigits: 0 })
+
+let cachedKopDataUrl = null
+
+/**
+ * Mendapatkan base64 Data URL dari Kop Surat Resmi Kemensos
+ */
+export async function getKopDataUrl() {
+  if (cachedKopDataUrl) return cachedKopDataUrl
+
+  // Bila berjalan di environment browser
+  if (typeof window !== 'undefined' && typeof Image !== 'undefined') {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.crossOrigin = 'Anonymous'
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas')
+          canvas.width = img.naturalWidth || img.width
+          canvas.height = img.naturalHeight || img.height
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0)
+          cachedKopDataUrl = canvas.toDataURL('image/png')
+          resolve(cachedKopDataUrl)
+        } catch {
+          resolve(kopImage)
+        }
+      }
+      img.onerror = () => resolve(kopImage)
+      img.src = kopImage
+    })
+  }
+  return kopImage
+}
+
+/**
+ * Generator Naskah Dinas Resmi Kemensos Berkecepatan Tinggi (Vector jsPDF)
+ * Mampu merender ribuan lembar dokumen dalam hitungan detik tanpa konsumsi memori berlebih.
+ */
+export async function generateOfficialPdfBatch({
+  template,
+  official,
+  venue,
+  letterNumber = '       /3.3/KP.06.04/10/2026',
+  letterDate = '15 Oktober 2026',
+  customAgenda = '',
+  recipients = [],
+  onProgress = null
+}) {
+  if (!recipients || recipients.length === 0) {
+    throw new Error('Daftar penerima naskah dinas kosong.')
+  }
+
+  const kopData = await getKopDataUrl()
+  const isTagihan = template.category === 'keuangan'
+  const isBeritaAcara = template.category === 'berita-acara'
+
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  const total = recipients.length
+
+  for (let idx = 0; idx < total; idx++) {
+    const recipient = recipients[idx]
+    if (idx > 0) {
+      doc.addPage('a4', 'portrait')
+    }
+
+    // Laporkan progres berkala
+    if (onProgress && (idx % 25 === 0 || idx === total - 1)) {
+      onProgress(idx + 1, total, `Menyusun lembar ${idx + 1} dari ${total}...`)
+      // Beri kesempatan browser merender UI progress
+      await new Promise(r => setTimeout(r, 0))
+    }
+
+    // 1. KOP SURAT RESMI KEMENSOS
+    // A4 width: 210mm. Margin kiri 14mm -> lebar kop 182mm, tinggi 25mm
+    try {
+      doc.addImage(kopData, 'PNG', 14, 8, 182, 25, undefined, 'FAST')
+    } catch (e) {
+      // Fallback text jika gambar kop gagal
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(11)
+      doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', 105, 14, { align: 'center' })
+      doc.setFontSize(9)
+      doc.setFont('helvetica', 'normal')
+      doc.text('DIREKTORAT PERLINDUNGAN SOSIAL NON KEBENCANAAN', 105, 19, { align: 'center' })
+      doc.setLineWidth(0.4)
+      doc.line(14, 25, 196, 25)
+    }
+
+    // 2. KLASIFIKASI DOKUMEN (RAHASIA / SEGERA)
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(9.5)
+    doc.setTextColor(30, 41, 59)
+    doc.text(template.classification || 'RAHASIA', 14, 38)
+
+    // 3. JUDUL DAN NOMOR SURAT
+    doc.setFontSize(11.5)
+    doc.setFont('helvetica', 'bold')
+    doc.text(template.title || 'SURAT PANGGILAN', 105, 43, { align: 'center' })
+    doc.setFontSize(9.5)
+    doc.setFont('helvetica', 'normal')
+    doc.text(`NOMOR : ${letterNumber}`, 105, 48, { align: 'center' })
+
+    let curY = 56
+
+    if (isTagihan) {
+      // ================= KONTEN SURAT PENAGIHAN =================
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9.5)
+      doc.text('Kepada Yth.', 14, curY)
+      curY += 4.5
+      doc.setFont('helvetica', 'bold')
+      doc.text(`Saudara/i ${recipient.nama || '«NAMA ASN»'}`, 14, curY)
+      curY += 4.5
+      doc.setFont('helvetica', 'normal')
+      doc.text(`NIP/NIPPPK : ${recipient.nip || '«NIP»'}`, 14, curY)
+      curY += 4.5
+      doc.text(`Jabatan : ${recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'}`, 14, curY)
+      curY += 4.5
+      doc.text('di Tempat', 14, curY)
+      curY += 6
+
+      // Paragraf Pembuka
+      const opening = template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'
+      const splitOpening = doc.splitTextToSize(opening, 182)
+      doc.text(splitOpening, 14, curY)
+      curY += (splitOpening.length * 4.2) + 3
+
+      // Tabel 5 Kolom Presisi
+      const catDesc = recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'
+      const bankDesc = recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''
+      const uraianText = `Pengembalian Kelebihan Pembayaran Tukin & Uang Makan\n${catDesc}${bankDesc}`
+
+      autoTable(doc, {
+        startY: curY,
+        margin: { left: 14, right: 14 },
+        head: [['No', 'Uraian Kewajiban', 'Kewajiban Awal', 'Telah Disetor', 'Sisa yang Wajib Disetor']],
+        body: [
+          [
+            '1',
+            uraianText,
+            fmtRp(recipient.kewajibanTotal || 0),
+            fmtRp(recipient.realisasiTotal || 0),
+            fmtRp(recipient.sisaKewajiban || 0)
+          ]
+        ],
+        foot: [
+          [
+            '',
+            'Total Sisa Kewajiban :',
+            '',
+            '',
+            fmtRp(recipient.sisaKewajiban || 0)
+          ]
+        ],
+        theme: 'grid',
+        headStyles: {
+          fillColor: [241, 245, 249],
+          textColor: [15, 23, 42],
+          fontStyle: 'bold',
+          halign: 'center',
+          valign: 'middle',
+          lineWidth: 0.2,
+          lineColor: [203, 213, 225],
+          fontSize: 8.5
+        },
+        bodyStyles: {
+          textColor: [30, 41, 59],
+          lineWidth: 0.2,
+          lineColor: [203, 213, 225],
+          fontSize: 8.5
+        },
+        footStyles: {
+          fillColor: [254, 242, 242],
+          textColor: [185, 28, 28],
+          fontStyle: 'bold',
+          lineWidth: 0.2,
+          lineColor: [203, 213, 225],
+          fontSize: 9
+        },
+        columnStyles: {
+          0: { cellWidth: 9, halign: 'center' },
+          1: { cellWidth: 'auto' },
+          2: { cellWidth: 32, halign: 'right' },
+          3: { cellWidth: 32, halign: 'right' },
+          4: { cellWidth: 38, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+        }
+      })
+
+      curY = doc.lastAutoTable.finalY + 5
+
+      // Paragraf Agenda / Penyetoran SIMPONI
+      const agenda = customAgenda || template.agendaDefault
+      if (agenda) {
+        const splitAgenda = doc.splitTextToSize(agenda, 182)
+        doc.text(splitAgenda, 14, curY)
+        curY += (splitAgenda.length * 4.2) + 3
+      }
+
+      // Koordinasi & Penutup
+      const coordText = 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Tim Pokja Evkin/TLHP Direktorat PSNK.'
+      const splitCoord = doc.splitTextToSize(coordText, 182)
+      doc.text(splitCoord, 14, curY)
+      curY += (splitCoord.length * 4.2) + 3
+
+      const closing = template.closingText || 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.'
+      const splitClosing = doc.splitTextToSize(closing, 182)
+      doc.text(splitClosing, 14, curY)
+      curY += (splitClosing.length * 4.2) + 4
+
+    } else if (isBeritaAcara) {
+      // ================= KONTEN BERITA ACARA =================
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9)
+      const openBA = `Pada hari ini ${venue.hari || 'Senin'}, tanggal ${venue.tanggal || '26 Oktober 2026'}, bertempat di ${venue.tempat || 'Kementerian Sosial RI'}, kami yang bertanda tangan di bawah ini:`
+      const splitOpenBA = doc.splitTextToSize(openBA, 182)
+      doc.text(splitOpenBA, 14, curY)
+      curY += (splitOpenBA.length * 4.2) + 2
+
+      // Tabel Pemeriksa
+      autoTable(doc, {
+        startY: curY,
+        margin: { left: 14, right: 14 },
+        body: [
+          ['1. Nama', ':', official.nama],
+          ['   NIP', ':', official.nip],
+          ['   Pangkat/Gol', ':', official.pangkat || official.pangkatSingkat || 'IV/c'],
+          ['   Jabatan', ':', official.jabatan]
+        ],
+        theme: 'plain',
+        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        columnStyles: { 0: { cellWidth: 26 }, 1: { cellWidth: 4 }, 2: { cellWidth: 'auto', fontStyle: 'bold' } }
+      })
+      curY = doc.lastAutoTable.finalY + 2
+
+      doc.setFont('helvetica', 'normal')
+      doc.text('Selaku Pemeriksa, telah melakukan pemeriksaan/permintaan keterangan terhadap:', 18, curY)
+      curY += 4
+
+      // Tabel Yang Diperiksa
+      autoTable(doc, {
+        startY: curY,
+        margin: { left: 14, right: 14 },
+        body: [
+          ['2. Nama', ':', recipient.nama || '«NAMA ASN»'],
+          ['   NIP/NIPPPK', ':', recipient.nip || '«NIP»'],
+          ['   Pangkat/Gol', ':', recipient.pangkat || 'Penata Muda (III/a)'],
+          ['   Jabatan', ':', recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'],
+          ['   Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
+        ],
+        theme: 'plain',
+        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        columnStyles: { 0: { cellWidth: 26 }, 1: { cellWidth: 4 }, 2: { cellWidth: 'auto', fontStyle: 'bold' } }
+      })
+      curY = doc.lastAutoTable.finalY + 4
+
+      const agendaBA = `Pemeriksaan/permintaan keterangan dilakukan sehubungan dengan: ${customAgenda || template.agendaDefault}. Seluruh keterangan dan pernyataan yang diberikan telah dicatat secara benar, tanpa ada paksaan dari pihak manapun.`
+      const splitAgendaBA = doc.splitTextToSize(agendaBA, 182)
+      doc.text(splitAgendaBA, 14, curY)
+      curY += (splitAgendaBA.length * 4.2) + 3
+
+      const closeBA = template.closingText || 'Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.'
+      const splitCloseBA = doc.splitTextToSize(closeBA, 182)
+      doc.text(splitCloseBA, 14, curY)
+      curY += (splitCloseBA.length * 4.2) + 4
+
+    } else {
+      // ================= KONTEN SURAT PEMANGGILAN =================
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9.5)
+      doc.text(template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:', 14, curY)
+      curY += 4
+
+      // Tabel Data Penerima
+      const recipientRows = [
+        ['Nama', ':', recipient.nama || '«NAMA ASN»'],
+        ['NIP/NIPPPK', ':', recipient.nip || '«NIP»'],
+        ['Pangkat', ':', recipient.pangkat || '«pangkat»'],
+        ['Jabatan', ':', recipient.jabatan || '«Jabatan»'],
+        ['Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
+      ]
+
+      if (Number(recipient.sisaKewajiban || 0) > 0) {
+        recipientRows.push(['Sisa yang Wajib Disetor', ':', fmtRp(recipient.sisaKewajiban)])
+      }
+
+      autoTable(doc, {
+        startY: curY,
+        margin: { left: 14, right: 14 },
+        body: recipientRows,
+        theme: 'plain',
+        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { cellWidth: 38 },
+          1: { cellWidth: 4 },
+          2: { cellWidth: 'auto', fontStyle: 'bold' }
+        }
+      })
+      curY = doc.lastAutoTable.finalY + 3
+
+      // Jika ada kewajiban pengembalian, tampilkan tabel 5 kolom presisi
+      if (Number(recipient.sisaKewajiban || 0) > 0) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(8.5)
+        doc.text('Rincian Kewajiban Pengembalian yang Masih Tercatat :', 14, curY)
+        curY += 3
+
+        const catDesc = recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'
+        const bankDesc = recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''
+        const uraianText = `Pengembalian Kelebihan Pembayaran Tukin & Uang Makan\n${catDesc}${bankDesc}`
+
+        autoTable(doc, {
+          startY: curY,
+          margin: { left: 14, right: 14 },
+          head: [['No', 'Uraian Kewajiban', 'Kewajiban Awal', 'Telah Disetor', 'Sisa yang Wajib Disetor']],
+          body: [
+            [
+              '1',
+              uraianText,
+              fmtRp(recipient.kewajibanTotal || 0),
+              fmtRp(recipient.realisasiTotal || 0),
+              fmtRp(recipient.sisaKewajiban || 0)
+            ]
+          ],
+          foot: [
+            [
+              '',
+              'Total Sisa Kewajiban :',
+              '',
+              '',
+              fmtRp(recipient.sisaKewajiban || 0)
+            ]
+          ],
+          theme: 'grid',
+          headStyles: {
+            fillColor: [241, 245, 249],
+            textColor: [15, 23, 42],
+            fontStyle: 'bold',
+            halign: 'center',
+            valign: 'middle',
+            lineWidth: 0.2,
+            lineColor: [203, 213, 225],
+            fontSize: 8
+          },
+          bodyStyles: {
+            textColor: [30, 41, 59],
+            lineWidth: 0.2,
+            lineColor: [203, 213, 225],
+            fontSize: 8
+          },
+          footStyles: {
+            fillColor: [254, 242, 242],
+            textColor: [185, 28, 28],
+            fontStyle: 'bold',
+            lineWidth: 0.2,
+            lineColor: [203, 213, 225],
+            fontSize: 8.5
+          },
+          columnStyles: {
+            0: { cellWidth: 8, halign: 'center' },
+            1: { cellWidth: 'auto' },
+            2: { cellWidth: 30, halign: 'right' },
+            3: { cellWidth: 30, halign: 'right' },
+            4: { cellWidth: 36, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+          }
+        })
+        curY = doc.lastAutoTable.finalY + 3
+      }
+
+      // Untuk Menghadap Kepada
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9)
+      doc.text('Untuk menghadap kepada:', 14, curY)
+      curY += 2.5
+
+      autoTable(doc, {
+        startY: curY,
+        margin: { left: 14, right: 14 },
+        body: [
+          ['Nama', ':', official.nama],
+          ['NIP', ':', official.nip],
+          ['Pangkat', ':', official.pangkatSingkat || 'IV/c'],
+          ['Jabatan', ':', official.jabatan]
+        ],
+        theme: 'plain',
+        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { cellWidth: 38 },
+          1: { cellWidth: 4 },
+          2: { cellWidth: 'auto', fontStyle: 'bold' }
+        }
+      })
+      curY = doc.lastAutoTable.finalY + 3
+
+      // Jadwal / Pada :
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9)
+      doc.text('Pada :', 14, curY)
+      curY += 2.5
+
+      const scheduleRows = [
+        ['Hari', ':', venue.hari || 'Senin'],
+        ['Tanggal', ':', venue.tanggal || '26 Oktober 2026'],
+        ['Jam', ':', venue.jam || '10.00 WIB'],
+        ['Tempat', ':', venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos']
+      ]
+      if (venue.linkZoom) {
+        scheduleRows.push(['Link Zoom', ':', venue.linkZoom])
+      }
+
+      autoTable(doc, {
+        startY: curY,
+        margin: { left: 18, right: 14 },
+        body: scheduleRows,
+        theme: 'plain',
+        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        columnStyles: {
+          0: { cellWidth: 26 },
+          1: { cellWidth: 4 },
+          2: { cellWidth: 'auto' }
+        }
+      })
+      curY = doc.lastAutoTable.finalY + 3.5
+
+      // Paragraf Agenda
+      const agenda = customAgenda || template.agendaDefault
+      if (agenda) {
+        const splitAgenda = doc.splitTextToSize(agenda, 182)
+        doc.text(splitAgenda, 14, curY)
+        curY += (splitAgenda.length * 4.2) + 3
+      }
+
+      // Paragraf Penutup
+      const closing = template.closingText || 'Demikian untuk dilaksanakan.'
+      const splitClosing = doc.splitTextToSize(closing, 182)
+      doc.text(splitClosing, 14, curY)
+      curY += (splitClosing.length * 4.2) + 3
+    }
+
+    // 4. TITIMANGSA & BLOK TANDA TANGAN
+    if (isBeritaAcara) {
+      // Blok tanda tangan ganda untuk Berita Acara
+      const signY = Math.max(curY + 4, 230)
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9)
+
+      // Kiri: Yang Diperiksa
+      doc.text('Yang Diperiksa,', 18, signY)
+      doc.setFont('helvetica', 'bold')
+      doc.text(recipient.nama || '«NAMA ASN»', 18, signY + 22)
+      doc.setFont('helvetica', 'normal')
+      doc.text(`NIP. ${recipient.nip || '—'}`, 18, signY + 26)
+
+      // Kanan: Pemeriksa
+      const rightX = 125
+      doc.text(`${official.kota || 'Jakarta'}, ${letterDate}`, rightX, signY)
+      doc.text('Pemeriksa,', rightX, signY + 4)
+      doc.setFont('helvetica', 'bold')
+      doc.text(official.nama, rightX, signY + 22)
+      doc.setFont('helvetica', 'normal')
+      doc.text(`NIP. ${official.nip}`, rightX, signY + 26)
+    } else {
+      // Blok tanda tangan tunggal resmi (Kanan Bawah)
+      const signY = Math.max(curY + 3, 224)
+      const signX = 125
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(9)
+      doc.text(`${official.kota || 'Jakarta'}, ${letterDate}`, signX, signY)
+
+      const splitRole = doc.splitTextToSize(official.jabatan, 72)
+      doc.text(splitRole, signX, signY + 4.5)
+
+      const nameY = signY + 4.5 + (splitRole.length * 4.2) + 16
+      doc.setFont('helvetica', 'bold')
+      doc.text(official.nama, signX, nameY)
+      doc.setFont('helvetica', 'normal')
+      doc.text(`NIP. ${official.nip}`, signX, nameY + 4.5)
+    }
+
+    // 5. TEMBUSAN RESMI
+    if (template.tembusan && template.tembusan.length > 0) {
+      const tembusanY = 258
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(8)
+      doc.text('Tembusan Yth:', 14, tembusanY)
+
+      template.tembusan.forEach((t, tIdx) => {
+        const itemY = tembusanY + 4 + (tIdx * 3.8)
+        if (itemY < 288) {
+          doc.text(`${tIdx + 1}. ${t}`, 16, itemY)
+        }
+      })
+    }
+  }
+
+  // Bangun Nama File Unduhan
+  const rawTitle = template.title || 'Naskah_Dinas_Kemensos'
+  const sanitizedTitle = rawTitle.replace(/[^a-zA-Z0-9_-]/g, '_')
+  let filename = ''
+
+  if (total === 1) {
+    const namePart = (recipients[0]?.nama || 'Penerima').replace(/[^a-zA-Z0-9_-]/g, '_')
+    filename = `${sanitizedTitle}_${namePart}.pdf`
+  } else {
+    filename = `${sanitizedTitle}_Batch_${total}_SDM.pdf`
+  }
+
+  // Simpan berkas PDF
+  doc.save(filename)
+  return { filename, total }
+}

@@ -65,6 +65,22 @@ export const LETTER_TYPES = [
     ]
   },
   {
+    id: 'panggilan-tukin',
+    category: 'keuangan',
+    name: 'Surat Pemanggilan Penyelesaian Pengembalian Tukin',
+    code: 'KP.06.04',
+    classification: 'RAHASIA',
+    title: 'SURAT PANGGILAN',
+    openingText: 'Bersama ini diminta dengan hormat kehadiran Saudara:',
+    agendaDefault: 'Untuk diperiksa/dimintai keterangan serta penyelesaian tindak lanjut pengembalian kelebihan pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat PSNK.',
+    closingText: 'Demikian untuk dilaksanakan.',
+    tembusan: [
+      'Sekretaris Direktorat Jenderal Perlindungan dan Jaminan Sosial;',
+      'Inspektur Bidang Perlindungan dan Jaminan Sosial (Itjen Kemensos); dan',
+      'Kepala Biro Keuangan Kementerian Sosial RI.'
+    ]
+  },
+  {
     id: 'tagihan-1',
     category: 'keuangan',
     name: 'Surat Penagihan I (Kelebihan Tukin / Uang Makan)',
