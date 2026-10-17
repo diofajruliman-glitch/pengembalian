@@ -1,0 +1,502 @@
+/* CSS Tata Naskah Dinas Resmi Kementerian Sosial RI */
+
+.letter-workspace {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Navigasi Tab Modul Persuratan */
+.letter-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 6px;
+  margin-bottom: 16px;
+}
+
+.letter-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  padding: 8px 16px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.letter-tab-btn:hover {
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.letter-tab-btn.active {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  font-weight: 600;
+}
+
+/* Panel Kontrol & Generator */
+.letter-config-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1080px) {
+  .letter-config-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.letter-sidebar-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.letter-sidebar-panel h3 {
+  font-size: 1.05rem;
+  color: #f1f5f9;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.letter-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.letter-form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #94a3b8;
+}
+
+.letter-form-group input,
+.letter-form-group select,
+.letter-form-group textarea {
+  background: rgba(30, 41, 59, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  color: #f8fafc;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+}
+
+.letter-form-group input:focus,
+.letter-form-group select:focus,
+.letter-form-group textarea:focus {
+  border-color: #38bdf8;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+.letter-recipients-box {
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recipient-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: #cbd5e1;
+}
+
+.recipient-checkbox-row:hover {
+  background: rgba(56, 189, 248, 0.1);
+  color: #f1f5f9;
+}
+
+.recipient-checkbox-row input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.recipient-checkbox-row .rec-name {
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.recipient-checkbox-row .rec-nip {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+
+/* Toolbar Aksi Atas Pratinjau */
+.letter-preview-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(15, 23, 42, 0.85);
+  padding: 12px 20px;
+  border-radius: 10px 10px 0 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Wadah Pratinjau Lembar Surat (A4 Screen View) */
+.letter-preview-stage {
+  background: #334155;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0 0 10px 10px;
+  padding: 30px;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Lembar Kertas A4 Format Resmi */
+.sheet-a4 {
+  background: #ffffff;
+  color: #111827;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 20mm 20mm 25mm;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+  box-sizing: border-box;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  position: relative;
+  page-break-after: always;
+}
+
+/* Kop Surat Kemensos */
+.kemensos-header {
+  margin-bottom: 12px;
+}
+
+.kemensos-header-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 8px;
+}
+
+.kemensos-header-logo {
+  flex-shrink: 0;
+  width: 95px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.kemensos-header-text {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.kemensos-title-main {
+  font-family: "Book Antiqua", "Times New Roman", Georgia, serif;
+  font-size: 15.5pt;
+  font-weight: bold;
+  letter-spacing: 0.7px;
+  color: #0c2b5e;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.kemensos-title-sub {
+  font-family: "Book Antiqua", "Times New Roman", Georgia, serif;
+  font-size: 13.5pt;
+  font-weight: bold;
+  letter-spacing: 0.4px;
+  color: #0c2b5e;
+  margin: 3px 0 0 0;
+  line-height: 1.15;
+}
+
+.kemensos-title-sub2 {
+  font-family: Arial, sans-serif;
+  font-size: 10.5pt;
+  font-weight: bold;
+  color: #111827;
+  margin: 2px 0 0 0;
+}
+
+.kemensos-header-address {
+  font-family: Arial, sans-serif;
+  font-size: 8.5pt;
+  color: #1f2937;
+  margin: 5px 0 0 0;
+  line-height: 1.25;
+}
+
+.kemensos-link {
+  color: #0044cc;
+  text-decoration: underline;
+  margin-left: 4px;
+}
+
+/* Garis Pembatas Kop Ganda */
+.kemensos-header-separator {
+  margin-top: 4px;
+}
+
+.kemensos-sep-thick {
+  height: 2.8px;
+  background-color: #000000;
+  width: 100%;
+}
+
+.kemensos-sep-thin {
+  height: 1px;
+  background-color: #000000;
+  width: 100%;
+  margin-top: 2px;
+}
+
+/* Badan Surat Resmi */
+.doc-classification {
+  font-weight: bold;
+  font-size: 11pt;
+  margin-top: 6px;
+  margin-bottom: 8px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+.doc-heading-center {
+  text-align: center;
+  margin: 6px 0 16px 0;
+}
+
+.doc-heading-title {
+  font-size: 12.5pt;
+  font-weight: bold;
+  text-decoration: underline;
+  margin: 0;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.doc-heading-number {
+  font-size: 10.5pt;
+  font-weight: bold;
+  margin: 4px 0 0 0;
+  letter-spacing: 0.4px;
+}
+
+.doc-salutation {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+/* Tabel Entri Identitas Dua Kolom */
+.doc-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 6px 0 12px 18px;
+}
+
+.doc-entry-table tr td {
+  padding: 2.5px 4px;
+  vertical-align: top;
+  font-size: 10.5pt;
+}
+
+.doc-entry-table td.col-label {
+  width: 125px;
+}
+
+.doc-entry-table td.col-sep {
+  width: 15px;
+  text-align: center;
+}
+
+.doc-entry-table td.col-val {
+  font-weight: normal;
+}
+
+.doc-body-paragraph {
+  margin: 12px 0;
+  text-align: justify;
+  line-height: 1.5;
+}
+
+/* Kotak Sesi Luring & Daring Zoom */
+.doc-schedule-block {
+  margin: 8px 0 12px 0;
+}
+
+.doc-session-heading {
+  font-weight: bold;
+  margin: 8px 0 4px 0;
+}
+
+/* Tabel Tagihan Keuangan */
+.doc-invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 16px 0;
+}
+
+.doc-invoice-table th,
+.doc-invoice-table td {
+  border: 1px solid #000000;
+  padding: 6px 10px;
+  font-size: 10pt;
+}
+
+.doc-invoice-table th {
+  background-color: #f1f5f9;
+  font-weight: bold;
+  text-align: center;
+}
+
+.doc-invoice-table td.num {
+  text-align: right;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 600;
+}
+
+/* Blok Tanda Tangan */
+.doc-signoff-block {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+  page-break-inside: avoid;
+}
+
+.doc-signoff-wrap {
+  width: 250px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.doc-signoff-date {
+  margin-bottom: 2px;
+}
+
+.doc-signoff-role {
+  font-weight: normal;
+  margin-bottom: 60px; /* Ruang untuk tanda tangan */
+}
+
+.doc-signoff-name {
+  font-weight: bold;
+  text-decoration: underline;
+  margin: 0;
+}
+
+.doc-signoff-nip {
+  margin: 2px 0 0 0;
+}
+
+/* Tembusan */
+.doc-copies-block {
+  margin-top: 24px;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.doc-copies-title {
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.doc-copies-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.doc-copies-list li {
+  margin-bottom: 2px;
+}
+
+/* ============================================================== */
+/* ATURAN KHUSUS CETAK (@media print)                             */
+/* ============================================================== */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Sembunyikan seluruh UI web */
+  .shell aside,
+  .topbar,
+  .footer,
+  .letter-tabs,
+  .letter-sidebar-panel,
+  .letter-preview-toolbar,
+  .notice,
+  .no-print,
+  button,
+  .mobile-overlay {
+    display: none !important;
+  }
+
+  .workspace,
+  .main,
+  .letter-workspace,
+  .letter-preview-stage {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    width: 100% !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 15mm 20mm 15mm 25mm;
+  }
+
+  .sheet-a4 {
+    box-shadow: none !important;
+    border: none !important;
+    width: 100% !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    page-break-after: always !important;
+    page-break-inside: avoid;
+  }
+
+  .kemensos-title-main,
+  .kemensos-title-sub {
+    color: #000000 !important;
+  }
+}

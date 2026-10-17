@@ -2,7 +2,7 @@ import React, {useState, useEffect, useMemo, useCallback} from 'react'
 import {createRoot} from 'react-dom/client'
 import {createClient} from '@supabase/supabase-js'
 import readXlsxFile from 'read-excel-file'
-import {LayoutDashboard, Users, AlertTriangle, CalendarDays, Landmark, FileSpreadsheet, LogOut, ShieldCheck, Search, Plus, RefreshCw, Upload, Download, Menu, X, CheckCircle2, Clock3, TrendingUp, Info, LoaderCircle, Pencil, ChevronLeft, ChevronRight, LockKeyhole, FileCheck2, Filter, Eye, Bell, CircleHelp, HeartHandshake} from 'lucide-react'
+import {LayoutDashboard, Users, AlertTriangle, CalendarDays, Landmark, FileSpreadsheet, LogOut, ShieldCheck, Search, Plus, RefreshCw, Upload, Download, Menu, X, CheckCircle2, Clock3, TrendingUp, Info, LoaderCircle, Pencil, ChevronLeft, ChevronRight, LockKeyhole, FileCheck2, Filter, Eye, Bell, CircleHelp, HeartHandshake, FileText} from 'lucide-react'
 import seeds from './seed.json'
 import './style.css'
 import './glass.css'
@@ -24,6 +24,7 @@ import {caseTestClient} from './recovery/caseApi.js'
 import {productionMasterClient} from './import/productionClient.js'
 import AdjustmentMonitor from './adjustments/AdjustmentMonitor.jsx'
 const JudolModule=React.lazy(()=>import('./judol/JudolModule.jsx'))
+const LetterManager=React.lazy(()=>import('./letters/LetterManager.jsx'))
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -51,6 +52,7 @@ const menus = [
   {id:'master-progress',name:'Master & Progres',icon:TrendingUp},
   {id:'perubahan-pengembalian',name:'Perubahan Pengembalian',icon:FileCheck2},
   {id:'kategorisasi-judol',name:'Kategorisasi Disiplin ASN',icon:ShieldCheck},
+  {id:'surat-tlhp',name:'Persuratan & Dokumen TLHP',icon:FileText},
   {id:'impor-master',name:'Pratinjau Excel Master',icon:FileSpreadsheet},
   {id:'panduan',name:'Petunjuk',icon:CircleHelp}
 ]
@@ -72,7 +74,7 @@ function App(){
  const [masterLoading,setMasterLoading]=useState(false);const [masterLoadError,setMasterLoadError]=useState('')
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
- const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
+ const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
  const [judolSnapshot,setJudolSnapshot]=useState(null)
  useEffect(()=>{setJudolSnapshot(null)},[session?.user?.id])
  const [editingAction,setEditingAction]=useState(null);const [deletingAction,setDeletingAction]=useState(null);const [actionError,setActionError]=useState('');
@@ -303,6 +305,7 @@ function App(){
     {page==='master-progress'&&<RecoveryWorkspace adjustmentClient={supabase} client={importTestClient} snapshot={recoverySnapshot} onImport={canImport?()=>go('impor-master'):undefined} onMasterLoaded={activateMaster}/>}
     {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
     {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={judolSnapshot} onSnapshot={setJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase}/></React.Suspense>}
+    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={judolSnapshot}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}
       {masterLoadError&&<div className="notice amber-notice"><Info size={18}/><span>{masterLoadError}</span></div>}

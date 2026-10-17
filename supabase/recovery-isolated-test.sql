@@ -62,8 +62,7 @@ create table recovery_test.recovery_changes (
 do $$ declare tbl text; begin
  foreach tbl in array array['recovery_people','recovery_sp2d','recovery_imports','recovery_obligations','recovery_sp2d_allocations','recovery_payments','recovery_changes'] loop
   execute format('alter table recovery_test.%I enable row level security',tbl);
-  execute format('revoke all on recovery_test.%I from anon, authenticated',tbl);
-
+  execute format('revoke all on recovery_test.%I from anon, authenticated',tbl);
   execute format('create policy authorized_read on recovery_test.%I for select to authenticated using ((select public.current_app_role()) in (''admin'',''editor'',''viewer''))',tbl);
  end loop;
 end $$;
@@ -223,10 +222,8 @@ begin
  where s.import_id=p_batch and s.record_type in ('obligation','payment') and (case when s.record_type='obligation' then o.nominal else p.nominal end) is distinct from (s.data->>'amount')::bigint
  order by s.record_type,s.record_key offset p_offset limit p_limit;
 end $$;
-revoke all on function recovery_test.recovery_diff(uuid,integer,integer) from public,anon;
-
-revoke all on function recovery_test.recovery_begin(text,text,integer,jsonb),recovery_test.recovery_append(uuid,jsonb),recovery_test.recovery_validate(uuid),recovery_test.recovery_commit(uuid,text) from public,anon;
-
+revoke all on function recovery_test.recovery_diff(uuid,integer,integer) from public,anon;
+revoke all on function recovery_test.recovery_begin(text,text,integer,jsonb),recovery_test.recovery_append(uuid,jsonb),recovery_test.recovery_validate(uuid),recovery_test.recovery_commit(uuid,text) from public,anon;
 
 revoke all on all tables in schema recovery_test from public,anon,authenticated;
 revoke all on all sequences in schema recovery_test from public,anon,authenticated;
