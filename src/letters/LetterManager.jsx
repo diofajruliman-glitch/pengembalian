@@ -1207,6 +1207,61 @@ NIP. ${official.nip}
               </select>
             </div>
 
+            {/* KONTROL DERAJAT KEAMANAN (FLEKSIBEL: PILIHAN CENTANG, RUBAH TEKS, & POSISI KIRI / TENGAH / KANAN) */}
+            <div className="classification-control-box">
+              <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontWeight: 600, color: '#f8fafc', fontSize: '0.82rem'}}>
+                <input
+                  type="checkbox"
+                  checked={showClassification}
+                  onChange={e => setShowClassification(e.target.checked)}
+                />
+                Tampilkan Derajat Keamanan Dokumen
+              </label>
+
+              {showClassification && (
+                <div style={{display: 'flex', flexDirection: 'column', gap: 6, marginTop: 2}}>
+                  <input
+                    type="text"
+                    value={classificationText}
+                    onChange={e => setClassificationText(e.target.value.toUpperCase())}
+                    placeholder="RAHASIA / SEGERA / BIASA"
+                    style={{fontSize: '0.82rem', padding: '6px 10px', textTransform: 'uppercase', fontWeight: 600}}
+                  />
+                  <div>
+                    <span style={{fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 600}}>
+                      Posisi Penempatan di Atas Judul:
+                    </span>
+                    <div className="pos-button-group">
+                      <button
+                        type="button"
+                        className={`pos-btn ${classificationPosition === 'left' ? 'active' : ''}`}
+                        onClick={() => setClassificationPosition('left')}
+                        title="Rata Kiri (Standar Format Kemensos)"
+                      >
+                        <AlignLeft size={13} /> Pinggir Kiri
+                      </button>
+                      <button
+                        type="button"
+                        className={`pos-btn ${classificationPosition === 'center' ? 'active' : ''}`}
+                        onClick={() => setClassificationPosition('center')}
+                        title="Rata Tengah"
+                      >
+                        <AlignCenter size={13} /> Tengah
+                      </button>
+                      <button
+                        type="button"
+                        className={`pos-btn ${classificationPosition === 'right' ? 'active' : ''}`}
+                        onClick={() => setClassificationPosition('right')}
+                        title="Rata Kanan"
+                      >
+                        <AlignRight size={13} /> Pinggir Kanan
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="letter-form-group">
               <label>Nomor Surat Resmi</label>
               <input
@@ -1224,6 +1279,54 @@ NIP. ${official.nip}
                 value={letterDate}
                 onChange={e => setLetterDate(e.target.value)}
               />
+            </div>
+
+            {/* PEJABAT PENANDATANGAN AKTIF */}
+            <div className="letter-form-group">
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <label>Pejabat Penandatangan</label>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('cms-official')}
+                  style={{background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.75rem', cursor: 'pointer', padding: 0}}
+                >
+                  Kelola Pejabat (CMS) →
+                </button>
+              </div>
+              <select
+                value={selectedOfficialId}
+                onChange={e => handleSelectOfficial(e.target.value)}
+              >
+                {officials.map(o => (
+                  <option key={o.id} value={o.id}>
+                    {o.nama} — {o.jabatan}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* PRESET AGENDA & LOKASI PERTEMUAN */}
+            <div className="letter-form-group">
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <label>Agenda & Lokasi Pertemuan</label>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('cms-official')}
+                  style={{background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.75rem', cursor: 'pointer', padding: 0}}
+                >
+                  Kelola Agenda (CMS) →
+                </button>
+              </div>
+              <select
+                value={selectedVenueId}
+                onChange={e => handleSelectVenue(e.target.value)}
+              >
+                {venues.map(v => (
+                  <option key={v.id} value={v.id}>
+                    {v.name || `${v.hari}, ${v.tanggal} (${v.jam})`}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <hr style={{borderColor: 'rgba(255,255,255,0.08)', margin: '4px 0'}} />
