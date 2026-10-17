@@ -92,6 +92,9 @@ function App(){
    return next
   })
  },[])
+ const demo=!configured && import.meta.env.DEV;const canEdit=demo?true: ['admin','editor'].includes(profile?.role)
+ const canImport=demo||profile?.role==='admin'
+ const isAuthorized=demo || Boolean(session && profile && ['admin','editor','viewer'].includes(profile.role))
  useEffect(()=>{
   if(!supabase||!isAuthorized||demo)return
   let active=true
@@ -135,9 +138,6 @@ function App(){
  const [matrix,setMatrix]=useState(seeds.bottlenecks); const [actions,setActions]=useState(seeds.actions); const [bankData,setBankData]=useState(bankDefaults)
  const [cases,setCases]=useState([]);const [caseTotal,setCaseTotal]=useState(0);const [caseSearchTotal,setCaseSearchTotal]=useState(0);const [openTotal,setOpenTotal]=useState(0);const [casesPage,setCasesPage]=useState(0);const [search,setSearch]=useState('')
  const [loading,setLoading]=useState(false);const [error,setError]=useState('');const [editingCase,setEditingCase]=useState(null);const [deletingCase,setDeletingCase]=useState(null);const [deleteCaseError,setDeleteCaseError]=useState('');const [editingBank,setEditingBank]=useState(null); const [importRows,setImportRows]=useState(null)
- const demo=!configured && import.meta.env.DEV;const canEdit=demo?true: ['admin','editor'].includes(profile?.role)
- const canImport=demo||profile?.role==='admin'
- const isAuthorized=demo || Boolean(session && profile && ['admin','editor','viewer'].includes(profile.role))
  useEffect(()=>{if(!supabase)return;let live=true;supabase.auth.getSession().then(({data})=>{if(live){setSession(data.session);setAuthLoading(false)}}).catch(()=>setAuthLoading(false));const {data:{subscription}}=supabase.auth.onAuthStateChange((event,s)=>{setSession(s);if(event==='PASSWORD_RECOVERY')setRecovering(true)});return ()=>{live=false;subscription.unsubscribe()}},[])
  useEffect(()=>{
   if(!supabase)return
