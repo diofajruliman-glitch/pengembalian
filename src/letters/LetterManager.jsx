@@ -1845,6 +1845,33 @@ NIP. ${official.nip}
           )}
         </div>
       )}
+
+      {/* 4. MODAL PROGRESS PEMBUATAN PDF BATCH RESMI KEMENSOS */}
+      {downloadProgress && (
+        <div className="pdf-progress-overlay no-print">
+          <div className="pdf-progress-modal">
+            <div className="pdf-progress-spinner">
+              <LoaderCircle size={28} className="spin" color="#38bdf8" />
+            </div>
+            <div className="pdf-progress-info">
+              <h4>Menyiapkan Berkas PDF Resmi Kemensos</h4>
+              <p>{downloadProgress.text}</p>
+              <div className="pdf-progress-bar-track">
+                <div
+                  className="pdf-progress-bar-fill"
+                  style={{
+                    width: `${Math.min(100, Math.round((downloadProgress.current / downloadProgress.total) * 100))}%`
+                  }}
+                />
+              </div>
+              <div className="pdf-progress-stat">
+                <span>{downloadProgress.current.toLocaleString('id-ID')} dari {downloadProgress.total.toLocaleString('id-ID')} Lembar</span>
+                <span>{Math.round((downloadProgress.current / downloadProgress.total) * 100)}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
