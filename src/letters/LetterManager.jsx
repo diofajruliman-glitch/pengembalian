@@ -127,6 +127,22 @@ export default function LetterManager({
   const [judolPeriod, setJudolPeriod] = useState('after')
   const [judolAvailability, setJudolAvailability] = useState('')
 
+  // Manual Recipient Form
+  const [manualRecipient, setManualRecipient] = useState({
+    nama: 'Ahmad Fauzi, S.Sos.',
+    nip: '199208152024211002',
+    pangkat: 'Penata Muda (IX/PPPK)',
+    jabatan: 'Penggerak Swadaya Masyarakat Ahli Pertama',
+    unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+    kewajibanTotal: 15450000,
+    realisasiTotal: 5000000,
+    sisaKewajiban: 10450000
+  })
+
+  // State untuk Editor CMS Template
+  const [editingTemplate, setEditingTemplate] = useState(null)
+  const [newTembusanInput, setNewTembusanInput] = useState('')
+
   // Helper identifikasi SDM Nonaktif
   const isNonactivePerson = (p) => {
     const s = `${p.status || ''} ${p.status_sdm || ''} ${p.kategori || ''} ${p.sourceMetadata?.status || ''}`.toLowerCase()
