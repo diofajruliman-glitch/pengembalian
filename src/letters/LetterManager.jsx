@@ -155,6 +155,9 @@ export default function LetterManager({
     return d.toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})
   })
   const [customAgenda, setCustomAgenda] = useState('')
+  const [customOpening, setCustomOpening] = useState('')
+  const [customCoordination, setCustomCoordination] = useState('')
+  const [customClosing, setCustomClosing] = useState('')
 
   // Sumber Data SDM Penerima
   const [recipientSource, setRecipientSource] = useState('bottleneck')
@@ -213,7 +216,7 @@ export default function LetterManager({
       bank: 'Mandiri',
       status: 'Meninggal Dunia',
       kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja Evkin',
+      pic: 'PSNK / Pokja SD',
       deadline: '2026-11-13',
       provinsi: 'DKI Jakarta'
     },
@@ -264,7 +267,7 @@ export default function LetterManager({
       bank: 'Mandiri',
       status: 'Meninggal Dunia',
       kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja Evkin',
+      pic: 'PSNK / Pokja SD',
       deadline: '2026-11-13',
       provinsi: 'Jawa Timur'
     },
@@ -315,7 +318,7 @@ export default function LetterManager({
       bank: 'BSI',
       status: 'Meninggal Dunia',
       kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja Evkin',
+      pic: 'PSNK / Pokja SD',
       deadline: '2026-11-13',
       provinsi: 'Sumatera Utara'
     },
@@ -366,7 +369,7 @@ export default function LetterManager({
       bank: 'Mandiri',
       status: 'Meninggal Dunia',
       kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja Evkin',
+      pic: 'PSNK / Pokja SD',
       deadline: '2026-11-13',
       provinsi: 'DKI Jakarta'
     },
@@ -1045,6 +1048,9 @@ export default function LetterManager({
         letterNumber,
         letterDate,
         customAgenda,
+        customOpening,
+        customCoordination,
+        customClosing,
         recipients: listToDownload,
         showClassification,
         classificationPosition,
@@ -1065,34 +1071,23 @@ export default function LetterManager({
   // Salin Teks ke Clipboard
   const handleCopyText = () => {
     const r = activeRecipients[0] || manualRecipient
+    const effectiveCoord = customCoordination || currentTemplate.coordinationText || 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.'
     const text = `
 ${currentTemplate.classification}
 ${currentTemplate.title}
 NOMOR : ${letterNumber}
 
-${currentTemplate.openingText}
+${customOpening || currentTemplate.openingText}
 Nama        : ${r.nama}
 NIP/NIPPPK  : ${r.nip}
 Pangkat     : ${r.pangkat || '—'}
 Jabatan     : ${r.jabatan || 'PPPK'}
 Unit Kerja  : ${r.unitKerja || official.unitKerja}
 
-Untuk menghadap kepada:
-Nama        : ${official.nama}
-NIP         : ${official.nip}
-Pangkat     : ${official.pangkatSingkat || 'IV/c'}
-Jabatan     : ${official.jabatan}
-
-Pada :
-Hari        : ${venue.hari}
-Tanggal     : ${venue.tanggal}
-Jam         : ${venue.jam}
-Tempat      : ${venue.tempat}
-
 ${venue.linkZoom ? `Dan Pada sesi :\nHari        : ${venue.hari}\nTanggal     : ${venue.tanggal}\nJam         : ${venue.jam}\nLink zoom   : ${venue.linkZoom}\n` : ''}
 ${customAgenda || currentTemplate.agendaDefault}
 
-${currentTemplate.closingText}
+${currentTemplate.category === 'keuangan' ? effectiveCoord + '\n\n' : ''}${customClosing || currentTemplate.closingText}
 
 ${official.kota}, ${letterDate}
 ${official.jabatan}
@@ -1433,7 +1428,7 @@ NIP. ${official.nip}
                     style={{background: 'linear-gradient(135deg, #0284c7, #0369a1)', color: '#ffffff', fontWeight: 600, padding: '8px 10px'}}
                     onClick={() => {
                       setSelectedTemplateId('tagihan-1')
-                      setCustomAgenda('Diminta kepada Saudara/i atau pihak yang mewakili untuk segera melakukan penyetoran sisa kewajiban tersebut ke Kas Negara melalui Kode Billing SIMPONI (Akun Penerimaan Pengembalian Belanja Pegawai TA Yang Lalu) selambat-lambatnya sebelum 15 Desember 2026, dan segera menyampaikan bukti setor sah (NTPN/BPN) kepada Tim TLHP Direktorat PSNK.')
+                      setCustomAgenda('Diminta kepada Saudara/i atau pihak yang mewakili untuk segera melakukan penyetoran sisa kewajiban tersebut ke Kas Negara melalui Kode Billing SIMPONI (Akun Penerimaan Pengembalian Belanja Pegawai TA Yang Lalu) selambat-lambatnya sebelum 15 Desember 2026, dan segera menyampaikan bukti setor sah (NTPN/BPN) kepada Pokja SD Tim TLHP Direktorat PSNK.')
                     }}
                   >
                     <Sparkles size={14} />
@@ -1665,14 +1660,81 @@ NIP. ${official.nip}
               </div>
             )}
 
-            <div className="letter-form-group">
-              <label>Klausul Agenda Khusus (Menimpa Agenda Baku)</label>
-              <textarea
-                rows={3}
-                placeholder={currentTemplate.agendaDefault}
-                value={customAgenda}
-                onChange={e => setCustomAgenda(e.target.value)}
-              />
+            {/* KUSTOMISASI TEKS NASKAH DINAS */}
+            <div style={{
+              background: 'rgba(30, 41, 59, 0.7)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              borderRadius: '8px',
+              padding: '12px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                <label style={{fontWeight: 700, color: '#38bdf8', fontSize: '0.85rem', margin: 0}}>
+                  Kustomisasi Teks Naskah Surat
+                </label>
+                {(customOpening || customAgenda || customCoordination || customClosing) && (
+                  <button
+                    type="button"
+                    style={{background: 'none', border: 'none', color: '#f87171', fontSize: '0.78rem', cursor: 'pointer', padding: 0}}
+                    onClick={() => {
+                      setCustomOpening('')
+                      setCustomAgenda('')
+                      setCustomCoordination('')
+                      setCustomClosing('')
+                    }}
+                  >
+                    Reset Teks
+                  </button>
+                )}
+              </div>
+
+              <div className="letter-form-group" style={{margin: 0}}>
+                <label style={{fontSize: '0.78rem', color: '#94a3b8'}}>1. Paragraf Pembuka (Opsional)</label>
+                <textarea
+                  rows={2}
+                  placeholder={currentTemplate.openingText}
+                  value={customOpening}
+                  onChange={e => setCustomOpening(e.target.value)}
+                  style={{fontSize: '0.82rem'}}
+                />
+              </div>
+
+              <div className="letter-form-group" style={{margin: 0}}>
+                <label style={{fontSize: '0.78rem', color: '#94a3b8'}}>2. Agenda / Klausul Penyetoran SIMPONI</label>
+                <textarea
+                  rows={3}
+                  placeholder={currentTemplate.agendaDefault}
+                  value={customAgenda}
+                  onChange={e => setCustomAgenda(e.target.value)}
+                  style={{fontSize: '0.82rem'}}
+                />
+              </div>
+
+              {currentTemplate.category === 'keuangan' && (
+                <div className="letter-form-group" style={{margin: 0}}>
+                  <label style={{fontSize: '0.78rem', color: '#94a3b8'}}>3. Teks Koordinasi / Ketidaksesuaian Data (Pokja SD)</label>
+                  <textarea
+                    rows={2}
+                    placeholder={currentTemplate.coordinationText || 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.'}
+                    value={customCoordination}
+                    onChange={e => setCustomCoordination(e.target.value)}
+                    style={{fontSize: '0.82rem'}}
+                  />
+                </div>
+              )}
+
+              <div className="letter-form-group" style={{margin: 0}}>
+                <label style={{fontSize: '0.78rem', color: '#94a3b8'}}>{currentTemplate.category === 'keuangan' ? '4.' : '3.'} Kalimat Penutup (Opsional)</label>
+                <input
+                  type="text"
+                  placeholder={currentTemplate.closingText}
+                  value={customClosing}
+                  onChange={e => setCustomClosing(e.target.value)}
+                  style={{fontSize: '0.82rem'}}
+                />
+              </div>
             </div>
           </div>
 
@@ -1757,6 +1819,9 @@ NIP. ${official.nip}
                   letterNumber={letterNumber}
                   letterDate={letterDate}
                   customAgenda={customAgenda}
+                  customOpening={customOpening}
+                  customCoordination={customCoordination}
+                  customClosing={customClosing}
                   showClassification={showClassification}
                   classificationPosition={classificationPosition}
                   classificationText={classificationText}
@@ -2310,6 +2375,16 @@ NIP. ${official.nip}
                 </div>
 
                 <div className="letter-form-group">
+                  <label>Teks Koordinasi / Ketidaksesuaian Data (Pokja SD)</label>
+                  <textarea
+                    rows={2}
+                    value={editingTemplate.coordinationText || ''}
+                    onChange={e => setEditingTemplate({...editingTemplate, coordinationText: e.target.value})}
+                    placeholder="Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK."
+                  />
+                </div>
+
+                <div className="letter-form-group">
                   <label>Teks Kalimat Penutup</label>
                   <input
                     type="text"
@@ -2493,6 +2568,12 @@ NIP. ${official.nip}
                     <div style={{fontSize: '0.85rem', color: '#94a3b8', marginBottom: 8}}>
                       <strong>Teks Agenda Baku:</strong> {tpl.agendaDefault}
                     </div>
+
+                    {tpl.coordinationText && (
+                      <div style={{fontSize: '0.85rem', color: '#38bdf8', marginBottom: 8}}>
+                        <strong>Teks Koordinasi Pokja SD:</strong> {tpl.coordinationText}
+                      </div>
+                    )}
 
                     <div style={{fontSize: '0.82rem', color: '#64748b'}}>
                       <strong>Tembusan Standar ({tpl.tembusan?.length || 0} pihak):</strong>

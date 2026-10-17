@@ -48,6 +48,9 @@ export async function generateOfficialPdfBatch({
   letterNumber = '       /3.3/KP.06.04/10/2026',
   letterDate = '15 Oktober 2026',
   customAgenda = '',
+  customOpening = '',
+  customCoordination = '',
+  customClosing = '',
   recipients = [],
   onProgress = null,
   showClassification = true,
@@ -145,7 +148,7 @@ export async function generateOfficialPdfBatch({
       curY += 6
 
       // Paragraf Pembuka
-      const opening = template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'
+      const opening = customOpening || template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'
       const splitOpening = doc.splitTextToSize(opening, 182)
       doc.text(splitOpening, 14, curY)
       curY += (splitOpening.length * 4.2) + 3
@@ -170,10 +173,7 @@ export async function generateOfficialPdfBatch({
         ],
         foot: [
           [
-            '',
-            'Total Sisa Kewajiban :',
-            '',
-            '',
+            { content: 'Total Sisa Kewajiban :', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
             fmtRp(recipient.sisaKewajiban || 0)
           ]
         ],
@@ -205,9 +205,9 @@ export async function generateOfficialPdfBatch({
         columnStyles: {
           0: { cellWidth: 9, halign: 'center' },
           1: { cellWidth: 'auto' },
-          2: { cellWidth: 32, halign: 'right' },
-          3: { cellWidth: 32, halign: 'right' },
-          4: { cellWidth: 38, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+          2: { cellWidth: 30, halign: 'right' },
+          3: { cellWidth: 30, halign: 'right' },
+          4: { cellWidth: 42, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
         }
       })
 
@@ -222,12 +222,14 @@ export async function generateOfficialPdfBatch({
       }
 
       // Koordinasi & Penutup
-      const coordText = 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Tim Pokja Evkin/TLHP Direktorat PSNK.'
-      const splitCoord = doc.splitTextToSize(coordText, 182)
-      doc.text(splitCoord, 14, curY)
-      curY += (splitCoord.length * 4.2) + 3
+      const coordText = customCoordination || template.coordinationText || 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.'
+      if (coordText) {
+        const splitCoord = doc.splitTextToSize(coordText, 182)
+        doc.text(splitCoord, 14, curY)
+        curY += (splitCoord.length * 4.2) + 3
+      }
 
-      const closing = template.closingText || 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.'
+      const closing = customClosing || template.closingText || 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.'
       const splitClosing = doc.splitTextToSize(closing, 182)
       doc.text(splitClosing, 14, curY)
       curY += (splitClosing.length * 4.2) + 4
@@ -315,7 +317,7 @@ export async function generateOfficialPdfBatch({
         theme: 'plain',
         styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
         columnStyles: {
-          0: { cellWidth: 38 },
+          0: { cellWidth: 44 },
           1: { cellWidth: 4 },
           2: { cellWidth: 'auto', fontStyle: 'bold' }
         }
@@ -348,10 +350,7 @@ export async function generateOfficialPdfBatch({
           ],
           foot: [
             [
-              '',
-              'Total Sisa Kewajiban :',
-              '',
-              '',
+              { content: 'Total Sisa Kewajiban :', colSpan: 4, styles: { halign: 'right', fontStyle: 'bold' } },
               fmtRp(recipient.sisaKewajiban || 0)
             ]
           ],
@@ -385,7 +384,7 @@ export async function generateOfficialPdfBatch({
             1: { cellWidth: 'auto' },
             2: { cellWidth: 30, halign: 'right' },
             3: { cellWidth: 30, halign: 'right' },
-            4: { cellWidth: 36, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+            4: { cellWidth: 42, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
           }
         })
         curY = doc.lastAutoTable.finalY + 3
