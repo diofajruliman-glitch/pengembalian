@@ -438,7 +438,8 @@
 }
 
 .doc-entry-table td.col-label {
-  width: 130px;
+  width: 175px;
+  min-width: 175px;
   white-space: nowrap;
 }
 
@@ -480,7 +481,7 @@
 .doc-invoice-table td {
   border: 1px solid #000000 !important;
   padding: 6px 8px !important;
-  font-size: 10pt;
+  font-size: 9.5pt;
   color: #111827;
   vertical-align: middle;
   word-break: break-word;
@@ -490,9 +491,16 @@
   background-color: #f1f5f9;
   font-weight: bold;
   text-align: center;
-  font-size: 9pt;
-  letter-spacing: 0.3px;
-  padding: 8px 6px !important;
+  font-size: 8.5pt;
+  letter-spacing: 0.2px;
+  padding: 8px 4px !important;
+}
+
+.doc-invoice-table th.col-sisa,
+.doc-invoice-table td.col-sisa {
+  width: 165px;
+  min-width: 160px;
+  white-space: nowrap;
 }
 
 .doc-invoice-table td.num {

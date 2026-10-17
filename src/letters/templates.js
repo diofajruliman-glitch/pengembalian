@@ -135,6 +135,7 @@ export const LETTER_TYPES = [
     title: 'SURAT PANGGILAN',
     openingText: 'Bersama ini diminta dengan hormat kehadiran Saudara:',
     agendaDefault: 'Untuk diperiksa/dimintai keterangan serta penyelesaian tindak lanjut pengembalian kelebihan pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat PSNK.',
+    coordinationText: 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.',
     closingText: 'Demikian untuk dilaksanakan.',
     tembusan: [
       'Sekretaris Direktorat Jenderal Perlindungan dan Jaminan Sosial;',
@@ -152,7 +153,8 @@ export const LETTER_TYPES = [
     classificationPosition: 'left',
     title: 'SURAT PENAGIHAN PENGEMBALIAN I',
     openingText: 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:',
-    agendaDefault: 'Diminta kepada Saudara untuk segera melakukan penyetoran sisa kewajiban tersebut ke Kas Negara melalui Kode Billing SIMPONI (Akun Penerimaan Pengembalian Belanja Pegawai TA Yang Lalu) selambat-lambatnya dalam jangka waktu 14 (empat belas) hari kalender sejak surat ini diterima, dan segera menyampaikan bukti setor sah (NTPN/BPN) kepada Tim TLHP Direktorat PSNK.',
+    agendaDefault: 'Diminta kepada Saudara untuk segera melakukan penyetoran sisa kewajiban tersebut ke Kas Negara melalui Kode Billing SIMPONI (Akun Penerimaan Pengembalian Belanja Pegawai TA Yang Lalu) selambat-lambatnya dalam jangka waktu 14 (empat belas) hari kalender sejak surat ini diterima, dan segera menyampaikan bukti setor sah (NTPN/BPN) kepada Pokja SD Tim TLHP Direktorat PSNK.',
+    coordinationText: 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.',
     closingText: 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.',
     tembusan: [
       'Direktur Jenderal Perlindungan dan Jaminan Sosial;',
@@ -171,6 +173,7 @@ export const LETTER_TYPES = [
     title: 'SURAT PENAGIHAN PENGEMBALIAN II (SURAT TEGURAN)',
     openingText: 'Menindaklanjuti Surat Penagihan Pengembalian I dan Hasil Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 yang hingga saat ini belum diselesaikan:',
     agendaDefault: 'Ditegaskan kembali kepada Saudara untuk segera melunasi seluruh sisa kewajiban pengembalian ke Kas Negara dalam jangka waktu selambat-lambatnya 7 (tujuh) hari kerja sejak surat teguran ini diterima. Keterlambatan pelunasan akan ditindaklanjuti sesuai ketentuan penuntutan ganti rugi negara dan penegakan disiplin kepegawaian.',
+    coordinationText: 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.',
     closingText: 'Demikian surat teguran ini disampaikan untuk segera ditindaklanjuti.',
     tembusan: [
       'Direktur Jenderal Perlindungan dan Jaminan Sosial;',
@@ -211,7 +214,7 @@ export const LETTER_TYPES = [
     tembusan: [
       'Inspektur Jenderal Kementerian Sosial RI;',
       'Kepala Biro Keuangan Kementerian Sosial RI; dan',
-      'Arsip Pokja SDM Tim TLHP.'
+      'Arsip Pokja SD Tim TLHP.'
     ]
   }
 ]
