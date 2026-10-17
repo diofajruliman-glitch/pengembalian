@@ -10,18 +10,34 @@ export default function LetterDocument({
   venue,
   letterNumber = '       /3.3/KP.06.04/10/2026',
   letterDate = '15 Oktober 2026',
-  customAgenda = ''
+  customAgenda = '',
+  showClassification = true,
+  classificationPosition = 'left',
+  classificationText = ''
 }) {
   const isTagihan = template.category === 'keuangan'
   const isBeritaAcara = template.category === 'berita-acara'
+  const effectiveShowClassification = showClassification ?? template.showClassification ?? true
+  const effectivePosition = classificationPosition || template.classificationPosition || 'left'
+  const effectiveClassification = classificationText || template.classification || 'RAHASIA'
 
   return (
     <article className="sheet-a4 printable-letter-sheet">
       {/* 1. KOP SURAT RESMI KEMENSOS (GAMBAR RESMI YANG DIUNGGAH PENGGUNA) */}
       <KemensosHeader />
 
-      {/* 2. SIFAT / DERAJAT KEAMANAN */}
-      <div className="doc-classification">{template.classification || 'RAHASIA'}</div>
+      {/* 2. SIFAT / DERAJAT KEAMANAN (BISA DIATUR POSISI: KIRI, TENGAH, KANAN, ATAU DISEMBUNYIKAN) */}
+      {effectiveShowClassification && (
+        <div
+          className="doc-classification"
+          style={{
+            textAlign: effectivePosition === 'center' ? 'center' : (effectivePosition === 'right' ? 'right' : 'left'),
+            width: '100%'
+          }}
+        >
+          {effectiveClassification}
+        </div>
+      )}
 
       {/* 3. JUDUL & NOMOR SURAT */}
       <div className="doc-heading-center">
