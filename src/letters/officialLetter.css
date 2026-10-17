@@ -467,30 +467,46 @@
   margin: 8px 0 4px 0;
 }
 
-/* Tabel Tagihan Keuangan */
+/* Tabel Tagihan Keuangan (Presisi Format Standar Kemensos) */
 .doc-invoice-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   margin: 12px 0 16px 0;
+  border: 1px solid #000000;
 }
 
 .doc-invoice-table th,
 .doc-invoice-table td {
-  border: 1px solid #000000;
-  padding: 6px 10px;
+  border: 1px solid #000000 !important;
+  padding: 6px 8px !important;
   font-size: 10pt;
+  color: #111827;
+  vertical-align: middle;
+  word-break: break-word;
 }
 
 .doc-invoice-table th {
   background-color: #f1f5f9;
   font-weight: bold;
   text-align: center;
+  font-size: 9pt;
+  letter-spacing: 0.3px;
+  padding: 8px 6px !important;
 }
 
 .doc-invoice-table td.num {
   text-align: right;
-  font-family: "Courier New", Courier, monospace;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-variant-numeric: tabular-nums;
   font-weight: 600;
+  white-space: nowrap;
+}
+
+.doc-invoice-table td.num.remaining-val,
+.doc-invoice-table th.num.remaining-val {
+  color: #991b1b !important;
+  font-weight: bold;
 }
 
 /* Blok Tanda Tangan */

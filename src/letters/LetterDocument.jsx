@@ -46,28 +46,45 @@ export default function LetterDocument({
           </p>
 
           <table className="doc-invoice-table">
+            <colgroup>
+              <col style={{width: '36px'}} />
+              <col style={{width: 'auto'}} />
+              <col style={{width: '130px'}} />
+              <col style={{width: '130px'}} />
+              <col style={{width: '145px'}} />
+            </colgroup>
             <thead>
               <tr>
-                <th>No</th>
-                <th>Uraian Kewajiban</th>
-                <th>Kewajiban Awal</th>
-                <th>Telah Disetor</th>
-                <th>Sisa yang Wajib Disetor</th>
+                <th style={{width: '36px', textAlign: 'center'}}>No</th>
+                <th style={{textAlign: 'center'}}>Uraian Kewajiban</th>
+                <th style={{width: '130px', textAlign: 'center'}}>Kewajiban Awal</th>
+                <th style={{width: '130px', textAlign: 'center'}}>Telah Disetor</th>
+                <th style={{width: '145px', textAlign: 'center'}}>Sisa yang Wajib Disetor</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td style={{textAlign: 'center'}}>1</td>
-                <td>Pengembalian Kelebihan Bayar Tukin & Uang Makan TA 2025</td>
+                <td style={{textAlign: 'center', fontWeight: 'bold'}}>1</td>
+                <td>
+                  <div style={{fontWeight: 'bold'}}>Pengembalian Kelebihan Pembayaran Tukin & Uang Makan</div>
+                  <div style={{fontSize: '8.5pt', color: '#475569', marginTop: '3px', lineHeight: 1.3}}>
+                    {recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK TA 2025 Dit. PSNK'}
+                    {recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''}
+                  </div>
+                </td>
                 <td className="num">{fmtRp(recipient.kewajibanTotal || 0)}</td>
                 <td className="num">{fmtRp(recipient.realisasiTotal || 0)}</td>
-                <td className="num" style={{color: '#991b1b'}}>{fmtRp(recipient.sisaKewajiban || 0)}</td>
+                <td className="num remaining-val">{fmtRp(recipient.sisaKewajiban || 0)}</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <th colSpan="4" style={{textAlign: 'right'}}>Total Sisa Kewajiban :</th>
-                <th className="num" style={{color: '#991b1b', fontSize: '10.5pt'}}>{fmtRp(recipient.sisaKewajiban || 0)}</th>
+                <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '8px 10px'}}>
+                  Total Sisa Kewajiban :
+                </th>
+                <th className="num remaining-val" style={{textAlign: 'right', fontSize: '10.5pt', padding: '8px 10px'}}>
+                  {fmtRp(recipient.sisaKewajiban || 0)}
+                </th>
               </tr>
             </tfoot>
           </table>

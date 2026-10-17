@@ -23,6 +23,7 @@ import {indexSnapshot,selectProgress} from './recovery/progress.js'
 import {caseTestClient} from './recovery/caseApi.js'
 import {productionMasterClient} from './import/productionClient.js'
 import AdjustmentMonitor from './adjustments/AdjustmentMonitor.jsx'
+import {disciplineStorage} from './judol/storage.js'
 const JudolModule=React.lazy(()=>import('./judol/JudolModule.jsx'))
 const LetterManager=React.lazy(()=>import('./letters/LetterManager.jsx'))
 
@@ -75,8 +76,23 @@ function App(){
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
  const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
- const [judolSnapshot,setJudolSnapshot]=useState(null)
- useEffect(()=>{setJudolSnapshot(null)},[session?.user?.id])
+ const [judolSnapshot,setJudolSnapshot]=useState(()=>{
+  try{
+   const saved=sessionStorage.getItem('cached_judol_snapshot')
+   return saved?JSON.parse(saved):null
+  }catch{return null}
+ })
+ const updateJudolSnapshot=useCallback(val=>{
+  setJudolSnapshot(current=>{
+   const next=typeof val==='function'?val(current):val
+   try{
+    if(next) sessionStorage.setItem('cached_judol_snapshot',JSON.stringify(next))
+    else sessionStorage.removeItem('cached_judol_snapshot')
+   }catch{}
+   return next
+  })
+ },[])
+ useEffect(()=>{updateJudolSnapshot(null)},[session?.user?.id,updateJudolSnapshot])
  const [editingAction,setEditingAction]=useState(null);const [deletingAction,setDeletingAction]=useState(null);const [actionError,setActionError]=useState('');
  const [editingMatrix,setEditingMatrix]=useState(null);const [deletingMatrix,setDeletingMatrix]=useState(null);const [matrixError,setMatrixError]=useState('');
  const [matrix,setMatrix]=useState(seeds.bottlenecks); const [actions,setActions]=useState(seeds.actions); const [bankData,setBankData]=useState(bankDefaults)
