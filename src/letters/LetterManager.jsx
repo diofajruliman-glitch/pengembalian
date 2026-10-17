@@ -1409,13 +1409,13 @@ NIP. ${official.nip}
                 <button
                   type="button"
                   className="btn primary"
-                  onClick={handleDownloadPdf}
+                  onClick={() => handleDownloadPdf(true)}
                   disabled={isDownloadingPdf}
-                  title="Unduh berkas PDF langsung ke folder Download perangkat Anda"
-                  style={{background: '#0284c7', borderColor: '#0284c7'}}
+                  title={`Unduh seluruh berkas PDF (${activeRecipients.length.toLocaleString('id-ID')} SDM) ke perangkat Anda`}
+                  style={{background: 'linear-gradient(135deg, #0284c7, #0369a1)', borderColor: '#0284c7', fontWeight: 600}}
                 >
                   {isDownloadingPdf ? <LoaderCircle size={16} className="spin" /> : <Download size={16} />}
-                  <span>{isDownloadingPdf ? 'Menyiapkan PDF...' : 'Unduh PDF'}</span>
+                  <span>{isDownloadingPdf ? 'Membuat PDF...' : `Unduh PDF (${activeRecipients.length.toLocaleString('id-ID')} SDM)`}</span>
                 </button>
                 <button
                   type="button"
