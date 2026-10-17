@@ -17,7 +17,7 @@ export default function LetterDocument({
 
   return (
     <article className="sheet-a4 printable-letter-sheet">
-      {/* 1. KOP SURAT RESMI KEMENSOS */}
+      {/* 1. KOP SURAT RESMI KEMENSOS (GAMBAR RESMI YANG DIUNGGAH PENGGUNA) */}
       <KemensosHeader />
 
       {/* 2. SIFAT / DERAJAT KEAMANAN */}
@@ -42,7 +42,7 @@ export default function LetterDocument({
           </div>
 
           <p className="doc-body-paragraph">
-            Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:
+            {template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'}
           </p>
 
           <table className="doc-invoice-table">
@@ -73,7 +73,7 @@ export default function LetterDocument({
           </table>
 
           <p className="doc-body-paragraph">
-            Mengingat batas waktu penyelesaian tindak lanjut sesuai rekomendasi pengawasan, diminta kepada Saudara untuk segera melakukan penyetoran sisa kewajiban tersebut ke Kas Negara melalui <strong>Kode Billing SIMPONI</strong> (Akun Penerimaan Pengembalian Belanja Pegawai TA Yang Lalu) selambat-lambatnya dalam jangka waktu <strong>14 (empat belas) hari kalender</strong> sejak surat ini diterima, dan segera menyampaikan bukti setor sah (NTPN/BPN) kepada Tim TLHP Direktorat PSNK.
+            {customAgenda || template.agendaDefault}
           </p>
 
           <p className="doc-body-paragraph">
@@ -81,7 +81,7 @@ export default function LetterDocument({
           </p>
 
           <p className="doc-body-paragraph">
-            Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.
+            {template.closingText || 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.'}
           </p>
         </div>
       ) : isBeritaAcara ? (
@@ -152,14 +152,14 @@ export default function LetterDocument({
           </p>
 
           <p className="doc-body-paragraph">
-            Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.
+            {template.closingText || 'Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.'}
           </p>
         </div>
       ) : (
-        // ================= KONTEN SURAT PANGGILAN (FORMAT PERSIS CONTOH KEMENSOS) =================
+        // ================= KONTEN SURAT PANGGILAN (FORMAT RESMI KEMENSOS) =================
         <div className="doc-body">
           <div className="doc-salutation">
-            Bersama ini diminta dengan hormat kehadiran Saudara:
+            {template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:'}
           </div>
 
           <table className="doc-entry-table">
@@ -285,7 +285,7 @@ export default function LetterDocument({
           </p>
 
           <p className="doc-body-paragraph" style={{marginTop: 10}}>
-            Demikian untuk dilaksanakan.
+            {template.closingText || 'Demikian untuk dilaksanakan.'}
           </p>
         </div>
       )}

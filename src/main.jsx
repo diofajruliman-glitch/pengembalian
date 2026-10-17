@@ -305,7 +305,7 @@ function App(){
     {page==='master-progress'&&<RecoveryWorkspace adjustmentClient={supabase} client={importTestClient} snapshot={recoverySnapshot} onImport={canImport?()=>go('impor-master'):undefined} onMasterLoaded={activateMaster}/>}
     {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
     {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={judolSnapshot} onSnapshot={setJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase}/></React.Suspense>}
-    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={judolSnapshot}/></React.Suspense>}
+    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={judolSnapshot} masterSnapshot={masterSnapshot}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}
       {masterLoadError&&<div className="notice amber-notice"><Info size={18}/><span>{masterLoadError}</span></div>}
