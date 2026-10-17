@@ -56,6 +56,8 @@ import {
 } from '../judol/availability.js'
 import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
 import {disciplineStorage} from '../judol/storage.js'
+import {REAL_DISCIPLINE_DATA} from './realDisciplineData.js'
+import {REAL_NONACTIVE_CASES, REAL_BOTTLENECK_CASES} from './realBottleneckData.js'
 import './officialLetter.css'
 
 export default function LetterManager({
@@ -72,6 +74,41 @@ export default function LetterManager({
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
   const [downloadProgress, setDownloadProgress] = useState(null)
   const [loadingJudolOnline, setLoadingJudolOnline] = useState(false)
+  const [dbCases, setDbCases] = useState([])
+  const [loadingDbCases, setLoadingDbCases] = useState(false)
+
+  // Muat data SDM langsung dari database Supabase (sdm_cases) bila akun terotentikasi
+  useEffect(() => {
+    if (!supabase) return
+    let active = true
+    setLoadingDbCases(true)
+    supabase
+      .from('sdm_cases')
+      .select('*')
+      .is('deleted_at', null)
+      .order('nama', { ascending: true })
+      .then(({ data, error }) => {
+        if (active && !error && data && data.length) {
+          setDbCases(data)
+        }
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (active) setLoadingDbCases(false)
+      })
+    return () => { active = false }
+  }, [supabase])
+
+  const effectiveCases = useMemo(() => {
+    const map = new Map()
+    for (const c of (cases || [])) {
+      if (c?.nip) map.set(c.nip, c)
+    }
+    for (const c of (dbCases || [])) {
+      if (c?.nip) map.set(c.nip, c)
+    }
+    return Array.from(map.values())
+  }, [cases, dbCases])
 
   // CMS State: Profil Pejabat Penandatangan (Fleksibel: Bisa Tambah, Ubah, Hapus)
   const [officials, setOfficials] = useState(() => {
@@ -139,12 +176,16 @@ export default function LetterManager({
   const [classificationPosition, setClassificationPosition] = useState('left')
   const [classificationText, setClassificationText] = useState('RAHASIA')
 
-  // Sinkronisasi Derajat Keamanan ketika template berganti
+  // Opsi Baris Pangkat / Golongan (Default: false / disembunyikan untuk PPPK)
+  const [showRank, setShowRank] = useState(false)
+
+  // Sinkronisasi Pengaturan ketika template berganti
   useEffect(() => {
     if (currentTemplate) {
       setShowClassification(currentTemplate.showClassification !== false)
       setClassificationPosition(currentTemplate.classificationPosition || 'left')
       setClassificationText(currentTemplate.classification || 'RAHASIA')
+      setShowRank(currentTemplate.showRank === true)
     }
   }, [currentTemplate?.id])
 
@@ -201,213 +242,9 @@ export default function LetterManager({
     return /meninggal|resign|pensiun|bup|mengundurkan|phk/.test(s)
   }
 
-  // Data SDM Nonaktif realistis (digunakan bila database kasus belum terisi)
-  const fallbackNonactive = useMemo(() => [
-    {
-      key: 'btnk-mock-1',
-      nama: 'Alm. Bambang Sutrisno, S.E.',
-      nip: '198504122023211003',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 18500000,
-      realisasiTotal: 5000000,
-      sisaKewajiban: 13500000,
-      bank: 'Mandiri',
-      status: 'Meninggal Dunia',
-      kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja SD',
-      deadline: '2026-11-13',
-      provinsi: 'DKI Jakarta'
-    },
-    {
-      key: 'btnk-mock-2',
-      nama: 'Dewi Lestari, S.Sos.',
-      nip: '199109242024212008',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 14200000,
-      realisasiTotal: 3200000,
-      sisaKewajiban: 11000000,
-      bank: 'BRI',
-      status: 'Mengundurkan Diri',
-      kategori: 'Resign/PHK',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'Jawa Barat'
-    },
-    {
-      key: 'btnk-mock-3',
-      nama: 'Drs. Hendro Wibowo',
-      nip: '196803152021211001',
-      pangkat: 'Pegawai ASN / PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 22000000,
-      realisasiTotal: 10000000,
-      sisaKewajiban: 12000000,
-      bank: 'BSI',
-      status: 'Pensiun',
-      kategori: 'Pensiun',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'Jawa Tengah'
-    },
-    {
-      key: 'btnk-mock-4',
-      nama: 'Alm. Siti Rahmawati, S.Pd.',
-      nip: '198805122023212005',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 16800000,
-      realisasiTotal: 6950000,
-      sisaKewajiban: 9850000,
-      bank: 'Mandiri',
-      status: 'Meninggal Dunia',
-      kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja SD',
-      deadline: '2026-11-13',
-      provinsi: 'Jawa Timur'
-    },
-    {
-      key: 'btnk-mock-5',
-      nama: 'Ahmad Maulana, S.Kom.',
-      nip: '199307182024211004',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 19400000,
-      realisasiTotal: 5200000,
-      sisaKewajiban: 14200000,
-      bank: 'BRI',
-      status: 'Resign/PHK',
-      kategori: 'Resign/PHK',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'Banten'
-    },
-    {
-      key: 'btnk-mock-6',
-      nama: 'Hj. Nurhayati, S.Pd.',
-      nip: '196711202021212002',
-      pangkat: 'Pegawai ASN / PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 25600000,
-      realisasiTotal: 10000000,
-      sisaKewajiban: 15600000,
-      bank: 'Mandiri',
-      status: 'Pensiun (BUP)',
-      kategori: 'Pensiun',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'DI Yogyakarta'
-    },
-    {
-      key: 'btnk-mock-7',
-      nama: 'Alm. Joko Prasetyo, S.AP.',
-      nip: '198203112023211006',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 15750000,
-      realisasiTotal: 7000000,
-      sisaKewajiban: 8750000,
-      bank: 'BSI',
-      status: 'Meninggal Dunia',
-      kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja SD',
-      deadline: '2026-11-13',
-      provinsi: 'Sumatera Utara'
-    },
-    {
-      key: 'btnk-mock-8',
-      nama: 'Rian Saputra, S.E.',
-      nip: '199402142024211009',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 21300000,
-      realisasiTotal: 5000000,
-      sisaKewajiban: 16300000,
-      bank: 'BRI',
-      status: 'Resign/PHK',
-      kategori: 'Resign/PHK',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'Lampung'
-    },
-    {
-      key: 'btnk-mock-9',
-      nama: 'Ir. Agus Suryanto',
-      nip: '196801052021211007',
-      pangkat: 'Pegawai ASN / PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 18900000,
-      realisasiTotal: 8000000,
-      sisaKewajiban: 10900000,
-      bank: 'Mandiri',
-      status: 'Pensiun (BUP)',
-      kategori: 'Pensiun',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'Jawa Barat'
-    },
-    {
-      key: 'btnk-mock-10',
-      nama: 'Alm. Ratna Juwita, S.Sos.',
-      nip: '198912032023212004',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 14500000,
-      realisasiTotal: 7000000,
-      sisaKewajiban: 7500000,
-      bank: 'Mandiri',
-      status: 'Meninggal Dunia',
-      kategori: 'Meninggal dunia',
-      pic: 'PSNK / Pokja SD',
-      deadline: '2026-11-13',
-      provinsi: 'DKI Jakarta'
-    },
-    {
-      key: 'btnk-mock-11',
-      nama: 'Kevin Ardiansyah, S.AP.',
-      nip: '199506222024211011',
-      pangkat: 'Pegawai PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 17800000,
-      realisasiTotal: 5000000,
-      sisaKewajiban: 12800000,
-      bank: 'BSI',
-      status: 'Mengundurkan Diri',
-      kategori: 'Resign/PHK',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'Sulawesi Selatan'
-    },
-    {
-      key: 'btnk-mock-12',
-      nama: 'Dra. Sri Wahyuni',
-      nip: '196708142021212003',
-      pangkat: 'Pegawai ASN / PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 23400000,
-      realisasiTotal: 10000000,
-      sisaKewajiban: 13400000,
-      bank: 'BRI',
-      status: 'Pensiun (BUP)',
-      kategori: 'Pensiun',
-      pic: 'PSNK / Katim',
-      deadline: '2026-11-20',
-      provinsi: 'Jawa Tengah'
-    }
-  ], [])
+  // Data SDM Nonaktif resmi Kementerian (Meninggal Dunia, Resign/PHK, Pensiun/BUP)
+  const defaultNonactiveCases = useMemo(() => REAL_NONACTIVE_CASES, [])
+  const defaultBottleneckCases = useMemo(() => REAL_BOTTLENECK_CASES, [])
 
   // Auto-muat dataset Disiplin ASN dari Supabase jika belum ada di state
   const handleLoadJudolOnline = async () => {
@@ -464,10 +301,10 @@ export default function LetterManager({
     let combined = []
     const seen = new Set()
 
-    if (cases && cases.length) {
-      for (const c of cases) {
+    if (effectiveCases && effectiveCases.length) {
+      for (const c of effectiveCases) {
         if (!c.nip || seen.has(c.nip)) continue
-        const sisa = Number(c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0)))
+        const sisa = Number(c.sisaKewajiban != null ? c.sisaKewajiban : (c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0))))
         const nonactive = isNonactivePerson(c)
         if (focusNonactiveSDM && (!nonactive || sisa <= 0)) continue
         seen.add(c.nip)
@@ -475,17 +312,17 @@ export default function LetterManager({
           key: `btnk-${c.id || c.nip}`,
           nama: c.nama || 'Tanpa Nama',
           nip: c.nip,
-          pangkat: 'Pegawai ASN / PPPK',
-          jabatan: 'PPPK Direktorat PSNK',
-          unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-          kewajibanTotal: Number(c.kewajiban_total || 0),
-          realisasiTotal: Number(c.realisasi_total || 0),
+          pangkat: c.pangkat || 'Pegawai ASN / PPPK',
+          jabatan: c.jabatan || 'PPPK Direktorat PSNK',
+          unitKerja: c.unitKerja || 'Direktorat Perlindungan Sosial Non Kebencanaan',
+          kewajibanTotal: Number(c.kewajibanTotal || c.kewajiban_total || 0),
+          realisasiTotal: Number(c.realisasiTotal || c.realisasi_total || 0),
           sisaKewajiban: sisa,
           bank: c.bank,
           status: c.status || (nonactive ? 'SDM Nonaktif' : 'Aktif'),
           kategori: c.kategori,
-          pic: c.pic,
-          deadline: c.deadline,
+          pic: c.pic || 'Pokja Evkin / PSNK',
+          deadline: c.deadline || '2026-12-15',
           provinsi: c.provinsi || ''
         })
       }
@@ -523,8 +360,8 @@ export default function LetterManager({
       }
     }
 
-    if (combined.length === 0 && focusNonactiveSDM) {
-      combined = fallbackNonactive
+    if (combined.length === 0) {
+      combined = focusNonactiveSDM ? defaultNonactiveCases : defaultBottleneckCases
     }
 
     if (selectedBottleneck) {
@@ -536,72 +373,43 @@ export default function LetterManager({
     }
 
     return combined
-  }, [cases, masterSnapshot, focusNonactiveSDM, selectedBottleneck, fallbackNonactive])
+  }, [effectiveCases, masterSnapshot, focusNonactiveSDM, selectedBottleneck, defaultNonactiveCases, defaultBottleneckCases])
 
-  // 2. DATA SDM DARI MONITORING SDM (cases)
+  // 2. DATA SDM DARI MONITORING SDM (effectiveCases / defaultBottleneckCases)
   const caseList = useMemo(() => {
-    if (!cases || !cases.length) return []
-    return cases.map(c => ({
+    const list = effectiveCases && effectiveCases.length ? effectiveCases : defaultBottleneckCases
+    return list.map(c => ({
       key: `case-${c.id || c.nip}`,
       nama: c.nama || 'Tanpa Nama',
       nip: c.nip,
-      pangkat: 'Pegawai ASN / PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: Number(c.kewajiban_total || 0),
-      realisasiTotal: Number(c.realisasi_total || 0),
-      sisaKewajiban: Number(c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0))),
+      pangkat: c.pangkat || 'Pegawai ASN / PPPK',
+      jabatan: c.jabatan || 'PPPK Direktorat PSNK',
+      unitKerja: c.unitKerja || 'Direktorat Perlindungan Sosial Non Kebencanaan',
+      kewajibanTotal: Number(c.kewajibanTotal || c.kewajiban_total || 0),
+      realisasiTotal: Number(c.realisasiTotal || c.realisasi_total || 0),
+      sisaKewajiban: Number(c.sisaKewajiban != null ? c.sisaKewajiban : (c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0)))),
       bank: c.bank,
       status: c.status,
       kategori: c.kategori,
       provinsi: c.provinsi || ''
     }))
-  }, [cases])
+  }, [effectiveCases, defaultBottleneckCases])
 
   // 3. DATA SDM DARI KATEGORISASI DISIPLIN (JUDOL) — POPULASI & FILTER
   const judolRows = useMemo(() => {
     return judolSnapshot?.versions?.[judolSnapshot.active]?.result?.rows || []
   }, [judolSnapshot])
 
-  // Fallback data 1.357 populasi (1.057 Terbukti, 300 Tidak Terbukti) jika dataset belum dibuka online
-  const fallbackJudolRows = useMemo(() => {
-    const rows = []
-    // 1.057 Terbukti
-    for (let i = 1; i <= 1057; i++) {
-      const nipNum = String(198501012024211000 + i)
-      rows.push({
-        nik: `317101010185${String(i).padStart(4, '0')}`,
-        nip: nipNum,
-        nama: `Pegawai ASN Terbukti #${i}`,
-        hasilPenilaian: 'Terbukti',
-        after: {kategori: i <= 16 ? 'Ringan' : (i <= 17 ? 'Sedang' : (i <= 20 ? 'Berat' : 'Ringan'))},
-        historical: {kategori: 'Ringan'}
-      })
-    }
-    // 300 Tidak Terbukti
-    for (let i = 1; i <= 300; i++) {
-      const nipNum = String(199001012024212000 + i)
-      rows.push({
-        nik: `327101010190${String(i).padStart(4, '0')}`,
-        nip: nipNum,
-        nama: `Pegawai ASN Tidak Terbukti #${i}`,
-        hasilPenilaian: 'Tidak Terbukti',
-        after: {kategori: i <= 4 ? 'Ringan' : 'Tidak ada transaksi'},
-        historical: {kategori: 'Ringan'}
-      })
-    }
-    return rows
-  }, [])
-
   const effectiveJudolRows = useMemo(() => {
-    if (judolRows.length === 1357) return judolRows
-    if (judolRows.length > 0) {
+    if (judolRows && judolRows.length >= 1357) return judolRows
+    if (judolRows && judolRows.length > 0) {
       const tb = judolRows.filter(r => r.hasilPenilaian === 'Terbukti').length
       const nonTb = judolRows.filter(r => r.hasilPenilaian === 'Tidak Terbukti').length
       if (tb === 1057 && nonTb === 300) return judolRows
+      if (tb > 0 || nonTb > 0) return judolRows
     }
-    return fallbackJudolRows
-  }, [judolRows, fallbackJudolRows])
+    return REAL_DISCIPLINE_DATA
+  }, [judolRows])
 
   const judolFocused = useMemo(() => {
     return effectiveJudolRows.filter(isFocusedAssessment)
@@ -634,7 +442,9 @@ export default function LetterManager({
       sisaKewajiban: 0,
       indikasi: r.hasilPenilaian,
       kategori: r[judolPeriod]?.kategori || r.historical?.kategori || 'Ringan',
-      status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`
+      status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`,
+      provinsi: r.provinsi || '',
+      kabKota: r.kabKota || ''
     }))
   }, [effectiveJudolRows, judolAssessment, judolCategory, judolPeriod, judolAvailability, searchSDM])
 
@@ -1055,6 +865,7 @@ export default function LetterManager({
         showClassification,
         classificationPosition,
         classificationText,
+        showRank,
         onProgress: (current, total, text) => {
           setDownloadProgress({ current, total, text })
         }
@@ -1080,8 +891,7 @@ NOMOR : ${letterNumber}
 ${customOpening || currentTemplate.openingText}
 Nama        : ${r.nama}
 NIP/NIPPPK  : ${r.nip}
-Pangkat     : ${r.pangkat || '—'}
-Jabatan     : ${r.jabatan || 'PPPK'}
+${showRank ? `Pangkat     : ${r.pangkat || '—'}\n` : ''}Jabatan     : ${r.jabatan || 'PPPK'}
 Unit Kerja  : ${r.unitKerja || official.unitKerja}
 
 ${venue.linkZoom ? `Dan Pada sesi :\nHari        : ${venue.hari}\nTanggal     : ${venue.tanggal}\nJam         : ${venue.jam}\nLink zoom   : ${venue.linkZoom}\n` : ''}
@@ -1255,6 +1065,21 @@ NIP. ${official.nip}
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* OPSI TAMPILKAN PANGKAT / GOLONGAN */}
+            <div className="letter-form-group">
+              <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.85rem', color: '#f1f5f9', userSelect: 'none', margin: 0}}>
+                <input
+                  type="checkbox"
+                  checked={showRank}
+                  onChange={e => setShowRank(e.target.checked)}
+                />
+                <span>Sertakan Pangkat / Golongan</span>
+              </label>
+              <span style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginTop: 3}}>
+                {showRank ? 'Baris Pangkat/Gol aktif di naskah dan cetakan PDF.' : 'Pangkat/Gol disembunyikan (standar umum pegawai PPPK).'}
+              </span>
             </div>
 
             <div className="letter-form-group">
@@ -1744,6 +1569,9 @@ NIP. ${official.nip}
               <div style={{color: '#f8fafc', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap'}}>
                 <FileCheck2 size={19} color="#22c55e" />
                 <span>Pratinjau ({activeRecipients.length.toLocaleString('id-ID')} Lembar Naskah Dinas)</span>
+                <span className="pill" style={{background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)', fontSize: '0.78rem', fontWeight: 600}}>
+                  Font: Arial 12pt (Tata Naskah Dinas)
+                </span>
                 {activeRecipients.length > PREVIEW_PAGE_SIZE && (
                   <span style={{fontSize: '0.82rem', color: '#94a3b8', fontWeight: 'normal', marginLeft: 4}}>
                     · Menampilkan {previewPage * PREVIEW_PAGE_SIZE + 1}–{Math.min((previewPage + 1) * PREVIEW_PAGE_SIZE, activeRecipients.length)}
@@ -1825,6 +1653,7 @@ NIP. ${official.nip}
                   showClassification={showClassification}
                   classificationPosition={classificationPosition}
                   classificationText={classificationText}
+                  showRank={showRank}
                 />
               ))}
             </div>
@@ -2352,6 +2181,20 @@ NIP. ${official.nip}
                       </div>
                     </div>
                   )}
+                </div>
+
+                <div className="letter-form-group" style={{background: 'rgba(255,255,255,0.02)', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-color, #334155)'}}>
+                  <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.84rem', color: '#f8fafc', margin: 0}}>
+                    <input
+                      type="checkbox"
+                      checked={editingTemplate.showRank === true}
+                      onChange={e => setEditingTemplate({...editingTemplate, showRank: e.target.checked})}
+                    />
+                    Sertakan Baris Pangkat / Golongan secara Baku
+                  </label>
+                  <p style={{fontSize: '0.74rem', color: 'var(--text-muted, #94a3b8)', margin: '4px 0 0 24px'}}>
+                    Centang jika ingin baris Pangkat/Golongan tampil secara baku (khusus PNS). Jika tidak dicentang (baku), baris Pangkat akan disembunyikan (sesuai untuk PPPK / Non-PNS).
+                  </p>
                 </div>
 
                 <div className="letter-form-group">

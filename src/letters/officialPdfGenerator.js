@@ -55,7 +55,8 @@ export async function generateOfficialPdfBatch({
   onProgress = null,
   showClassification = true,
   classificationPosition = 'left',
-  classificationText = ''
+  classificationText = '',
+  showRank = false
 }) {
   if (!recipients || recipients.length === 0) {
     throw new Error('Daftar penerima naskah dinas kosong.')
@@ -67,6 +68,7 @@ export async function generateOfficialPdfBatch({
   const effectiveShowClassification = showClassification ?? template.showClassification ?? true
   const effectivePosition = classificationPosition || template.classificationPosition || 'left'
   const effectiveClassification = classificationText || template.classification || 'RAHASIA'
+  const effectiveShowRank = showRank ?? template.showRank ?? false
 
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -109,7 +111,7 @@ export async function generateOfficialPdfBatch({
     // 2. KLASIFIKASI DOKUMEN / DERAJAT KEAMANAN (BISA DIATUR POSISI ATAU DINONAKTIFKAN)
     if (effectiveShowClassification) {
       doc.setFont('helvetica', 'bold')
-      doc.setFontSize(9.5)
+      doc.setFontSize(12)
       doc.setTextColor(30, 41, 59)
       if (effectivePosition === 'center') {
         doc.text(effectiveClassification, 105, 38, { align: 'center' })
@@ -120,38 +122,38 @@ export async function generateOfficialPdfBatch({
       }
     }
 
-    // 3. JUDUL DAN NOMOR SURAT
-    doc.setFontSize(11.5)
+    // 3. JUDUL DAN NOMOR SURAT (FONT ARIAL 12 PT STANDAR TATA NASKAH DINAS)
+    doc.setFontSize(12)
     doc.setFont('helvetica', 'bold')
     doc.text(template.title || 'SURAT PANGGILAN', 105, 43, { align: 'center' })
-    doc.setFontSize(9.5)
+    doc.setFontSize(12)
     doc.setFont('helvetica', 'normal')
-    doc.text(`NOMOR : ${letterNumber}`, 105, 48, { align: 'center' })
+    doc.text(`NOMOR : ${letterNumber}`, 105, 48.5, { align: 'center' })
 
     let curY = 56
 
     if (isTagihan) {
       // ================= KONTEN SURAT PENAGIHAN =================
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9.5)
+      doc.setFontSize(12)
       doc.text('Kepada Yth.', 14, curY)
-      curY += 4.5
+      curY += 5
       doc.setFont('helvetica', 'bold')
       doc.text(`Saudara/i ${recipient.nama || '«NAMA ASN»'}`, 14, curY)
-      curY += 4.5
+      curY += 5
       doc.setFont('helvetica', 'normal')
       doc.text(`NIP/NIPPPK : ${recipient.nip || '«NIP»'}`, 14, curY)
-      curY += 4.5
+      curY += 5
       doc.text(`Jabatan : ${recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'}`, 14, curY)
-      curY += 4.5
+      curY += 5
       doc.text('di Tempat', 14, curY)
-      curY += 6
+      curY += 6.5
 
       // Paragraf Pembuka
       const opening = customOpening || template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'
       const splitOpening = doc.splitTextToSize(opening, 182)
       doc.text(splitOpening, 14, curY)
-      curY += (splitOpening.length * 4.2) + 3
+      curY += (splitOpening.length * 4.8) + 3
 
       // Tabel 5 Kolom Presisi
       const catDesc = recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'
@@ -211,14 +213,14 @@ export async function generateOfficialPdfBatch({
         }
       })
 
-      curY = doc.lastAutoTable.finalY + 5
+      curY = doc.lastAutoTable.finalY + 4
 
       // Paragraf Agenda / Penyetoran SIMPONI
       const agenda = customAgenda || template.agendaDefault
       if (agenda) {
         const splitAgenda = doc.splitTextToSize(agenda, 182)
         doc.text(splitAgenda, 14, curY)
-        curY += (splitAgenda.length * 4.2) + 3
+        curY += (splitAgenda.length * 4.8) + 3
       }
 
       // Koordinasi & Penutup
@@ -226,85 +228,102 @@ export async function generateOfficialPdfBatch({
       if (coordText) {
         const splitCoord = doc.splitTextToSize(coordText, 182)
         doc.text(splitCoord, 14, curY)
-        curY += (splitCoord.length * 4.2) + 3
+        curY += (splitCoord.length * 4.8) + 3
       }
 
       const closing = customClosing || template.closingText || 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.'
       const splitClosing = doc.splitTextToSize(closing, 182)
       doc.text(splitClosing, 14, curY)
-      curY += (splitClosing.length * 4.2) + 4
+      curY += (splitClosing.length * 4.8) + 4
 
     } else if (isBeritaAcara) {
-      // ================= KONTEN BERITA ACARA =================
+      // ================= KONTEN BERITA ACARA (FONT ARIAL 12 PT) =================
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9)
+      doc.setFontSize(12)
       const openBA = `Pada hari ini ${venue.hari || 'Senin'}, tanggal ${venue.tanggal || '26 Oktober 2026'}, bertempat di ${venue.tempat || 'Kementerian Sosial RI'}, kami yang bertanda tangan di bawah ini:`
       const splitOpenBA = doc.splitTextToSize(openBA, 182)
       doc.text(splitOpenBA, 14, curY)
-      curY += (splitOpenBA.length * 4.2) + 2
+      curY += (splitOpenBA.length * 4.8) + 2
 
       // Tabel Pemeriksa
+      const officialRows = [
+        ['1. Nama', ':', official.nama],
+        ['   NIP', ':', official.nip]
+      ]
+      if (effectiveShowRank) {
+        officialRows.push(['   Pangkat/Gol', ':', official.pangkat || official.pangkatSingkat || 'IV/c'])
+      }
+      officialRows.push(['   Jabatan', ':', official.jabatan])
+
       autoTable(doc, {
         startY: curY,
         margin: { left: 14, right: 14 },
-        body: [
-          ['1. Nama', ':', official.nama],
-          ['   NIP', ':', official.nip],
-          ['   Pangkat/Gol', ':', official.pangkat || official.pangkatSingkat || 'IV/c'],
-          ['   Jabatan', ':', official.jabatan]
-        ],
+        body: officialRows,
         theme: 'plain',
-        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
         columnStyles: { 0: { cellWidth: 26 }, 1: { cellWidth: 4 }, 2: { cellWidth: 'auto', fontStyle: 'bold' } }
       })
       curY = doc.lastAutoTable.finalY + 2
 
       doc.setFont('helvetica', 'normal')
+      doc.setFontSize(12)
       doc.text('Selaku Pemeriksa, telah melakukan pemeriksaan/permintaan keterangan terhadap:', 18, curY)
-      curY += 4
+      curY += 4.5
 
       // Tabel Yang Diperiksa
+      const subjectRows = [
+        ['2. Nama', ':', recipient.nama || '«NAMA ASN»'],
+        ['   NIP/NIPPPK', ':', recipient.nip || '«NIP»']
+      ]
+      if (effectiveShowRank) {
+        subjectRows.push(['   Pangkat/Gol', ':', recipient.pangkat || 'Penata Muda (III/a)'])
+      }
+      subjectRows.push(
+        ['   Jabatan', ':', recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'],
+        ['   Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
+      )
+
       autoTable(doc, {
         startY: curY,
         margin: { left: 14, right: 14 },
-        body: [
-          ['2. Nama', ':', recipient.nama || '«NAMA ASN»'],
-          ['   NIP/NIPPPK', ':', recipient.nip || '«NIP»'],
-          ['   Pangkat/Gol', ':', recipient.pangkat || 'Penata Muda (III/a)'],
-          ['   Jabatan', ':', recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'],
-          ['   Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
-        ],
+        body: subjectRows,
         theme: 'plain',
-        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
         columnStyles: { 0: { cellWidth: 26 }, 1: { cellWidth: 4 }, 2: { cellWidth: 'auto', fontStyle: 'bold' } }
       })
       curY = doc.lastAutoTable.finalY + 4
 
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(12)
       const agendaBA = `Pemeriksaan/permintaan keterangan dilakukan sehubungan dengan: ${customAgenda || template.agendaDefault}. Seluruh keterangan dan pernyataan yang diberikan telah dicatat secara benar, tanpa ada paksaan dari pihak manapun.`
       const splitAgendaBA = doc.splitTextToSize(agendaBA, 182)
       doc.text(splitAgendaBA, 14, curY)
-      curY += (splitAgendaBA.length * 4.2) + 3
+      curY += (splitAgendaBA.length * 4.8) + 3
 
       const closeBA = template.closingText || 'Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.'
       const splitCloseBA = doc.splitTextToSize(closeBA, 182)
       doc.text(splitCloseBA, 14, curY)
-      curY += (splitCloseBA.length * 4.2) + 4
+      curY += (splitCloseBA.length * 4.8) + 4
 
     } else {
-      // ================= KONTEN SURAT PEMANGGILAN =================
+      // ================= KONTEN SURAT PEMANGGILAN (FONT ARIAL 12 PT) =================
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9.5)
+      doc.setFontSize(12)
       doc.text(template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:', 14, curY)
-      curY += 4
+      curY += 4.5
 
       // Tabel Data Penerima
       const recipientRows = [
         ['Nama', ':', recipient.nama || '«NAMA ASN»'],
-        ['NIP/NIPPPK', ':', recipient.nip || '«NIP»'],
-        ['Pangkat', ':', recipient.pangkat || '«pangkat»'],
+        ['NIP/NIPPPK', ':', recipient.nip || '«NIP»']
+      ]
+      if (effectiveShowRank) {
+        recipientRows.push(['Pangkat', ':', recipient.pangkat || '«pangkat»'])
+      }
+      recipientRows.push(
         ['Jabatan', ':', recipient.jabatan || '«Jabatan»'],
         ['Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
-      ]
+      )
 
       if (Number(recipient.sisaKewajiban || 0) > 0) {
         recipientRows.push(['Sisa yang Wajib Disetor', ':', fmtRp(recipient.sisaKewajiban)])
@@ -315,7 +334,7 @@ export async function generateOfficialPdfBatch({
         margin: { left: 14, right: 14 },
         body: recipientRows,
         theme: 'plain',
-        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
         columnStyles: {
           0: { cellWidth: 44 },
           1: { cellWidth: 4 },
@@ -327,7 +346,7 @@ export async function generateOfficialPdfBatch({
       // Jika ada kewajiban pengembalian, tampilkan tabel 5 kolom presisi
       if (Number(recipient.sisaKewajiban || 0) > 0) {
         doc.setFont('helvetica', 'bold')
-        doc.setFontSize(8.5)
+        doc.setFontSize(10.5)
         doc.text('Rincian Kewajiban Pengembalian yang Masih Tercatat :', 14, curY)
         curY += 3
 
@@ -363,13 +382,13 @@ export async function generateOfficialPdfBatch({
             valign: 'middle',
             lineWidth: 0.2,
             lineColor: [203, 213, 225],
-            fontSize: 8
+            fontSize: 8.5
           },
           bodyStyles: {
             textColor: [30, 41, 59],
             lineWidth: 0.2,
             lineColor: [203, 213, 225],
-            fontSize: 8
+            fontSize: 8.5
           },
           footStyles: {
             fillColor: [254, 242, 242],
@@ -377,7 +396,7 @@ export async function generateOfficialPdfBatch({
             fontStyle: 'bold',
             lineWidth: 0.2,
             lineColor: [203, 213, 225],
-            fontSize: 8.5
+            fontSize: 9
           },
           columnStyles: {
             0: { cellWidth: 8, halign: 'center' },
@@ -392,21 +411,25 @@ export async function generateOfficialPdfBatch({
 
       // Untuk Menghadap Kepada
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9)
+      doc.setFontSize(12)
       doc.text('Untuk menghadap kepada:', 14, curY)
-      curY += 2.5
+      curY += 3
+
+      const faceRows = [
+        ['Nama', ':', official.nama],
+        ['NIP', ':', official.nip]
+      ]
+      if (effectiveShowRank) {
+        faceRows.push(['Pangkat', ':', official.pangkatSingkat || 'IV/c'])
+      }
+      faceRows.push(['Jabatan', ':', official.jabatan])
 
       autoTable(doc, {
         startY: curY,
         margin: { left: 14, right: 14 },
-        body: [
-          ['Nama', ':', official.nama],
-          ['NIP', ':', official.nip],
-          ['Pangkat', ':', official.pangkatSingkat || 'IV/c'],
-          ['Jabatan', ':', official.jabatan]
-        ],
+        body: faceRows,
         theme: 'plain',
-        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
         columnStyles: {
           0: { cellWidth: 38 },
           1: { cellWidth: 4 },
@@ -417,9 +440,9 @@ export async function generateOfficialPdfBatch({
 
       // Jadwal / Pada :
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9)
+      doc.setFontSize(12)
       doc.text('Pada :', 14, curY)
-      curY += 2.5
+      curY += 3
 
       const scheduleRows = [
         ['Hari', ':', venue.hari || 'Senin'],
@@ -436,7 +459,7 @@ export async function generateOfficialPdfBatch({
         margin: { left: 18, right: 14 },
         body: scheduleRows,
         theme: 'plain',
-        styles: { fontSize: 8.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
         columnStyles: {
           0: { cellWidth: 26 },
           1: { cellWidth: 4 },
@@ -446,69 +469,71 @@ export async function generateOfficialPdfBatch({
       curY = doc.lastAutoTable.finalY + 3.5
 
       // Paragraf Agenda
+      doc.setFont('helvetica', 'normal')
+      doc.setFontSize(12)
       const agenda = customAgenda || template.agendaDefault
       if (agenda) {
         const splitAgenda = doc.splitTextToSize(agenda, 182)
         doc.text(splitAgenda, 14, curY)
-        curY += (splitAgenda.length * 4.2) + 3
+        curY += (splitAgenda.length * 4.8) + 3
       }
 
       // Paragraf Penutup
       const closing = template.closingText || 'Demikian untuk dilaksanakan.'
       const splitClosing = doc.splitTextToSize(closing, 182)
       doc.text(splitClosing, 14, curY)
-      curY += (splitClosing.length * 4.2) + 3
+      curY += (splitClosing.length * 4.8) + 3
     }
 
-    // 4. TITIMANGSA & BLOK TANDA TANGAN
+    // 4. TITIMANGSA & BLOK TANDA TANGAN (FONT ARIAL 12 PT)
     if (isBeritaAcara) {
       // Blok tanda tangan ganda untuk Berita Acara
-      const signY = Math.max(curY + 4, 230)
+      const signY = Math.max(curY + 4, 222)
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9)
+      doc.setFontSize(12)
 
       // Kiri: Yang Diperiksa
       doc.text('Yang Diperiksa,', 18, signY)
       doc.setFont('helvetica', 'bold')
-      doc.text(recipient.nama || '«NAMA ASN»', 18, signY + 22)
+      doc.text(recipient.nama || '«NAMA ASN»', 18, signY + 20)
       doc.setFont('helvetica', 'normal')
-      doc.text(`NIP. ${recipient.nip || '—'}`, 18, signY + 26)
+      doc.text(`NIP. ${recipient.nip || '—'}`, 18, signY + 25)
 
       // Kanan: Pemeriksa
       const rightX = 125
       doc.text(`${official.kota || 'Jakarta'}, ${letterDate}`, rightX, signY)
-      doc.text('Pemeriksa,', rightX, signY + 4)
+      doc.text('Pemeriksa,', rightX, signY + 5)
       doc.setFont('helvetica', 'bold')
-      doc.text(official.nama, rightX, signY + 22)
+      doc.text(official.nama, rightX, signY + 20)
       doc.setFont('helvetica', 'normal')
-      doc.text(`NIP. ${official.nip}`, rightX, signY + 26)
+      doc.text(`NIP. ${official.nip}`, rightX, signY + 25)
     } else {
       // Blok tanda tangan tunggal resmi (Kanan Bawah)
-      const signY = Math.max(curY + 3, 224)
+      const signY = Math.max(curY + 3, 218)
       const signX = 125
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(9)
+      doc.setFontSize(12)
       doc.text(`${official.kota || 'Jakarta'}, ${letterDate}`, signX, signY)
 
       const splitRole = doc.splitTextToSize(official.jabatan, 72)
-      doc.text(splitRole, signX, signY + 4.5)
+      doc.text(splitRole, signX, signY + 4.8)
 
-      const nameY = signY + 4.5 + (splitRole.length * 4.2) + 16
+      const nameY = signY + 4.8 + (splitRole.length * 4.5) + 15
       doc.setFont('helvetica', 'bold')
       doc.text(official.nama, signX, nameY)
       doc.setFont('helvetica', 'normal')
-      doc.text(`NIP. ${official.nip}`, signX, nameY + 4.5)
+      doc.text(`NIP. ${official.nip}`, signX, nameY + 4.8)
     }
 
     // 5. TEMBUSAN RESMI
     if (template.tembusan && template.tembusan.length > 0) {
-      const tembusanY = 258
+      const tembusanY = Math.max(nameY + 6, 258)
       doc.setFont('helvetica', 'normal')
-      doc.setFontSize(8)
+      doc.setFontSize(10.5)
       doc.text('Tembusan Yth:', 14, tembusanY)
 
       template.tembusan.forEach((t, tIdx) => {
-        const itemY = tembusanY + 4 + (tIdx * 3.8)
+        const itemY = tembusanY + 4 + (tIdx * 4)
         if (itemY < 288) {
           doc.text(`${tIdx + 1}. ${t}`, 16, itemY)
         }

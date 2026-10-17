@@ -262,8 +262,8 @@
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
   box-sizing: border-box;
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-  font-size: 10.5pt;
-  line-height: 1.45;
+  font-size: 12pt;
+  line-height: 1.35;
   position: relative;
   page-break-after: always;
 }
@@ -367,38 +367,43 @@
 
 /* Badan Surat Resmi */
 .doc-classification {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   font-weight: bold;
-  font-size: 11pt;
-  margin-top: 6px;
-  margin-bottom: 8px;
+  font-size: 12pt;
+  margin-top: 4px;
+  margin-bottom: 6px;
   color: #000;
   text-transform: uppercase;
 }
 
 .doc-heading-center {
   text-align: center;
-  margin: 6px 0 16px 0;
+  margin: 4px 0 12px 0;
 }
 
 .doc-heading-title {
-  font-size: 12.5pt;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
   font-weight: bold;
   text-decoration: underline;
   margin: 0;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
 .doc-heading-number {
-  font-size: 10.5pt;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
   font-weight: bold;
-  margin: 4px 0 0 0;
-  letter-spacing: 0.4px;
+  margin: 3px 0 0 0;
+  letter-spacing: 0.3px;
 }
 
 .doc-salutation {
-  margin-bottom: 10px;
-  line-height: 1.5;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  margin-bottom: 8px;
+  line-height: 1.35;
 }
 
 /* Tabel Entri Identitas Dua Kolom (Bersih Tanpa Garis Halus Web) */
@@ -424,14 +429,16 @@
 .doc-entry-table {
   width: 100%;
   border-collapse: collapse;
-  margin: 6px 0 12px 18px;
+  margin: 4px 0 10px 18px;
   border: none !important;
 }
 
 .doc-entry-table tr td {
-  padding: 3px 4px !important;
+  padding: 2.5px 4px !important;
   vertical-align: top;
-  font-size: 10.5pt;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.35;
   border: none !important;
   border-bottom: none !important;
   color: #111827 !important;
@@ -453,19 +460,23 @@
 }
 
 .doc-body-paragraph {
-  margin: 12px 0;
+  margin: 8px 0;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
   text-align: justify;
-  line-height: 1.5;
+  line-height: 1.35;
 }
 
 /* Kotak Sesi Luring & Daring Zoom */
 .doc-schedule-block {
-  margin: 8px 0 12px 0;
+  margin: 6px 0 10px 0;
 }
 
 .doc-session-heading {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
   font-weight: bold;
-  margin: 8px 0 4px 0;
+  margin: 6px 0 3px 0;
 }
 
 /* Tabel Tagihan Keuangan (Presisi Format Standar Kemensos) */
@@ -473,15 +484,17 @@
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
-  margin: 12px 0 16px 0;
+  margin: 10px 0 14px 0;
   border: 1px solid #000000;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 .doc-invoice-table th,
 .doc-invoice-table td {
   border: 1px solid #000000 !important;
-  padding: 6px 8px !important;
-  font-size: 9.5pt;
+  padding: 5px 6px !important;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 10pt;
   color: #111827;
   vertical-align: middle;
   word-break: break-word;
@@ -491,9 +504,9 @@
   background-color: #f1f5f9;
   font-weight: bold;
   text-align: center;
-  font-size: 8.5pt;
-  letter-spacing: 0.2px;
-  padding: 8px 4px !important;
+  font-size: 9.5pt;
+  letter-spacing: 0.1px;
+  padding: 6px 4px !important;
 }
 
 .doc-invoice-table th.col-sisa,
@@ -521,26 +534,32 @@
 .doc-signoff-block {
   display: flex;
   justify-content: flex-end;
-  margin-top: 24px;
+  margin-top: 20px;
   page-break-inside: avoid;
 }
 
 .doc-signoff-wrap {
   width: 250px;
   text-align: left;
-  line-height: 1.4;
+  line-height: 1.35;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
 }
 
 .doc-signoff-date {
   margin-bottom: 2px;
+  font-size: 12pt;
 }
 
 .doc-signoff-role {
   font-weight: normal;
-  margin-bottom: 60px; /* Ruang untuk tanda tangan */
+  font-size: 12pt;
+  margin-bottom: 50px; /* Ruang untuk tanda tangan */
 }
 
 .doc-signoff-name {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
   font-weight: bold;
   text-decoration: underline;
   margin: 0;
@@ -548,23 +567,27 @@
 
 .doc-signoff-nip {
   margin: 2px 0 0 0;
+  font-size: 12pt;
 }
 
 /* Tembusan */
 .doc-copies-block {
-  margin-top: 24px;
-  font-size: 9.5pt;
+  margin-top: 18px;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 11pt;
   page-break-inside: avoid;
 }
 
 .doc-copies-title {
   font-weight: bold;
   margin-bottom: 3px;
+  font-size: 11pt;
 }
 
 .doc-copies-list {
   margin: 0;
   padding-left: 18px;
+  font-size: 11pt;
 }
 
 .doc-copies-list li {
@@ -831,6 +854,9 @@
     padding: 16mm 20mm 16mm 25mm !important; /* Standar naskah dinas: kiri 25mm, kanan 20mm, atas/bawah 16mm */
     margin: 0 auto !important;
     box-sizing: border-box !important;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
+    font-size: 12pt !important;
+    line-height: 1.35 !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;

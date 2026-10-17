@@ -93,7 +93,7 @@ export default function LetterDocument({
                 <td style={{textAlign: 'center', fontWeight: 'bold'}}>1</td>
                 <td>
                   <div style={{fontWeight: 'bold'}}>Pengembalian Kelebihan Pembayaran Tukin & Uang Makan</div>
-                  <div style={{fontSize: '8.5pt', color: '#475569', marginTop: '3px', lineHeight: 1.3}}>
+                  <div style={{fontSize: '9pt', color: '#475569', marginTop: '2px', lineHeight: 1.25}}>
                     {recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK TA 2025 Dit. PSNK'}
                     {recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''}
                   </div>
@@ -105,10 +105,10 @@ export default function LetterDocument({
             </tbody>
             <tfoot>
               <tr>
-                <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '8px 10px'}}>
+                <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '6px 8px'}}>
                   Total Sisa Kewajiban :
                 </th>
-                <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10.5pt', padding: '8px 10px'}}>
+                <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10pt', padding: '6px 8px'}}>
                   {fmtRp(recipient.sisaKewajiban || 0)}
                 </th>
               </tr>
@@ -257,8 +257,8 @@ export default function LetterDocument({
           </table>
 
           {Number(recipient.sisaKewajiban || 0) > 0 && (
-            <div style={{margin: '10px 0 12px 0'}}>
-              <div style={{fontSize: '9.5pt', fontWeight: 600, color: '#1e293b', marginBottom: '4px'}}>
+            <div style={{margin: '8px 0 10px 0'}}>
+              <div style={{fontSize: '11pt', fontWeight: 600, color: '#1e293b', marginBottom: '4px'}}>
                 Rincian Kewajiban Pengembalian yang Masih Tercatat :
               </div>
               <table className="doc-invoice-table">
@@ -283,7 +283,7 @@ export default function LetterDocument({
                     <td style={{textAlign: 'center', fontWeight: 'bold'}}>1</td>
                     <td>
                       <div style={{fontWeight: 'bold'}}>Pengembalian Kelebihan Pembayaran Tukin & Uang Makan</div>
-                      <div style={{fontSize: '8.5pt', color: '#475569', marginTop: '3px', lineHeight: 1.3}}>
+                      <div style={{fontSize: '9pt', color: '#475569', marginTop: '2px', lineHeight: 1.25}}>
                         {recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'}
                         {recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''}
                       </div>
@@ -295,10 +295,10 @@ export default function LetterDocument({
                 </tbody>
                 <tfoot>
                   <tr>
-                    <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '6px 10px'}}>
+                    <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '6px 8px'}}>
                       Total Sisa Kewajiban :
                     </th>
-                    <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10.5pt', padding: '6px 10px'}}>
+                    <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10pt', padding: '6px 8px'}}>
                       {fmtRp(recipient.sisaKewajiban || 0)}
                     </th>
                   </tr>
@@ -409,17 +409,17 @@ export default function LetterDocument({
 
       {/* 5. TITIMANGSA & BLOK TANDA TANGAN */}
       {isBeritaAcara ? (
-        <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 30, pageBreakInside: 'avoid'}}>
-          <div style={{width: 220}}>
+        <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 24, pageBreakInside: 'avoid', fontSize: '12pt'}}>
+          <div style={{width: 220, fontSize: '12pt'}}>
             <div>Yang Diperiksa,</div>
-            <div style={{height: 60}} />
+            <div style={{height: 50}} />
             <div style={{fontWeight: 'bold', textDecoration: 'underline'}}>{recipient.nama}</div>
             <div>NIP. {recipient.nip}</div>
           </div>
-          <div style={{width: 260}}>
+          <div style={{width: 260, fontSize: '12pt'}}>
             <div>{official.kota || 'Jakarta'}, {letterDate}</div>
             <div>Pemeriksa,</div>
-            <div style={{height: 60}} />
+            <div style={{height: 50}} />
             <div style={{fontWeight: 'bold', textDecoration: 'underline'}}>{official.nama}</div>
             <div>NIP. {official.nip}</div>
           </div>
