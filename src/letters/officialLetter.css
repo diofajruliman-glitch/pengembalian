@@ -445,12 +445,19 @@
 /* ============================================================== */
 /* ATURAN KHUSUS CETAK (@media print)                             */
 /* ============================================================== */
+@page {
+  size: A4 portrait;
+  margin: 0; /* Menghilangkan header URL, judul aplikasi, dan tanggal cetak browser */
+}
+
 @media print {
-  body {
+  html, body {
     background: #ffffff !important;
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   /* Sembunyikan seluruh UI web */
@@ -477,22 +484,29 @@
     margin: 0 !important;
     overflow: visible !important;
     width: 100% !important;
-  }
-
-  @page {
-    size: A4 portrait;
-    margin: 15mm 20mm 15mm 25mm;
+    display: block !important;
   }
 
   .sheet-a4 {
     box-shadow: none !important;
     border: none !important;
-    width: 100% !important;
-    min-height: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    padding: 16mm 20mm 16mm 25mm !important; /* Standar naskah dinas: kiri 25mm, kanan 20mm, atas/bawah 16mm */
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
     page-break-after: always !important;
-    page-break-inside: avoid;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .kemensos-official-header-img {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .kemensos-title-main,

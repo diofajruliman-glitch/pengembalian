@@ -336,7 +336,12 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
 
   // Trigger Cetak / PDF
   const handlePrint = () => {
+    const originalTitle = document.title
+    document.title = ''
     window.print()
+    setTimeout(() => {
+      document.title = originalTitle
+    }, 1200)
   }
 
   // Salin Teks ke Clipboard
