@@ -23,15 +23,38 @@ import {
   Trash2,
   Save,
   RotateCcw,
-  Sparkles
+  Sparkles,
+  Download,
+  LoaderCircle,
+  ShieldCheck,
+  AlertTriangle,
+  Layers,
+  ArrowRight
 } from 'lucide-react'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 import LetterDocument from './LetterDocument'
 import {DEFAULT_OFFICIAL, DEFAULT_VENUE, LETTER_TYPES} from './templates'
+import {
+  FOCUSED_ASSESSMENTS,
+  TRANSACTION_AVAILABILITY_LABELS,
+  filterDisciplineRows,
+  isFocusedAssessment,
+  getTransactionAvailability
+} from '../judol/availability.js'
+import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
 import './officialLetter.css'
 
-export default function LetterManager({cases = [], judolSnapshot = null, masterSnapshot = null}) {
+export default function LetterManager({
+  cases = [],
+  judolSnapshot = null,
+  masterSnapshot = null,
+  matrix = [],
+  actions = []
+}) {
   const [activeTab, setActiveTab] = useState('generator')
   const [copied, setCopied] = useState(false)
+  const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
 
   // CMS State: Profil Pejabat Penandatangan
   const [official, setOfficial] = useState(() => {
@@ -81,10 +104,19 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
   const [customAgenda, setCustomAgenda] = useState('')
 
   // Sumber Data SDM Penerima
-  const [recipientSource, setRecipientSource] = useState('sdm_cases')
+  const [recipientSource, setRecipientSource] = useState('bottleneck')
   const [searchSDM, setSearchSDM] = useState('')
   const [filterStatusSDM, setFilterStatusSDM] = useState('all')
   const [selectedSDMKeys, setSelectedSDMKeys] = useState(new Set())
+
+  // Filter Khusus Penanganan SDM — Bottleneck
+  const [selectedBottleneckNo, setSelectedBottleneckNo] = useState('')
+
+  // Filter Khusus Populasi & Filter Disiplin (Judol)
+  const [judolAssessment, setJudolAssessment] = useState('')
+  const [judolCategory, setJudolCategory] = useState('')
+  const [judolPeriod, setJudolPeriod] = useState('after')
+  const [judolAvailability, setJudolAvailability] = useState('')
 
   // Manual Recipient Form
   const [manualRecipient, setManualRecipient] = useState({
@@ -102,7 +134,42 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
   const [editingTemplate, setEditingTemplate] = useState(null)
   const [newTembusanInput, setNewTembusanInput] = useState('')
 
-  // 1. DATA SDM DARI MONITORING SDM (cases)
+  // 1. DATA SDM DARI PENANGANAN SDM — BOTTLENECK (Matriks Hambatan)
+  const selectedBottleneck = useMemo(() => {
+    if (!selectedBottleneckNo) return null
+    return matrix.find(m => String(m.no) === String(selectedBottleneckNo)) || null
+  }, [matrix, selectedBottleneckNo])
+
+  const bottleneckList = useMemo(() => {
+    if (!cases || !cases.length) return []
+    let list = cases
+    if (selectedBottleneck) {
+      const bCat = (selectedBottleneck.kategori || '').toLowerCase().trim()
+      list = cases.filter(c => {
+        const cCat = (c.kategori || '').toLowerCase().trim()
+        return cCat.includes(bCat) || bCat.includes(cCat)
+      })
+    }
+    return list.map(c => ({
+      key: `btnk-${c.id || c.nip}`,
+      nama: c.nama || 'Tanpa Nama',
+      nip: c.nip,
+      pangkat: 'Pegawai ASN / PPPK',
+      jabatan: 'PPPK Direktorat PSNK',
+      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+      kewajibanTotal: Number(c.kewajiban_total || 0),
+      realisasiTotal: Number(c.realisasi_total || 0),
+      sisaKewajiban: Number(c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0))),
+      bank: c.bank,
+      status: c.status,
+      kategori: c.kategori,
+      pic: c.pic,
+      deadline: c.deadline,
+      provinsi: c.provinsi || ''
+    }))
+  }, [cases, selectedBottleneck])
+
+  // 2. DATA SDM DARI MONITORING SDM (cases)
   const caseList = useMemo(() => {
     if (!cases || !cases.length) return []
     return cases.map(c => ({
@@ -117,14 +184,36 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
       sisaKewajiban: Number(c.sisa_kewajiban != null ? c.sisa_kewajiban : (Number(c.kewajiban_total || 0) - Number(c.realisasi_total || 0))),
       bank: c.bank,
       status: c.status,
+      kategori: c.kategori,
       provinsi: c.provinsi || ''
     }))
   }, [cases])
 
-  // 2. DATA SDM DARI KATEGORISASI DISIPLIN (JUDOL)
+  // 3. DATA SDM DARI KATEGORISASI DISIPLIN (JUDOL) — POPULASI & FILTER
+  const judolRows = useMemo(() => {
+    return judolSnapshot?.versions?.[judolSnapshot.active]?.result?.rows || []
+  }, [judolSnapshot])
+
+  const judolFocused = useMemo(() => {
+    return judolRows.filter(isFocusedAssessment)
+  }, [judolRows])
+
+  const judolCounts = useMemo(() => {
+    return Object.fromEntries(
+      FOCUSED_ASSESSMENTS.map(s => [s, judolFocused.filter(r => r.hasilPenilaian === s).length])
+    )
+  }, [judolFocused])
+
   const judolList = useMemo(() => {
-    const rows = judolSnapshot?.versions?.[judolSnapshot.active]?.result?.rows || []
-    return rows.map(r => ({
+    if (!judolRows.length) return []
+    const filtered = filterDisciplineRows(judolRows, {
+      assessment: judolAssessment,
+      category: judolCategory,
+      period: judolPeriod,
+      search: searchSDM,
+      availability: judolAvailability
+    })
+    return filtered.map(r => ({
       key: `judol-${r.nik || r.nip}`,
       nama: r.nama || 'Tanpa Nama',
       nip: r.nip || r.nik,
@@ -135,12 +224,12 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
       realisasiTotal: 0,
       sisaKewajiban: 0,
       indikasi: r.hasilPenilaian,
-      kategori: r.historical?.kategori || r.after?.kategori || 'Ringan',
-      status: `Indikasi ${r.hasilPenilaian || 'Disiplin'}`
+      kategori: r[judolPeriod]?.kategori || r.historical?.kategori || 'Ringan',
+      status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`
     }))
-  }, [judolSnapshot])
+  }, [judolRows, judolAssessment, judolCategory, judolPeriod, judolAvailability, searchSDM])
 
-  // 3. DATA SDM DARI MASTER WORKBOOK (masterSnapshot)
+  // 4. DATA SDM DARI MASTER WORKBOOK (masterSnapshot)
   const masterList = useMemo(() => {
     if (!masterSnapshot?.results?.length) return []
     const allPeople = []
@@ -171,22 +260,26 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
   // Opsi SDM aktif sesuai sumber yang dipilih
   const activeSDMOptions = useMemo(() => {
     let list = []
-    if (recipientSource === 'sdm_cases') list = caseList
+    if (recipientSource === 'bottleneck') list = bottleneckList
+    else if (recipientSource === 'sdm_cases') list = caseList
     else if (recipientSource === 'judol') list = judolList
     else if (recipientSource === 'master') list = masterList
 
-    if (filterStatusSDM === 'unpaid') {
+    if (filterStatusSDM === 'unpaid' && recipientSource !== 'judol') {
       list = list.filter(item => item.sisaKewajiban > 0)
     }
+
+    if (recipientSource === 'judol') return list // filterDisciplineRows handles search
 
     if (!searchSDM.trim()) return list
     const q = searchSDM.trim().toLowerCase()
     return list.filter(item => (
       item.nama.toLowerCase().includes(q) ||
       item.nip.toLowerCase().includes(q) ||
-      (item.provinsi && item.provinsi.toLowerCase().includes(q))
+      (item.provinsi && item.provinsi.toLowerCase().includes(q)) ||
+      (item.kategori && item.kategori.toLowerCase().includes(q))
     ))
-  }, [recipientSource, caseList, judolList, masterList, filterStatusSDM, searchSDM])
+  }, [recipientSource, bottleneckList, caseList, judolList, masterList, filterStatusSDM, searchSDM])
 
   // Update nomor surat ketika template berganti
   useEffect(() => {
@@ -231,13 +324,17 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
     }
   }
 
-  // Daftar Penerima yang akan dicetak
+  // Daftar Penerima yang akan dicetak / diunduh
   const activeRecipients = useMemo(() => {
     if (recipientSource === 'manual') return [manualRecipient]
-    const list = recipientSource === 'sdm_cases' ? caseList : recipientSource === 'judol' ? judolList : masterList
+    let list = []
+    if (recipientSource === 'bottleneck') list = bottleneckList
+    else if (recipientSource === 'sdm_cases') list = caseList
+    else if (recipientSource === 'judol') list = judolList
+    else if (recipientSource === 'master') list = masterList
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
-    return filtered.length > 0 ? filtered : [manualRecipient]
-  }, [recipientSource, manualRecipient, caseList, judolList, masterList, selectedSDMKeys])
+    return filtered.length > 0 ? filtered : (list.length > 0 ? [list[0]] : [manualRecipient])
+  }, [recipientSource, manualRecipient, bottleneckList, caseList, judolList, masterList, selectedSDMKeys])
 
   // Simpan CMS Pejabat & Agenda
   const handleSaveOfficial = (e) => {
@@ -334,7 +431,7 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
     setEditingTemplate({...editingTemplate, tembusan: updated})
   }
 
-  // Trigger Cetak / PDF
+  // Trigger Cetak / PDF via Browser
   const handlePrint = () => {
     const originalTitle = document.title
     document.title = ''
@@ -342,6 +439,66 @@ export default function LetterManager({cases = [], judolSnapshot = null, masterS
     setTimeout(() => {
       document.title = originalTitle
     }, 1200)
+  }
+
+  // Unduh Berkas PDF Langsung (.pdf)
+  const handleDownloadPdf = async () => {
+    try {
+      setIsDownloadingPdf(true)
+      const sheets = document.querySelectorAll('.printable-letter-sheet')
+      if (!sheets || sheets.length === 0) {
+        alert('Tidak ada lembar naskah dinas untuk diunduh.')
+        return
+      }
+
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4',
+        compress: true
+      })
+
+      const pdfWidth = 210
+      const pdfHeight = 297
+
+      for (let i = 0; i < sheets.length; i++) {
+        const sheet = sheets[i]
+        const canvas = await html2canvas(sheet, {
+          scale: 2.5,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#ffffff',
+          logging: false,
+          onclone: (_doc, el) => {
+            el.style.boxShadow = 'none'
+            el.style.margin = '0'
+          }
+        })
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.98)
+        if (i > 0) {
+          pdf.addPage('a4', 'portrait')
+        }
+        pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight, undefined, 'FAST')
+      }
+
+      const rawTitle = currentTemplate?.title || 'Naskah_Dinas_Kemensos'
+      const sanitizedTitle = rawTitle.replace(/[^a-zA-Z0-9_-]/g, '_')
+      let filename = ''
+      if (activeRecipients.length === 1) {
+        const namePart = (activeRecipients[0]?.nama || 'Penerima').replace(/[^a-zA-Z0-9_-]/g, '_')
+        filename = `${sanitizedTitle}_${namePart}.pdf`
+      } else {
+        filename = `${sanitizedTitle}_Batch_${activeRecipients.length}_SDM.pdf`
+      }
+
+      pdf.save(filename)
+    } catch (err) {
+      console.error('Download PDF error:', err)
+      alert('Gagal membuat file PDF. Silakan gunakan tombol Cetak / Simpan PDF.')
+    } finally {
+      setIsDownloadingPdf(false)
+    }
   }
 
   // Salin Teks ke Clipboard
