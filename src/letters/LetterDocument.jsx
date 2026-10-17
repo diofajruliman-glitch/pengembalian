@@ -11,6 +11,9 @@ export default function LetterDocument({
   letterNumber = '       /3.3/KP.06.04/10/2026',
   letterDate = '15 Oktober 2026',
   customAgenda = '',
+  customOpening = '',
+  customCoordination = '',
+  customClosing = '',
   showClassification = true,
   classificationPosition = 'left',
   classificationText = ''
@@ -20,6 +23,11 @@ export default function LetterDocument({
   const effectiveShowClassification = showClassification ?? template.showClassification ?? true
   const effectivePosition = classificationPosition || template.classificationPosition || 'left'
   const effectiveClassification = classificationText || template.classification || 'RAHASIA'
+
+  const openingText = customOpening || template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'
+  const agendaText = customAgenda || template.agendaDefault
+  const coordText = customCoordination || template.coordinationText || 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.'
+  const closingText = customClosing || template.closingText || 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.'
 
   return (
     <article className="sheet-a4 printable-letter-sheet">
@@ -58,24 +66,24 @@ export default function LetterDocument({
           </div>
 
           <p className="doc-body-paragraph">
-            {template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'}
+            {openingText}
           </p>
 
           <table className="doc-invoice-table">
             <colgroup>
               <col style={{width: '36px'}} />
               <col style={{width: 'auto'}} />
-              <col style={{width: '130px'}} />
-              <col style={{width: '130px'}} />
-              <col style={{width: '145px'}} />
+              <col style={{width: '120px'}} />
+              <col style={{width: '120px'}} />
+              <col style={{width: '165px'}} />
             </colgroup>
             <thead>
               <tr>
                 <th style={{width: '36px', textAlign: 'center'}}>No</th>
                 <th style={{textAlign: 'center'}}>Uraian Kewajiban</th>
-                <th style={{width: '130px', textAlign: 'center'}}>Kewajiban Awal</th>
-                <th style={{width: '130px', textAlign: 'center'}}>Telah Disetor</th>
-                <th style={{width: '145px', textAlign: 'center'}}>Sisa yang Wajib Disetor</th>
+                <th style={{width: '120px', textAlign: 'center'}}>Kewajiban Awal</th>
+                <th style={{width: '120px', textAlign: 'center'}}>Telah Disetor</th>
+                <th className="col-sisa" style={{width: '165px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
               </tr>
             </thead>
             <tbody>
@@ -90,7 +98,7 @@ export default function LetterDocument({
                 </td>
                 <td className="num">{fmtRp(recipient.kewajibanTotal || 0)}</td>
                 <td className="num">{fmtRp(recipient.realisasiTotal || 0)}</td>
-                <td className="num remaining-val">{fmtRp(recipient.sisaKewajiban || 0)}</td>
+                <td className="num remaining-val col-sisa">{fmtRp(recipient.sisaKewajiban || 0)}</td>
               </tr>
             </tbody>
             <tfoot>
@@ -98,24 +106,30 @@ export default function LetterDocument({
                 <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '8px 10px'}}>
                   Total Sisa Kewajiban :
                 </th>
-                <th className="num remaining-val" style={{textAlign: 'right', fontSize: '10.5pt', padding: '8px 10px'}}>
+                <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10.5pt', padding: '8px 10px'}}>
                   {fmtRp(recipient.sisaKewajiban || 0)}
                 </th>
               </tr>
             </tfoot>
           </table>
 
-          <p className="doc-body-paragraph">
-            {customAgenda || template.agendaDefault}
-          </p>
+          {agendaText && (
+            <p className="doc-body-paragraph">
+              {agendaText}
+            </p>
+          )}
 
-          <p className="doc-body-paragraph">
-            Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Tim Pokja Evkin/TLHP Direktorat PSNK.
-          </p>
+          {coordText && (
+            <p className="doc-body-paragraph">
+              {coordText}
+            </p>
+          )}
 
-          <p className="doc-body-paragraph">
-            {template.closingText || 'Demikian surat penagihan ini disampaikan untuk menjadi perhatian dan dilaksanakan sebagaimana mestinya.'}
-          </p>
+          {closingText && (
+            <p className="doc-body-paragraph">
+              {closingText}
+            </p>
+          )}
         </div>
       ) : isBeritaAcara ? (
         // ================= KONTEN BERITA ACARA =================
