@@ -49,7 +49,10 @@ export async function generateOfficialPdfBatch({
   letterDate = '15 Oktober 2026',
   customAgenda = '',
   recipients = [],
-  onProgress = null
+  onProgress = null,
+  showClassification = true,
+  classificationPosition = 'left',
+  classificationText = ''
 }) {
   if (!recipients || recipients.length === 0) {
     throw new Error('Daftar penerima naskah dinas kosong.')
@@ -58,6 +61,9 @@ export async function generateOfficialPdfBatch({
   const kopData = await getKopDataUrl()
   const isTagihan = template.category === 'keuangan'
   const isBeritaAcara = template.category === 'berita-acara'
+  const effectiveShowClassification = showClassification ?? template.showClassification ?? true
+  const effectivePosition = classificationPosition || template.classificationPosition || 'left'
+  const effectiveClassification = classificationText || template.classification || 'RAHASIA'
 
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -97,11 +103,19 @@ export async function generateOfficialPdfBatch({
       doc.line(14, 25, 196, 25)
     }
 
-    // 2. KLASIFIKASI DOKUMEN (RAHASIA / SEGERA)
-    doc.setFont('helvetica', 'bold')
-    doc.setFontSize(9.5)
-    doc.setTextColor(30, 41, 59)
-    doc.text(template.classification || 'RAHASIA', 14, 38)
+    // 2. KLASIFIKASI DOKUMEN / DERAJAT KEAMANAN (BISA DIATUR POSISI ATAU DINONAKTIFKAN)
+    if (effectiveShowClassification) {
+      doc.setFont('helvetica', 'bold')
+      doc.setFontSize(9.5)
+      doc.setTextColor(30, 41, 59)
+      if (effectivePosition === 'center') {
+        doc.text(effectiveClassification, 105, 38, { align: 'center' })
+      } else if (effectivePosition === 'right') {
+        doc.text(effectiveClassification, 196, 38, { align: 'right' })
+      } else {
+        doc.text(effectiveClassification, 14, 38)
+      }
+    }
 
     // 3. JUDUL DAN NOMOR SURAT
     doc.setFontSize(11.5)
