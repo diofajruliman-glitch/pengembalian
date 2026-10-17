@@ -13,22 +13,22 @@ test('batch pdf generator logic test', async () => {
 
   const recipients = [
     {
-      nama: 'Pegawai Test 1',
-      nip: '198501012024211001',
+      nama: 'Hermawan Kurnia',
+      nip: '198807152025211094',
       pangkat: 'Penata Muda (IX/PPPK)',
       jabatan: 'PPPK Dit. PSNK',
       unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
       sisaKewajiban: 0
     },
     {
-      nama: 'Alm. Bambang Sutrisno, S.E.',
-      nip: '198504122023211003',
+      nama: 'AHMAD FAIZAL NASIHIN',
+      nip: '198302132025211044',
       pangkat: 'Pegawai PPPK',
       jabatan: 'PPPK Dit. PSNK',
       unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 18500000,
-      realisasiTotal: 5000000,
-      sisaKewajiban: 13500000,
+      kewajibanTotal: 23496,
+      realisasiTotal: 0,
+      sisaKewajiban: 23496,
       kategori: 'Meninggal dunia'
     }
   ]
