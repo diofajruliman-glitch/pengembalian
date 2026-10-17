@@ -35,7 +35,13 @@ import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import LetterDocument from './LetterDocument'
 import {generateOfficialPdfBatch} from './officialPdfGenerator'
-import {DEFAULT_OFFICIAL, DEFAULT_VENUE, LETTER_TYPES} from './templates'
+import {
+  DEFAULT_OFFICIALS,
+  DEFAULT_OFFICIAL,
+  DEFAULT_VENUES,
+  DEFAULT_VENUE,
+  LETTER_TYPES
+} from './templates'
 import {
   FOCUSED_ASSESSMENTS,
   TRANSACTION_AVAILABILITY_LABELS,
@@ -62,27 +68,49 @@ export default function LetterManager({
   const [downloadProgress, setDownloadProgress] = useState(null)
   const [loadingJudolOnline, setLoadingJudolOnline] = useState(false)
 
-  // CMS State: Profil Pejabat Penandatangan
-  const [official, setOfficial] = useState(() => {
+  // CMS State: Profil Pejabat Penandatangan (Fleksibel: Bisa Tambah, Ubah, Hapus)
+  const [officials, setOfficials] = useState(() => {
     try {
-      const saved = localStorage.getItem('kemensos_tlhp_official')
-      return saved ? JSON.parse(saved) : DEFAULT_OFFICIAL
+      const saved = localStorage.getItem('kemensos_tlhp_officials')
+      return saved ? JSON.parse(saved) : DEFAULT_OFFICIALS
     } catch {
-      return DEFAULT_OFFICIAL
+      return DEFAULT_OFFICIALS
     }
   })
-
-  // CMS State: Venue & Sesi Agenda Default
-  const [venue, setVenue] = useState(() => {
+  const [selectedOfficialId, setSelectedOfficialId] = useState(() => {
     try {
-      const saved = localStorage.getItem('kemensos_tlhp_venue')
-      return saved ? JSON.parse(saved) : DEFAULT_VENUE
+      return localStorage.getItem('kemensos_tlhp_selected_official_id') || DEFAULT_OFFICIALS[0]?.id || 'off-1'
     } catch {
-      return DEFAULT_VENUE
+      return DEFAULT_OFFICIALS[0]?.id || 'off-1'
     }
   })
+  const official = useMemo(() => {
+    return officials.find(o => o.id === selectedOfficialId) || officials[0] || DEFAULT_OFFICIAL
+  }, [officials, selectedOfficialId])
+  const [editingOfficial, setEditingOfficial] = useState(null)
 
-  // CMS State: Daftar Template Naskah Dinas (Bisa diedit teksnya secara penuh)
+  // CMS State: Venue & Sesi Agenda Default (Fleksibel: Bisa Tambah, Ubah, Hapus)
+  const [venues, setVenues] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kemensos_tlhp_venues')
+      return saved ? JSON.parse(saved) : DEFAULT_VENUES
+    } catch {
+      return DEFAULT_VENUES
+    }
+  })
+  const [selectedVenueId, setSelectedVenueId] = useState(() => {
+    try {
+      return localStorage.getItem('kemensos_tlhp_selected_venue_id') || DEFAULT_VENUES[0]?.id || 'ven-1'
+    } catch {
+      return DEFAULT_VENUES[0]?.id || 'ven-1'
+    }
+  })
+  const venue = useMemo(() => {
+    return venues.find(v => v.id === selectedVenueId) || venues[0] || DEFAULT_VENUE
+  }, [venues, selectedVenueId])
+  const [editingVenue, setEditingVenue] = useState(null)
+
+  // CMS State: Daftar Template Naskah Dinas (Fleksibel: Bisa Tambah, Ubah, Hapus, Duplikat)
   const [templates, setTemplates] = useState(() => {
     try {
       const saved = localStorage.getItem('kemensos_tlhp_templates')
@@ -100,6 +128,20 @@ export default function LetterManager({
   const currentTemplate = useMemo(() => {
     return templates.find(t => t.id === selectedTemplateId) || templates[0] || LETTER_TYPES[0]
   }, [templates, selectedTemplateId])
+
+  // Derajat Keamanan State (Bisa dirubah teksnya, posisinya: kiri/tengah/kanan, dan pilihan centang tampil/tidak)
+  const [showClassification, setShowClassification] = useState(true)
+  const [classificationPosition, setClassificationPosition] = useState('left')
+  const [classificationText, setClassificationText] = useState('RAHASIA')
+
+  // Sinkronisasi Derajat Keamanan ketika template berganti
+  useEffect(() => {
+    if (currentTemplate) {
+      setShowClassification(currentTemplate.showClassification !== false)
+      setClassificationPosition(currentTemplate.classificationPosition || 'left')
+      setClassificationText(currentTemplate.classification || 'RAHASIA')
+    }
+  }, [currentTemplate?.id])
 
   // Nomor & Tanggal Surat
   const [letterNumber, setLetterNumber] = useState('       /3.3/KP.06.04/10/2026')
