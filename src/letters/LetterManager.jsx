@@ -220,16 +220,29 @@ export default function LetterManager({
   const [judolPeriod, setJudolPeriod] = useState('after')
   const [judolAvailability, setJudolAvailability] = useState('')
 
-  // Manual Recipient Form
+  // Helper filter data uji / simulasi agar tidak pernah masuk ke dokumen resmi
+  const isTestRecord = (item) => {
+    if (!item) return true
+    const nama = String(item.nama || '').trim()
+    const nip = String(item.nip || '').trim()
+    const nik = String(item.nik || '').trim()
+    const combined = `${nama} ${nip} ${nik} ${item.pic || ''} ${item.catatan || ''}`.toLowerCase()
+    if (/simulasi|test|dummy|contoh|pegawai test|ahmad fauzi/i.test(combined)) return true
+    if (/^0{6,}/.test(nip) || /^0{6,}/.test(nik)) return true
+    if (!nama || nama.toLowerCase() === 'tanpa nama') return true
+    return false
+  }
+
+  // Manual Recipient Form (Default: SDM Nonaktif resmi Kementerian dengan sisa pengembalian)
   const [manualRecipient, setManualRecipient] = useState({
-    nama: 'Ahmad Fauzi, S.Sos.',
-    nip: '199208152024211002',
-    pangkat: 'Penata Muda (IX/PPPK)',
-    jabatan: 'Penggerak Swadaya Masyarakat Ahli Pertama',
+    nama: 'AHMAD FAIZAL NASIHIN',
+    nip: '198302132025211044',
+    pangkat: 'Pegawai ASN / PPPK',
+    jabatan: 'PPPK Direktorat PSNK',
     unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-    kewajibanTotal: 15450000,
-    realisasiTotal: 5000000,
-    sisaKewajiban: 10450000
+    kewajibanTotal: 23496,
+    realisasiTotal: 0,
+    sisaKewajiban: 23496
   })
 
   // State untuk Editor CMS Template
