@@ -2228,7 +2228,7 @@ NIP. ${official.nip}
                   </div>
                 </div>
 
-                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12}}>
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12}}>
                   <div className="letter-form-group">
                     <label>Kode Klasifikasi Arsip</label>
                     <input
@@ -2240,25 +2240,53 @@ NIP. ${official.nip}
                     />
                   </div>
                   <div className="letter-form-group">
-                    <label>Derajat Keamanan</label>
-                    <input
-                      type="text"
-                      value={editingTemplate.classification}
-                      required
-                      placeholder="RAHASIA / SEGERA / BIASA"
-                      onChange={e => setEditingTemplate({...editingTemplate, classification: e.target.value.toUpperCase()})}
-                    />
-                  </div>
-                  <div className="letter-form-group">
                     <label>Judul Tercetak</label>
                     <input
                       type="text"
                       value={editingTemplate.title}
                       required
-                      placeholder="SURAT PANGGILAN"
+                      placeholder="SURAT PANGGILAN / SURAT PENAGIHAN"
                       onChange={e => setEditingTemplate({...editingTemplate, title: e.target.value.toUpperCase()})}
                     />
                   </div>
+                </div>
+
+                {/* DERAJAT KEAMANAN BAWAAN TEMPLATE */}
+                <div style={{background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: 8, padding: 12, display: 'flex', flexDirection: 'column', gap: 10}}>
+                  <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontWeight: 600, color: '#f8fafc', fontSize: '0.84rem'}}>
+                    <input
+                      type="checkbox"
+                      checked={editingTemplate.showClassification !== false}
+                      onChange={e => setEditingTemplate({...editingTemplate, showClassification: e.target.checked})}
+                    />
+                    Tampilkan Derajat Keamanan Dokumen Secara Bawaan
+                  </label>
+
+                  {editingTemplate.showClassification !== false && (
+                    <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12}}>
+                      <div className="letter-form-group">
+                        <label>Teks Derajat Keamanan</label>
+                        <input
+                          type="text"
+                          value={editingTemplate.classification || 'RAHASIA'}
+                          required
+                          placeholder="RAHASIA / SEGERA / BIASA"
+                          onChange={e => setEditingTemplate({...editingTemplate, classification: e.target.value.toUpperCase()})}
+                        />
+                      </div>
+                      <div className="letter-form-group">
+                        <label>Posisi Derajat Keamanan</label>
+                        <select
+                          value={editingTemplate.classificationPosition || 'left'}
+                          onChange={e => setEditingTemplate({...editingTemplate, classificationPosition: e.target.value})}
+                        >
+                          <option value="left">Pinggir Kiri (Standar Kemensos)</option>
+                          <option value="center">Tengah (Center)</option>
+                          <option value="right">Pinggir Kanan</option>
+                        </select>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="letter-form-group">
