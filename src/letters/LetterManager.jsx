@@ -2430,24 +2430,58 @@ NIP. ${official.nip}
                       padding: 16
                     }}
                   >
-                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8}}>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 10}}>
-                        <span className={`pill ${tpl.classification === 'RAHASIA' ? 'amber' : tpl.classification === 'SEGERA' ? 'red' : 'blue'}`}>
-                          {tpl.classification}
-                        </span>
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 8}}>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap'}}>
+                        {tpl.showClassification !== false ? (
+                          <span className={`pill ${tpl.classification === 'RAHASIA' ? 'amber' : tpl.classification === 'SEGERA' ? 'red' : 'blue'}`}>
+                            {tpl.classification} ({tpl.classificationPosition === 'center' ? 'Tengah' : tpl.classificationPosition === 'right' ? 'Kanan' : 'Kiri'})
+                          </span>
+                        ) : (
+                          <span className="pill gray" style={{fontSize: '0.72rem'}}>Tanpa Derajat</span>
+                        )}
                         <strong style={{color: '#f8fafc', fontSize: '1.02rem'}}>{tpl.name}</strong>
-                      </div>
-                      <div style={{display: 'flex', alignItems: 'center', gap: 12}}>
-                        <span style={{fontFamily: 'monospace', color: '#38bdf8', fontSize: '0.85rem'}}>
+                        <span style={{fontFamily: 'monospace', color: '#38bdf8', fontSize: '0.82rem'}}>
                           Kode: {tpl.code}
                         </span>
+                      </div>
+                      <div style={{display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap'}}>
                         <button
                           type="button"
                           className="btn secondary"
-                          style={{padding: '5px 12px', fontSize: '0.82rem'}}
+                          style={{padding: '5px 10px', fontSize: '0.8rem', color: '#38bdf8', borderColor: 'rgba(56,189,248,0.3)'}}
+                          onClick={() => {
+                            setSelectedTemplateId(tpl.id)
+                            setActiveTab('generator')
+                          }}
+                        >
+                          Pilih Dokumen
+                        </button>
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{padding: '5px 10px', fontSize: '0.8rem'}}
                           onClick={() => setEditingTemplate({...tpl})}
                         >
-                          <Pencil size={14} /> Edit Teks
+                          <Pencil size={13} /> Edit Teks
+                        </button>
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{padding: '5px 10px', fontSize: '0.8rem'}}
+                          onClick={() => handleDuplicateTemplate(tpl)}
+                          title="Duplikat template ini untuk membuat variasi baru"
+                        >
+                          <Files size={13} /> Duplikat
+                        </button>
+                        <button
+                          type="button"
+                          className="btn secondary"
+                          style={{padding: '5px 8px', fontSize: '0.8rem', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)'}}
+                          onClick={() => handleDeleteTemplate(tpl.id)}
+                          disabled={templates.length <= 1}
+                          title="Hapus template naskah dinas ini"
+                        >
+                          <Trash2 size={13} />
                         </button>
                       </div>
                     </div>
