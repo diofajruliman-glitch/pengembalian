@@ -19,6 +19,7 @@ Aplikasi monitoring pengembalian Tunjangan Kinerja (Tukin) dan Uang Makan PPPK T
 - Rekap Mandiri, BRI, BSI dan cut-off rekonsiliasi.
 - Impor **.xlsx** dari sheet `Tracker_SDM` sumber; ekspor CSV untuk WPS/Excel.
 - Supabase Auth dan RLS 3 peran (`admin`, `editor`, `viewer`), audit perubahan di database.
+- Monitoring Wawancara sementara untuk Dio: populasi Terbukti dari Kategorisasi Disiplin ASN, draft 18 room, 11 responden per room per hari, verifikasi identitas, timer, catatan pimpinan, dan rekap. Catatan modul ini disimpan lokal per browser/akun dengan cadangan JSON; lihat [panduan monitoring](docs/monitoring-wawancara-dio.md).
 - Mode demo/pratinjau tanpa konfigurasi backend, **bukan untuk data riil**.
 
 ## Arsitektur
