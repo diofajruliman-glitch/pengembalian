@@ -622,16 +622,150 @@ NIP. ${official.nip}
                 value={recipientSource}
                 onChange={e => setRecipientSource(e.target.value)}
               >
-                <option value="sdm_cases">1. Monitoring SDM Kasus ({caseList.length} data)</option>
-                {judolList.length > 0 && (
-                  <option value="judol">2. Analisis Disiplin ASN / Judol ({judolList.length} data)</option>
+                <option value="bottleneck">1. Penanganan SDM — Bottleneck ({matrix.length} Kategori)</option>
+                {judolRows.length > 0 && (
+                  <option value="judol">2. Disiplin ASN — Populasi & Filter ({judolRows.length} SDM)</option>
                 )}
+                <option value="sdm_cases">3. Monitoring SDM Kasus ({caseList.length} data)</option>
                 {masterList.length > 0 && (
-                  <option value="master">3. Master & Progres Tersimpan ({masterList.length} SDM)</option>
+                  <option value="master">4. Master & Progres Tersimpan ({masterList.length} SDM)</option>
                 )}
-                <option value="manual">4. Input Manual Perorangan</option>
+                <option value="manual">5. Input Manual Perorangan</option>
               </select>
             </div>
+
+            {/* KONTROL KHUSUS PENANGANAN SDM — BOTTLENECK */}
+            {recipientSource === 'bottleneck' && (
+              <div style={{display: 'flex', flexDirection: 'column', gap: 10, margin: '4px 0'}}>
+                <div className="letter-form-group">
+                  <label>Pilih Kategori Bottleneck</label>
+                  <select
+                    value={selectedBottleneckNo}
+                    onChange={e => setSelectedBottleneckNo(e.target.value)}
+                  >
+                    <option value="">Semua Kategori Hambatan ({cases.length} SDM)</option>
+                    {matrix.map(m => {
+                      const mCat = (m.kategori || '').toLowerCase()
+                      const matchCount = cases.filter(c => {
+                        const cCat = (c.kategori || '').toLowerCase()
+                        return cCat.includes(mCat) || mCat.includes(cCat)
+                      }).length
+                      return (
+                        <option key={m.no} value={String(m.no)}>
+                          {String(m.no).padStart(2, '0')}. {m.kategori} ({matchCount} SDM)
+                        </option>
+                      )
+                    })}
+                  </select>
+                </div>
+
+                {selectedBottleneck && (
+                  <div className="letter-context-card">
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                      <b>{String(selectedBottleneck.no).padStart(2, '0')}. {selectedBottleneck.kategori}</b>
+                      <span className="pill amber">{selectedBottleneck.prioritas || 'Prioritas'}</span>
+                    </div>
+                    <div><b>Risiko:</b> {selectedBottleneck.risiko}</div>
+                    <div><b>Tindak Lanjut:</b> {selectedBottleneck.tindak_lanjut}</div>
+                    <div><b>Jalur:</b> {selectedBottleneck.jalur}</div>
+                    <div><b>PIC:</b> {selectedBottleneck.pic} · <b>Tenggat:</b> {selectedBottleneck.deadline}</div>
+
+                    <button
+                      type="button"
+                      className="quick-action-btn"
+                      onClick={() => {
+                        setCustomAgenda(`Menindaklanjuti penanganan hambatan ${selectedBottleneck.kategori}: ${selectedBottleneck.tindak_lanjut} melalui ${selectedBottleneck.jalur}.`)
+                        const kLower = selectedBottleneck.kategori.toLowerCase()
+                        if (kLower.includes('saldo') || kLower.includes('resign') || kLower.includes('pensiun')) {
+                          setSelectedTemplateId('tagihan-1')
+                        } else if (kLower.includes('meninggal')) {
+                          setSelectedTemplateId('berita-acara-kesepakatan')
+                        } else if (kLower.includes('kooperatif')) {
+                          setSelectedTemplateId('panggilan-2')
+                        }
+                      }}
+                    >
+                      <Sparkles size={13} />
+                      <span>Terapkan Agenda & Template dari Bottleneck</span>
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* KONTROL KHUSUS KATEGORISASI DISIPLIN ASN — POPULASI & FILTER */}
+            {recipientSource === 'judol' && (
+              <div style={{display: 'flex', flexDirection: 'column', gap: 8, margin: '4px 0'}}>
+                <label style={{fontSize: '0.82rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase'}}>
+                  Populasi & Filter Disiplin
+                </label>
+                <div className="letter-filter-pills">
+                  <button
+                    type="button"
+                    className={`letter-pill-btn ${!judolAssessment ? 'active' : ''}`}
+                    onClick={() => setJudolAssessment('')}
+                  >
+                    Kedua status: {judolFocused.length}
+                  </button>
+                  {FOCUSED_ASSESSMENTS.map(status => (
+                    <button
+                      key={status}
+                      type="button"
+                      className={`letter-pill-btn ${judolAssessment === status ? 'active' : ''}`}
+                      onClick={() => setJudolAssessment(judolAssessment === status ? '' : status)}
+                    >
+                      {status}: {judolCounts[status] || 0}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6}}>
+                  <div className="letter-form-group">
+                    <label style={{fontSize: '0.72rem'}}>Kategori Pelanggaran</label>
+                    <select
+                      value={judolCategory}
+                      onChange={e => setJudolCategory(e.target.value)}
+                      style={{fontSize: '0.8rem', padding: '6px 8px'}}
+                    >
+                      <option value="">Semua Kategori</option>
+                      {DISCIPLINE_CATEGORIES.map(c => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="letter-form-group">
+                    <label style={{fontSize: '0.72rem'}}>Kelengkapan Data</label>
+                    <select
+                      value={judolAvailability}
+                      onChange={e => setJudolAvailability(e.target.value)}
+                      style={{fontSize: '0.8rem', padding: '6px 8px'}}
+                    >
+                      <option value="">Semua Kelengkapan</option>
+                      {Object.entries(TRANSACTION_AVAILABILITY_LABELS).map(([k, lbl]) => (
+                        <option key={k} value={k}>{lbl}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="letter-context-card">
+                  <div>
+                    Fokus <b>{judolList.length} SDM</b> sesuai filter dari <b>{judolRows.length} SDM</b> sumber analisis.
+                  </div>
+                  <button
+                    type="button"
+                    className="quick-action-btn"
+                    onClick={() => {
+                      setSelectedTemplateId('panggilan-judol')
+                      setCustomAgenda('Untuk diperiksa/dimintai keterangan dan klarifikasi sehubungan dengan dugaan pelanggaran disiplin indikasi aktivitas transaksi judi online berdasarkan Nota Dinas Sekretaris Jenderal Nomor 3513/I/KP.06.08/09/2026.')
+                    }}
+                  >
+                    <Sparkles size={13} />
+                    <span>Terapkan Template Panggilan Judol & Klausul Sekjen</span>
+                  </button>
+                </div>
+              </div>
+            )}
 
             {recipientSource !== 'manual' ? (
               <>
@@ -650,12 +784,12 @@ NIP. ${official.nip}
                   <div style={{display: 'flex', gap: 6, marginBottom: 6}}>
                     <input
                       type="text"
-                      placeholder="Cari NIP atau Nama SDM..."
+                      placeholder={recipientSource === 'judol' ? 'Cari NIK / Nama / NIP...' : 'Cari NIP, Nama, atau Kategori...'}
                       value={searchSDM}
                       onChange={e => setSearchSDM(e.target.value)}
                       style={{flex: 1}}
                     />
-                    {recipientSource === 'sdm_cases' && (
+                    {recipientSource !== 'judol' && (
                       <select
                         value={filterStatusSDM}
                         onChange={e => setFilterStatusSDM(e.target.value)}
@@ -670,7 +804,7 @@ NIP. ${official.nip}
                   <div className="letter-recipients-box">
                     {!activeSDMOptions.length ? (
                       <div style={{fontSize: '0.82rem', color: '#64748b', padding: 8, textAlign: 'center'}}>
-                        Tidak ada data yang cocok dengan pencarian.
+                        Tidak ada data yang cocok dengan kriteria filter.
                       </div>
                     ) : (
                       activeSDMOptions.map(item => {
@@ -688,6 +822,7 @@ NIP. ${official.nip}
                                 {item.nip}
                                 {item.sisaKewajiban > 0 && ` · Sisa Rp ${item.sisaKewajiban.toLocaleString('id-ID')}`}
                                 {item.indikasi && ` · ${item.indikasi}`}
+                                {item.kategori && ` · ${item.kategori}`}
                               </div>
                             </div>
                           </label>
@@ -760,7 +895,7 @@ NIP. ${official.nip}
             <div className="letter-preview-toolbar no-print">
               <div style={{color: '#f8fafc', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8}}>
                 <FileCheck2 size={19} color="#22c55e" />
-                <span>Pratinjau Cetak ({activeRecipients.length} Lembar Naskah Dinas)</span>
+                <span>Pratinjau ({activeRecipients.length} Lembar Naskah Dinas)</span>
               </div>
               <div className="preview-actions">
                 <button
@@ -775,8 +910,19 @@ NIP. ${official.nip}
                 <button
                   type="button"
                   className="btn primary"
+                  onClick={handleDownloadPdf}
+                  disabled={isDownloadingPdf}
+                  title="Unduh berkas PDF langsung ke folder Download perangkat Anda"
+                  style={{background: '#0284c7', borderColor: '#0284c7'}}
+                >
+                  {isDownloadingPdf ? <LoaderCircle size={16} className="spin" /> : <Download size={16} />}
+                  <span>{isDownloadingPdf ? 'Menyiapkan PDF...' : 'Unduh PDF'}</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn primary"
                   onClick={handlePrint}
-                  title="Cetak langsung atau simpan ke PDF A4"
+                  title="Cetak langsung atau simpan via dialog printer browser"
                 >
                   <Printer size={16} />
                   <span>Cetak / Simpan PDF</span>
