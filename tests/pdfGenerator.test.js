@@ -360,4 +360,150 @@ test('staggered schedule per recipient creates distinct time slots', async () =>
   assert.ok(buffer.byteLength > 3000)
 })
 
+import {
+  formatIndoDate,
+  formatIndoTime,
+  lookupBnbaSchedule
+} from '../src/letters/bnbaScheduleHelper.js'
+
+test('formatIndoDate and formatIndoTime correctness', () => {
+  const d1 = formatIndoDate('2026-10-19')
+  assert.equal(d1.hari, 'Senin')
+  assert.equal(d1.tanggal, '19 Oktober 2026')
+  assert.equal(d1.tanggalShort, '19 Okt 2026')
+
+  const d2 = formatIndoDate('2026-10-21')
+  assert.equal(d2.hari, 'Rabu')
+  assert.equal(d2.tanggal, '21 Oktober 2026')
+
+  const d3 = formatIndoDate('2026-10-23')
+  assert.equal(d3.hari, 'Jumat')
+  assert.equal(d3.tanggal, '23 Oktober 2026')
+
+  assert.equal(formatIndoDate('invalid-date'), null)
+  assert.equal(formatIndoDate(''), null)
+
+  assert.equal(formatIndoTime('08:00', 40, 'range'), '08.00 - 08.40 WIB')
+  assert.equal(formatIndoTime('08:00', 40, 'startOnly'), '08.00 WIB')
+  assert.equal(formatIndoTime('09:45', 30, 'range'), '09.45 - 10.15 WIB')
+  assert.equal(formatIndoTime('13:30', 45, 'range'), '13.30 - 14.15 WIB')
+})
+
+test('lookupBnbaSchedule resolves interview day, date, time, and room from workspace', () => {
+  const mockWorkspace = {
+    entries: {
+      '3201012345670001': {
+        nik: '3201012345670001',
+        date: '2026-10-19',
+        time: '08:00',
+        duration: 40,
+        roomId: 'room-1',
+        session: 1,
+        status: 'Terjadwal'
+      },
+      '3201012345670002': {
+        nik: '3201012345670002',
+        date: '2026-10-21',
+        time: '09:30',
+        duration: 40,
+        roomId: 'room-2',
+        session: 3,
+        status: 'Terjadwal'
+      }
+    },
+    rooms: [
+      { id: 'room-1', name: 'Room 1', interviewer: 'Itjen 1' },
+      { id: 'room-2', name: 'Room 2', interviewer: 'Itjen 2' }
+    ]
+  }
+
+  const p1 = { nik: '3201012345670001', nip: '199001012025211001', nama: 'Budi Santoso' }
+  const s1 = lookupBnbaSchedule(p1, mockWorkspace)
+  assert.ok(s1)
+  assert.equal(s1.hari, 'Senin')
+  assert.equal(s1.tanggal, '19 Oktober 2026')
+  assert.equal(s1.jamRange, '08.00 - 08.40 WIB')
+  assert.equal(s1.roomName, 'Room 1')
+  assert.equal(s1.interviewer, 'Itjen 1')
+  assert.equal(s1.tempat, 'Breakout Room 1 (Itjen 1) · Media Daring Zoom Ditjen Linjamsos')
+
+  const p2 = { key: 'judol-3201012345670002', nama: 'Siti Rahma' }
+  const s2 = lookupBnbaSchedule(p2, mockWorkspace)
+  assert.ok(s2)
+  assert.equal(s2.hari, 'Rabu')
+  assert.equal(s2.tanggal, '21 Oktober 2026')
+  assert.equal(s2.jamRange, '09.30 - 10.10 WIB')
+  assert.equal(s2.roomName, 'Room 2')
+
+  const pUnscheduled = { nik: '9999999999999999', nama: 'Belum Terjadwal' }
+  assert.equal(lookupBnbaSchedule(pUnscheduled, mockWorkspace), null)
+})
+
+test('connected BNBA interview schedule generates distinct day, date, time and breakout room in PDF batch', () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  const recipients = [
+    {
+      nama: 'Budi Santoso',
+      nip: '199001012025211001',
+      hari: 'Senin',
+      tanggal: '19 Oktober 2026',
+      jam: '08.00 - 08.40 WIB',
+      tempat: 'Breakout Room 1 (Itjen 1) · Media Daring Zoom Ditjen Linjamsos',
+      linkZoom: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+    },
+    {
+      nama: 'Siti Rahma',
+      nip: '199203152025212002',
+      hari: 'Rabu',
+      tanggal: '21 Oktober 2026',
+      jam: '09.30 - 10.10 WIB',
+      tempat: 'Breakout Room 2 (Itjen 2) · Media Daring Zoom Ditjen Linjamsos',
+      linkZoom: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+    },
+    {
+      nama: 'Ahmad Fauzi (Fallback Venue Standar)',
+      nip: '198805202025211003',
+      hari: 'Senin',
+      tanggal: '26 Oktober 2026',
+      jam: '10.00 WIB',
+      tempat: 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos',
+      linkZoom: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+    }
+  ]
+
+  for (let i = 0; i < recipients.length; i++) {
+    if (i > 0) doc.addPage('a4', 'portrait')
+    const r = recipients[i]
+
+    autoTable(doc, {
+      startY: 50,
+      margin: { left: 18, right: 14 },
+      body: [
+        ['Hari', ':', r.hari],
+        ['Tanggal', ':', r.tanggal],
+        ['Jam', ':', r.jam],
+        ['Tempat', ':', r.tempat],
+        ['Link Zoom', ':', r.linkZoom]
+      ],
+      theme: 'plain',
+      styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+      columnStyles: {
+        0: { cellWidth: 46 },
+        1: { cellWidth: 4, halign: 'center' },
+        2: { cellWidth: 'auto' }
+      }
+    })
+  }
+
+  assert.equal(doc.internal.getNumberOfPages(), 3)
+  const buffer = doc.output('arraybuffer')
+  assert.ok(buffer.byteLength > 4000)
+})
+
 

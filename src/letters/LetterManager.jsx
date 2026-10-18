@@ -50,17 +50,14 @@ import {
   LETTER_TYPES
 } from './templates'
 import {
-  FOCUSED_ASSESSMENTS,
-  TRANSACTION_AVAILABILITY_LABELS,
-  filterDisciplineRows,
-  isFocusedAssessment,
-  getTransactionAvailability
-} from '../judol/availability.js'
-import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
-import {indexSnapshot, selectProgress} from '../recovery/progress.js'
-import {statusOf, targetStatuses, normalizeSdmStatus, isNonactiveStatus, isSpecialTarget} from '../import/sourceMetadata.js'
-import {lookupNipPosition} from './nipPositionReference.js'
-import './officialLetter.css'
+  INDO_DAYS,
+  INDO_MONTHS,
+  INDO_MONTHS_SHORT,
+  formatIndoDate,
+  formatIndoTime,
+  loadInterviewWorkspaceFromStorage,
+  lookupBnbaSchedule
+} from './bnbaScheduleHelper.js'
 
 // Helper filter data uji / simulasi agar tidak pernah masuk ke dokumen resmi
 export function isTestRecord(item) {
@@ -195,14 +192,49 @@ export default function LetterManager({
   }, [venues, selectedVenueId])
   const [editingVenue, setEditingVenue] = useState(null)
 
-  // State Pengaturan Jam Pelaksanaan & Penjadwalan Sesi (Bergilir / Multi-Sesi)
-  const [scheduleMode, setScheduleMode] = useState('uniform') // 'uniform' | 'staggered'
+  // State Pengaturan Jam Pelaksanaan & Penjadwalan Sesi (Bergilir / Multi-Sesi / Terhubung BNBA)
+  const [scheduleMode, setScheduleMode] = useState('uniform') // 'uniform' | 'staggered' | 'bnba_interview'
+  const [customVenueHari, setCustomVenueHari] = useState('')
+  const [customVenueTanggal, setCustomVenueTanggal] = useState('')
   const [customVenueJam, setCustomVenueJam] = useState('')
   const [staggerStartTime, setStaggerStartTime] = useState('09.00')
   const [staggerInterval, setStaggerInterval] = useState(30)
   const [staggerBatchSize, setStaggerBatchSize] = useState(1)
-  const [staggerFormat, setStaggerFormat] = useState('startOnly') // 'startOnly' | 'range'
+  const [staggerFormat, setStaggerFormat] = useState('range') // 'startOnly' | 'range'
   const [skipLunchBreak, setSkipLunchBreak] = useState(true)
+  const [filterOnlyBnbaScheduled, setFilterOnlyBnbaScheduled] = useState(false)
+
+  // Venue efektif yang menggabungkan preset dengan kustomisasi Hari, Tanggal, dan Jam
+  const effectiveVenue = useMemo(() => {
+    return {
+      ...venue,
+      hari: customVenueHari.trim() || venue.hari || 'Senin',
+      tanggal: customVenueTanggal.trim() || venue.tanggal || '26 Oktober 2026',
+      jam: customVenueJam.trim() || venue.jam || '10.00 WIB'
+    }
+  }, [venue, customVenueHari, customVenueTanggal, customVenueJam])
+
+  // Sinkronisasi Workspace Monitoring Wawancara dari localStorage
+  const [interviewWorkspace, setInterviewWorkspace] = useState(() => {
+    return loadInterviewWorkspaceFromStorage(judolSnapshot)
+  })
+
+  const refreshInterviewWorkspace = () => {
+    const ws = loadInterviewWorkspaceFromStorage(judolSnapshot)
+    setInterviewWorkspace(ws)
+    return ws
+  }
+
+  useEffect(() => {
+    refreshInterviewWorkspace()
+    const handleStorageChange = (e) => {
+      if (e.key && e.key.startsWith('tlhp_interviews_v1')) {
+        refreshInterviewWorkspace()
+      }
+    }
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [judolSnapshot])
 
   // CMS State: Daftar Template Naskah Dinas (Fleksibel: Bisa Tambah, Ubah, Hapus, Duplikat)
   const [templates, setTemplates] = useState(() => {
@@ -670,21 +702,89 @@ export default function LetterManager({
     }
   }
 
+  // Statistik jadwal BNBA Monitoring Wawancara untuk populasi aktif
+  const bnbaScheduleStats = useMemo(() => {
+    if (!interviewWorkspace?.entries) {
+      return { totalEntries: 0, scheduledEntries: 0, recipientMatches: 0 }
+    }
+    const entries = interviewWorkspace.entries
+    const allList = Object.values(entries)
+    const scheduled = allList.filter(e => e?.date && e.status !== 'Belum dijadwalkan' && e.status !== 'Jadwal ulang')
+    let matches = 0
+    for (const r of (activeSDMOptions || [])) {
+      if (lookupBnbaSchedule(r, interviewWorkspace)) {
+        matches++
+      }
+    }
+    return {
+      totalEntries: allList.length,
+      scheduledEntries: scheduled.length,
+      recipientMatches: matches
+    }
+  }, [interviewWorkspace, activeSDMOptions])
+
   // Daftar Penerima yang akan dicetak / diunduh
   const activeRecipients = useMemo(() => {
     if (recipientSource === 'manual') {
       if (databaseOnly) return []
-      const manualJam = customVenueJam || venue.jam || '10.00 WIB'
-      return [{ ...manualRecipient, jam: manualJam }]
+      const manualJam = customVenueJam || effectiveVenue.jam || '10.00 WIB'
+      return [{
+        ...manualRecipient,
+        hari: customVenueHari || effectiveVenue.hari || 'Senin',
+        tanggal: customVenueTanggal || effectiveVenue.tanggal || '26 Oktober 2026',
+        jam: manualJam,
+        tempat: effectiveVenue.tempat,
+        linkZoom: effectiveVenue.linkZoom
+      }]
     }
     const list = activeSDMOptions
     if (!list.length) return []
 
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
-    const rawList = filtered.length > 0 ? filtered : list
+    let rawList = filtered.length > 0 ? filtered : list
+
+    if (scheduleMode === 'bnba_interview' && filterOnlyBnbaScheduled) {
+      rawList = rawList.filter(r => Boolean(lookupBnbaSchedule(r, interviewWorkspace)))
+    }
+
     return rawList.map((r, idx) => {
       const posRef = lookupNipPosition(r.nip || r.nik)
-      let assignedJam = customVenueJam || venue.jam || '10.00 WIB'
+
+      if (scheduleMode === 'bnba_interview') {
+        const bnbaSched = lookupBnbaSchedule(r, interviewWorkspace)
+        if (bnbaSched) {
+          const chosenJam = staggerFormat === 'startOnly' ? bnbaSched.jamStartOnly : bnbaSched.jamRange
+          return {
+            ...r,
+            nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
+            pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
+            jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+            hari: bnbaSched.hari,
+            tanggal: bnbaSched.tanggal,
+            jam: chosenJam,
+            tempat: bnbaSched.tempat,
+            linkZoom: effectiveVenue.linkZoom,
+            hasBnbaSchedule: true,
+            bnbaRoom: bnbaSched.roomName,
+            bnbaInterviewer: bnbaSched.interviewer,
+            bnbaDateShort: bnbaSched.tanggalShort
+          }
+        }
+        return {
+          ...r,
+          nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
+          pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
+          jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+          hari: customVenueHari || effectiveVenue.hari || 'Senin',
+          tanggal: customVenueTanggal || effectiveVenue.tanggal || '26 Oktober 2026',
+          jam: customVenueJam || effectiveVenue.jam || '10.00 WIB',
+          tempat: effectiveVenue.tempat,
+          linkZoom: effectiveVenue.linkZoom,
+          hasBnbaSchedule: false
+        }
+      }
+
+      let assignedJam = customVenueJam || effectiveVenue.jam || '10.00 WIB'
 
       if (scheduleMode === 'staggered') {
         const [hStr, mStr] = (staggerStartTime || '09.00').split(/[:.]/)
@@ -707,16 +807,47 @@ export default function LetterManager({
         nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
         pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
         jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
-        jam: r.customJam || assignedJam
+        hari: customVenueHari || effectiveVenue.hari || 'Senin',
+        tanggal: customVenueTanggal || effectiveVenue.tanggal || '26 Oktober 2026',
+        jam: r.customJam || assignedJam,
+        tempat: effectiveVenue.tempat,
+        linkZoom: effectiveVenue.linkZoom
       }
     })
-  }, [recipientSource, manualRecipient, activeSDMOptions, selectedSDMKeys, databaseOnly, customVenueJam, venue.jam, scheduleMode, staggerStartTime, staggerInterval, staggerBatchSize, staggerFormat, skipLunchBreak])
+  }, [
+    recipientSource,
+    manualRecipient,
+    activeSDMOptions,
+    selectedSDMKeys,
+    databaseOnly,
+    effectiveVenue,
+    customVenueHari,
+    customVenueTanggal,
+    customVenueJam,
+    scheduleMode,
+    staggerStartTime,
+    staggerInterval,
+    staggerBatchSize,
+    staggerFormat,
+    skipLunchBreak,
+    interviewWorkspace,
+    filterOnlyBnbaScheduled
+  ])
 
   // Map jadwal per SDM untuk tampilan badge di daftar checklist
   const itemScheduleMap = useMemo(() => {
     const map = new Map()
     for (const r of activeRecipients) {
-      if (r.key && r.jam) map.set(r.key, r.jam)
+      if (r.key) {
+        map.set(r.key, {
+          jam: r.jam,
+          hari: r.hari,
+          tanggal: r.tanggal,
+          hasBnbaSchedule: r.hasBnbaSchedule,
+          bnbaRoom: r.bnbaRoom,
+          bnbaDateShort: r.bnbaDateShort
+        })
+      }
     }
     return map
   }, [activeRecipients])
@@ -817,6 +948,9 @@ export default function LetterManager({
   // Pilih Venue/Agenda Aktif
   const handleSelectVenue = (id) => {
     setSelectedVenueId(id)
+    setCustomVenueHari('')
+    setCustomVenueTanggal('')
+    setCustomVenueJam('')
     try {
       localStorage.setItem('kemensos_tlhp_selected_venue_id', id)
     } catch (e) {
@@ -1016,7 +1150,7 @@ export default function LetterManager({
       await generateOfficialPdfBatch({
         template: currentTemplate,
         official,
-        venue,
+        venue: effectiveVenue,
         letterNumber,
         letterDate,
         customAgenda,
@@ -1057,11 +1191,11 @@ NIP/NIPPPK  : ${r.nip}
 ${showRank ? `Pangkat     : ${r.pangkat || '—'}\n` : ''}Jabatan     : ${r.jabatan || 'PPPK'}
 Unit Kerja  : ${r.unitKerja || official.unitKerja}
 Pada :
-Hari        : ${r.hari || venue.hari || 'Senin'}
-Tanggal     : ${r.tanggal || venue.tanggal || '26 Oktober 2026'}
-Jam         : ${r.jam || venue.jam || '10.00 WIB'}
-Tempat      : ${r.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}
-${venue.linkZoom ? `Link Zoom   : ${venue.linkZoom}\n` : ''}
+Hari        : ${r.hari || effectiveVenue.hari || 'Senin'}
+Tanggal     : ${r.tanggal || effectiveVenue.tanggal || '26 Oktober 2026'}
+Jam         : ${r.jam || effectiveVenue.jam || '10.00 WIB'}
+Tempat      : ${r.tempat || effectiveVenue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}
+${(r.linkZoom || effectiveVenue.linkZoom) ? `Link Zoom   : ${r.linkZoom || effectiveVenue.linkZoom}\n` : ''}
 ${customAgenda || currentTemplate.agendaDefault}
 
 ${currentTemplate.category === 'keuangan' ? effectiveCoord + '\n\n' : ''}${customClosing || currentTemplate.closingText}
@@ -1383,6 +1517,61 @@ NIP. ${official.nip}
               </select>
             </div>
 
+            {/* HARI & TANGGAL PELAKSANAAN */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 8,
+              margin: '2px 0 6px 0'
+            }}>
+              <div className="letter-form-group" style={{margin: 0}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <label style={{fontSize: '0.78rem', color: '#94a3b8', margin: 0}}>Hari Pelaksanaan</label>
+                  {customVenueHari && (
+                    <button
+                      type="button"
+                      onClick={() => setCustomVenueHari('')}
+                      style={{background: 'none', border: 'none', color: '#f87171', fontSize: '0.7rem', cursor: 'pointer', padding: 0}}
+                      title="Kembalikan ke hari dari preset"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  placeholder={`Hari: ${venue.hari || 'Senin'}`}
+                  value={customVenueHari}
+                  onChange={e => setCustomVenueHari(e.target.value)}
+                  style={{fontSize: '0.8rem', padding: '5px 8px'}}
+                  title="Hari pelaksanaan pertemuan/pemeriksaan"
+                />
+              </div>
+              <div className="letter-form-group" style={{margin: 0}}>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <label style={{fontSize: '0.78rem', color: '#94a3b8', margin: 0}}>Tanggal Pelaksanaan</label>
+                  {customVenueTanggal && (
+                    <button
+                      type="button"
+                      onClick={() => setCustomVenueTanggal('')}
+                      style={{background: 'none', border: 'none', color: '#f87171', fontSize: '0.7rem', cursor: 'pointer', padding: 0}}
+                      title="Kembalikan ke tanggal dari preset"
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+                <input
+                  type="text"
+                  placeholder={`Tanggal: ${venue.tanggal || '26 Oktober 2026'}`}
+                  value={customVenueTanggal}
+                  onChange={e => setCustomVenueTanggal(e.target.value)}
+                  style={{fontSize: '0.8rem', padding: '5px 8px'}}
+                  title="Tanggal pelaksanaan pertemuan/pemeriksaan"
+                />
+              </div>
+            </div>
+
             {/* PENGATURAN JAM PELAKSANAAN & PENJADWALAN SESI */}
             <div style={{
               background: 'rgba(30, 41, 59, 0.7)',
@@ -1398,7 +1587,7 @@ NIP. ${official.nip}
                 <label style={{fontWeight: 700, color: '#38bdf8', fontSize: '0.82rem', margin: 0, display: 'flex', alignItems: 'center', gap: 5}}>
                   <Clock size={14} /> Pengaturan Jam Pelaksanaan
                 </label>
-                <div style={{display: 'flex', gap: 4}}>
+                <div style={{display: 'flex', gap: 4, flexWrap: 'wrap'}}>
                   <button
                     type="button"
                     style={{
@@ -1433,10 +1622,30 @@ NIP. ${official.nip}
                   >
                     Jam Bergilir (Beda-beda)
                   </button>
+                  <button
+                    type="button"
+                    style={{
+                      background: scheduleMode === 'bnba_interview' ? '#059669' : 'rgba(255,255,255,0.06)',
+                      color: '#ffffff',
+                      fontSize: '0.72rem',
+                      padding: '2px 8px',
+                      border: 'none',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      fontWeight: scheduleMode === 'bnba_interview' ? 600 : 400
+                    }}
+                    onClick={() => {
+                      setScheduleMode('bnba_interview')
+                      refreshInterviewWorkspace()
+                    }}
+                    title="Terhubung pada jadwal BNBA di menu Monitoring Wawancara"
+                  >
+                    Jadwal BNBA (Wawancara)
+                  </button>
                 </div>
               </div>
 
-              {scheduleMode === 'uniform' ? (
+              {scheduleMode === 'uniform' && (
                 <div style={{display: 'flex', gap: 6, alignItems: 'center'}}>
                   <input
                     type="text"
@@ -1456,7 +1665,9 @@ NIP. ${official.nip}
                     </button>
                   )}
                 </div>
-              ) : (
+              )}
+
+              {scheduleMode === 'staggered' && (
                 <div style={{display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.78rem', color: '#cbd5e1'}}>
                   <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6}}>
                     <div>
@@ -1520,6 +1731,72 @@ NIP. ${official.nip}
                     />
                     <span>Lewati jam istirahat (12.00 – 13.00 WIB)</span>
                   </label>
+                </div>
+              )}
+
+              {scheduleMode === 'bnba_interview' && (
+                <div style={{
+                  background: 'rgba(16, 185, 129, 0.08)',
+                  border: '1px solid rgba(16, 185, 129, 0.28)',
+                  borderRadius: 6,
+                  padding: '8px 10px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 6
+                }}>
+                  <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6}}>
+                    <span style={{fontSize: '0.76rem', fontWeight: 600, color: '#34d399', display: 'flex', alignItems: 'center', gap: 5}}>
+                      <CheckCircle2 size={13} /> Terhubung Jadwal Monitoring Wawancara
+                    </span>
+                    <button
+                      type="button"
+                      onClick={refreshInterviewWorkspace}
+                      style={{background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.72rem', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: 3}}
+                      title="Perbarui data terbaru dari Monitoring Wawancara"
+                    >
+                      <RefreshCw size={11} /> Sinkronisasi
+                    </button>
+                  </div>
+
+                  <div style={{fontSize: '0.74rem', color: '#cbd5e1', lineHeight: 1.4}}>
+                    {bnbaScheduleStats.scheduledEntries > 0 ? (
+                      <>
+                        <strong>{bnbaScheduleStats.recipientMatches.toLocaleString('id-ID')} ASN</strong> terpilih telah memiliki jadwal wawancara di sistem (dari total <strong>{bnbaScheduleStats.scheduledEntries.toLocaleString('id-ID')}</strong> jadwal room di Monitoring Wawancara).
+                      </>
+                    ) : (
+                      <span style={{color: '#facc15'}}>
+                        Belum ada jadwal wawancara tersimpan di browser. Anda dapat membuat jadwal di menu <strong>Monitoring Wawancara</strong>.
+                      </span>
+                    )}
+                  </div>
+
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginTop: 2}}>
+                    <div>
+                      <label style={{fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Format Jam di Surat</label>
+                      <select
+                        value={staggerFormat}
+                        onChange={e => setStaggerFormat(e.target.value)}
+                        style={{width: '100%', fontSize: '0.75rem', padding: '3px 6px'}}
+                      >
+                        <option value="range">Rentang (08.00 - 08.40 WIB)</option>
+                        <option value="startOnly">Mulai Saja (08.00 WIB)</option>
+                      </select>
+                    </div>
+                    <div style={{display: 'flex', alignItems: 'flex-end'}}>
+                      <label style={{display: 'flex', alignItems: 'center', gap: 5, fontSize: '0.72rem', cursor: 'pointer', color: '#e2e8f0', userSelect: 'none', marginBottom: 4}}>
+                        <input
+                          type="checkbox"
+                          checked={filterOnlyBnbaScheduled}
+                          onChange={e => setFilterOnlyBnbaScheduled(e.target.checked)}
+                        />
+                        <span>Hanya yang terjadwal BNBA</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div style={{fontSize: '0.7rem', color: '#94a3b8', fontStyle: 'italic', marginTop: 2}}>
+                    * Hari, Tanggal, Jam, dan Breakout Room otomatis terisi presisi per individu berdasarkan penugasan di Monitoring Wawancara.
+                  </div>
                 </div>
               )}
             </div>
@@ -1811,18 +2088,63 @@ NIP. ${official.nip}
                             <div style={{flex: 1}}>
                               <div className="rec-name" style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6}}>
                                 <span>{item.nama}</span>
-                                {isChecked && itemScheduleMap.has(item.key) && scheduleMode === 'staggered' && (
-                                  <span style={{
-                                    background: 'rgba(56, 189, 248, 0.2)',
-                                    color: '#38bdf8',
-                                    fontSize: '0.68rem',
-                                    padding: '1px 6px',
-                                    borderRadius: 4,
-                                    fontWeight: 600,
-                                    whiteSpace: 'nowrap'
-                                  }}>
-                                    {itemScheduleMap.get(item.key)}
-                                  </span>
+                                {isChecked && itemScheduleMap.has(item.key) && (
+                                  <>
+                                    {scheduleMode === 'bnba_interview' && (
+                                      itemScheduleMap.get(item.key).hasBnbaSchedule ? (
+                                        <span style={{
+                                          background: 'rgba(16, 185, 129, 0.2)',
+                                          color: '#34d399',
+                                          fontSize: '0.68rem',
+                                          padding: '1px 6px',
+                                          borderRadius: 4,
+                                          fontWeight: 600,
+                                          whiteSpace: 'nowrap',
+                                          border: '1px solid rgba(16, 185, 129, 0.35)'
+                                        }}>
+                                          {itemScheduleMap.get(item.key).hari}, {itemScheduleMap.get(item.key).bnbaDateShort || itemScheduleMap.get(item.key).tanggal} · {itemScheduleMap.get(item.key).jam} · {itemScheduleMap.get(item.key).bnbaRoom}
+                                        </span>
+                                      ) : (
+                                        <span style={{
+                                          background: 'rgba(245, 158, 11, 0.15)',
+                                          color: '#fbbf24',
+                                          fontSize: '0.68rem',
+                                          padding: '1px 6px',
+                                          borderRadius: 4,
+                                          fontWeight: 500,
+                                          whiteSpace: 'nowrap',
+                                          border: '1px solid rgba(245, 158, 11, 0.25)'
+                                        }}>
+                                          Belum Terjadwal BNBA
+                                        </span>
+                                      )
+                                    )}
+                                    {scheduleMode === 'staggered' && (
+                                      <span style={{
+                                        background: 'rgba(56, 189, 248, 0.2)',
+                                        color: '#38bdf8',
+                                        fontSize: '0.68rem',
+                                        padding: '1px 6px',
+                                        borderRadius: 4,
+                                        fontWeight: 600,
+                                        whiteSpace: 'nowrap'
+                                      }}>
+                                        {itemScheduleMap.get(item.key).jam}
+                                      </span>
+                                    )}
+                                    {scheduleMode === 'uniform' && customVenueJam && (
+                                      <span style={{
+                                        background: 'rgba(56, 189, 248, 0.15)',
+                                        color: '#38bdf8',
+                                        fontSize: '0.68rem',
+                                        padding: '1px 6px',
+                                        borderRadius: 4,
+                                        whiteSpace: 'nowrap'
+                                      }}>
+                                        {itemScheduleMap.get(item.key).jam}
+                                      </span>
+                                    )}
+                                  </>
                                 )}
                               </div>
                               <div className="rec-nip">
@@ -2080,7 +2402,7 @@ NIP. ${official.nip}
                   template={currentTemplate}
                   recipient={rec}
                   official={official}
-                  venue={venue}
+                  venue={effectiveVenue}
                   letterNumber={letterNumber}
                   letterDate={letterDate}
                   customAgenda={customAgenda}

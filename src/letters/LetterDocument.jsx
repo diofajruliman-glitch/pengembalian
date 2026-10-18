@@ -362,11 +362,11 @@ export default function LetterDocument({
                   <td className="col-sep">:</td>
                   <td className="col-val">{recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
                 </tr>
-                {venue.linkZoom && (
+                {(recipient.linkZoom || venue.linkZoom) && (
                   <tr>
                     <td className="col-label">Link Zoom</td>
                     <td className="col-sep">:</td>
-                    <td className="col-val" style={{wordBreak: 'break-all'}}>{venue.linkZoom}</td>
+                    <td className="col-val" style={{wordBreak: 'break-all'}}>{recipient.linkZoom || venue.linkZoom}</td>
                   </tr>
                 )}
               </tbody>
