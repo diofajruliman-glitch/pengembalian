@@ -46,7 +46,7 @@ Tanggal menerima YYYY-MM-DD, DD/MM/YYYY, serta tanggal Excel asli. Waktu memakai
 
 Impor menampilkan masalah per baris: identitas tidak ditemukan, identitas ganda, room/pewawancara tidak cocok, jadwal bentrok, kapasitas harian terlampaui, atau peserta sudah aktif/selesai. Satu masalah memblokir seluruh penerapan; baris valid tidak disimpan sebagian. Tidak ada perubahan sebelum menekan Terapkan.
 
-**Jadwal per pewawancara** menyiapkan satu CSV untuk setiap pewawancara utama, berisi hanya BNBA yang ditugaskan kepadanya. Semua CSV dapat diunduh sebagai satu ZIP. Berkas dibuat lokal untuk dibagikan melalui kanal kerja pengguna; fitur ini tidak mengirim pesan atau memberikan akses akun otomatis.
+**Jadwal per pewawancara** menyiapkan satu CSV untuk setiap pewawancara utama, berisi hanya BNBA yang ditugaskan kepadanya. Semua CSV dapat diunduh sebagai satu ZIP. CSV BNBA dan paket pewawancara menyertakan kategori Pairing Sekjen asli beserta acuannya, termasuk flag perlu validasi. Berkas dibuat lokal untuk dibagikan melalui kanal kerja pengguna; fitur ini tidak mengirim pesan atau memberikan akses akun otomatis.
 
 ## Penyimpanan dan batas penggunaan sementara
 
@@ -61,3 +61,5 @@ Tidak ada migrasi database atau deployment pada implementasi ini. Setelah rilis 
 Tes model mencakup seleksi Terbukti, sumber/versi, roster CSV, kapasitas 1.057 peserta, akhir pekan, bentrok, verifikasi identitas, timer, pemindahan, penjadwalan ulang, dan keamanan ekspor CSV. Tes penyimpanan mencakup isolasi akun/sumber, konflik revisi, format korup, batas kapasitas, izin browser, serta pemulihan yang mempertahankan data lama. Pengujian browser memakai BNBA simulasi (bukan data personal riil) untuk integrasi menu, penjadwalan, catatan sebelum jadwal, verifikasi, timer, pergantian status, dan muat ulang.
 
 Pembaruan distribusi: 73 pengujian modul wawancara lulus dan build produksi berhasil. Verifikasi browser menggunakan 1.057 SDM simulasi mencakup 49 pilihan lintas halaman, penolakan bentrok, redistribusi dua SDM ke pewawancara berbeda, impor XLSX dengan dua perubahan jadwal, serta unduhan ZIP 18 paket CSV dengan total 1.057 baris peserta.
+
+Pembaruan aturan Berat: 96 pengujian modul wawancara lulus. Verifikasi browser menggunakan kategori asli yang sengaja berbeda dari kategori sesudah ASN: 45 SDM Berat dibagi hanya ke empat room Itjen/OSDM, 44 pada hari pertama dan satu pada hari berikutnya. Pengujian mencakup semua jalur penempatan, penolakan impor yang melanggar, flag sumber perlu validasi, serta penyelesaian wawancara lama pada room yang kemudian dinonaktifkan.
