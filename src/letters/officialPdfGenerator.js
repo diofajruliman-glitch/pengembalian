@@ -139,12 +139,12 @@ export async function generateOfficialPdfBatch({
       doc.text('Kepada Yth.', 14, curY)
       curY += 5
       doc.setFont('helvetica', 'bold')
-      doc.text(`Saudara/i ${recipient.nama || '«NAMA ASN»'}`, 14, curY)
+      doc.text(`Saudara/i ${recipient.nama || '—'}`, 14, curY)
       curY += 5
       doc.setFont('helvetica', 'normal')
-      doc.text(`NIP/NIPPPK : ${recipient.nip || '«NIP»'}`, 14, curY)
+      doc.text(`NIP/NIPPPK : ${recipient.nip || '—'}`, 14, curY)
       curY += 5
-      doc.text(`Jabatan : ${recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'}`, 14, curY)
+      doc.text(`Jabatan : ${recipient.jabatan || 'PPPK Direktorat PSNK'}`, 14, curY)
       curY += 5
       doc.text('di Tempat', 14, curY)
       curY += 6.5
@@ -280,14 +280,14 @@ export async function generateOfficialPdfBatch({
 
       // Tabel Yang Diperiksa
       const subjectRows = [
-        ['2. Nama', ':', recipient.nama || '«NAMA ASN»'],
-        ['   NIP/NIPPPK', ':', recipient.nip || '«NIP»']
+        ['2. Nama', ':', recipient.nama || '—'],
+        ['   NIP/NIPPPK', ':', recipient.nip || '—']
       ]
       if (effectiveShowRank) {
-        subjectRows.push(['   Pangkat/Gol', ':', recipient.pangkat || 'Penata Muda (III/a)'])
+        subjectRows.push(['   Pangkat/Gol', ':', recipient.pangkat || 'Pegawai ASN / PPPK'])
       }
       subjectRows.push(
-        ['   Jabatan', ':', recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'],
+        ['   Jabatan', ':', recipient.jabatan || 'PPPK Direktorat PSNK'],
         ['   Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
       )
 
@@ -322,14 +322,14 @@ export async function generateOfficialPdfBatch({
 
       // Tabel Data Penerima
       const recipientRows = [
-        ['Nama', ':', recipient.nama || '«NAMA ASN»'],
-        ['NIP/NIPPPK', ':', recipient.nip || '«NIP»']
+        ['Nama', ':', recipient.nama || '—'],
+        ['NIP/NIPPPK', ':', recipient.nip || '—']
       ]
       if (effectiveShowRank) {
-        recipientRows.push(['Pangkat', ':', recipient.pangkat || '«pangkat»'])
+        recipientRows.push(['Pangkat', ':', recipient.pangkat || 'Pegawai ASN / PPPK'])
       }
       recipientRows.push(
-        ['Jabatan', ':', recipient.jabatan || '«Jabatan»'],
+        ['Jabatan', ':', recipient.jabatan || 'PPPK Direktorat PSNK'],
         ['Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
       )
 
@@ -511,7 +511,7 @@ export async function generateOfficialPdfBatch({
       // Kiri: Yang Diperiksa
       doc.text('Yang Diperiksa,', 18, signY)
       doc.setFont('helvetica', 'bold')
-      doc.text(recipient.nama || '«NAMA ASN»', 18, signY + 20)
+      doc.text(recipient.nama || '—', 18, signY + 20)
       doc.setFont('helvetica', 'normal')
       doc.text(`NIP. ${recipient.nip || '—'}`, 18, signY + 25)
 
