@@ -445,8 +445,8 @@
 }
 
 .doc-entry-table td.col-label {
-  width: 175px;
-  min-width: 175px;
+  width: 195px;
+  min-width: 195px;
   white-space: nowrap;
 }
 
@@ -504,15 +504,21 @@
   background-color: #f1f5f9;
   font-weight: bold;
   text-align: center;
-  font-size: 9.5pt;
-  letter-spacing: 0.1px;
+  font-size: 9pt;
+  letter-spacing: normal;
   padding: 6px 4px !important;
 }
 
 .doc-invoice-table th.col-sisa,
 .doc-invoice-table td.col-sisa {
-  width: 165px;
-  min-width: 160px;
+  width: 185px;
+  min-width: 180px;
+}
+
+.doc-invoice-table th.col-sisa {
+  font-size: 9pt;
+  letter-spacing: normal;
+  text-align: center;
   white-space: nowrap;
 }
 

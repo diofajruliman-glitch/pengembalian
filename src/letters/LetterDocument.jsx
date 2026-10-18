@@ -73,19 +73,19 @@ export default function LetterDocument({
 
           <table className="doc-invoice-table">
             <colgroup>
-              <col style={{width: '36px'}} />
+              <col style={{width: '32px'}} />
               <col style={{width: 'auto'}} />
-              <col style={{width: '120px'}} />
-              <col style={{width: '120px'}} />
-              <col style={{width: '165px'}} />
+              <col style={{width: '110px'}} />
+              <col style={{width: '110px'}} />
+              <col style={{width: '185px'}} />
             </colgroup>
             <thead>
               <tr>
-                <th style={{width: '36px', textAlign: 'center'}}>No</th>
+                <th style={{width: '32px', textAlign: 'center'}}>No</th>
                 <th style={{textAlign: 'center'}}>Uraian Kewajiban</th>
-                <th style={{width: '120px', textAlign: 'center'}}>Kewajiban Awal</th>
-                <th style={{width: '120px', textAlign: 'center'}}>Telah Disetor</th>
-                <th className="col-sisa" style={{width: '165px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
+                <th style={{width: '110px', textAlign: 'center'}}>Kewajiban Awal</th>
+                <th style={{width: '110px', textAlign: 'center'}}>Telah Disetor</th>
+                <th className="col-sisa" style={{width: '185px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
               </tr>
             </thead>
             <tbody>
@@ -263,19 +263,19 @@ export default function LetterDocument({
               </div>
               <table className="doc-invoice-table">
                 <colgroup>
-                  <col style={{width: '36px'}} />
+                  <col style={{width: '32px'}} />
                   <col style={{width: 'auto'}} />
-                  <col style={{width: '120px'}} />
-                  <col style={{width: '120px'}} />
-                  <col style={{width: '165px'}} />
+                  <col style={{width: '110px'}} />
+                  <col style={{width: '110px'}} />
+                  <col style={{width: '185px'}} />
                 </colgroup>
                 <thead>
                   <tr>
-                    <th style={{width: '36px', textAlign: 'center'}}>No</th>
+                    <th style={{width: '32px', textAlign: 'center'}}>No</th>
                     <th style={{textAlign: 'center'}}>Uraian Kewajiban</th>
-                    <th style={{width: '120px', textAlign: 'center'}}>Kewajiban Awal</th>
-                    <th style={{width: '120px', textAlign: 'center'}}>Telah Disetor</th>
-                    <th className="col-sisa" style={{width: '165px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
+                    <th style={{width: '110px', textAlign: 'center'}}>Kewajiban Awal</th>
+                    <th style={{width: '110px', textAlign: 'center'}}>Telah Disetor</th>
+                    <th className="col-sisa" style={{width: '185px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
                   </tr>
                 </thead>
                 <tbody>
