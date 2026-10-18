@@ -46,20 +46,41 @@ const fmtRp = n => 'Rp ' + Math.max(0,Number(n||0)).toLocaleString('id-ID', {max
 const fmtN = n => Number(n||0).toLocaleString('id-ID')
 const safeDate = v => v ? new Date(`${v}T12:00:00`).toLocaleDateString('id-ID', {day:'2-digit', month:'short', year:'numeric'}) : '—'
 const deadline = '2026-12-31'
-const menus = [
-  {id:'dashboard',name:'Dashboard',icon:LayoutDashboard},
-  {id:'kasus',name:'Monitoring SDM',icon:Users},
-  {id:'bottleneck',name:'Matriks Bottleneck',icon:AlertTriangle},
-  {id:'aksi',name:'Rencana Aksi',icon:CalendarDays},
-  {id:'bank',name:'Rekap Bank',icon:Landmark},
-  {id:'master-progress',name:'Master & Progres',icon:TrendingUp},
-  {id:'perubahan-pengembalian',name:'Penyesuaian Pengembalian',icon:FileCheck2},
-  {id:'kategorisasi-judol',name:'Kategorisasi Disiplin ASN',icon:ShieldCheck},
-  {id:'monitoring-wawancara',name:'Monitoring Wawancara',icon:Users},
-  {id:'surat-tlhp',name:'Persuratan & Dokumen TLHP',icon:FileText},
-  {id:'impor-master',name:'Pratinjau Excel Master',icon:FileSpreadsheet},
-  {id:'panduan',name:'Petunjuk',icon:CircleHelp}
+const menuGroups = [
+  {
+    group: 'RINGKASAN',
+    items: [
+      { id: 'dashboard', name: 'Dashboard', icon: LayoutDashboard }
+    ]
+  },
+  {
+    group: 'PENGEMBALIAN KEUANGAN (TUKIN & UM)',
+    items: [
+      { id: 'kasus', name: 'Daftar SDM (BNBA)', icon: Users },
+      { id: 'bank', name: 'Rekap Bank', icon: Landmark },
+      { id: 'master-progress', name: 'Master & Progres', icon: TrendingUp },
+      { id: 'perubahan-pengembalian', name: 'Penyesuaian Pengembalian', icon: FileCheck2 },
+      { id: 'bottleneck', name: 'Matriks Hambatan (Bottleneck)', icon: AlertTriangle },
+      { id: 'aksi', name: 'Rencana Aksi', icon: CalendarDays }
+    ]
+  },
+  {
+    group: 'PENEGAKAN DISIPLIN & PERSURATAN',
+    items: [
+      { id: 'kategorisasi-judol', name: 'Kategorisasi Disiplin ASN', icon: ShieldCheck },
+      { id: 'surat-tlhp', name: 'Persuratan & Dokumen Resmi', icon: FileText },
+      { id: 'monitoring-wawancara', name: 'Monitoring Wawancara', icon: Users, tag: 'Operasional' }
+    ]
+  },
+  {
+    group: 'SISTEM & DOKUMEN',
+    items: [
+      { id: 'impor-master', name: 'Pratinjau Excel Master', icon: FileSpreadsheet, adminOnly: true },
+      { id: 'panduan', name: 'Petunjuk & Tata Kelola', icon: CircleHelp }
+    ]
+  }
 ]
+const menus = menuGroups.flatMap(g => g.items)
 const statuses = ['Belum Mulai','Proses','Menunggu Keputusan','Selesai','Tertunda']
 const statusesCase = ['Belum Ditindaklanjuti','Proses Penagihan','Menunggu Autodebet','Perlu Telaah','Lunas Terverifikasi','Belum Lunas']
 const banks = ['Mandiri','BRI','BSI','Lainnya']
@@ -362,7 +383,31 @@ function App(){
  return <div className="shell">
    <aside className={'sidebar '+(navOpen?'is-open':'')}>
     <div className="brand tlhp-brand"><div className="brand-symbol"><ShieldCheck size={23}/></div><div><b>Pokja SD Tim TLHP</b><small>Monitoring Tindak Lanjut</small></div><button className="mobile-close icon-btn" onClick={()=>setNavOpen(false)}><X size={20}/></button></div>
-    <div className="nav-label">WORKSPACE</div><nav>{menus.filter(m=>m.id!=='impor-master'||canImport).map(m=><button key={m.id} className={'nav-item '+(page===m.id?'active':'')} onClick={()=>go(m.id)}><m.icon size={18}/><span>{m.name}</span>{m.id==='kasus'&&caseTotal>0&&<small>{fmtN(caseTotal)}</small>}</button>)}</nav>
+     <div className="sidebar-nav-scroll">
+      {menuGroups.map(g => {
+        const visibleItems = g.items.filter(m => !m.adminOnly || canImport)
+        if (!visibleItems.length) return null
+        return (
+          <div key={g.group} className="nav-group">
+            <div className="nav-label">{g.group}</div>
+            <nav>
+              {visibleItems.map(m => (
+                <button
+                  key={m.id}
+                  className={'nav-item ' + (page === m.id ? 'active' : '')}
+                  onClick={() => go(m.id)}
+                >
+                  <m.icon size={18}/>
+                  <span>{m.name}</span>
+                  {m.id === 'kasus' && caseTotal > 0 && <small>{fmtN(caseTotal)}</small>}
+                  {m.tag && <span className="nav-tag">{m.tag}</span>}
+                </button>
+              ))}
+            </nav>
+          </div>
+        )
+      })}
+     </div>
     <div className="nav-foot"><div className="deadline-widget"><span><Clock3 size={16}/> TENGGAT PENYELESAIAN</span><strong>31 Desember 2026</strong><div className="progress-rail"><i style={{width:kpis.pct+'%'}}/></div><small>Target pelunasan semua kewajiban</small></div><div className="nav-identity"><div className="avatar">{demo?'D':(profile?.nama||'P')[0].toUpperCase()}</div><div><b>{demo?'Mode Pratinjau':profile?.nama||session?.user?.email}</b><small>{demo?'Data simulasi':profile?.role?.toUpperCase()}</small></div>{!demo&&<button className="icon-btn" onClick={signOut} title="Keluar" aria-label="Keluar dari aplikasi"><LogOut size={16}/></button>}</div></div>
    </aside>
    <div className="workspace"><header className="topbar"><div className="top-left"><button className="icon-btn hamburger" onClick={()=>setNavOpen(true)}><Menu size={22}/></button><span className="crumb">Direktorat PSNK <ChevronRight size={14}/> <b>{menus.find(m=>m.id===page)?.name}</b></span></div><div className="top-right"><span className="online-chip"><span className="green-dot"/>{demo?'PRATINJAU':'DATABASE AKTIF'}</span><span className="user-chip"><div className="avatar small">{demo?'D':(profile?.nama||'P')[0].toUpperCase()}</div>{demo?'Pratinjau':profile?.nama||'Pengguna'}</span>{!demo&&<button type="button" className="btn secondary logout-button" onClick={signOut} aria-label="Keluar dari aplikasi"><LogOut size={16}/><span>Keluar</span></button>}</div></header>
