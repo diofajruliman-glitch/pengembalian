@@ -16,10 +16,29 @@ Susun jadwal melalui **Penugasan & parameter → Pratinjau jadwal → Terapkan d
 2. Lakukan Assign/Move To pada Zoom, kemudian simpan status **Di room**. Identitas wajib diverifikasi dan jadwal harus lengkap. Timer memakai waktu mulai aktual; hanya satu peserta aktif per room/pewawancara utama.
 3. **Kendali room** menampilkan peserta aktif, hitung mundur, kelebihan waktu, peserta berikutnya, dan jumlah antrean sesuai tanggal. Rincian memungkinkan perpindahan room tanpa mengulang timer. Durasi/jadwal sesi aktif dikunci.
 4. Catat posisi pimpinan di Main Room/room tujuan dan kunjungannya. Teks pengingat dapat disalin untuk Broadcast pada Zoom.
-5. Setelah perpindahan keluar dilakukan di Zoom, catat **Selesai**. Tersedia status Tidak hadir, Terkendala, dan Jadwal ulang beserta catatan. Penjadwalan ulang dilakukan per peserta melalui rincian.
+5. Setelah perpindahan keluar dilakukan di Zoom, catat **Selesai**. Tersedia status Tidak hadir, Terkendala, dan Jadwal ulang beserta catatan. Penjadwalan ulang dapat dilakukan per peserta melalui rincian atau secara massal pada SDM terpilih.
 6. Ekspor seluruh BNBA atau sesuai filter ke CSV, serta unduh cadangan JSON.
 
 Panduan operasi tertera di tab **Panduan Dio**. Acuan Host/Co-Host: [Zoom — Managing meeting breakout rooms](https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0062540). Aplikasi mencatat tindakan; tidak mengendalikan Zoom, mengirim undangan, atau memindahkan peserta otomatis.
+
+## Distribusi massal dan impor jadwal
+
+Pada **BNBA & jadwal**, tersedia kotak centang per SDM, pilihan satu halaman, dan **Pilih semua hasil filter**. Pilihan bertahan saat pindah halaman atau filter; jumlah pilihan di luar filter tetap ditampilkan. Peserta Di room atau Selesai dikunci dari operasi massal. Pilihan yang kemudian menjadi aktif/selesai dikeluarkan dari pilihan otomatis.
+
+Gunakan **Distribusikan / ubah pilihan** untuk:
+
+- **Ganti pewawancara, pertahankan jadwal:** pindahkan SDM terpilih ke satu room/pewawancara tujuan tanpa menggeser tanggal, jam, sesi, atau durasi. Bentrok antar-SDM terpilih maupun jadwal lain tetap ditolak.
+- **Susun jadwal ke pewawancara terpilih:** pilih beberapa room, tanggal awal, durasi, jeda, dan kapasitas per room per hari. Hanya penempatan SDM terpilih yang disusun ulang. Parameter ini disimpan sebagai acuan operasi berikutnya; jadwal SDM lain dipertahankan dan tetap diperhitungkan.
+
+Pratinjau menampilkan jumlah berubah/tetap, pembagian tiap room, rentang tanggal, serta perbandingan sebelum/sesudah. Penempatan berubah kembali ke Terjadwal, verifikasi identitas dan waktu aktual dikosongkan, sedangkan catatan, nama Zoom, dan catatan pimpinan dipertahankan. Penempatan yang identik tidak menghapus status/hasil verifikasi. Seluruh batch diterapkan sekaligus hanya jika valid dan revisi draft belum berubah.
+
+**Impor jadwal Excel / CSV** menyediakan template CSV. Header yang digunakan: NIK, NIP, Nama (opsional), Tanggal, Jadwal atau Jam Mulai, Sesi, Room atau Pewawancara Utama, Durasi (menit), Catatan (opsional). NIK/NIP harus teks lengkap (16/18 digit); pencocokan nama saja ditolak. Jika kedua identitas diisi, keduanya wajib mengarah ke SDM yang sama pada populasi Terbukti. Nama opsional yang berbeda dari sumber juga ditandai untuk diperiksa.
+
+Tanggal menerima YYYY-MM-DD, DD/MM/YYYY, serta tanggal Excel asli. Waktu memakai HH:MM dalam WIB atau pecahan waktu Excel yang tepat per menit. Sesi/durasi kosong memakai 1/40 menit dengan catatan di pratinjau. Room dan pewawancara harus sesuai penugasan saat ini. Workbook boleh memiliki satu sheet atau sheet bernama **Jadwal**. Maksimal 8 MiB, 5.000 baris data, dan 100 kolom. Nilai identitas Excel numerik/notasi ilmiah ditolak untuk mencegah pencocokan digit yang sudah berubah.
+
+Impor menampilkan masalah per baris: identitas tidak ditemukan, identitas ganda, room/pewawancara tidak cocok, jadwal bentrok, kapasitas harian terlampaui, atau peserta sudah aktif/selesai. Satu masalah memblokir seluruh penerapan; baris valid tidak disimpan sebagian. Tidak ada perubahan sebelum menekan Terapkan.
+
+**Jadwal per pewawancara** menyiapkan satu CSV untuk setiap pewawancara utama, berisi hanya BNBA yang ditugaskan kepadanya. Semua CSV dapat diunduh sebagai satu ZIP. Berkas dibuat lokal untuk dibagikan melalui kanal kerja pengguna; fitur ini tidak mengirim pesan atau memberikan akses akun otomatis.
 
 ## Penyimpanan dan batas penggunaan sementara
 
