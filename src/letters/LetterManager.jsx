@@ -55,8 +55,6 @@ import {
   getTransactionAvailability
 } from '../judol/availability.js'
 import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
-import {disciplineStorage} from '../judol/storage.js'
-import {REAL_DISCIPLINE_DATA} from './realDisciplineData.js'
 import {indexSnapshot, selectProgress} from '../recovery/progress.js'
 import {statusOf, targetStatuses, normalizeSdmStatus, isNonactiveStatus, isSpecialTarget} from '../import/sourceMetadata.js'
 import './officialLetter.css'
@@ -64,22 +62,25 @@ import './officialLetter.css'
 export default function LetterManager({
   cases = [],
   judolSnapshot = null,
-  onJudolSnapshot = null,
+  onOpenJudolSource = null,
   masterSnapshot = null,
   matrix = [],
   actions = [],
-  supabase = null
+  supabase = null,
+  databaseOnly = true
 }) {
   const [activeTab, setActiveTab] = useState('generator')
   const [copied, setCopied] = useState(false)
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
   const [downloadProgress, setDownloadProgress] = useState(null)
-  const [loadingJudolOnline, setLoadingJudolOnline] = useState(false)
   const [dbCases, setDbCases] = useState([])
   const [loadingDbCases, setLoadingDbCases] = useState(false)
+  const [dbCasesError, setDbCasesError] = useState('')
 
   // Muat data SDM langsung dari database Supabase (sdm_cases) bila akun terotentikasi
   useEffect(() => {
+    setDbCases([])
+    setDbCasesError('')
     if (!supabase) return
     let active = true
     setLoadingDbCases(true)
@@ -89,11 +90,11 @@ export default function LetterManager({
       .is('deleted_at', null)
       .order('nama', { ascending: true })
       .then(({ data, error }) => {
-        if (active && !error && data && data.length) {
-          setDbCases(data)
-        }
+        if (!active) return
+        if (error) throw error
+        setDbCases(data || [])
       })
-      .catch(() => {})
+      .catch(() => { if (active) setDbCasesError('Daftar SDM dari database belum dapat dimuat. Periksa koneksi dan muat ulang halaman.') })
       .finally(() => {
         if (active) setLoadingDbCases(false)
       })
@@ -255,51 +256,6 @@ export default function LetterManager({
     const s = `${p.status || ''} ${p.status_sdm || ''} ${p.kategori || ''} ${p.sourceMetadata?.status || ''}`.toLowerCase()
     return /meninggal|resign|pensiun|bup|mengundurkan|phk/.test(s)
   }
-
-  // Auto-muat dataset Disiplin ASN dari Supabase jika belum ada di state
-  const handleLoadJudolOnline = async () => {
-    if (!supabase || !onJudolSnapshot) return
-    setLoadingJudolOnline(true)
-    try {
-      const storage = disciplineStorage(supabase)
-      if (storage) {
-        const data = await storage.listDatasets()
-        if (data && data.length > 0) {
-          const [dataset, followups] = await Promise.all([
-            storage.loadDataset(data[0].id),
-            storage.loadFollowups(data[0].id).catch(() => [])
-          ])
-          const snap = {
-            kind: 'analysis',
-            name: dataset.name,
-            filename: dataset.filename,
-            source: null,
-            active: 0,
-            versions: [{
-              id: dataset.id,
-              number: dataset.version,
-              createdAt: dataset.createdAt,
-              status: dataset.status,
-              result: dataset.result,
-              followups: followups || [],
-              auditEvents: dataset.auditEvents || []
-            }]
-          }
-          onJudolSnapshot(snap)
-        }
-      }
-    } catch (e) {
-      console.error('Judol dataset auto-load error:', e)
-    } finally {
-      setLoadingJudolOnline(false)
-    }
-  }
-
-  useEffect(() => {
-    if (supabase && !judolSnapshot && onJudolSnapshot) {
-      handleLoadJudolOnline()
-    }
-  }, [supabase, judolSnapshot, onJudolSnapshot])
 
   // 1. DATA SDM DARI PENANGANAN SDM — BOTTLENECK (Matriks Hambatan & Master/Database)
   const selectedBottleneck = useMemo(() => {
@@ -475,31 +431,9 @@ export default function LetterManager({
     return judolSnapshot?.versions?.[judolSnapshot.active]?.result?.rows || []
   }, [judolSnapshot])
 
-  const effectiveJudolRows = useMemo(() => {
-    // Jika dataset Supabase memuat seluruh data riil (>= 1357), gunakan
-    if (judolRows && judolRows.length >= 1357 && !judolRows.some(isTestRecord)) {
-      return judolRows
-    }
-    // Jika dataset Supabase memuat pembaruan tindak lanjut / status, gabungkan ke dataset riil 1.357
-    if (judolRows && judolRows.length > 0) {
-      const updateMap = new Map()
-      for (const r of judolRows) {
-        const id = r.nik || r.nip
-        if (id && !isTestRecord(r)) {
-          updateMap.set(id, r)
-        }
-      }
-      if (updateMap.size > 0) {
-        return REAL_DISCIPLINE_DATA.map(r => {
-          const id = r.nik || r.nip
-          const updated = updateMap.get(id)
-          return updated ? { ...r, ...updated } : r
-        })
-      }
-    }
-    // Master data resmi lengkap: 1.357 SDM (1.057 Terbukti, 300 Tidak Terbukti)
-    return REAL_DISCIPLINE_DATA
-  }, [judolRows])
+  // Main supplies the verified database response online. An empty/partial
+  // dataset remains empty/partial; never merge a bundled personnel list.
+  const effectiveJudolRows = judolRows
 
   const judolFocused = useMemo(() => {
     return effectiveJudolRows.filter(isFocusedAssessment)
@@ -660,18 +594,18 @@ export default function LetterManager({
 
   // Daftar Penerima yang akan dicetak / diunduh
   const activeRecipients = useMemo(() => {
-    if (recipientSource === 'manual') return [manualRecipient]
+    if (recipientSource === 'manual') return databaseOnly ? [] : [manualRecipient]
     let list = []
     if (recipientSource === 'bottleneck') list = bottleneckList
     else if (recipientSource === 'sdm_cases') list = caseList
     else if (recipientSource === 'judol') list = judolList
     else if (recipientSource === 'master') list = masterList
 
-    if (!list.length) return [manualRecipient]
+    if (!list.length) return []
 
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
     return filtered.length > 0 ? filtered : list
-  }, [recipientSource, manualRecipient, bottleneckList, caseList, judolList, masterList, selectedSDMKeys])
+  }, [recipientSource, manualRecipient, bottleneckList, caseList, judolList, masterList, selectedSDMKeys, databaseOnly])
 
   // SDM yang dirender di layar pratinjau (dipaginasi per 10 lembar agar performa instan tanpa lag)
   const displayedRecipients = useMemo(() => {
@@ -995,7 +929,8 @@ export default function LetterManager({
 
   // Salin Teks ke Clipboard
   const handleCopyText = () => {
-    const r = activeRecipients[0] || manualRecipient
+    const r = activeRecipients[0]
+    if (!r) return
     const effectiveCoord = customCoordination || currentTemplate.coordinationText || 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.'
     const text = `
 ${currentTemplate.classification}
@@ -1092,6 +1027,7 @@ NIP. ${official.nip}
 
   return (
     <div className="letter-workspace">
+      {dbCasesError && <p className="notice amber-notice" role="alert">{dbCasesError}</p>}
       {/* 1. NAVIGASI TAB MODUL PERSURATAN */}
       <div className="letter-tabs no-print">
         <button
@@ -1294,7 +1230,7 @@ NIP. ${official.nip}
                 {masterList.length > 0 && (
                   <option value="master">4. Master & Progres Tersimpan ({masterList.length} SDM)</option>
                 )}
-                <option value="manual">5. Input Manual Perorangan</option>
+                {!databaseOnly && <option value="manual">5. Input Manual Perorangan</option>}
               </select>
             </div>
 
@@ -1420,14 +1356,13 @@ NIP. ${official.nip}
                   <label style={{fontSize: '0.82rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase'}}>
                     Populasi & Filter Disiplin
                   </label>
-                  {!judolRows.length && supabase && (
+                  {!judolRows.length && onOpenJudolSource && (
                     <button
                       type="button"
-                      onClick={handleLoadJudolOnline}
-                      disabled={loadingJudolOnline}
+                      onClick={onOpenJudolSource}
                       style={{background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.78rem', cursor: 'pointer', padding: 0}}
                     >
-                      {loadingJudolOnline ? 'Memuat...' : '↻ Muat Online'}
+                      Pilih dataset online
                     </button>
                   )}
                 </div>
@@ -1744,6 +1679,7 @@ NIP. ${official.nip}
                   type="button"
                   className="btn secondary"
                   onClick={handleCopyText}
+                  disabled={!activeRecipients.length}
                   title="Salin teks surat ke clipboard"
                 >
                   {copied ? <Check size={16} color="#22c55e" /> : <Copy size={16} />}
@@ -1753,7 +1689,7 @@ NIP. ${official.nip}
                   type="button"
                   className="btn primary"
                   onClick={() => handleDownloadPdf(true)}
-                  disabled={isDownloadingPdf}
+                  disabled={isDownloadingPdf || !activeRecipients.length}
                   title={`Unduh seluruh berkas PDF (${activeRecipients.length.toLocaleString('id-ID')} SDM) ke perangkat Anda`}
                   style={{background: 'linear-gradient(135deg, #0284c7, #0369a1)', borderColor: '#0284c7', fontWeight: 600}}
                 >
@@ -1764,6 +1700,7 @@ NIP. ${official.nip}
                   type="button"
                   className="btn primary"
                   onClick={handlePrint}
+                  disabled={!activeRecipients.length}
                   title="Cetak langsung atau simpan via dialog printer browser"
                 >
                   <Printer size={16} />
@@ -1773,6 +1710,7 @@ NIP. ${official.nip}
             </div>
 
             <div className="letter-preview-stage">
+              {!activeRecipients.length && <p className="notice amber-notice" role="status">Belum ada penerima dari sumber yang dipilih. Muat data database atau ubah filter sebelum membuat surat.</p>}
               {displayedRecipients.map((rec, index) => (
                 <LetterDocument
                   key={rec.key || (previewPage * PREVIEW_PAGE_SIZE + index)}
