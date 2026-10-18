@@ -63,7 +63,7 @@ export async function generateOfficialPdfBatch({
   }
 
   const kopData = await getKopDataUrl()
-  const isTagihan = template.category === 'keuangan'
+  const isTagihan = template.category === 'keuangan' && !template.id?.startsWith('panggilan')
   const isBeritaAcara = template.category === 'berita-acara'
   const effectiveShowClassification = showClassification ?? template.showClassification ?? true
   const effectivePosition = classificationPosition || template.classificationPosition || 'left'
@@ -308,7 +308,7 @@ export async function generateOfficialPdfBatch({
       doc.text(splitAgendaBA, 14, curY)
       curY += (splitAgendaBA.length * 4.8) + 3
 
-      const closeBA = template.closingText || 'Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.'
+      const closeBA = customClosing || template.closingText || 'Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.'
       const splitCloseBA = doc.splitTextToSize(closeBA, 182)
       doc.text(splitCloseBA, 14, curY)
       curY += (splitCloseBA.length * 4.8) + 4
@@ -317,8 +317,10 @@ export async function generateOfficialPdfBatch({
       // ================= KONTEN SURAT PEMANGGILAN (FONT ARIAL 12 PT) =================
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
-      doc.text(template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:', 14, curY)
-      curY += 4.5
+      const opening = customOpening || template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:'
+      const splitOpening = doc.splitTextToSize(opening, 182)
+      doc.text(splitOpening, 14, curY)
+      curY += (splitOpening.length * 4.8) + 2
 
       // Tabel Data Penerima
       const recipientRows = [
@@ -494,8 +496,16 @@ export async function generateOfficialPdfBatch({
         curY += (splitAgenda.length * 4.8) + 3
       }
 
+      // Paragraf Koordinasi (Jika ada, misal untuk Panggilan Pengembalian Tukin / Finansial)
+      const coordText = customCoordination || template.coordinationText
+      if (coordText) {
+        const splitCoord = doc.splitTextToSize(coordText, 182)
+        doc.text(splitCoord, 14, curY)
+        curY += (splitCoord.length * 4.8) + 3
+      }
+
       // Paragraf Penutup
-      const closing = template.closingText || 'Demikian untuk dilaksanakan.'
+      const closing = customClosing || template.closingText || 'Demikian untuk dilaksanakan.'
       const splitClosing = doc.splitTextToSize(closing, 182)
       doc.text(splitClosing, 14, curY)
       curY += (splitClosing.length * 4.8) + 3
