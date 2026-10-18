@@ -362,39 +362,15 @@ export default function LetterDocument({
                   <td className="col-sep">:</td>
                   <td className="col-val">{venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
                 </tr>
+                {venue.linkZoom && (
+                  <tr>
+                    <td className="col-label">Link Zoom</td>
+                    <td className="col-sep">:</td>
+                    <td className="col-val" style={{wordBreak: 'break-all'}}>{venue.linkZoom}</td>
+                  </tr>
+                )}
               </tbody>
             </table>
-
-            {venue.linkZoom && (
-              <>
-                <div className="doc-session-heading" style={{marginTop: 6}}>Dan</div>
-                <div className="doc-session-heading" style={{marginTop: 2}}>Pada sesi :</div>
-                <table className="doc-entry-table" style={{margin: '2px 0 8px 18px'}}>
-                  <tbody>
-                    <tr>
-                      <td className="col-label">Hari</td>
-                      <td className="col-sep">:</td>
-                      <td className="col-val">{venue.hari || 'Senin'}</td>
-                    </tr>
-                    <tr>
-                      <td className="col-label">Tanggal</td>
-                      <td className="col-sep">:</td>
-                      <td className="col-val">{venue.tanggal || '26 Oktober 2026'}</td>
-                    </tr>
-                    <tr>
-                      <td className="col-label">Jam</td>
-                      <td className="col-sep">:</td>
-                      <td className="col-val">{venue.jam || '10.00 WIB'}</td>
-                    </tr>
-                    <tr>
-                      <td className="col-label">Link zoom</td>
-                      <td className="col-sep">:</td>
-                      <td className="col-val" style={{wordBreak: 'break-all'}}>{venue.linkZoom}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </>
-            )}
           </div>
 
           <p className="doc-body-paragraph">

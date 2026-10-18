@@ -196,3 +196,125 @@ test('surat penagihan custom editing and table layout test', async () => {
   const buffer = doc.output('arraybuffer')
   assert.ok(buffer.byteLength > 2000)
 })
+
+test('surat panggilan precise alignment test matching user layout specifications', async () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  let curY = 56
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(12)
+  doc.text('Bersama ini diminta dengan hormat kehadiran Saudara:', 14, curY)
+  curY += 6
+
+  // 1. Tabel Penerima
+  const recipientRows = [
+    ['Nama', ':', { content: 'Ramadhan Syah', styles: { fontStyle: 'bold' } }],
+    ['NIP/NIPPPK', ':', '199004252025211054'],
+    ['Pangkat / Golongan', ':', 'Golongan VII'],
+    ['Jabatan', ':', 'Pengelola Layanan Operasional'],
+    ['Unit Kerja', ':', 'Direktorat Perlindungan Sosial Non Kebencanaan']
+  ]
+
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 18, right: 14 },
+    body: recipientRows,
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+    columnStyles: {
+      0: { cellWidth: 46 },
+      1: { cellWidth: 4, halign: 'center' },
+      2: { cellWidth: 'auto' }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 3.5
+
+  // 2. Untuk Menghadap Kepada
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(12)
+  doc.text('Untuk menghadap kepada:', 14, curY)
+  curY += 3.5
+
+  const faceRows = [
+    ['Nama', ':', { content: 'Faisal', styles: { fontStyle: 'bold' } }],
+    ['NIP', ':', '19761106 200502 1 001'],
+    ['Pangkat', ':', 'IV/c'],
+    ['Jabatan', ':', 'Direktur Perlindungan Sosial Non Kebencanaan']
+  ]
+
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 18, right: 14 },
+    body: faceRows,
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+    columnStyles: {
+      0: { cellWidth: 46 },
+      1: { cellWidth: 4, halign: 'center' },
+      2: { cellWidth: 'auto' }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 3.5
+
+  // 3. Jadwal Pada :
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(12)
+  doc.text('Pada :', 14, curY)
+  curY += 3.5
+
+  const scheduleRows = [
+    ['Hari', ':', 'Senin'],
+    ['Tanggal', ':', '26 Oktober 2026'],
+    ['Jam', ':', '10.00 WIB'],
+    ['Tempat', ':', 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'],
+    ['Link Zoom', ':', 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)']
+  ]
+
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 18, right: 14 },
+    body: scheduleRows,
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+    columnStyles: {
+      0: { cellWidth: 46 },
+      1: { cellWidth: 4, halign: 'center' },
+      2: { cellWidth: 'auto' }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 4
+
+  // Agenda & Penutup
+  const agenda = 'Untuk diperiksa/dimintai keterangan sehubungan dengan dugaan pelanggaran disiplin kinerja.'
+  const splitAgenda = doc.splitTextToSize(agenda, 182)
+  doc.text(splitAgenda, 14, curY)
+  curY += (splitAgenda.length * 4.8) + 3
+
+  const closing = 'Demikian untuk dilaksanakan.'
+  const splitClosing = doc.splitTextToSize(closing, 182)
+  doc.text(splitClosing, 14, curY)
+  curY += (splitClosing.length * 4.8) + 3
+
+  // Tanda Tangan
+  const signY = Math.max(curY + 6, 214)
+  const signX = 125
+  doc.text('Jakarta, 26 Oktober 2026', signX, signY)
+  doc.text('Direktur Perlindungan Sosial Non Kebencanaan', signX, signY + 5)
+  const nameY = signY + 25
+  doc.setFont('helvetica', 'bold')
+  doc.text('Faisal', signX, nameY)
+  doc.setFont('helvetica', 'normal')
+  doc.text('NIP. 19761106 200502 1 001', signX, nameY + 4.8)
+
+  // Verify single page fit and exact page count
+  assert.equal(doc.internal.getNumberOfPages(), 1)
+  assert.ok(nameY + 4.8 < 280, 'Signature block fits neatly above bottom margin')
+  const buffer = doc.output('arraybuffer')
+  assert.ok(buffer.byteLength > 2000)
+})
+
