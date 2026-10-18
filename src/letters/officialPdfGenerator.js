@@ -205,11 +205,19 @@ export async function generateOfficialPdfBatch({
           fontSize: 9
         },
         columnStyles: {
-          0: { cellWidth: 9, halign: 'center' },
+          0: { cellWidth: 8, halign: 'center' },
           1: { cellWidth: 'auto' },
-          2: { cellWidth: 30, halign: 'right' },
-          3: { cellWidth: 30, halign: 'right' },
-          4: { cellWidth: 42, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+          2: { cellWidth: 28, halign: 'right' },
+          3: { cellWidth: 28, halign: 'right' },
+          4: { cellWidth: 48, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+        },
+        didParseCell: (data) => {
+          if (data.section === 'head') {
+            data.cell.styles.halign = 'center'
+            data.cell.styles.valign = 'middle'
+            data.cell.styles.textColor = [15, 23, 42]
+            data.cell.styles.fontStyle = 'bold'
+          }
         }
       })
 
@@ -336,7 +344,7 @@ export async function generateOfficialPdfBatch({
         theme: 'plain',
         styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
         columnStyles: {
-          0: { cellWidth: 44 },
+          0: { cellWidth: 50 },
           1: { cellWidth: 4 },
           2: { cellWidth: 'auto', fontStyle: 'bold' }
         }
@@ -401,9 +409,17 @@ export async function generateOfficialPdfBatch({
           columnStyles: {
             0: { cellWidth: 8, halign: 'center' },
             1: { cellWidth: 'auto' },
-            2: { cellWidth: 30, halign: 'right' },
-            3: { cellWidth: 30, halign: 'right' },
-            4: { cellWidth: 42, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+            2: { cellWidth: 28, halign: 'right' },
+            3: { cellWidth: 28, halign: 'right' },
+            4: { cellWidth: 48, halign: 'right', fontStyle: 'bold', textColor: [185, 28, 28] }
+          },
+          didParseCell: (data) => {
+            if (data.section === 'head') {
+              data.cell.styles.halign = 'center'
+              data.cell.styles.valign = 'middle'
+              data.cell.styles.textColor = [15, 23, 42]
+              data.cell.styles.fontStyle = 'bold'
+            }
           }
         })
         curY = doc.lastAutoTable.finalY + 3
