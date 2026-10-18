@@ -185,3 +185,49 @@ test('XLSX numeric date serials follow the workbook 1904 epoch',async()=>{
  const result=await withBrowserXml(()=>readScheduleFile(new File([zipSync(entries)],'jadwal.xlsx')))
  assert.equal(result.rows[0]?.date,'2026-10-19',JSON.stringify(result))
 })
+
+test('XLSX rejects oversized dimensions and sparse cell coordinates before table allocation',async()=>{
+ const bytes=await workbook([headers,row()])
+ await withBrowserXml(async()=>{
+  for(const coordinate of ['XFD1048576','CW1','A5002']) {
+   const entries=unzipSync(bytes),source=strFromU8(entries['xl/worksheets/sheet1.xml'])
+   const xml=source.replace(/<dimension\b[^>]*\/>/,'').replace(/(<worksheet\b[^>]*>)/,`$1<dimension ref="A1:${coordinate}"/>`)
+   entries['xl/worksheets/sheet1.xml']=strToU8(xml)
+   const result=await readScheduleFile(new File([zipSync(entries)],'jadwal.xlsx'))
+   assert.equal(result.rows.length,0)
+   assert.match(result.errors[0].message,/maksimal 5000.*100 kolom/)
+  }
+  const entries=unzipSync(bytes)
+  const source=strFromU8(entries['xl/worksheets/sheet1.xml']).replace(/<dimension\b[^>]*\/>/,'')
+  entries['xl/worksheets/sheet1.xml']=strToU8(source.replace('r="A2"','r="A999999"'))
+  assert.match((await readScheduleFile(new File([zipSync(entries)],'jadwal.xlsx'))).errors[0].message,/maksimal 5000/)
+ })
+})
+
+test('XLSX checks inflated-size metadata without allocating the claimed oversized entry',async()=>{
+ const bytes=await workbook([headers,row()])
+ const patchSizes=(perEntry,count)=>{
+  const patched=Uint8Array.from(bytes),view=new DataView(patched.buffer)
+  let found=0
+  for(let index=0;index<patched.length-46&&found<count;index++) {
+   if(view.getUint32(index,true)===0x02014b50){view.setUint32(index+24,perEntry,true);found++}
+  }
+  assert.equal(found,count)
+  return patched
+ }
+ await withBrowserXml(async()=>{
+  for(const oversized of [patchSizes(17*1024*1024,1),patchSizes(12*1024*1024,3)]) {
+   const result=await readScheduleFile(new File([oversized],'jadwal.xlsx'))
+   assert.equal(result.rows.length,0)
+   assert.match(result.errors[0].message,/terlalu besar setelah dibuka/)
+  }
+ })
+})
+
+test('XLSX bounds apply to the selected Jadwal sheet rather than an unused sheet',async()=>{
+ const bytes=await writeXlsxFile([{sheet:'Lainnya',data:cells([['Bukan jadwal']])},{sheet:'Jadwal',data:cells([headers,row()])}]).toBuffer()
+ const entries=unzipSync(bytes)
+ entries['xl/worksheets/sheet1.xml']=strToU8(strFromU8(entries['xl/worksheets/sheet1.xml']).replace(/(<worksheet\b[^>]*>)/,'$1<dimension ref="A1:XFD1048576"/>'))
+ const result=await withBrowserXml(()=>readScheduleFile(new File([zipSync(entries)],'jadwal.xlsx')))
+ assert.equal(result.rows.length,1,JSON.stringify(result))
+})
