@@ -1120,6 +1120,51 @@ NIP. ${official.nip}
           <div className="letter-sidebar-panel no-print">
             <h3><FileText size={19} color="#38bdf8" /> Penerbitan Naskah Dinas</h3>
 
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              padding: '6px 10px',
+              borderRadius: '6px',
+              marginBottom: 12,
+              fontSize: '0.78rem',
+              fontWeight: 500,
+              background: loadingDbCases
+                ? 'rgba(234, 179, 8, 0.12)'
+                : dbCasesError
+                ? 'rgba(239, 68, 68, 0.12)'
+                : 'rgba(16, 185, 129, 0.12)',
+              color: loadingDbCases
+                ? '#facc15'
+                : dbCasesError
+                ? '#f87171'
+                : '#34d399',
+              border: `1px solid ${
+                loadingDbCases
+                  ? 'rgba(234, 179, 8, 0.3)'
+                  : dbCasesError
+                  ? 'rgba(239, 68, 68, 0.3)'
+                  : 'rgba(16, 185, 129, 0.3)'
+              }`
+            }}>
+              {loadingDbCases ? (
+                <>
+                  <LoaderCircle size={14} className="spin" />
+                  <span>Memuat data riil database Supabase...</span>
+                </>
+              ) : dbCasesError ? (
+                <>
+                  <AlertCircle size={14} />
+                  <span>Koneksi DB terbatas: data master aktif</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 size={14} />
+                  <span>Database Terhubung: <strong>{effectiveCases.length} data riil</strong></span>
+                </>
+              )}
+            </div>
+
             <div className="letter-form-group">
               <label>Jenis Naskah Dinas</label>
               <select
@@ -1280,13 +1325,15 @@ NIP. ${official.nip}
                 value={recipientSource}
                 onChange={e => handleRecipientSourceChange(e.target.value)}
               >
+                <option value="sdm_cases">
+                  1. Database Monitoring SDM ({caseList.length} data riil)
+                </option>
                 <option value="bottleneck">
-                  1. Penanganan SDM — Bottleneck ({focusNonactiveSDM ? `${bottleneckList.length} SDM Nonaktif` : `${matrix.length} Kategori`})
+                  2. Penanganan SDM — Bottleneck ({focusNonactiveSDM ? `${bottleneckList.length} SDM Nonaktif` : `${matrix.length} Kategori`})
                 </option>
                 <option value="judol">
-                  2. Disiplin ASN — Populasi & Filter ({judolFocused.length.toLocaleString('id-ID')} SDM · Terbukti: {(judolCounts['Terbukti'] || 0).toLocaleString('id-ID')}, Tidak Terbukti: {(judolCounts['Tidak Terbukti'] || 0).toLocaleString('id-ID')})
+                  3. Disiplin ASN — Klarifikasi Transaksi ({judolFocused.length.toLocaleString('id-ID')} SDM · Terbukti: {(judolCounts['Terbukti'] || 0).toLocaleString('id-ID')}, Tidak Terbukti: {(judolCounts['Tidak Terbukti'] || 0).toLocaleString('id-ID')})
                 </option>
-                <option value="sdm_cases">3. Monitoring SDM Kasus ({caseList.length} data)</option>
                 {masterList.length > 0 && (
                   <option value="master">4. Master & Progres Tersimpan ({masterList.length} SDM)</option>
                 )}
@@ -1770,7 +1817,38 @@ NIP. ${official.nip}
             </div>
 
             <div className="letter-preview-stage">
-              {!activeRecipients.length && <p className="notice amber-notice" role="status">Belum ada penerima dari sumber yang dipilih. Muat data database atau ubah filter sebelum membuat surat.</p>}
+              {!activeRecipients.length && (
+                <div style={{
+                  padding: '48px 24px',
+                  textAlign: 'center',
+                  background: '#ffffff',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  color: '#475569',
+                  maxWidth: '210mm',
+                  margin: '0 auto'
+                }}>
+                  <ShieldCheck size={40} color="#0284c7" style={{margin: '0 auto 12px auto'}} />
+                  <h3 style={{fontSize: '1.15rem', color: '#0f172a', marginBottom: '8px'}}>
+                    Tidak Ada Naskah Dinas Sesuai Kriteria Filter
+                  </h3>
+                  <p style={{fontSize: '0.9rem', color: '#64748b', maxWidth: '480px', margin: '0 auto 16px auto', lineHeight: 1.45}}>
+                    {loadingDbCases
+                      ? 'Sedang menghubungkan dan memuat data SDM riil dari database Supabase...'
+                      : 'Data penerima yang aktif saat ini kosong atau tidak cocok dengan filter pencarian.'}
+                  </p>
+                  {caseList.length > 0 && recipientSource !== 'sdm_cases' && (
+                    <button
+                      type="button"
+                      className="btn primary"
+                      onClick={() => handleRecipientSourceChange('sdm_cases')}
+                      style={{margin: '0 auto', background: '#0284c7', borderColor: '#0284c7', fontWeight: 600}}
+                    >
+                      Buka Data Monitoring SDM ({caseList.length} data riil dari database)
+                    </button>
+                  )}
+                </div>
+              )}
               {displayedRecipients.map((rec, index) => (
                 <LetterDocument
                   key={rec.key || (previewPage * PREVIEW_PAGE_SIZE + index)}
