@@ -324,7 +324,7 @@ export async function generateOfficialPdfBatch({
 
       // Tabel Data Penerima
       const recipientRows = [
-        ['Nama', ':', recipient.nama || '—'],
+        ['Nama', ':', { content: recipient.nama || '—', styles: { fontStyle: 'bold' } }],
         ['NIP/NIPPPK', ':', recipient.nip || '—']
       ]
       if (effectiveShowRank) {
@@ -336,29 +336,29 @@ export async function generateOfficialPdfBatch({
       )
 
       if (Number(recipient.sisaKewajiban || 0) > 0) {
-        recipientRows.push(['Sisa yang Wajib Disetor', ':', fmtRp(recipient.sisaKewajiban)])
+        recipientRows.push(['Sisa yang Wajib Disetor', ':', { content: fmtRp(recipient.sisaKewajiban), styles: { fontStyle: 'bold', textColor: [185, 28, 28] } }])
       }
 
       autoTable(doc, {
         startY: curY,
-        margin: { left: 14, right: 14 },
+        margin: { left: 18, right: 14 },
         body: recipientRows,
         theme: 'plain',
-        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
         columnStyles: {
-          0: { cellWidth: 50 },
-          1: { cellWidth: 4 },
-          2: { cellWidth: 'auto', fontStyle: 'bold' }
+          0: { cellWidth: 46 },
+          1: { cellWidth: 4, halign: 'center' },
+          2: { cellWidth: 'auto' }
         }
       })
-      curY = doc.lastAutoTable.finalY + 3
+      curY = doc.lastAutoTable.finalY + 3.5
 
       // Jika ada kewajiban pengembalian, tampilkan tabel 5 kolom presisi
       if (Number(recipient.sisaKewajiban || 0) > 0) {
         doc.setFont('helvetica', 'bold')
-        doc.setFontSize(10.5)
+        doc.setFontSize(11)
         doc.text('Rincian Kewajiban Pengembalian yang Masih Tercatat :', 14, curY)
-        curY += 3
+        curY += 3.5
 
         const catDesc = recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'
         const bankDesc = recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''
@@ -424,43 +424,43 @@ export async function generateOfficialPdfBatch({
             }
           }
         })
-        curY = doc.lastAutoTable.finalY + 3
+        curY = doc.lastAutoTable.finalY + 3.5
       }
 
       // Untuk Menghadap Kepada
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
       doc.text('Untuk menghadap kepada:', 14, curY)
-      curY += 3
+      curY += 3.5
 
       const faceRows = [
-        ['Nama', ':', official.nama],
+        ['Nama', ':', { content: official.nama, styles: { fontStyle: 'bold' } }],
         ['NIP', ':', official.nip]
       ]
       if (effectiveShowRank) {
-        faceRows.push(['Pangkat', ':', official.pangkatSingkat || 'IV/c'])
+        faceRows.push(['Pangkat', ':', official.pangkatSingkat || official.pangkat || 'IV/c'])
       }
       faceRows.push(['Jabatan', ':', official.jabatan])
 
       autoTable(doc, {
         startY: curY,
-        margin: { left: 14, right: 14 },
+        margin: { left: 18, right: 14 },
         body: faceRows,
         theme: 'plain',
-        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
         columnStyles: {
-          0: { cellWidth: 38 },
-          1: { cellWidth: 4 },
-          2: { cellWidth: 'auto', fontStyle: 'bold' }
+          0: { cellWidth: 46 },
+          1: { cellWidth: 4, halign: 'center' },
+          2: { cellWidth: 'auto' }
         }
       })
-      curY = doc.lastAutoTable.finalY + 3
+      curY = doc.lastAutoTable.finalY + 3.5
 
       // Jadwal / Pada :
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
       doc.text('Pada :', 14, curY)
-      curY += 3
+      curY += 3.5
 
       const scheduleRows = [
         ['Hari', ':', venue.hari || 'Senin'],
@@ -477,14 +477,14 @@ export async function generateOfficialPdfBatch({
         margin: { left: 18, right: 14 },
         body: scheduleRows,
         theme: 'plain',
-        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
+        styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
         columnStyles: {
-          0: { cellWidth: 26 },
-          1: { cellWidth: 4 },
+          0: { cellWidth: 46 },
+          1: { cellWidth: 4, halign: 'center' },
           2: { cellWidth: 'auto' }
         }
       })
-      curY = doc.lastAutoTable.finalY + 3.5
+      curY = doc.lastAutoTable.finalY + 4
 
       // Paragraf Agenda
       doc.setFont('helvetica', 'normal')
