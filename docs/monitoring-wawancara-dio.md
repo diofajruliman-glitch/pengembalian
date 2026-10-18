@@ -51,3 +51,5 @@ Tidak ada migrasi database atau deployment pada implementasi ini. Setelah rilis 
 ## Verifikasi
 
 Tes model mencakup seleksi Terbukti, sumber/versi, roster CSV, kapasitas 1.057 peserta, akhir pekan, bentrok, verifikasi identitas, timer, pemindahan, penjadwalan ulang, dan keamanan ekspor CSV. Tes penyimpanan mencakup isolasi akun/sumber, konflik revisi, format korup, batas kapasitas, izin browser, serta pemulihan yang mempertahankan data lama. Pengujian browser memakai BNBA simulasi (bukan data personal riil) untuk integrasi menu, penjadwalan, catatan sebelum jadwal, verifikasi, timer, pergantian status, dan muat ulang.
+
+Pembaruan distribusi: 73 pengujian modul wawancara lulus dan build produksi berhasil. Verifikasi browser menggunakan 1.057 SDM simulasi mencakup 49 pilihan lintas halaman, penolakan bentrok, redistribusi dua SDM ke pewawancara berbeda, impor XLSX dengan dua perubahan jadwal, serta unduhan ZIP 18 paket CSV dengan total 1.057 baris peserta.
