@@ -57,7 +57,8 @@ import {
 import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
 import {disciplineStorage} from '../judol/storage.js'
 import {REAL_DISCIPLINE_DATA} from './realDisciplineData.js'
-import {REAL_NONACTIVE_CASES, REAL_BOTTLENECK_CASES} from './realBottleneckData.js'
+import {indexSnapshot, selectProgress} from '../recovery/progress.js'
+import {statusOf, targetStatuses} from '../import/sourceMetadata.js'
 import './officialLetter.css'
 
 export default function LetterManager({
