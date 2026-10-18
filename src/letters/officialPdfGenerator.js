@@ -581,6 +581,12 @@ export async function generateOfficialPdfBatch({
     filename = `${sanitizedTitle}_Batch_${total}_SDM.pdf`
   }
 
+  // Laporkan progres selesai 100%
+  if (onProgress) {
+    onProgress(total, total, `Menyelesaikan dan mengunduh berkas PDF (${total.toLocaleString('id-ID')} Lembar)...`)
+    await new Promise(r => setTimeout(r, 0))
+  }
+
   // Simpan berkas PDF
   doc.save(filename)
   return { filename, total }

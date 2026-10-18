@@ -19,7 +19,7 @@ export default function LetterDocument({
   classificationText = '',
   showRank = true
 }) {
-  const isTagihan = template.category === 'keuangan'
+  const isTagihan = template.category === 'keuangan' && !template.id?.startsWith('panggilan')
   const isBeritaAcara = template.category === 'berita-acara'
   const effectiveShowClassification = showClassification ?? template.showClassification ?? true
   const effectivePosition = classificationPosition || template.classificationPosition || 'left'
@@ -205,14 +205,14 @@ export default function LetterDocument({
           </p>
 
           <p className="doc-body-paragraph">
-            {template.closingText || 'Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.'}
+            {customClosing || template.closingText || 'Demikian Berita Acara ini dibuat dengan sebenarnya dalam rangkap 2 (dua) untuk dipergunakan sebagaimana mestinya.'}
           </p>
         </div>
       ) : (
         // ================= KONTEN SURAT PANGGILAN (FORMAT RESMI KEMENSOS) =================
         <div className="doc-body">
           <div className="doc-salutation">
-            {template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:'}
+            {customOpening || template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:'}
           </div>
 
           <table className="doc-entry-table">
@@ -401,8 +401,14 @@ export default function LetterDocument({
             {customAgenda || template.agendaDefault}
           </p>
 
+          {(customCoordination || template.coordinationText) && (
+            <p className="doc-body-paragraph">
+              {customCoordination || template.coordinationText}
+            </p>
+          )}
+
           <p className="doc-body-paragraph" style={{marginTop: 10}}>
-            {template.closingText || 'Demikian untuk dilaksanakan.'}
+            {customClosing || template.closingText || 'Demikian untuk dilaksanakan.'}
           </p>
         </div>
       )}
