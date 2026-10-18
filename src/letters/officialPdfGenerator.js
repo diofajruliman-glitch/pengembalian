@@ -255,7 +255,7 @@ export async function generateOfficialPdfBatch({
 
       // Tabel Pemeriksa
       const officialRows = [
-        ['1. Nama', ':', official.nama],
+        ['1. Nama', ':', { content: official.nama, styles: { fontStyle: 'bold' } }],
         ['   NIP', ':', official.nip]
       ]
       if (effectiveShowRank) {
@@ -265,13 +265,13 @@ export async function generateOfficialPdfBatch({
 
       autoTable(doc, {
         startY: curY,
-        margin: { left: 14, right: 14 },
+        margin: { left: 18, right: 14 },
         body: officialRows,
         theme: 'plain',
-        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
-        columnStyles: { 0: { cellWidth: 26 }, 1: { cellWidth: 4 }, 2: { cellWidth: 'auto', fontStyle: 'bold' } }
+        styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
+        columnStyles: { 0: { cellWidth: 46 }, 1: { cellWidth: 4, halign: 'center' }, 2: { cellWidth: 'auto' } }
       })
-      curY = doc.lastAutoTable.finalY + 2
+      curY = doc.lastAutoTable.finalY + 2.5
 
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
@@ -280,7 +280,7 @@ export async function generateOfficialPdfBatch({
 
       // Tabel Yang Diperiksa
       const subjectRows = [
-        ['2. Nama', ':', recipient.nama || '—'],
+        ['2. Nama', ':', { content: recipient.nama || '—', styles: { fontStyle: 'bold' } }],
         ['   NIP/NIPPPK', ':', recipient.nip || '—']
       ]
       if (effectiveShowRank) {
@@ -293,13 +293,13 @@ export async function generateOfficialPdfBatch({
 
       autoTable(doc, {
         startY: curY,
-        margin: { left: 14, right: 14 },
+        margin: { left: 18, right: 14 },
         body: subjectRows,
         theme: 'plain',
-        styles: { fontSize: 10.5, cellPadding: 0.6, textColor: [30, 41, 59] },
-        columnStyles: { 0: { cellWidth: 26 }, 1: { cellWidth: 4 }, 2: { cellWidth: 'auto', fontStyle: 'bold' } }
+        styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
+        columnStyles: { 0: { cellWidth: 46 }, 1: { cellWidth: 4, halign: 'center' }, 2: { cellWidth: 'auto' } }
       })
-      curY = doc.lastAutoTable.finalY + 4
+      curY = doc.lastAutoTable.finalY + 3.5
 
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
