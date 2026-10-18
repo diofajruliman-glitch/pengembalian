@@ -59,6 +59,7 @@ import {
 import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
 import {indexSnapshot, selectProgress} from '../recovery/progress.js'
 import {statusOf, targetStatuses, normalizeSdmStatus, isNonactiveStatus, isSpecialTarget} from '../import/sourceMetadata.js'
+import {lookupNipPosition} from './nipPositionReference.js'
 import './officialLetter.css'
 
 // Helper filter data uji / simulasi agar tidak pernah masuk ke dokumen resmi
@@ -218,8 +219,8 @@ export default function LetterManager({
   const [classificationPosition, setClassificationPosition] = useState('left')
   const [classificationText, setClassificationText] = useState('RAHASIA')
 
-  // Opsi Baris Pangkat / Golongan (Default: false / disembunyikan untuk PPPK)
-  const [showRank, setShowRank] = useState(false)
+  // Opsi Baris Pangkat / Golongan (Default: true untuk surat resmi pemanggilan & klarifikasi)
+  const [showRank, setShowRank] = useState(true)
 
   // Sinkronisasi Pengaturan ketika template berganti
   useEffect(() => {
@@ -227,7 +228,7 @@ export default function LetterManager({
       setShowClassification(currentTemplate.showClassification !== false)
       setClassificationPosition(currentTemplate.classificationPosition || 'left')
       setClassificationText(currentTemplate.classification || 'RAHASIA')
-      setShowRank(currentTemplate.showRank === true)
+      setShowRank(currentTemplate.showRank !== false)
     }
   }, [currentTemplate?.id])
 
@@ -305,12 +306,13 @@ export default function LetterManager({
         for (const p of (progress.rows || [])) {
           if (!p?.nip || isTestRecord(p)) continue
           const currentStatus = statusOf(p) || p.status_sdm || (isNonactiveStatus(statusOf(p)) ? 'SDM Nonaktif' : 'Aktif')
+          const posRef = lookupNipPosition(p.nip)
           map.set(p.nip, {
             key: `btnk-master-${p.nip}`,
-            nama: p.nama,
+            nama: p.nama || posRef?.nama || 'Tanpa Nama',
             nip: p.nip,
-            pangkat: p.pangkat || 'Pegawai ASN / PPPK',
-            jabatan: p.jabatan || 'PPPK Direktorat PSNK',
+            pangkat: posRef?.pangkat || p.pangkat || 'Golongan IX',
+            jabatan: posRef?.jabatan || p.jabatan || 'Penata Layanan Operasional',
             unitKerja: p.unitKerja || 'Direktorat Perlindungan Sosial Non Kebencanaan',
             kewajibanTotal: Number(p.obligation || 0),
             realisasiTotal: Number(p.payment || 0),
@@ -339,11 +341,14 @@ export default function LetterManager({
 
         if (focusNonactiveSDM && (!nonactive || sisa <= 0)) continue
 
+        const posRef = lookupNipPosition(c.nip)
         if (map.has(c.nip)) {
           const prev = map.get(c.nip)
           map.set(c.nip, {
             ...prev,
             nama: c.nama || prev.nama,
+            pangkat: posRef?.pangkat || prev.pangkat || 'Golongan IX',
+            jabatan: posRef?.jabatan || prev.jabatan || 'Penata Layanan Operasional',
             kewajibanTotal: kw || prev.kewajibanTotal,
             realisasiTotal: real || prev.realisasiTotal,
             sisaKewajiban: sisa,
@@ -357,10 +362,10 @@ export default function LetterManager({
         } else {
           map.set(c.nip, {
             key: `btnk-${c.id || c.nip}`,
-            nama: c.nama,
+            nama: c.nama || posRef?.nama || 'Tanpa Nama',
             nip: c.nip,
-            pangkat: c.pangkat || 'Pegawai ASN / PPPK',
-            jabatan: c.jabatan || 'PPPK Direktorat PSNK',
+            pangkat: posRef?.pangkat || c.pangkat || 'Golongan IX',
+            jabatan: posRef?.jabatan || c.jabatan || 'Penata Layanan Operasional',
             unitKerja: c.unitKerja || 'Direktorat Perlindungan Sosial Non Kebencanaan',
             kewajibanTotal: kw,
             realisasiTotal: real,
@@ -404,14 +409,15 @@ export default function LetterManager({
         const kw = Number(c.kewajibanTotal || c.kewajiban_total || 0)
         const real = Number(c.realisasiTotal || c.realisasi_total || 0)
         const sisa = Number(c.sisaKewajiban != null ? c.sisaKewajiban : (c.sisa_kewajiban != null ? c.sisa_kewajiban : Math.max(0, kw - real)))
+        const posRef = lookupNipPosition(c.nip)
 
         map.set(c.nip, {
           key: `case-${c.id || c.nip}`,
           id: c.id,
-          nama: c.nama,
+          nama: c.nama || posRef?.nama || 'Tanpa Nama',
           nip: c.nip,
-          pangkat: c.pangkat || 'Pegawai ASN / PPPK',
-          jabatan: c.jabatan || 'PPPK Direktorat PSNK',
+          pangkat: posRef?.pangkat || c.pangkat || 'Golongan IX',
+          jabatan: posRef?.jabatan || c.jabatan || 'Penata Layanan Operasional',
           unitKerja: c.unitKerja || 'Direktorat Perlindungan Sosial Non Kebencanaan',
           kewajibanTotal: kw,
           realisasiTotal: real,
@@ -436,12 +442,13 @@ export default function LetterManager({
           const kw = Number(p.obligation || 0)
           const real = Number(p.payment || 0)
           const sisa = Number(p.remaining != null ? p.remaining : Math.max(0, kw - real))
+          const posRef = lookupNipPosition(p.nip)
           map.set(p.nip, {
             key: `case-master-${p.nip}`,
-            nama: p.nama,
+            nama: p.nama || posRef?.nama || 'Tanpa Nama',
             nip: p.nip,
-            pangkat: 'Pegawai ASN / PPPK',
-            jabatan: 'PPPK Direktorat PSNK',
+            pangkat: posRef?.pangkat || p.pangkat || 'Golongan IX',
+            jabatan: posRef?.jabatan || p.jabatan || 'Penata Layanan Operasional',
             unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
             kewajibanTotal: kw,
             realisasiTotal: real,
@@ -493,22 +500,26 @@ export default function LetterManager({
     })
     return filtered
       .filter(r => !isTestRecord(r))
-      .map(r => ({
-        key: `judol-${r.nik || r.nip}`,
-        nama: r.nama || 'Tanpa Nama',
-        nip: r.nip || r.nik,
-        pangkat: 'Pegawai ASN / PPPK',
-        jabatan: 'PPPK Direktorat PSNK',
-        unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-        kewajibanTotal: 0,
-        realisasiTotal: 0,
-        sisaKewajiban: 0,
-        indikasi: r.hasilPenilaian,
-        kategori: r[judolPeriod]?.kategori || r.historical?.kategori || 'Ringan',
-        status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`,
-        provinsi: r.provinsi || '',
-        kabKota: r.kabKota || ''
-      }))
+      .map(r => {
+        const rawNip = r.nip || r.nik
+        const posRef = lookupNipPosition(rawNip)
+        return {
+          key: `judol-${r.nik || r.nip}`,
+          nama: r.nama || posRef?.nama || 'Tanpa Nama',
+          nip: rawNip,
+          pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
+          jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+          unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+          kewajibanTotal: 0,
+          realisasiTotal: 0,
+          sisaKewajiban: 0,
+          indikasi: r.hasilPenilaian,
+          kategori: r[judolPeriod]?.kategori || r.historical?.kategori || 'Ringan',
+          status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`,
+          provinsi: r.provinsi || '',
+          kabKota: r.kabKota || ''
+        }
+      })
   }, [effectiveJudolRows, judolAssessment, judolCategory, judolPeriod, judolAvailability, searchSDM])
 
   // 4. DATA SDM DARI MASTER WORKBOOK (masterSnapshot)
@@ -522,12 +533,13 @@ export default function LetterManager({
         for (const p of (progress.rows || [])) {
           if (!p?.nip || seen.has(p.nip) || isTestRecord(p)) continue
           seen.add(p.nip)
+          const posRef = lookupNipPosition(p.nip)
           list.push({
             key: `master-${p.nip}`,
-            nama: p.nama || 'Tanpa Nama',
+            nama: p.nama || posRef?.nama || 'Tanpa Nama',
             nip: p.nip,
-            pangkat: 'Pegawai ASN / PPPK',
-            jabatan: 'PPPK Direktorat PSNK',
+            pangkat: posRef?.pangkat || 'Golongan IX',
+            jabatan: posRef?.jabatan || 'Penata Layanan Operasional',
             unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
             kewajibanTotal: Number(p.obligation || 0),
             realisasiTotal: Number(p.payment || 0),
@@ -550,12 +562,13 @@ export default function LetterManager({
         const kw = Number(c.kewajibanTotal || c.kewajiban_total || 0)
         const real = Number(c.realisasiTotal || c.realisasi_total || 0)
         const sisa = Number(c.sisaKewajiban != null ? c.sisaKewajiban : (c.sisa_kewajiban != null ? c.sisa_kewajiban : Math.max(0, kw - real)))
+        const posRef = lookupNipPosition(c.nip)
         list.push({
           key: `master-case-${c.id || c.nip}`,
-          nama: c.nama || 'Tanpa Nama',
+          nama: c.nama || posRef?.nama || 'Tanpa Nama',
           nip: c.nip,
-          pangkat: c.pangkat || 'Pegawai ASN / PPPK',
-          jabatan: c.jabatan || 'PPPK Direktorat PSNK',
+          pangkat: posRef?.pangkat || c.pangkat || 'Golongan IX',
+          jabatan: posRef?.jabatan || c.jabatan || 'Penata Layanan Operasional',
           unitKerja: c.unitKerja || 'Direktorat Perlindungan Sosial Non Kebencanaan',
           kewajibanTotal: kw,
           realisasiTotal: real,
@@ -655,7 +668,17 @@ export default function LetterManager({
     if (!list.length) return []
 
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
-    return filtered.length > 0 ? filtered : list
+    const rawList = filtered.length > 0 ? filtered : list
+    return rawList.map(r => {
+      const posRef = lookupNipPosition(r.nip || r.nik)
+      if (!posRef) return r
+      return {
+        ...r,
+        nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef.nama || r.nama),
+        pangkat: posRef.pangkat || r.pangkat || 'Golongan IX',
+        jabatan: posRef.jabatan || r.jabatan || 'Penata Layanan Operasional'
+      }
+    })
   }, [recipientSource, manualRecipient, activeSDMOptions, selectedSDMKeys, databaseOnly])
 
   // SDM yang dirender di layar pratinjau (dipaginasi per 10 lembar agar performa instan tanpa lag)
@@ -1604,6 +1627,8 @@ NIP. ${official.nip}
                               <div className="rec-name">{item.nama}</div>
                               <div className="rec-nip">
                                 {item.nip}
+                                {item.jabatan && ` · ${item.jabatan}`}
+                                {item.pangkat && ` · ${item.pangkat}`}
                                 {item.sisaKewajiban > 0 && ` · Sisa Rp ${item.sisaKewajiban.toLocaleString('id-ID')}`}
                                 {item.indikasi && ` · ${item.indikasi}`}
                                 {item.kategori && ` · ${item.kategori}`}

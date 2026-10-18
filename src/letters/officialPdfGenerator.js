@@ -56,7 +56,7 @@ export async function generateOfficialPdfBatch({
   showClassification = true,
   classificationPosition = 'left',
   classificationText = '',
-  showRank = false
+  showRank = true
 }) {
   if (!recipients || recipients.length === 0) {
     throw new Error('Daftar penerima naskah dinas kosong.')
@@ -68,7 +68,7 @@ export async function generateOfficialPdfBatch({
   const effectiveShowClassification = showClassification ?? template.showClassification ?? true
   const effectivePosition = classificationPosition || template.classificationPosition || 'left'
   const effectiveClassification = classificationText || template.classification || 'RAHASIA'
-  const effectiveShowRank = showRank ?? template.showRank ?? false
+  const effectiveShowRank = showRank ?? template.showRank ?? true
 
   const doc = new jsPDF({
     orientation: 'portrait',
@@ -284,10 +284,10 @@ export async function generateOfficialPdfBatch({
         ['   NIP/NIPPPK', ':', recipient.nip || '—']
       ]
       if (effectiveShowRank) {
-        subjectRows.push(['   Pangkat/Gol', ':', recipient.pangkat || 'Pegawai ASN / PPPK'])
+        subjectRows.push(['   Pangkat / Golongan', ':', recipient.pangkat || 'Golongan IX'])
       }
       subjectRows.push(
-        ['   Jabatan', ':', recipient.jabatan || 'PPPK Direktorat PSNK'],
+        ['   Jabatan', ':', recipient.jabatan || 'Penata Layanan Operasional'],
         ['   Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
       )
 
@@ -326,10 +326,10 @@ export async function generateOfficialPdfBatch({
         ['NIP/NIPPPK', ':', recipient.nip || '—']
       ]
       if (effectiveShowRank) {
-        recipientRows.push(['Pangkat', ':', recipient.pangkat || 'Pegawai ASN / PPPK'])
+        recipientRows.push(['Pangkat / Golongan', ':', recipient.pangkat || 'Golongan IX'])
       }
       recipientRows.push(
-        ['Jabatan', ':', recipient.jabatan || 'PPPK Direktorat PSNK'],
+        ['Jabatan', ':', recipient.jabatan || 'Penata Layanan Operasional'],
         ['Unit Kerja', ':', recipient.unitKerja || official.unitKerja]
       )
 
