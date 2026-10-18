@@ -95,7 +95,7 @@ export async function generateOfficialPdfBatch({
     // 1. KOP SURAT RESMI KEMENSOS
     // A4 width: 210mm. Margin kiri 14mm -> lebar kop 182mm, tinggi 25mm
     try {
-      doc.addImage(kopData, 'PNG', 14, 8, 182, 25, undefined, 'FAST')
+      doc.addImage(kopData, 'PNG', 14, 8, 182, 25, 'KEMENSOS_KOP', 'FAST')
     } catch (e) {
       // Fallback text jika gambar kop gagal
       doc.setFont('helvetica', 'bold')
@@ -502,6 +502,7 @@ export async function generateOfficialPdfBatch({
     }
 
     // 4. TITIMANGSA & BLOK TANDA TANGAN (FONT ARIAL 12 PT)
+    let nameY = 245
     if (isBeritaAcara) {
       // Blok tanda tangan ganda untuk Berita Acara
       const signY = Math.max(curY + 4, 222)
@@ -523,6 +524,7 @@ export async function generateOfficialPdfBatch({
       doc.text(official.nama, rightX, signY + 20)
       doc.setFont('helvetica', 'normal')
       doc.text(`NIP. ${official.nip}`, rightX, signY + 25)
+      nameY = signY + 25
     } else {
       // Blok tanda tangan tunggal resmi (Kanan Bawah)
       const signY = Math.max(curY + 3, 218)
@@ -534,7 +536,7 @@ export async function generateOfficialPdfBatch({
       const splitRole = doc.splitTextToSize(official.jabatan, 72)
       doc.text(splitRole, signX, signY + 4.8)
 
-      const nameY = signY + 4.8 + (splitRole.length * 4.5) + 15
+      nameY = signY + 4.8 + (splitRole.length * 4.5) + 15
       doc.setFont('helvetica', 'bold')
       doc.text(official.nama, signX, nameY)
       doc.setFont('helvetica', 'normal')
@@ -543,7 +545,7 @@ export async function generateOfficialPdfBatch({
 
     // 5. TEMBUSAN RESMI
     if (template.tembusan && template.tembusan.length > 0) {
-      const tembusanY = Math.max(nameY + 6, 258)
+      const tembusanY = Math.min(Math.max(nameY + 6, 252), 268)
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(10.5)
       doc.text('Tembusan Yth:', 14, tembusanY)
