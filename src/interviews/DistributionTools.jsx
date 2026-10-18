@@ -85,14 +85,14 @@ export function BulkDistributionDialog({population, entries, rooms, settings, se
   event.preventDefault()
   try {
    const plan = prepareBulkDistribution({population, entries, rooms, selectedIds:ids, mode, roomIds:mode === 'keepSchedule' ? [targetRoomId] : roomIds, settings:form})
-   setPreview({plan, expectedRevision:revision})
+   setPreview({plan, expectedRevision:revision, settings:mode === 'reschedule' ? {...form} : null})
    setError('')
   } catch (err) {setPreview(null); setError(err.message)}
  }
  function apply() {
   if (!preview || stale || !preview.plan.summary.changed) return
   try {
-   const outcome = onApply(preview.plan.entries, preview.expectedRevision, `${number(preview.plan.summary.changed)} penempatan SDM diperbarui dalam draft browser.`)
+   const outcome = onApply(preview.plan.entries, preview.expectedRevision, `${number(preview.plan.summary.changed)} penempatan SDM diperbarui dalam draft browser.`, preview.settings)
    if (outcome === true) onClose()
    else setError(outcome || 'Distribusi belum disimpan. Susun pratinjau kembali.')
   } catch (err) {setError(err.message)}
@@ -107,7 +107,7 @@ export function BulkDistributionDialog({population, entries, rooms, settings, se
    {mode === 'keepSchedule' ? <><label>Room / pewawancara tujuan<select required value={targetRoomId} onChange={event => {setTargetRoomId(event.target.value); clearPreview()}}><option value="">Pilih pewawancara</option>{activeRooms.map(room => <option key={room.id} value={room.id}>{roomText(room)}</option>)}</select></label><p className="interview-muted">Tanggal, jam, sesi, dan durasi tetap mengikuti jadwal masing-masing SDM. Penempatan yang berbenturan akan ditolak.</p></> : <>
     <fieldset className="interview-distribution-rooms"><legend>Pilih room / pewawancara tujuan ({roomIds.length})</legend><div className="interview-distribution-room-actions"><button type="button" className="btn secondary" onClick={() => {setRoomIds(activeRooms.map(room => room.id)); clearPreview()}}>Pilih semua room aktif</button><button type="button" className="btn secondary" onClick={() => {setRoomIds([]); clearPreview()}}>Kosongkan pilihan</button></div><div className="interview-distribution-room-options">{activeRooms.map(room => <label className="interview-checkbox" key={room.id}><input type="checkbox" checked={roomIds.includes(room.id)} onChange={() => toggleRoom(room.id)}/>{roomText(room)}</label>)}</div></fieldset>
     <div className="interview-settings"><label>Tanggal mulai<input type="date" required value={form.startDate} onChange={event => change('startDate', event.target.value)}/></label><label>Mulai pukul (WIB)<input type="time" required value={form.startTime} onChange={event => change('startTime', event.target.value)}/></label><label>Durasi wawancara (menit)<input type="number" min="1" max="480" required value={form.duration} onChange={event => change('duration', Number(event.target.value))}/></label><label>Jeda pergantian (menit)<input type="number" min="0" max="240" required value={form.gap} onChange={event => change('gap', Number(event.target.value))}/></label><label>SDM / room / hari<input type="number" min="1" max="500" required value={form.perDay} onChange={event => change('perDay', Number(event.target.value))}/></label><label className="interview-checkbox"><input type="checkbox" checked={form.skipWeekends} onChange={event => change('skipWeekends', event.target.checked)}/>Lewati Sabtu & Minggu</label></div>
-    <p className="interview-muted">Hanya SDM terpilih yang disusun ulang. Jadwal SDM lain tetap diperhitungkan untuk mencegah bentrok room dan pewawancara.</p>
+    <p className="interview-muted">Hanya SDM terpilih yang disusun ulang. Jadwal SDM lain tetap diperhitungkan untuk mencegah bentrok room dan pewawancara. Parameter ini juga disimpan sebagai acuan distribusi dan impor berikutnya.</p>
    </>}
    <div className="interview-form-actions"><button className="btn secondary" type="button" onClick={onClose}>Batal</button><button className="btn primary" disabled={!ids.length || protectedCount > 0}>Pratinjau distribusi</button></div>
   </form>

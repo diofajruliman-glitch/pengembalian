@@ -53,6 +53,12 @@ function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,on
  const entries=workspace.entries,rooms=workspace.rooms||DEFAULT_ROOMS,settings=workspace.settings||DEFAULT_SETTINGS
  const editable=canEdit&&!loadError
  const populationById=useMemo(()=>new Map(population.map(person=>[person.nik,person])),[population])
+ useEffect(()=>{
+  setSelectedIds(current=>{
+   const next=current.filter(nik=>populationById.has(nik)&&!['Di room','Selesai'].includes(entries[nik]?.status))
+   return next.length===current.length?current:next
+  })
+ },[populationById,entries])
  const active=population.filter(person=>statusOf(entries[person.nik])==='Di room')
  useEffect(()=>{
   if(!active.length)return
@@ -75,9 +81,9 @@ function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,on
  function changePerson(nik,patch){
   try{return commit({entries:updateEntry(nik,patch,workspaceRef.current.entries,rooms,new Date().toISOString())})}catch(err){setError(err.message);return err.message}
  }
- function applyDistribution(nextEntries,expectedRevision,success){
+ function applyDistribution(nextEntries,expectedRevision,success,nextSettings){
   if(expectedRevision!==workspaceRef.current.revision)return 'Catatan berubah sejak pratinjau. Tutup dialog dan buat pratinjau dari catatan terbaru.'
-  const outcome=commit({entries:nextEntries},success)
+  const outcome=commit({entries:nextEntries,...(nextSettings?{settings:nextSettings}:{})},success)
   if(outcome===true)setSelectedIds([])
   return outcome
  }
