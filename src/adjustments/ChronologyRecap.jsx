@@ -1,14 +1,8 @@
 import React,{useEffect,useState} from 'react'
 import ReasonReconciliation from './ReasonReconciliation.jsx'
+import {chronologyFilters,loadChronology} from './chronology.js'
 
-export const chronologyFilters = year => ({
- initial:{sp2dOld:year,bpk:'TAHAP 1 SEND BPK'},
- retained:{sp2dOld:year,sp2dUpdated:year,bpk:'TAHAP 1 SEND BPK'},
- moved:{sp2dOld:year,sp2dUpdated:year+1,bpk:'TAHAP 1 SEND BPK'},
- correction:{sp2dOld:year,sp2dUpdated:year,bpk:'TAHAP 1 SEND BPK',change:'amount'},
- added:{sp2dUpdated:year,bpk:'BELUM MASUK BPK'},
- total:{sp2dUpdated:year}
-})
+export {chronologyFilters} from './chronology.js'
 const money=v=>'Rp '+Math.round(v).toLocaleString('id-ID')
 
 export default function ChronologyRecap({api,version,refresh,onSelect}){
@@ -16,8 +10,8 @@ export default function ChronologyRecap({api,version,refresh,onSelect}){
  const presets=chronologyFilters(year)
  useEffect(()=>{
   const controller=new AbortController();setData(null);setError('')
-  Promise.all(Object.entries(chronologyFilters(year)).map(async([key,filters])=>{const result=await api.query(filters,0,controller.signal);return [key,{...result.summary,reasonGroups:result.recaps?.reasons,sourcePriorityGroups:result.recaps?.sourcePriority}]}))
-   .then(entries=>setData(Object.fromEntries(entries))).catch(e=>{if(e.name!=='AbortError')setError(e.message)})
+  loadChronology(api,year,controller.signal)
+   .then(result=>{if(!controller.signal.aborted)setData(result)}).catch(e=>{if(!controller.signal.aborted&&e.name!=='AbortError')setError(e.message)})
   return()=>controller.abort()
  },[api,version,refresh,year])
  const rows=data?[
