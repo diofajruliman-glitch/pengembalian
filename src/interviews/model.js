@@ -1,4 +1,4 @@
-import { assertRoutingAssignment, isHeavyPerson, isSpecialistRoom } from './routing.js'
+import { assertRoutingAssignment, getRoutingCategory, isHeavyPerson, isSpecialistRoom } from './routing.js'
 
 // Operational drafts reference the active discipline population; they never copy
 // names, NIPs, or assessment results into monitoring storage.
@@ -172,8 +172,12 @@ export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Dat
  }
  const hasAssignment=Boolean(next.date||next.roomId||next.time||next.session)
  const needsAssignment=['Terjadwal','Menunggu','Di room','Selesai'].includes(next.status)
- if(hasAssignment||needsAssignment)validateAssignment(next,entries,rooms)
  const placementChanged=['date','time','duration','session','roomId'].some(field=>Object.hasOwn(safePatch,field)&&String(safePatch[field])!==String(previous[field]??''))
+ // A room can be disabled while an interview is underway. Closing that same
+ // appointment still needs a valid schedule, but does not allocate the room anew.
+ const closingExisting=previous.status==='Di room'&&next.status==='Selesai'&&!placementChanged
+ const validationRooms=closingExisting?rooms.map(room=>room.id===next.roomId?{...room,enabled:true}:room):rooms
+ if(hasAssignment||needsAssignment)validateAssignment(next,entries,validationRooms)
  const startingInterview=next.status==='Di room'&&previous.status!=='Di room'
  const initialAssignment=hasAssignment&&!Boolean(previous.date||previous.roomId||previous.time||previous.session)
  // Existing operational records remain writable for notes and completion. Their
@@ -194,7 +198,7 @@ export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Dat
   if(previous.status!=='Di room'){next.startedAt=next.updatedAt;next.finishedAt=''}
  }
  if(next.status==='Selesai'&&previous.status!=='Selesai') {
-  if(!next.startedAt)throw Error('Mulai wawancara melalui status Di room sebelum menandainya selesai.')
+  if(!Number.isFinite(Date.parse(next.startedAt||'')))throw Error('Mulai wawancara melalui status Di room sebelum menandainya selesai.')
   next.finishedAt=next.updatedAt
  }
  return {...entries,[nik]:next}
@@ -214,11 +218,12 @@ function csvCell(value,identifier=false) {
  return `"${content.replace(/"/g,'""')}"`
 }
 export function monitoringCsv(population,entries={},rooms=DEFAULT_ROOMS) {
- const headers=['Tanggal','Sesi','Room','Nama','NIP','NIK','Pewawancara Utama','Pewawancara Lintas','Petugas Lalu Lintas','Jadwal','Status','Identitas Terverifikasi','Mulai Aktual','Selesai Aktual','Catatan','Pimpinan','Durasi (menit)','Nama Zoom']
+ const headers=['Tanggal','Sesi','Room','Nama','NIP','NIK','Pewawancara Utama','Pewawancara Lintas','Petugas Lalu Lintas','Jadwal','Status','Identitas Terverifikasi','Mulai Aktual','Selesai Aktual','Catatan','Pimpinan','Durasi (menit)','Nama Zoom','Kategori Pairing Sekjen asli','Acuan kategori']
  const lines=[headers.map(value=>csvCell(value)).join(';')]
  for(const person of population||[]) {
   const nik=text(person?.nik),entry=ownEntry(entries,nik)||{},room=roomFor(rooms,entry.roomId)||{}
-  const row=[entry.date,entry.session,room.name,person.nama,String(person.nip??''),nik,room.interviewer,room.crossInterviewer,room.trafficOfficer,entry.time,entry.status||'Belum dijadwalkan',entry.verified===true?'Ya':'Belum',entry.startedAt,entry.finishedAt,entry.notes,entry.leader,entry.duration,entry.zoomName]
+  const routing=getRoutingCategory(person)
+  const row=[entry.date,entry.session,room.name,person.nama,String(person.nip??''),nik,room.interviewer,room.crossInterviewer,room.trafficOfficer,entry.time,entry.status||'Belum dijadwalkan',entry.verified===true?'Ya':'Belum',entry.startedAt,entry.finishedAt,entry.notes,entry.leader,entry.duration,entry.zoomName,routing.category,routing.sourceLabel]
   lines.push(row.map((value,index)=>csvCell(value,index===4||index===5)).join(';'))
  }
  return '\uFEFF'+lines.join('\r\n')+'\r\n'

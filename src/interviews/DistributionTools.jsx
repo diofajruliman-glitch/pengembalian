@@ -3,6 +3,7 @@ import {createPortal} from 'react-dom'
 import {Download, FileUp} from 'lucide-react'
 import {interviewerPackages, prepareBulkDistribution, prepareScheduleImport, scheduleImportTemplateCsv} from './distribution.js'
 import {readScheduleFile} from './scheduleImport.js'
+import {getRoutingCategory,isHeavyPerson,isSpecialistRoom} from './routing.js'
 
 const number = value => Number(value || 0).toLocaleString('id-ID')
 const dateText = value => value ? new Date(`${value}T12:00:00+07:00`).toLocaleDateString('id-ID', {timeZone:'Asia/Jakarta', dateStyle:'medium'}) : 'Belum dijadwalkan'
@@ -59,20 +60,24 @@ function PlanPreview({plan, population, rooms}) {
   <p><b>{number(summary.selected)} SDM</b> · {number(summary.changed)} berubah · {number(summary.unchanged)} tetap · {number(summary.rooms)} room · {number(summary.days)} hari kegiatan.</p>
   {Boolean(summary.byDate?.length) && <p className="interview-muted">{dateText(summary.byDate[0].date)}{summary.byDate.length > 1 ? ` sampai ${dateText(summary.byDate.at(-1).date)}` : ''}. Jadwal belum disimpan.</p>}
   {Boolean(summary.byRoom?.length) && <div className="interview-distribution-room-summary">{summary.byRoom.map(group => <span key={group.roomId}>{roomById.has(group.roomId) ? roomText(roomById.get(group.roomId)) : group.roomId}: <b>{number(group.count)} SDM</b></span>)}</div>}
-  {plan.changes.length ? <><div className="table-scroll" tabIndex={0} role="region" aria-label="Perbandingan jadwal sebelum dan sesudah distribusi"><table><thead><tr><th>SDM</th><th>Sebelum</th><th>Sesudah</th></tr></thead><tbody>{plan.changes.slice(0, 20).map(change => <tr key={change.nik}><td><b>{people.get(change.nik)?.nama || 'Peserta'}</b>{(change.before?.notes || '') !== (change.after?.notes || '') && <details><summary>Catatan diubah</summary><p>Sebelum: {change.before?.notes || 'Kosong'}</p><p>Sesudah: {change.after?.notes || 'Kosong'}</p></details>}</td><td>{assignmentText(change.before)}</td><td>{assignmentText(change.after)}</td></tr>)}</tbody></table></div><p className="interview-muted">Menampilkan {Math.min(20, plan.changes.length)} dari {number(plan.changes.length)} perubahan. Seluruh hasil tersedia di BNBA setelah diterapkan.</p></> : <p>Seluruh penempatan sudah sesuai; tidak ada perubahan yang perlu diterapkan.</p>}
+  {plan.changes.length ? <><div className="table-scroll" tabIndex={0} role="region" aria-label="Perbandingan jadwal sebelum dan sesudah distribusi"><table><thead><tr><th>SDM</th><th>Sebelum</th><th>Sesudah</th></tr></thead><tbody>{plan.changes.slice(0, 20).map(change => <tr key={change.nik}><td><b>{people.get(change.nik)?.nama || 'Peserta'}</b><small>{getRoutingCategory(people.get(change.nik)).category} · {getRoutingCategory(people.get(change.nik)).sourceLabel}</small>{(change.before?.notes || '') !== (change.after?.notes || '') && <details><summary>Catatan diubah</summary><p>Sebelum: {change.before?.notes || 'Kosong'}</p><p>Sesudah: {change.after?.notes || 'Kosong'}</p></details>}</td><td>{assignmentText(change.before)}</td><td>{assignmentText(change.after)}</td></tr>)}</tbody></table></div><p className="interview-muted">Menampilkan {Math.min(20, plan.changes.length)} dari {number(plan.changes.length)} perubahan. Seluruh hasil tersedia di BNBA setelah diterapkan.</p></> : <p>Seluruh penempatan sudah sesuai; tidak ada perubahan yang perlu diterapkan.</p>}
  </section>
 }
 
 export function BulkDistributionDialog({population, entries, rooms, settings, selectedIds, revision, onApply, onClose}) {
  const ids = useMemo(() => Array.from(selectedIds), [selectedIds])
- const activeRooms = rooms.filter(room => room.enabled !== false)
+ const selectedPeople=useMemo(()=>new Map(population.map(person=>[person.nik,person])),[population])
+ const heavyCount=ids.filter(nik=>isHeavyPerson(selectedPeople.get(nik))).length
+ const allHeavy=ids.length>0&&heavyCount===ids.length
+ const activeRooms=rooms.filter(room=>room.enabled!==false&&(!allHeavy||isSpecialistRoom(room)))
+ const keepRooms=activeRooms.filter(room=>!heavyCount||isSpecialistRoom(room))
  const completeSchedule = ids.length > 0 && ids.every(id => {
   const entry = entries[id]
   return entry?.date && entry.time && entry.roomId && entry.session && entry.duration
  })
- const [mode, setMode] = useState(completeSchedule ? 'keepSchedule' : 'reschedule')
+ const [mode, setMode] = useState(allHeavy ? 'reschedule' : completeSchedule ? 'keepSchedule' : 'reschedule')
  const [roomIds, setRoomIds] = useState(() => activeRooms.map(room => room.id))
- const [targetRoomId, setTargetRoomId] = useState(() => activeRooms.find(room => room.id === entries[ids[0]]?.roomId)?.id || activeRooms[0]?.id || '')
+ const [targetRoomId, setTargetRoomId] = useState(() => keepRooms.find(room => room.id === entries[ids[0]]?.roomId)?.id || keepRooms[0]?.id || '')
  const [form, setForm] = useState(() => ({startDate:settings.startDate || '', startTime:settings.startTime || '08:00', duration:settings.duration ?? 40, gap:settings.gap ?? 5, perDay:settings.perDay ?? 11, skipWeekends:settings.skipWeekends !== false}))
  const [preview, setPreview] = useState(null)
  const [error, setError] = useState('')
@@ -100,11 +105,12 @@ export function BulkDistributionDialog({population, entries, rooms, settings, se
  return <Modal title="Distribusikan SDM ke pewawancara" onClose={onClose}>
   <p><b>{number(ids.length)} SDM dipilih.</b> Penempatan mengikuti pewawancara utama setiap room. Tinjau perubahan sebelum menyimpan.</p>
   <p className="interview-muted">Jadwal atau room yang berubah akan mengembalikan status SDM ke Terjadwal; identitas perlu diverifikasi kembali saat pelaksanaan.</p>
+  {heavyCount>0&&<p className="interview-heavy-note"><b>{number(heavyCount)} SDM Berat · Pairing Sekjen asli.</b> Penempatan hanya ke Itjen/OSDM; pada mode susun jadwal, SDM lain mengikuti room tujuan yang dipilih.</p>}
   {protectedCount > 0 && <p className="notice amber-notice">{number(protectedCount)} SDM sudah mulai atau selesai wawancara. Keluarkan mereka dari pilihan agar catatan pelaksanaan tetap terjaga.</p>}
   {error && <p className="notice red-notice" role="alert">{error}</p>}
   <form onSubmit={previewDistribution} className="interview-distribution-form">
    <label>Cara distribusi<select value={mode} onChange={event => {setMode(event.target.value); clearPreview()}}><option value="reschedule">Susun jadwal ke pewawancara terpilih</option><option value="keepSchedule">Ganti pewawancara, pertahankan jadwal</option></select></label>
-   {mode === 'keepSchedule' ? <><label>Room / pewawancara tujuan<select required value={targetRoomId} onChange={event => {setTargetRoomId(event.target.value); clearPreview()}}><option value="">Pilih pewawancara</option>{activeRooms.map(room => <option key={room.id} value={room.id}>{roomText(room)}</option>)}</select></label><p className="interview-muted">Tanggal, jam, sesi, dan durasi tetap mengikuti jadwal masing-masing SDM. Penempatan yang berbenturan akan ditolak.</p></> : <>
+   {mode === 'keepSchedule' ? <><label>Room / pewawancara tujuan<select required value={targetRoomId} onChange={event => {setTargetRoomId(event.target.value); clearPreview()}}><option value="">Pilih pewawancara</option>{keepRooms.map(room => <option key={room.id} value={room.id}>{roomText(room)}</option>)}</select></label><p className="interview-muted">Tanggal, jam, sesi, dan durasi tetap mengikuti jadwal masing-masing SDM. Penempatan yang berbenturan akan ditolak.</p></> : <>
     <fieldset className="interview-distribution-rooms"><legend>Pilih room / pewawancara tujuan ({roomIds.length})</legend><div className="interview-distribution-room-actions"><button type="button" className="btn secondary" onClick={() => {setRoomIds(activeRooms.map(room => room.id)); clearPreview()}}>Pilih semua room aktif</button><button type="button" className="btn secondary" onClick={() => {setRoomIds([]); clearPreview()}}>Kosongkan pilihan</button></div><div className="interview-distribution-room-options">{activeRooms.map(room => <label className="interview-checkbox" key={room.id}><input type="checkbox" checked={roomIds.includes(room.id)} onChange={() => toggleRoom(room.id)}/>{roomText(room)}</label>)}</div></fieldset>
     <div className="interview-settings"><label>Tanggal mulai<input type="date" required value={form.startDate} onChange={event => change('startDate', event.target.value)}/></label><label>Mulai pukul (WIB)<input type="time" required value={form.startTime} onChange={event => change('startTime', event.target.value)}/></label><label>Durasi wawancara (menit)<input type="number" min="1" max="480" required value={form.duration} onChange={event => change('duration', Number(event.target.value))}/></label><label>Jeda pergantian (menit)<input type="number" min="0" max="240" required value={form.gap} onChange={event => change('gap', Number(event.target.value))}/></label><label>SDM / room / hari<input type="number" min="1" max="500" required value={form.perDay} onChange={event => change('perDay', Number(event.target.value))}/></label><label className="interview-checkbox"><input type="checkbox" checked={form.skipWeekends} onChange={event => change('skipWeekends', event.target.checked)}/>Lewati Sabtu & Minggu</label></div>
     <p className="interview-muted">Hanya SDM terpilih yang disusun ulang. Jadwal SDM lain tetap diperhitungkan untuk mencegah bentrok room dan pewawancara. Parameter ini juga disimpan sebagai acuan distribusi dan impor berikutnya.</p>
@@ -155,7 +161,7 @@ export function ScheduleImportDialog({population, entries, rooms, settings, revi
  }
  return <Modal title="Impor jadwal SDM" onClose={onClose}>
   <p>Unggah jadwal yang sudah disiapkan dalam CSV atau Excel (.xlsx). NIK atau NIP harus cocok dengan BNBA ASN Terbukti pada sumber aktif.</p>
-  <div className="interview-distribution-help"><p><b>Gunakan template:</b> isi NIK atau NIP, Tanggal (YYYY-MM-DD), Jadwal (HH:MM WIB), Sesi, Room atau Pewawancara Utama, dan Durasi (menit).</p><p>Simpan NIK/NIP sebagai <b>teks</b> agar seluruh digit tetap utuh. Nama saja tidak cukup untuk mencocokkan SDM. Untuk Excel, gunakan satu lembar atau beri nama lembar jadwal: <b>Jadwal</b>.</p><p>Nama room dan pewawancara mengikuti Penugasan & parameter. Pratinjau memeriksa identitas, bentrok jadwal, dan catatan wawancara yang telah berjalan.{settings?.perDay ? ` Batas harian: ${number(settings.perDay)} SDM per room.` : ''}</p></div>
+  <div className="interview-distribution-help"><p><b>Gunakan template:</b> isi NIK atau NIP, Tanggal (YYYY-MM-DD), Jadwal (HH:MM WIB), Sesi, Room atau Pewawancara Utama, dan Durasi (menit).</p><p>Simpan NIK/NIP sebagai <b>teks</b> agar seluruh digit tetap utuh. Nama saja tidak cukup untuk mencocokkan SDM. Untuk Excel, gunakan satu lembar atau beri nama lembar jadwal: <b>Jadwal</b>.</p><p>Nama room dan pewawancara mengikuti Penugasan & parameter. SDM Berat menurut Pairing Sekjen asli wajib ke Itjen/OSDM. Pratinjau memeriksa identitas, bentrok jadwal, dan catatan wawancara yang telah berjalan.{settings?.perDay ? ` Batas harian: ${number(settings.perDay)} SDM per room.` : ''}</p></div>
   <div className="interview-form-actions"><button className="btn secondary" type="button" onClick={() => downloadBlob(scheduleImportTemplateCsv(), 'template-jadwal-sdm.csv', 'text/csv;charset=utf-8')}><Download size={14}/>Unduh template CSV</button><button className="btn primary" type="button" disabled={loading} onClick={() => fileInput.current.click()}><FileUp size={14}/>{loading ? 'Membaca jadwal…' : 'Pilih berkas jadwal'}</button><input ref={fileInput} type="file" hidden disabled={loading} accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" onChange={readFile}/></div>
   {filename && <p className="interview-muted" role="status">{filename}{loading ? ' · sedang dibaca' : ''}</p>}
   <ErrorList items={warnings} warning/>

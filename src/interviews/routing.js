@@ -15,7 +15,11 @@ const result = (category,sourceLabel,reference=false) => ({category:category||'B
 // The original pairing and calculated periods can disagree. Routing must use
 // the selected source explicitly and never manufacture a per-period score.
 export function getRoutingCategory(person,basis=ROUTING_BASIS) {
- if(basis==='historical')return result(categoryOf(person?.historical),'Pairing Sekjen asli')
+ if(basis==='historical') {
+  const historical=person?.historical
+  const category=categories.includes(historical?.kategori)?historical.kategori:null
+  return result(category,historical?.status==='Perlu validasi'?'Pairing Sekjen asli — perlu validasi':'Pairing Sekjen asli')
+ }
  if(basis==='after') {
   if(hasPairingCategoryReference(person))return result(person.historical.kategori,'Acuan Hasil pairing; rincian sesudah ASN belum tersedia',true)
   return result(categoryOf(person?.after),'Sesudah ASN')

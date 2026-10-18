@@ -6,7 +6,7 @@ Menu **Monitoring Wawancara** menggunakan seluruh ASN berstatus **Terbukti** pad
 
 Draft penugasan berasal dari `draft-penugasan-pewawancara.csv`: 18 room, pewawancara utama sesuai sumber, Dio sebagai petugas lalu lintas Room 1–9. Petugas lalu lintas Room 10–18 tetap kosong/belum ditetapkan; Abi Setiadi Halim tercatat sebagai pewawancara lintas. Pewawancara lintas diperlakukan sebagai koordinasi kunjungan, bukan satu petugas tetap yang wajib hadir serentak di sembilan room.
 
-Pengguna mengonfirmasi **11 responden per room per hari**. Dengan 18 room aktif, kapasitasnya 198/hari dan 1.057 peserta memerlukan enam hari kegiatan. Acuan awal wawancara 40 menit, jeda lima menit, mulai 08.00 WIB: sesi ke-11 berlangsung 15.30–16.10 WIB. Tanggal mulai wajib diisi; tidak otomatis dianggap tanggal rapat. Jumlah room, jeda, jam mulai, dan kapasitas dapat disesuaikan setelah rapat Senin, 19 Oktober 2026. Sabtu/Minggu dilewati secara bawaan; hari libur lain belum diperhitungkan.
+Pengguna mengonfirmasi **11 responden per room per hari**. Dengan 18 room aktif, kapasitas totalnya 198/hari dan 1.057 peserta memerlukan sedikitnya enam hari kegiatan. Kategori Berat dibatasi pada Itjen/OSDM sehingga jumlah hari sebenarnya juga bergantung pada jumlah SDM Berat dan kapasitas empat room tersebut. Acuan awal wawancara 40 menit, jeda lima menit, mulai 08.00 WIB: sesi ke-11 berlangsung 15.30–16.10 WIB. Tanggal mulai wajib diisi; tidak otomatis dianggap tanggal rapat. Jumlah room, jeda, jam mulai, dan kapasitas dapat disesuaikan setelah rapat Senin, 19 Oktober 2026. Sabtu/Minggu dilewati secara bawaan; hari libur lain belum diperhitungkan.
 
 Susun jadwal melalui **Penugasan & parameter → Pratinjau jadwal → Terapkan draft ke kertas kerja**. Pratinjau menampilkan rentang tanggal dan contoh penempatan. Generator hanya mengisi peserta tanpa penempatan; jadwal lama, peserta selesai, kendala, dan permintaan jadwal ulang tidak ditimpa. Bentrok waktu pada room atau pewawancara utama ditolak, termasuk pada penempatan manual. Semua sesi harus selesai sebelum pergantian tanggal.
 
@@ -20,6 +20,14 @@ Susun jadwal melalui **Penugasan & parameter → Pratinjau jadwal → Terapkan d
 6. Ekspor seluruh BNBA atau sesuai filter ke CSV, serta unduh cadangan JSON.
 
 Panduan operasi tertera di tab **Panduan Dio**. Acuan Host/Co-Host: [Zoom — Managing meeting breakout rooms](https://support.zoom.com/hc/en/article?id=zm_kb&sysparm_article=KB0062540). Aplikasi mencatat tindakan; tidak mengendalikan Zoom, mengirim undangan, atau memindahkan peserta otomatis.
+
+## Penempatan kategori Berat ke Itjen/OSDM
+
+Sesuai arahan pengguna, acuan penempatan adalah **kategori asli Pairing Sekjen**, bukan hasil periode sebelum/sesudah ASN. Semua SDM dengan kategori asli **Berat** diarahkan hanya ke room aktif dengan pewawancara utama **Itjen atau OSDM**. Pada draft sumber saat ini: Room 1 Itjen 1, Room 2 Itjen 2, Room 3 OSDM 1, dan Room 4 OSDM 2. Dengan 11 SDM per room per hari, kapasitas kelompok Berat adalah **44 SDM/hari**. Jumlah hari aktual mengikuti jumlah peserta dan jadwal yang masih tersedia.
+
+BNBA menampilkan kategori sumber, filter kategori Pairing Sekjen, dan tombol **Distribusikan Berat**. Tombol memilih peserta Berat yang belum ditempatkan, perlu jadwal ulang, atau masih ditempatkan pada pewawancara lain. Pratinjau secara awal memilih empat room Itjen/OSDM dan membagi jadwal sesuai kapasitas, kemudian pengguna menerapkan hasilnya. Peserta Berat yang sudah ditempatkan dengan benar tetap dapat dipilih melalui filter dan pilihan massal bila diperlukan penyesuaian.
+
+Aturan yang sama dipakai oleh penjadwal otomatis, distribusi massal, perubahan per peserta, serta impor CSV/Excel. Penempatan Berat di luar Itjen/OSDM ditolak. Nama Itjen/OSDM hanya pada kolom pewawancara lintas tidak cukup; kewenangan room mengikuti pewawancara utamanya. Penempatan lama yang melanggar ditandai. Data Di room atau Selesai tidak dipindah otomatis; penyelesaian wawancara yang sedang berjalan tetap bisa dicatat. Kategori sumber tidak diubah. Jika kategori asli memiliki flag perlu validasi, kategorinya tetap dipakai sesuai nilai sumber dan flag tetap ditampilkan.
 
 ## Distribusi massal dan impor jadwal
 

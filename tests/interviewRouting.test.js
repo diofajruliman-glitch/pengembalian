@@ -44,11 +44,21 @@ test('missing period details retain a clearly labelled pairing reference without
 })
 
 test('unknown or invalid original categories remain unavailable instead of borrowing another period',()=>{
- for(const row of [null,{},person('1',''),person('1','berat'),person('1','Tidak diketahui'),person('1','Berat',{historical:{kategori:'Berat',status:'Perlu validasi'}}),{after:{kategori:'Berat'}}]) {
+ for(const row of [null,{},person('1',''),person('1','berat'),person('1','Tidak diketahui'),{after:{kategori:'Berat'}}]) {
   assert.equal(getRoutingCategory(row).category,'Belum tersedia')
   assert.equal(isHeavyPerson(row),false)
  }
  assert.throws(()=>getRoutingCategory({},'unknown'),/Acuan kategori/)
+})
+
+test('a validation flag preserves the original pairing category and remains visible in its source label',()=>{
+ const row=person('1','Berat',{historical:{kategori:'Berat',status:'Perlu validasi',frekuensi:null},before:{kategori:'Ringan'},after:{kategori:'Sedang'}})
+ const original=structuredClone(row)
+ assert.deepEqual(getRoutingCategory(row),{category:'Berat',sourceLabel:'Pairing Sekjen asli — perlu validasi',reference:false})
+ assert.equal(isHeavyPerson(row),true)
+ assert.throws(()=>assertRoutingAssignment(row,DEFAULT_ROOMS[4]),/Berat.*Itjen atau OSDM/)
+ assert.equal(assertRoutingAssignment(row,DEFAULT_ROOMS[0]),true)
+ assert.deepEqual(row,original)
 })
 
 test('specialist rooms use an anchored primary institution name, including institutional numbering',()=>{
