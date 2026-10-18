@@ -1,0 +1,6 @@
+<USER_REQUEST>
+untuk surat pemanggilan untuk jabatannya dan pangkatnya bisa ambil dari sini , berdasarkan nip 
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-18T10:27:14+07:00.
+</ADDITIONAL_METADATA>
