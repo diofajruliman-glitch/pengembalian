@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react'
+import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react'
 import {createRoot} from 'react-dom/client'
 import {createClient} from '@supabase/supabase-js'
 import readXlsxFile from 'read-excel-file'
@@ -24,6 +24,7 @@ import {caseTestClient} from './recovery/caseApi.js'
 import {productionMasterClient} from './import/productionClient.js'
 import AdjustmentMonitor from './adjustments/AdjustmentMonitor.jsx'
 import {disciplineStorage} from './judol/storage.js'
+import {activeDatasetId,loadDatabaseDisciplineSnapshot,operationalDisciplineSnapshot} from './judol/databaseSource.js'
 const JudolModule=React.lazy(()=>import('./judol/JudolModule.jsx'))
 const LetterManager=React.lazy(()=>import('./letters/LetterManager.jsx'))
 const InterviewMonitor=React.lazy(()=>import('./interviews/InterviewMonitor.jsx'))
@@ -79,65 +80,70 @@ function App(){
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
  const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp','#monitoring-wawancara'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
  const [judolSnapshot,setJudolSnapshot]=useState(()=>{
+  if(configured||!import.meta.env.DEV)return null
   try{
    const saved=sessionStorage.getItem('cached_judol_snapshot')
    return saved?JSON.parse(saved):null
   }catch{return null}
  })
+ const [judolAccountId,setJudolAccountId]=useState(null)
+ const [verifiedJudol,setVerifiedJudol]=useState(null)
+ const [judolSourceError,setJudolSourceError]=useState('')
+ const [judolSourceLoading,setJudolSourceLoading]=useState(false)
+ const [judolSourceAttempt,setJudolSourceAttempt]=useState(0)
+ const judolSnapshotRef=useRef(judolSnapshot)
+ judolSnapshotRef.current=judolSnapshot
  const updateJudolSnapshot=useCallback(val=>{
+  setJudolAccountId(session?.user?.id||null)
   setJudolSnapshot(current=>{
    const next=typeof val==='function'?val(current):val
+   judolSnapshotRef.current=next
    try{
-    if(next) sessionStorage.setItem('cached_judol_snapshot',JSON.stringify(next))
+    if(next&&!configured&&import.meta.env.DEV) sessionStorage.setItem('cached_judol_snapshot',JSON.stringify(next))
     else sessionStorage.removeItem('cached_judol_snapshot')
    }catch{}
    return next
   })
- },[])
+ },[session?.user?.id])
  const demo=!configured && import.meta.env.DEV;const canEdit=demo?true: ['admin','editor'].includes(profile?.role)
  const canImport=demo||profile?.role==='admin'
  const isAuthorized=demo || Boolean(session && profile && ['admin','editor','viewer'].includes(profile.role))
+ const selectedJudolSnapshot=demo||judolAccountId===session?.user?.id?judolSnapshot:null
+ const operationalJudolSnapshot=operationalDisciplineSnapshot({online:!demo,accountId:session?.user?.id,selectedSnapshot:selectedJudolSnapshot,verified:verifiedJudol})
+ useEffect(()=>{
+  if(demo)return
+  setJudolSnapshot(null);judolSnapshotRef.current=null;setJudolAccountId(session?.user?.id||null)
+  setVerifiedJudol(null);setJudolSourceError('');setJudolSourceLoading(false)
+  setMatrix([]);setActions([]);setBankData(bankDefaults);setCases([]);setCaseTotal(0);setCaseSearchTotal(0);setOpenTotal(0)
+  try{sessionStorage.removeItem('cached_judol_snapshot')}catch{}
+ },[session?.user?.id,demo])
  useEffect(()=>{
   if(!supabase||!isAuthorized||demo)return
   let active=true
-  try{
-   const storage=disciplineStorage(supabase)
-   if(storage){
-    storage.listDatasets().then(async data=>{
-     if(!active||!data||!data.length)return
-     setJudolSnapshot(curr=>{
-      if(curr)return curr
-      storage.loadDataset(data[0].id).then(async dataset=>{
-       if(!active||!dataset)return
-       const followups=await storage.loadFollowups(data[0].id).catch(()=>[])
-       const snap={
-        kind:'analysis',
-        name:dataset.name,
-        filename:dataset.filename,
-        source:null,
-        active:0,
-        versions:[{
-         id:dataset.id,
-         number:dataset.version,
-         createdAt:dataset.createdAt,
-         status:dataset.status,
-         result:dataset.result,
-         followups:followups||[],
-         auditEvents:dataset.auditEvents||[]
-        }]
-       }
-       updateJudolSnapshot(snap)
-      }).catch(()=>{})
-      return curr
-     })
-    }).catch(()=>{})
-   }
-  }catch{}
+  const storage=disciplineStorage(supabase)
+  storage.listDatasets().then(async data=>{
+   if(!active||judolSnapshotRef.current||!data?.length)return
+   const snap=await loadDatabaseDisciplineSnapshot(storage,data[0].id)
+   if(active&&!judolSnapshotRef.current)updateJudolSnapshot(snap)
+  }).catch(error=>{if(active)setJudolSourceError(error.message)})
   return ()=>{active=false}
- },[supabase,isAuthorized,demo,updateJudolSnapshot])
+ },[supabase,isAuthorized,demo,updateJudolSnapshot,judolSourceAttempt])
+ const selectedJudolDatasetId=activeDatasetId(selectedJudolSnapshot)
+ useEffect(()=>{
+  if(demo||!isAuthorized||!supabase)return
+  let active=true
+  setVerifiedJudol(null);setJudolSourceError('')
+  if(!selectedJudolDatasetId){setJudolSourceLoading(false);return}
+  setJudolSourceLoading(true)
+  loadDatabaseDisciplineSnapshot(disciplineStorage(supabase),selectedJudolDatasetId).then(snapshot=>{
+   if(active)setVerifiedJudol({accountId:session.user.id,datasetId:selectedJudolDatasetId,snapshot})
+  }).catch(error=>{if(active)setJudolSourceError(`Sumber database belum dapat diverifikasi: ${error.message}`)})
+   .finally(()=>{if(active)setJudolSourceLoading(false)})
+  return()=>{active=false}
+ },[demo,isAuthorized,selectedJudolDatasetId,session?.user?.id,judolSourceAttempt,page])
  const [editingAction,setEditingAction]=useState(null);const [deletingAction,setDeletingAction]=useState(null);const [actionError,setActionError]=useState('');
  const [editingMatrix,setEditingMatrix]=useState(null);const [deletingMatrix,setDeletingMatrix]=useState(null);const [matrixError,setMatrixError]=useState('');
- const [matrix,setMatrix]=useState(seeds.bottlenecks); const [actions,setActions]=useState(seeds.actions); const [bankData,setBankData]=useState(bankDefaults)
+ const [matrix,setMatrix]=useState(()=>demo?seeds.bottlenecks:[]); const [actions,setActions]=useState(()=>demo?seeds.actions:[]); const [bankData,setBankData]=useState(bankDefaults)
  const [cases,setCases]=useState([]);const [caseTotal,setCaseTotal]=useState(0);const [caseSearchTotal,setCaseSearchTotal]=useState(0);const [openTotal,setOpenTotal]=useState(0);const [casesPage,setCasesPage]=useState(0);const [search,setSearch]=useState('')
  const [loading,setLoading]=useState(false);const [error,setError]=useState('');const [editingCase,setEditingCase]=useState(null);const [deletingCase,setDeletingCase]=useState(null);const [deleteCaseError,setDeleteCaseError]=useState('');const [editingBank,setEditingBank]=useState(null); const [importRows,setImportRows]=useState(null)
  useEffect(()=>{if(!supabase)return;let live=true;supabase.auth.getSession().then(({data})=>{if(live){setSession(data.session);setAuthLoading(false)}}).catch(()=>setAuthLoading(false));const {data:{subscription}}=supabase.auth.onAuthStateChange((event,s)=>{setSession(s);if(event==='PASSWORD_RECOVERY')setRecovering(true)});return ()=>{live=false;subscription.unsubscribe()}},[])
@@ -202,7 +208,7 @@ function App(){
   setBusy(true);setLoginError('')
   try{const {error}=await supabase.auth.updateUser({password});if(error)throw error;setRecovering(false);await supabase.auth.signOut();window.history.replaceState({},'',window.location.pathname);setResetMessage('Password berhasil diperbarui. Silakan masuk dengan password baru.')}catch(e){setLoginError(notify(e))}finally{setBusy(false)}
  }
- const signOut=async()=>{await supabase.auth.signOut();setPage('dashboard');setRecoverySnapshot(null);setMasterSnapshot(null);updateJudolSnapshot(null)}
+ const signOut=async()=>{setVerifiedJudol(null);updateJudolSnapshot(null);await supabase.auth.signOut();setPage('dashboard');setRecoverySnapshot(null);setMasterSnapshot(null)}
  const updateData=async(table,no,patch)=>{
    if(!canEdit)return;setError('');if(demo){const setter=table==='bottlenecks'?setMatrix:setActions;setter(old=>old.map(r=>r.no===no?{...r,...patch}:r));return}
    const {error}=await supabase.from(table).update(patch).eq('no',no);if(error)setError(notify(error));else fetchAll()
@@ -359,9 +365,10 @@ function App(){
     {page==='impor-master'&&canImport&&<ImportPreview metadataClient={profile?.role==='admin'?sourceMetadataClient:null} storedSnapshot={profile?.role==='admin'?masterSnapshot:null} sdmClient={profile?.role==='admin'?sdmStatusClient:null} stagingClient={profile?.role==='admin'?importTestClient:null} onMasterCommitted={refreshCommittedMaster} onSnapshot={data=>{setRecoverySnapshot(data);activateMaster(data);go('master-progress')}}/>}
     {page==='master-progress'&&<RecoveryWorkspace adjustmentClient={supabase} client={importTestClient} snapshot={recoverySnapshot} onImport={canImport?()=>go('impor-master'):undefined} onMasterLoaded={activateMaster}/>}
     {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
-    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={judolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase} onOpenInterviews={()=>go('monitoring-wawancara')}/></React.Suspense>}
-    {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={judolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')}/></React.Suspense>}
-    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={judolSnapshot} onJudolSnapshot={updateJudolSnapshot} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
+    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={selectedJudolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase} onOpenInterviews={()=>go('monitoring-wawancara')}/></React.Suspense>}
+    {!demo&&['monitoring-wawancara','surat-tlhp'].includes(page)&&!operationalJudolSnapshot&&<div className="notice amber-notice" role="status"><Info size={17}/><span>{judolSourceLoading?'Memverifikasi populasi Disiplin ASN dari database…':judolSourceError||'BNBA dan penerima surat Disiplin ASN hanya memakai versi tersimpan di database. Pilih dataset online di Kategorisasi Disiplin ASN; draft Excel belum digunakan.'}</span>{judolSourceError&&<button className="btn secondary" onClick={()=>setJudolSourceAttempt(value=>value+1)}>Coba verifikasi lagi</button>}</div>}
+    {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={operationalJudolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')}/></React.Suspense>}
+    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={operationalJudolSnapshot} onJudolSnapshot={updateJudolSnapshot} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}
       {masterLoadError&&<div className="notice amber-notice"><Info size={18}/><span>{masterLoadError}</span></div>}
