@@ -61,9 +61,9 @@ export default function LetterDocument({
         <div className="doc-body">
           <div className="doc-salutation">
             Kepada Yth.<br />
-            <strong>Saudara/i {recipient.nama || '«NAMA ASN»'}</strong><br />
-            NIP/NIPPPK : {recipient.nip || '«NIP»'}<br />
-            Jabatan : {recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'}<br />
+            <strong>Saudara/i {recipient.nama || '—'}</strong><br />
+            NIP/NIPPPK : {recipient.nip || '—'}<br />
+            Jabatan : {recipient.jabatan || 'PPPK Direktorat PSNK'}<br />
             di Tempat
           </div>
 
@@ -173,24 +173,24 @@ export default function LetterDocument({
               <tr>
                 <td className="col-label">2. Nama</td>
                 <td className="col-sep">:</td>
-                <td className="col-val"><strong>{recipient.nama || '«NAMA ASN»'}</strong></td>
+                <td className="col-val"><strong>{recipient.nama || '—'}</strong></td>
               </tr>
               <tr>
                 <td className="col-label">NIP/NIPPPK</td>
                 <td className="col-sep">:</td>
-                <td className="col-val">{recipient.nip || '«NIP»'}</td>
+                <td className="col-val">{recipient.nip || '—'}</td>
               </tr>
               {effectiveShowRank && (
                 <tr>
                   <td className="col-label">Pangkat/Gol</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{recipient.pangkat || 'Penata Muda (III/a)'}</td>
+                  <td className="col-val">{recipient.pangkat || 'Pegawai ASN / PPPK'}</td>
                 </tr>
               )}
               <tr>
                 <td className="col-label">Jabatan</td>
                 <td className="col-sep">:</td>
-                <td className="col-val">{recipient.jabatan || 'PPPK / Pegawai Dit. PSNK'}</td>
+                <td className="col-val">{recipient.jabatan || 'PPPK Direktorat PSNK'}</td>
               </tr>
               <tr>
                 <td className="col-label">Unit Kerja</td>
@@ -220,24 +220,24 @@ export default function LetterDocument({
               <tr>
                 <td className="col-label">Nama</td>
                 <td className="col-sep">:</td>
-                <td className="col-val"><strong>{recipient.nama || '«NAMA ASN»'}</strong></td>
+                <td className="col-val"><strong>{recipient.nama || '—'}</strong></td>
               </tr>
               <tr>
                 <td className="col-label">NIP/NIPPPK</td>
                 <td className="col-sep">:</td>
-                <td className="col-val">{recipient.nip || '«NIP »'}</td>
+                <td className="col-val">{recipient.nip || '—'}</td>
               </tr>
               {effectiveShowRank && (
                 <tr>
                   <td className="col-label">Pangkat</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{recipient.pangkat || '«pangkat»'}</td>
+                  <td className="col-val">{recipient.pangkat || 'Pegawai ASN / PPPK'}</td>
                 </tr>
               )}
               <tr>
                 <td className="col-label">Jabatan</td>
                 <td className="col-sep">:</td>
-                <td className="col-val">{recipient.jabatan || '«Jabatan»'}</td>
+                <td className="col-val">{recipient.jabatan || 'PPPK Direktorat PSNK'}</td>
               </tr>
               <tr>
                 <td className="col-label">Unit Kerja</td>

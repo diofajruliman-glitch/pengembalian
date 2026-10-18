@@ -16,3 +16,9 @@
 Enam pengujian kebijakan sumber mencakup cache/draft yang ditolak, respons database yang digunakan, pergantian akun/versi, ID respons yang berbeda, kegagalan RPC, dan alur demo lokal. Rangkaian terkait: 127 lulus, satu pengujian workbook riil dilewati karena berkas acuannya tidak disediakan pada proses tes. Pengujian browser terisolasi membuktikan sumber kosong tetap nol penerima dan satu baris uji tetap satu penerima; tidak digabungkan dengan daftar statis. Bukti dan data uji berada di `.local-analysis/`, diabaikan Git dan tidak menjadi entry build Vite.
 
 Pembuktian sumber melalui RPC tidak membuktikan kebenaran setiap baris database. Jumlah dan isi dataset online perlu diperiksa menggunakan sesi petugas yang berwenang; pemeriksaan anonim hanya mencapai halaman login.
+
+## Status online
+
+Deployment produksi `dpl_LziBhNv67VzSUe8HkuvcSj9S6cNb`, commit `86aebde048e0a600724dc3db336c4595e2bcf584`, dikonfirmasi READY pada https://pengembalian.vercel.app/. Lima berkas kebijakan sumber pada commit tersebut identik dengan paket perbaikan yang ditinjau dan diuji. Deployment ini terbit melalui pipeline Git yang sudah ada selama pemeriksaan, sehingga paket yang sama tidak dirilis ulang.
+
+Pemeriksaan HTTP produksi: 200; entry `index-D9sru9RJ.js`, persuratan `LetterManager-ObpNSPSu.js`. Marker daftar personel statis tidak ditemukan di aset persuratan, sedangkan guard verifikasi database dan sumber penerima kosong ditemukan. Pemeriksaan sebelumnya pada `9f2eb14` masih menemukan daftar statis. Tidak ada impor data uji atau penulisan database pada pekerjaan ini.
