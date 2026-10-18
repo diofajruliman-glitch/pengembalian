@@ -53,7 +53,7 @@ const menus = [
   {id:'aksi',name:'Rencana Aksi',icon:CalendarDays},
   {id:'bank',name:'Rekap Bank',icon:Landmark},
   {id:'master-progress',name:'Master & Progres',icon:TrendingUp},
-  {id:'perubahan-pengembalian',name:'Perubahan Pengembalian',icon:FileCheck2},
+  {id:'perubahan-pengembalian',name:'Penyesuaian Pengembalian',icon:FileCheck2},
   {id:'kategorisasi-judol',name:'Kategorisasi Disiplin ASN',icon:ShieldCheck},
   {id:'monitoring-wawancara',name:'Monitoring Wawancara',icon:Users},
   {id:'surat-tlhp',name:'Persuratan & Dokumen TLHP',icon:FileText},
