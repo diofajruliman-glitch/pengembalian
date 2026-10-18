@@ -463,13 +463,14 @@ export async function generateOfficialPdfBatch({
       curY += 3.5
 
       const scheduleRows = [
-        ['Hari', ':', venue.hari || 'Senin'],
-        ['Tanggal', ':', venue.tanggal || '26 Oktober 2026'],
-        ['Jam', ':', venue.jam || '10.00 WIB'],
-        ['Tempat', ':', venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos']
+        ['Hari', ':', recipient.hari || venue.hari || 'Senin'],
+        ['Tanggal', ':', recipient.tanggal || venue.tanggal || '26 Oktober 2026'],
+        ['Jam', ':', recipient.jam || venue.jam || '10.00 WIB'],
+        ['Tempat', ':', recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos']
       ]
-      if (venue.linkZoom) {
-        scheduleRows.push(['Link Zoom', ':', venue.linkZoom])
+      const linkZoom = recipient.linkZoom || venue.linkZoom
+      if (linkZoom) {
+        scheduleRows.push(['Link Zoom', ':', linkZoom])
       }
 
       autoTable(doc, {

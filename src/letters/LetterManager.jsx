@@ -195,6 +195,15 @@ export default function LetterManager({
   }, [venues, selectedVenueId])
   const [editingVenue, setEditingVenue] = useState(null)
 
+  // State Pengaturan Jam Pelaksanaan & Penjadwalan Sesi (Bergilir / Multi-Sesi)
+  const [scheduleMode, setScheduleMode] = useState('uniform') // 'uniform' | 'staggered'
+  const [customVenueJam, setCustomVenueJam] = useState('')
+  const [staggerStartTime, setStaggerStartTime] = useState('09.00')
+  const [staggerInterval, setStaggerInterval] = useState(30)
+  const [staggerBatchSize, setStaggerBatchSize] = useState(1)
+  const [staggerFormat, setStaggerFormat] = useState('startOnly') // 'startOnly' | 'range'
+  const [skipLunchBreak, setSkipLunchBreak] = useState(true)
+
   // CMS State: Daftar Template Naskah Dinas (Fleksibel: Bisa Tambah, Ubah, Hapus, Duplikat)
   const [templates, setTemplates] = useState(() => {
     try {
@@ -663,23 +672,54 @@ export default function LetterManager({
 
   // Daftar Penerima yang akan dicetak / diunduh
   const activeRecipients = useMemo(() => {
-    if (recipientSource === 'manual') return databaseOnly ? [] : [manualRecipient]
+    if (recipientSource === 'manual') {
+      if (databaseOnly) return []
+      const manualJam = customVenueJam || venue.jam || '10.00 WIB'
+      return [{ ...manualRecipient, jam: manualJam }]
+    }
     const list = activeSDMOptions
     if (!list.length) return []
 
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
     const rawList = filtered.length > 0 ? filtered : list
-    return rawList.map(r => {
+    return rawList.map((r, idx) => {
       const posRef = lookupNipPosition(r.nip || r.nik)
-      if (!posRef) return r
+      let assignedJam = customVenueJam || venue.jam || '10.00 WIB'
+
+      if (scheduleMode === 'staggered') {
+        const [hStr, mStr] = (staggerStartTime || '09.00').split(/[:.]/)
+        const baseH = parseInt(hStr, 10) || 9
+        const baseM = parseInt(mStr, 10) || 0
+        const slot = Math.floor(idx / Math.max(1, staggerBatchSize))
+        let startMin = baseH * 60 + baseM + (slot * staggerInterval)
+        if (skipLunchBreak && startMin >= 720) {
+          startMin += 60 // loncat 1 jam istirahat siang 12.00 - 13.00
+        }
+        const endMin = startMin + staggerInterval
+        const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}.${String(m % 60).padStart(2, '0')}`
+        assignedJam = staggerFormat === 'range'
+          ? `${fmt(startMin)} - ${fmt(endMin)} WIB`
+          : `${fmt(startMin)} WIB`
+      }
+
       return {
         ...r,
-        nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef.nama || r.nama),
-        pangkat: posRef.pangkat || r.pangkat || 'Golongan IX',
-        jabatan: posRef.jabatan || r.jabatan || 'Penata Layanan Operasional'
+        nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
+        pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
+        jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+        jam: r.customJam || assignedJam
       }
     })
-  }, [recipientSource, manualRecipient, activeSDMOptions, selectedSDMKeys, databaseOnly])
+  }, [recipientSource, manualRecipient, activeSDMOptions, selectedSDMKeys, databaseOnly, customVenueJam, venue.jam, scheduleMode, staggerStartTime, staggerInterval, staggerBatchSize, staggerFormat, skipLunchBreak])
+
+  // Map jadwal per SDM untuk tampilan badge di daftar checklist
+  const itemScheduleMap = useMemo(() => {
+    const map = new Map()
+    for (const r of activeRecipients) {
+      if (r.key && r.jam) map.set(r.key, r.jam)
+    }
+    return map
+  }, [activeRecipients])
 
   // SDM yang dirender di layar pratinjau (dipaginasi per 10 lembar agar performa instan tanpa lag)
   const displayedRecipients = useMemo(() => {
@@ -1016,8 +1056,12 @@ Nama        : ${r.nama}
 NIP/NIPPPK  : ${r.nip}
 ${showRank ? `Pangkat     : ${r.pangkat || '—'}\n` : ''}Jabatan     : ${r.jabatan || 'PPPK'}
 Unit Kerja  : ${r.unitKerja || official.unitKerja}
-
-${venue.linkZoom ? `Dan Pada sesi :\nHari        : ${venue.hari}\nTanggal     : ${venue.tanggal}\nJam         : ${venue.jam}\nLink zoom   : ${venue.linkZoom}\n` : ''}
+Pada :
+Hari        : ${r.hari || venue.hari || 'Senin'}
+Tanggal     : ${r.tanggal || venue.tanggal || '26 Oktober 2026'}
+Jam         : ${r.jam || venue.jam || '10.00 WIB'}
+Tempat      : ${r.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}
+${venue.linkZoom ? `Link Zoom   : ${venue.linkZoom}\n` : ''}
 ${customAgenda || currentTemplate.agendaDefault}
 
 ${currentTemplate.category === 'keuangan' ? effectiveCoord + '\n\n' : ''}${customClosing || currentTemplate.closingText}
@@ -1339,6 +1383,147 @@ NIP. ${official.nip}
               </select>
             </div>
 
+            {/* PENGATURAN JAM PELAKSANAAN & PENJADWALAN SESI */}
+            <div style={{
+              background: 'rgba(30, 41, 59, 0.7)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              borderRadius: '8px',
+              padding: '10px 12px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              margin: '2px 0 6px 0'
+            }}>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 6}}>
+                <label style={{fontWeight: 700, color: '#38bdf8', fontSize: '0.82rem', margin: 0, display: 'flex', alignItems: 'center', gap: 5}}>
+                  <Clock size={14} /> Pengaturan Jam Pelaksanaan
+                </label>
+                <div style={{display: 'flex', gap: 4}}>
+                  <button
+                    type="button"
+                    style={{
+                      background: scheduleMode === 'uniform' ? '#0284c7' : 'rgba(255,255,255,0.06)',
+                      color: '#ffffff',
+                      fontSize: '0.72rem',
+                      padding: '2px 8px',
+                      border: 'none',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      fontWeight: scheduleMode === 'uniform' ? 600 : 400
+                    }}
+                    onClick={() => setScheduleMode('uniform')}
+                    title="Seluruh surat menggunakan jam yang sama"
+                  >
+                    Jam Sama
+                  </button>
+                  <button
+                    type="button"
+                    style={{
+                      background: scheduleMode === 'staggered' ? '#0284c7' : 'rgba(255,255,255,0.06)',
+                      color: '#ffffff',
+                      fontSize: '0.72rem',
+                      padding: '2px 8px',
+                      border: 'none',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      fontWeight: scheduleMode === 'staggered' ? 600 : 400
+                    }}
+                    onClick={() => setScheduleMode('staggered')}
+                    title="Surat dibagi ke jam bergilir otomatis (beda-beda jam per orang/kelompok)"
+                  >
+                    Jam Bergilir (Beda-beda)
+                  </button>
+                </div>
+              </div>
+
+              {scheduleMode === 'uniform' ? (
+                <div style={{display: 'flex', gap: 6, alignItems: 'center'}}>
+                  <input
+                    type="text"
+                    placeholder={`Jam: ${venue.jam || '10.00 WIB'}`}
+                    value={customVenueJam}
+                    onChange={e => setCustomVenueJam(e.target.value)}
+                    style={{fontSize: '0.8rem', padding: '5px 8px', flex: 1}}
+                    title="Ketik untuk mengubah jam serentak naskah surat"
+                  />
+                  {customVenueJam && (
+                    <button
+                      type="button"
+                      onClick={() => setCustomVenueJam('')}
+                      style={{background: 'none', border: 'none', color: '#f87171', fontSize: '0.75rem', cursor: 'pointer', padding: '0 4px'}}
+                    >
+                      Reset
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <div style={{display: 'flex', flexDirection: 'column', gap: 6, fontSize: '0.78rem', color: '#cbd5e1'}}>
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6}}>
+                    <div>
+                      <label style={{fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Jam Mulai</label>
+                      <input
+                        type="text"
+                        value={staggerStartTime}
+                        onChange={e => setStaggerStartTime(e.target.value)}
+                        placeholder="09.00"
+                        style={{width: '100%', fontSize: '0.78rem', padding: '4px 6px'}}
+                      />
+                    </div>
+                    <div>
+                      <label style={{fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Durasi per Sesi</label>
+                      <select
+                        value={staggerInterval}
+                        onChange={e => setStaggerInterval(Number(e.target.value))}
+                        style={{width: '100%', fontSize: '0.78rem', padding: '4px 6px'}}
+                      >
+                        <option value={15}>15 Menit</option>
+                        <option value={30}>30 Menit</option>
+                        <option value={45}>45 Menit</option>
+                        <option value={60}>60 Menit</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6}}>
+                    <div>
+                      <label style={{fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Kapasitas per Sesi</label>
+                      <select
+                        value={staggerBatchSize}
+                        onChange={e => setStaggerBatchSize(Number(e.target.value))}
+                        style={{width: '100%', fontSize: '0.78rem', padding: '4px 6px'}}
+                      >
+                        <option value={1}>1 Orang / Sesi</option>
+                        <option value={2}>2 Orang / Sesi</option>
+                        <option value={3}>3 Orang / Sesi</option>
+                        <option value={5}>5 Orang / Sesi</option>
+                        <option value={10}>10 Orang / Sesi</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Format Tampilan Jam</label>
+                      <select
+                        value={staggerFormat}
+                        onChange={e => setStaggerFormat(e.target.value)}
+                        style={{width: '100%', fontSize: '0.78rem', padding: '4px 6px'}}
+                      >
+                        <option value="startOnly">09.00 WIB</option>
+                        <option value="range">09.00 - 09.30 WIB</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <label style={{display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.75rem', cursor: 'pointer', marginTop: 2}}>
+                    <input
+                      type="checkbox"
+                      checked={skipLunchBreak}
+                      onChange={e => setSkipLunchBreak(e.target.checked)}
+                    />
+                    <span>Lewati jam istirahat (12.00 – 13.00 WIB)</span>
+                  </label>
+                </div>
+              )}
+            </div>
+
             <hr style={{borderColor: 'rgba(255,255,255,0.08)', margin: '4px 0'}} />
 
             {/* SUMBER DATA PENERIMA */}
@@ -1623,8 +1808,23 @@ NIP. ${official.nip}
                               checked={isChecked}
                               onChange={() => toggleSelectSDM(item.key)}
                             />
-                            <div>
-                              <div className="rec-name">{item.nama}</div>
+                            <div style={{flex: 1}}>
+                              <div className="rec-name" style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6}}>
+                                <span>{item.nama}</span>
+                                {isChecked && itemScheduleMap.has(item.key) && scheduleMode === 'staggered' && (
+                                  <span style={{
+                                    background: 'rgba(56, 189, 248, 0.2)',
+                                    color: '#38bdf8',
+                                    fontSize: '0.68rem',
+                                    padding: '1px 6px',
+                                    borderRadius: 4,
+                                    fontWeight: 600,
+                                    whiteSpace: 'nowrap'
+                                  }}>
+                                    {itemScheduleMap.get(item.key)}
+                                  </span>
+                                )}
+                              </div>
                               <div className="rec-nip">
                                 {item.nip}
                                 {item.jabatan && ` · ${item.jabatan}`}

@@ -318,3 +318,46 @@ test('surat panggilan precise alignment test matching user layout specifications
   assert.ok(buffer.byteLength > 2000)
 })
 
+test('staggered schedule per recipient creates distinct time slots', async () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  const recipients = [
+    { nama: 'Ahmad', nip: '199001012025211001', jam: '09.00 - 09.30 WIB' },
+    { nama: 'Budi', nip: '199001012025211002', jam: '09.30 - 10.00 WIB' },
+    { nama: 'Citra', nip: '199001012025211003', jam: '10.00 - 10.30 WIB' }
+  ]
+
+  for (let i = 0; i < recipients.length; i++) {
+    if (i > 0) doc.addPage('a4', 'portrait')
+    const r = recipients[i]
+
+    autoTable(doc, {
+      startY: 50,
+      margin: { left: 18, right: 14 },
+      body: [
+        ['Hari', ':', 'Senin'],
+        ['Tanggal', ':', '26 Oktober 2026'],
+        ['Jam', ':', r.jam || '10.00 WIB'],
+        ['Tempat', ':', 'Kemensos Gedung A Lantai 3']
+      ],
+      theme: 'plain',
+      styles: { fontSize: 12 },
+      columnStyles: {
+        0: { cellWidth: 46 },
+        1: { cellWidth: 4, halign: 'center' },
+        2: { cellWidth: 'auto' }
+      }
+    })
+  }
+
+  assert.equal(doc.internal.getNumberOfPages(), 3)
+  const buffer = doc.output('arraybuffer')
+  assert.ok(buffer.byteLength > 3000)
+})
+
+

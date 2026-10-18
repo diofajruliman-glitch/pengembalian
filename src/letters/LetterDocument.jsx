@@ -345,22 +345,22 @@ export default function LetterDocument({
                 <tr>
                   <td className="col-label">Hari</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{venue.hari || 'Senin'}</td>
+                  <td className="col-val">{recipient.hari || venue.hari || 'Senin'}</td>
                 </tr>
                 <tr>
                   <td className="col-label">Tanggal</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{venue.tanggal || '26 Oktober 2026'}</td>
+                  <td className="col-val">{recipient.tanggal || venue.tanggal || '26 Oktober 2026'}</td>
                 </tr>
                 <tr>
                   <td className="col-label">Jam</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{venue.jam || '10.00 WIB'}</td>
+                  <td className="col-val">{recipient.jam || venue.jam || '10.00 WIB'}</td>
                 </tr>
                 <tr>
                   <td className="col-label">Tempat</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
+                  <td className="col-val">{recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
                 </tr>
                 {venue.linkZoom && (
                   <tr>
