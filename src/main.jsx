@@ -93,6 +93,8 @@ function App(){
  const [judolSourceAttempt,setJudolSourceAttempt]=useState(0)
  const judolSnapshotRef=useRef(judolSnapshot)
  judolSnapshotRef.current=judolSnapshot
+ const activeAccountIdRef=useRef(session?.user?.id)
+ activeAccountIdRef.current=session?.user?.id
  const updateJudolSnapshot=useCallback(val=>{
   setJudolAccountId(session?.user?.id||null)
   setJudolSnapshot(current=>{
@@ -132,8 +134,9 @@ function App(){
  useEffect(()=>{
   if(demo||!isAuthorized||!supabase)return
   let active=true
-  setVerifiedJudol(null);setJudolSourceError('')
+  setVerifiedJudol(null)
   if(!selectedJudolDatasetId){setJudolSourceLoading(false);return}
+  setJudolSourceError('')
   setJudolSourceLoading(true)
   loadDatabaseDisciplineSnapshot(disciplineStorage(supabase),selectedJudolDatasetId).then(snapshot=>{
    if(active)setVerifiedJudol({accountId:session.user.id,datasetId:selectedJudolDatasetId,snapshot})
@@ -174,6 +177,7 @@ function App(){
 
  const fetchAll=useCallback(async()=>{
    if(!supabase||!isAuthorized)return
+   const requestAccountId=session?.user?.id
    setLoading(true);setError('')
    try{
      const [m,a,b,total,open]=await Promise.all([
@@ -183,19 +187,22 @@ function App(){
       supabase.from('sdm_cases').select('id',{head:true,count:'exact'}).is('deleted_at',null),
       supabase.from('sdm_cases').select('id',{head:true,count:'exact'}).gt('sisa_kewajiban',0)
      ])
+     if(activeAccountIdRef.current!==requestAccountId)return
      for(const q of [m,a,b,total,open])if(q.error)throw q.error
      setMatrix(m.data||[]);setActions(a.data||[]);setBankData(b.data||[]);setCaseTotal(total.count||0);setOpenTotal(open.count||0)
-   }catch(err){setError(notify(err))}finally{setLoading(false)}
- },[isAuthorized])
+   }catch(err){if(activeAccountIdRef.current===requestAccountId)setError(notify(err))}finally{if(activeAccountIdRef.current===requestAccountId)setLoading(false)}
+ },[isAuthorized,session?.user?.id])
  const fetchCases=useCallback(async()=>{
    if(!supabase||!isAuthorized)return
+   const requestAccountId=session?.user?.id
    const offset=casesPage*25
    let q=supabase.from('sdm_cases').select('*',{count:'exact'}).is('deleted_at',null).order('updated_at',{ascending:false}).range(offset,offset+24)
    const term=search.trim().replace(/[,%()]/g,'').slice(0,60)
    if(term)q=q.or(`nip.ilike.%${term}%,nama.ilike.%${term}%,provinsi.ilike.%${term}%`)
    const {data,error,count}=await q
+   if(activeAccountIdRef.current!==requestAccountId)return
    if(error)setError(notify(error)); else {setCases(data||[]);setCaseSearchTotal(count||0)}
- },[casesPage,search,isAuthorized])
+ },[casesPage,search,isAuthorized,session?.user?.id])
  useEffect(()=>{if(isAuthorized&&!demo)fetchAll()},[isAuthorized,fetchAll,demo])
  useEffect(()=>{if(isAuthorized&&!demo&&(page==='kasus'||page==='surat-tlhp'))fetchCases()},[isAuthorized,fetchCases,demo,page])
  const signIn=async(email,password)=>{setBusy(true);setLoginError(''); const {error}=await supabase.auth.signInWithPassword({email,password}); if(error)setLoginError(notify(error));setBusy(false)}
@@ -368,7 +375,7 @@ function App(){
     {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={selectedJudolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase} onOpenInterviews={()=>go('monitoring-wawancara')}/></React.Suspense>}
     {!demo&&['monitoring-wawancara','surat-tlhp'].includes(page)&&!operationalJudolSnapshot&&<div className="notice amber-notice" role="status"><Info size={17}/><span>{judolSourceLoading?'Memverifikasi populasi Disiplin ASN dari database…':judolSourceError||'BNBA dan penerima surat Disiplin ASN hanya memakai versi tersimpan di database. Pilih dataset online di Kategorisasi Disiplin ASN; draft Excel belum digunakan.'}</span>{judolSourceError&&<button className="btn secondary" onClick={()=>setJudolSourceAttempt(value=>value+1)}>Coba verifikasi lagi</button>}</div>}
     {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={operationalJudolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')}/></React.Suspense>}
-    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={operationalJudolSnapshot} onJudolSnapshot={updateJudolSnapshot} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
+    {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager cases={cases} judolSnapshot={operationalJudolSnapshot} onJudolSnapshot={updateJudolSnapshot} onOpenJudolSource={()=>go('kategorisasi-judol')} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}
       {masterLoadError&&<div className="notice amber-notice"><Info size={18}/><span>{masterLoadError}</span></div>}
