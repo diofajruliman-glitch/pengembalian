@@ -1,3 +1,5 @@
+import { assertRoutingAssignment, isHeavyPerson, isSpecialistRoom } from './routing.js'
+
 // Operational drafts reference the active discipline population; they never copy
 // names, NIPs, or assessment results into monitoring storage.
 export const STATUSES = ['Belum dijadwalkan','Terjadwal','Menunggu','Di room','Selesai','Tidak hadir','Terkendala','Jadwal ulang']
@@ -117,26 +119,35 @@ export function createSchedule(population,existingEntries={},rooms=DEFAULT_ROOMS
   seen.add(nik)
   return pending(ownEntry(existingEntries,nik))
  })
+ // Reserve specialist capacity for the pending heavy queue while ordinary rooms
+ // keep moving through the other queue. A heavy participant must never block
+ // ordinary rooms or spill into one merely because of their source-row order.
+ const heavyPeople=people.filter(person=>isHeavyPerson(person)),otherPeople=people.filter(person=>!isHeavyPerson(person))
+ if(heavyPeople.length&&!activeRooms.some(room=>isSpecialistRoom(room)))throw Error('SDM kategori Berat dari Pairing Sekjen asli memerlukan room aktif dengan pewawancara utama Itjen atau OSDM.')
  const generated=[],entries={...existingEntries}
- let personIndex=0,cursor=0,daysVisited=0
- while(personIndex<people.length) {
+ let heavyIndex=0,otherIndex=0,cursor=0,daysVisited=0
+ while(generated.length<people.length) {
   if(++daysVisited>36600||new Date(day).getUTCFullYear()>9999)throw Error('Jadwal melampaui rentang tanggal yang didukung. Periksa kapasitas harian.')
   const weekday=new Date(day).getUTCDay()
   if(settings.skipWeekends!==false&&(weekday===0||weekday===6)){day+=86400000;continue}
   const date=new Date(day).toISOString().slice(0,10)
   const counts=new Map()
   for(const entry of entryList(entries))if(entry.date===date&&entry.status!=='Belum dijadwalkan'&&entry.status!=='Jadwal ulang')counts.set(entry.roomId,(counts.get(entry.roomId)||0)+1)
-  for(let time=start,session=1;session<=perDay&&personIndex<people.length;time+=duration+gap,session++) {
+  for(let time=start,session=1;session<=perDay&&generated.length<people.length;time+=duration+gap,session++) {
    const firstRoom=cursor
-   for(let step=0;step<activeRooms.length&&personIndex<people.length;step++) {
+   for(let step=0;step<activeRooms.length&&generated.length<people.length;step++) {
     const roomIndex=(firstRoom+step)%activeRooms.length,room=activeRooms[roomIndex]
     if((counts.get(room.id)||0)>=perDay)continue
-    const nik=text(people[personIndex].nik)
+    const useHeavy=isSpecialistRoom(room)&&heavyIndex<heavyPeople.length
+    const person=useHeavy?heavyPeople[heavyIndex]:otherPeople[otherIndex]
+    if(!person)continue
+    const nik=text(person.nik)
     const assignment={nik,date,session,roomId:room.id,time:`${String(Math.floor(time/60)).padStart(2,'0')}:${String(time%60).padStart(2,'0')}`,duration,status:'Terjadwal'}
-    try{validateAssignment(assignment,entries,rooms)}catch{continue}
+    try{assertRoutingAssignment(person,room);validateAssignment(assignment,entries,rooms)}catch{continue}
     entries[nik]=assignment
     generated.push(assignment)
-    personIndex++;counts.set(room.id,(counts.get(room.id)||0)+1);cursor=(roomIndex+1)%activeRooms.length
+    if(useHeavy)heavyIndex++;else otherIndex++
+    counts.set(room.id,(counts.get(room.id)||0)+1);cursor=(roomIndex+1)%activeRooms.length
    }
   }
   day+=86400000
@@ -144,9 +155,10 @@ export function createSchedule(population,existingEntries={},rooms=DEFAULT_ROOMS
  return generated
 }
 
-export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Date().toISOString()) {
+export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Date().toISOString(),person=null) {
  nik=text(nik)
  if(!nik)throw Error('Pilih peserta dari populasi Terbukti.')
+ if(person!==null&&person!==undefined&&text(person?.nik)!==nik)throw Error('Identitas SDM sumber tidak sesuai dengan NIK catatan monitoring.')
  if(!patch||typeof patch!=='object'||Array.isArray(patch))throw Error('Perubahan monitoring tidak valid.')
  if(!Number.isFinite(Date.parse(now)))throw Error('Waktu pencatatan tidak valid.')
  const previous=ownEntry(entries,nik)||{}
@@ -161,6 +173,12 @@ export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Dat
  const hasAssignment=Boolean(next.date||next.roomId||next.time||next.session)
  const needsAssignment=['Terjadwal','Menunggu','Di room','Selesai'].includes(next.status)
  if(hasAssignment||needsAssignment)validateAssignment(next,entries,rooms)
+ const placementChanged=['date','time','duration','session','roomId'].some(field=>Object.hasOwn(safePatch,field)&&String(safePatch[field])!==String(previous[field]??''))
+ const startingInterview=next.status==='Di room'&&previous.status!=='Di room'
+ const initialAssignment=hasAssignment&&!Boolean(previous.date||previous.roomId||previous.time||previous.session)
+ // Existing operational records remain writable for notes and completion. Their
+ // routing conflict is shown by the UI; any new placement or start is guarded.
+ if(person&&(placementChanged||startingInterview||initialAssignment))assertRoutingAssignment(person,roomFor(rooms,next.roomId))
  const scheduleChanged=['date','time','duration','session'].some(field=>Object.hasOwn(safePatch,field)&&String(safePatch[field])!==String(previous[field]??''))
  if(previous.status==='Di room'&&next.status==='Di room'&&scheduleChanged)throw Error('Ubah jadwal setelah wawancara dihentikan; perpindahan room dapat dilakukan langsung.')
  const newAppointment=next.status==='Terjadwal'&&(scheduleChanged||(previous.status&&previous.status!=='Terjadwal'))
