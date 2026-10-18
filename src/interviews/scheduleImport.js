@@ -2,6 +2,8 @@
 const MAX_BYTES = 8 * 1024 * 1024
 const MAX_ROWS = 5000
 const MAX_COLUMNS = 100
+const MAX_UNPACKED_BYTES = 32 * 1024 * 1024
+const MAX_ENTRY_BYTES = 16 * 1024 * 1024
 const DAY = 86400000
 const text = value => typeof value === 'string' ? value.trim() : ''
 const blank = value => value == null || (typeof value === 'string' && !value.trim())
@@ -21,6 +23,7 @@ const aliases = {
 const fields = new Map(Object.entries(aliases).flatMap(([field,names])=>names.map(name=>[normalize(name),field])))
 const issue = (rowNumber,message) => ({rowNumber,message})
 const failure = (message,rowNumber=0) => ({rows:[],errors:[issue(rowNumber,message)],warnings:[]})
+class WorkbookLimitError extends Error {}
 
 function headerColumns(header) {
  const columns={},seen=new Set()
@@ -197,6 +200,62 @@ export function parseScheduleCsv(value) {
  return result
 }
 
+async function workbookArchive(file) {
+ const buffer=await file.arrayBuffer()
+ if(buffer.byteLength>MAX_BYTES)throw new WorkbookLimitError('Ukuran berkas maksimal 8 MiB.')
+ const bytes=new Uint8Array(buffer),{unzipSync,strFromU8}=await import('fflate')
+ let unpacked=0,count=0
+ const names=new Set()
+ // Inspect central-directory metadata before inflating any archive entry.
+ unzipSync(bytes,{filter:entry=>{
+  count++;unpacked+=entry.originalSize
+  if(count>500||!Number.isFinite(unpacked)||entry.originalSize>MAX_ENTRY_BYTES||unpacked>MAX_UNPACKED_BYTES)throw new WorkbookLimitError('Isi workbook terlalu besar setelah dibuka (maksimal 32 MiB total, 16 MiB per bagian, dan 500 bagian). Simpan hanya tabel jadwal yang diperlukan.')
+  if(names.has(entry.name))throw new WorkbookLimitError('Workbook mengandung bagian berulang; simpan ulang sebagai XLSX atau CSV UTF-8.')
+  names.add(entry.name)
+  return false
+ }})
+ return {buffer,bytes,unzipSync,strFromU8}
+}
+
+function checkSheetBounds(archive,sheetName) {
+ const {bytes,unzipSync,strFromU8}=archive
+ const metadata=unzipSync(bytes,{filter:entry=>entry.name==='xl/workbook.xml'||entry.name==='xl/_rels/workbook.xml.rels'})
+ const xml=content=>new DOMParser().parseFromString(strFromU8(content),'text/xml')
+ const workbook=xml(metadata['xl/workbook.xml']),relationships=xml(metadata['xl/_rels/workbook.xml.rels'])
+ const sheets=Array.from(workbook.getElementsByTagNameNS('*','sheet'))
+ const sheet=sheets.find(item=>item.getAttribute('name')===sheetName)
+ const relationshipId=sheet?.getAttribute('r:id')
+ const relationship=Array.from(relationships.getElementsByTagNameNS('*','Relationship')).find(item=>item.getAttribute('Id')===relationshipId)
+ const target=relationship?.getAttribute('Target')
+ if(!target)throw Error('Missing worksheet relationship')
+ // Match read-excel-file's relative/absolute workbook relationship resolution.
+ const path=target.startsWith('/')?target.slice(1):`xl/${target}`
+ const contents=unzipSync(bytes,{filter:entry=>entry.name===path})
+ if(!contents[path])throw Error('Missing worksheet')
+ const document=xml(contents[path])
+ const checkCoordinate=coordinate=>{
+  const match=/^([A-Z]{1,3})([1-9]\d*)$/.exec(coordinate)
+  if(!match)throw Error('Invalid worksheet coordinate')
+  let column=0
+  for(const letter of match[1])column=column*26+letter.charCodeAt(0)-64
+  if(column>MAX_COLUMNS||Number(match[2])>MAX_ROWS+1)throw new WorkbookLimitError(`Area sheet jadwal maksimal ${MAX_ROWS} baris data ditambah satu judul dan ${MAX_COLUMNS} kolom. Hapus format/baris/kolom berlebih, lalu simpan ulang.`)
+ }
+ // Dimensions may include millions of empty formatted cells. Reject them before
+ // read-excel-file creates a dense array, and check real cells when no dimension exists.
+ for(const dimension of Array.from(document.getElementsByTagNameNS('*','dimension'))) {
+  for(const coordinate of dimension.getAttribute('ref').split(':'))checkCoordinate(coordinate)
+ }
+ const rows=document.getElementsByTagNameNS('*','row')
+ if(rows.length>MAX_ROWS+1)throw new WorkbookLimitError(`Jadwal maksimal ${MAX_ROWS} baris data.`)
+ for(const row of Array.from(rows)) {
+  const number=row.getAttribute('r')
+  if(number&&(!/^\d+$/.test(number)||Number(number)>MAX_ROWS+1))throw new WorkbookLimitError(`Jadwal maksimal ${MAX_ROWS} baris data; hapus baris kosong yang terformat di bagian bawah.`)
+ }
+ const cells=document.getElementsByTagNameNS('*','c')
+ if(cells.length>(MAX_ROWS+1)*MAX_COLUMNS)throw new WorkbookLimitError('Jumlah sel sheet jadwal melebihi batas.')
+ for(const cell of Array.from(cells))checkCoordinate(cell.getAttribute('r'))
+}
+
 /** Read the selected local CSV/TSV or XLSX; all validation remains reviewable. */
 export async function readScheduleFile(file) {
  if(!file||typeof file.name!=='string'||!Number.isFinite(file.size)||file.size<0)return failure('Pilih berkas jadwal CSV atau XLSX yang valid.')
@@ -205,11 +264,13 @@ export async function readScheduleFile(file) {
  try {
   if(/\.(csv|tsv)$/i.test(file.name))return parseScheduleCsv(await file.text())
   const {default:readXlsxFile}=await import('read-excel-file')
-  const sheets=await readXlsxFile(file,{getSheets:true})
+  const archive=await workbookArchive(file)
+  const sheets=await readXlsxFile(archive.buffer,{getSheets:true})
   const named=sheets.filter(sheet=>normalize(sheet.name)==='jadwal')
   const sheet=named.length===1?named[0].name:sheets.length===1?sheets[0].name:null
   if(!sheet)return failure('Workbook memiliki beberapa sheet. Gunakan satu sheet bernama Jadwal agar data yang dipilih jelas.')
-  const {data,properties}=await readXlsxFile(file,{sheet,properties:true,trim:false})
+  checkSheetBounds(archive,sheet)
+  const {data,properties}=await readXlsxFile(archive.buffer,{sheet,properties:true,trim:false})
   // Unformatted serial dates also respect workbooks using Excel's 1904 epoch.
   if(properties?.epoch1904&&data.length) {
    let dateColumn
@@ -217,5 +278,5 @@ export async function readScheduleFile(file) {
    for(let index=1;index<data.length;index++)if(typeof data[index][dateColumn]==='number')data[index][dateColumn]+=1462
   }
   return parseScheduleRows(data)
- }catch{return failure('Berkas jadwal tidak dapat dibaca. Pastikan berkas tidak rusak atau dilindungi sandi, lalu simpan ulang sebagai CSV UTF-8 atau XLSX.')}
+ }catch(error){return failure(error instanceof WorkbookLimitError?error.message:'Berkas jadwal tidak dapat dibaca. Pastikan berkas tidak rusak atau dilindungi sandi, lalu simpan ulang sebagai CSV UTF-8 atau XLSX.')}
 }
