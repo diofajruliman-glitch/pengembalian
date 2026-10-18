@@ -34,7 +34,9 @@ import {
   AlignCenter,
   AlignRight,
   Shield,
-  Files
+  Files,
+  Database,
+  CheckCircle2
 } from 'lucide-react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
@@ -59,6 +61,21 @@ import {indexSnapshot, selectProgress} from '../recovery/progress.js'
 import {statusOf, targetStatuses, normalizeSdmStatus, isNonactiveStatus, isSpecialTarget} from '../import/sourceMetadata.js'
 import './officialLetter.css'
 
+// Helper filter data uji / simulasi agar tidak pernah masuk ke dokumen resmi
+export function isTestRecord(item) {
+  if (!item) return true
+  const nama = String(item.nama || '').trim()
+  const nip = String(item.nip || '').trim()
+  const nik = String(item.nik || '').trim()
+  const combined = `${nama} ${nip} ${nik} ${item.pic || ''} ${item.catatan || ''} ${item.kategori || ''} ${item.status || ''}`.toLowerCase()
+  if (/simulasi|test|testing|dummy|contoh|sample|trial|fiktif|tester|pegawai test|ahmad fauzi/i.test(combined)) return true
+  if (/^0{4,}/.test(nip) || /^0{4,}/.test(nik)) return true
+  if (/^1{10,}/.test(nip) || /^123456/.test(nip)) return true
+  if (!nama || nama.toLowerCase() === 'tanpa nama' || nama.toLowerCase() === '«nama asn»' || nama === '—' || nama === '-') return true
+  if (nip.length < 8 && (!nik || nik.length < 8)) return true
+  return false
+}
+
 export default function LetterManager({
   cases = [],
   judolSnapshot = null,
@@ -77,37 +94,60 @@ export default function LetterManager({
   const [loadingDbCases, setLoadingDbCases] = useState(false)
   const [dbCasesError, setDbCasesError] = useState('')
 
-  // Muat data SDM langsung dari database Supabase (sdm_cases) bila akun terotentikasi
+  // Muat data SDM langsung dari database Supabase (sdm_cases) bila akun terotentikasi (dengan pagination chunking)
   useEffect(() => {
     setDbCases([])
     setDbCasesError('')
     if (!supabase) return
     let active = true
     setLoadingDbCases(true)
-    supabase
-      .from('sdm_cases')
-      .select('*')
-      .is('deleted_at', null)
-      .order('nama', { ascending: true })
-      .then(({ data, error }) => {
-        if (!active) return
-        if (error) throw error
-        setDbCases(data || [])
-      })
-      .catch(() => { if (active) setDbCasesError('Daftar SDM dari database belum dapat dimuat. Periksa koneksi dan muat ulang halaman.') })
-      .finally(() => {
+
+    const loadAllDbCases = async () => {
+      try {
+        const all = []
+        let offset = 0
+        let hasMore = true
+        while (hasMore && active) {
+          const { data, error } = await supabase
+            .from('sdm_cases')
+            .select('*')
+            .is('deleted_at', null)
+            .order('id', { ascending: true })
+            .range(offset, offset + 999)
+          if (!active) return
+          if (error) throw error
+          if (data && data.length > 0) {
+            all.push(...data)
+            hasMore = data.length === 1000
+            offset += 1000
+          } else {
+            hasMore = false
+          }
+        }
+        if (active) {
+          setDbCases(all)
+        }
+      } catch (err) {
+        if (active) {
+          console.error('Error loading sdm_cases in LetterManager:', err)
+          setDbCasesError('Daftar SDM dari database belum dapat dimuat. Periksa koneksi dan hak akses.')
+        }
+      } finally {
         if (active) setLoadingDbCases(false)
-      })
+      }
+    }
+
+    loadAllDbCases()
     return () => { active = false }
   }, [supabase])
 
   const effectiveCases = useMemo(() => {
     const map = new Map()
     for (const c of (cases || [])) {
-      if (c?.nip) map.set(c.nip, c)
+      if (c?.nip && !isTestRecord(c)) map.set(c.nip, c)
     }
     for (const c of (dbCases || [])) {
-      if (c?.nip) map.set(c.nip, c)
+      if (c?.nip && !isTestRecord(c)) map.set(c.nip, c)
     }
     return Array.from(map.values())
   }, [cases, dbCases])
@@ -203,7 +243,7 @@ export default function LetterManager({
   const [customClosing, setCustomClosing] = useState('')
 
   // Sumber Data SDM Penerima
-  const [recipientSource, setRecipientSource] = useState('bottleneck')
+  const [recipientSource, setRecipientSource] = useState('sdm_cases')
   const [searchSDM, setSearchSDM] = useState('')
   const [filterStatusSDM, setFilterStatusSDM] = useState('all')
   const [selectedSDMKeys, setSelectedSDMKeys] = useState(new Set())
@@ -221,19 +261,6 @@ export default function LetterManager({
   const [judolCategory, setJudolCategory] = useState('')
   const [judolPeriod, setJudolPeriod] = useState('after')
   const [judolAvailability, setJudolAvailability] = useState('')
-
-  // Helper filter data uji / simulasi agar tidak pernah masuk ke dokumen resmi
-  const isTestRecord = (item) => {
-    if (!item) return true
-    const nama = String(item.nama || '').trim()
-    const nip = String(item.nip || '').trim()
-    const nik = String(item.nik || '').trim()
-    const combined = `${nama} ${nip} ${nik} ${item.pic || ''} ${item.catatan || ''}`.toLowerCase()
-    if (/simulasi|test|dummy|contoh|pegawai test|ahmad fauzi/i.test(combined)) return true
-    if (/^0{6,}/.test(nip) || /^0{6,}/.test(nik)) return true
-    if (!nama || nama.toLowerCase() === 'tanpa nama') return true
-    return false
-  }
 
   // Manual Recipient Form (Input Khusus / Tambahan)
   const [manualRecipient, setManualRecipient] = useState({
@@ -380,6 +407,7 @@ export default function LetterManager({
 
         map.set(c.nip, {
           key: `case-${c.id || c.nip}`,
+          id: c.id,
           nama: c.nama,
           nip: c.nip,
           pangkat: c.pangkat || 'Pegawai ASN / PPPK',
@@ -391,19 +419,23 @@ export default function LetterManager({
           bank: c.bank || 'Bank Pemerintah',
           status: c.status || 'Aktif',
           kategori: c.kategori || 'Umum',
-          provinsi: c.provinsi || ''
+          provinsi: c.provinsi || '',
+          kabKota: c.kab_kota || c.kabKota || '',
+          pic: c.pic || 'Pokja SD Tim TLHP',
+          deadline: c.deadline || '2026-12-15'
         })
       }
     }
 
     if (masterSnapshot?.results?.length) {
-      for (const res of masterSnapshot.results) {
-        if (!res.people) continue
-        for (const p of res.people) {
+      try {
+        const index = indexSnapshot(masterSnapshot.results)
+        const progress = selectProgress(index)
+        for (const p of (progress.rows || [])) {
           if (!p?.nip || map.has(p.nip) || isTestRecord(p)) continue
-          const kw = Number(p.kewajiban || 0)
-          const real = Number(p.realisasi || 0)
-          const sisa = Math.max(0, kw - real)
+          const kw = Number(p.obligation || 0)
+          const real = Number(p.payment || 0)
+          const sisa = Number(p.remaining != null ? p.remaining : Math.max(0, kw - real))
           map.set(p.nip, {
             key: `case-master-${p.nip}`,
             nama: p.nama,
@@ -415,11 +447,16 @@ export default function LetterManager({
             realisasiTotal: real,
             sisaKewajiban: sisa,
             bank: p.bank || 'Bank Pemerintah',
-            status: p.status_sdm || 'Data Master',
-            kategori: p.status_sdm || 'Umum',
-            provinsi: p.provinsi || ''
+            status: statusOf(p) || p.status_sdm || 'Data Master',
+            kategori: statusOf(p) || p.status_sdm || 'Umum',
+            provinsi: p.provinsi || '',
+            kabKota: p.kabKota || '',
+            pic: 'Pokja SD Tim TLHP',
+            deadline: '2026-12-15'
           })
         }
+      } catch (err) {
+        console.error('Error indexing master in caseList:', err)
       }
     }
 
@@ -454,22 +491,24 @@ export default function LetterManager({
       search: searchSDM,
       availability: judolAvailability
     })
-    return filtered.map(r => ({
-      key: `judol-${r.nik || r.nip}`,
-      nama: r.nama || 'Tanpa Nama',
-      nip: r.nip || r.nik,
-      pangkat: 'Pegawai ASN / PPPK',
-      jabatan: 'PPPK Direktorat PSNK',
-      unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-      kewajibanTotal: 0,
-      realisasiTotal: 0,
-      sisaKewajiban: 0,
-      indikasi: r.hasilPenilaian,
-      kategori: r[judolPeriod]?.kategori || r.historical?.kategori || 'Ringan',
-      status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`,
-      provinsi: r.provinsi || '',
-      kabKota: r.kabKota || ''
-    }))
+    return filtered
+      .filter(r => !isTestRecord(r))
+      .map(r => ({
+        key: `judol-${r.nik || r.nip}`,
+        nama: r.nama || 'Tanpa Nama',
+        nip: r.nip || r.nik,
+        pangkat: 'Pegawai ASN / PPPK',
+        jabatan: 'PPPK Direktorat PSNK',
+        unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
+        kewajibanTotal: 0,
+        realisasiTotal: 0,
+        sisaKewajiban: 0,
+        indikasi: r.hasilPenilaian,
+        kategori: r[judolPeriod]?.kategori || r.historical?.kategori || 'Ringan',
+        status: `Indikasi ${r.hasilPenilaian || 'Disiplin'} (${r[judolPeriod]?.kategori || 'Ringan'})`,
+        provinsi: r.provinsi || '',
+        kabKota: r.kabKota || ''
+      }))
   }, [effectiveJudolRows, judolAssessment, judolCategory, judolPeriod, judolAvailability, searchSDM])
 
   // 4. DATA SDM DARI MASTER WORKBOOK (masterSnapshot)
@@ -477,25 +516,30 @@ export default function LetterManager({
     const list = []
     const seen = new Set()
     if (masterSnapshot?.results?.length) {
-      for (const res of masterSnapshot.results) {
-        if (!res.people) continue
-        for (const p of res.people) {
+      try {
+        const index = indexSnapshot(masterSnapshot.results)
+        const progress = selectProgress(index)
+        for (const p of (progress.rows || [])) {
           if (!p?.nip || seen.has(p.nip) || isTestRecord(p)) continue
           seen.add(p.nip)
           list.push({
             key: `master-${p.nip}`,
             nama: p.nama || 'Tanpa Nama',
             nip: p.nip,
-            pangkat: 'Pegawai ASN',
-            jabatan: 'Pegawai Direktorat PSNK',
+            pangkat: 'Pegawai ASN / PPPK',
+            jabatan: 'PPPK Direktorat PSNK',
             unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-            kewajibanTotal: Number(p.kewajiban || 0),
-            realisasiTotal: Number(p.realisasi || 0),
-            sisaKewajiban: Math.max(0, Number(p.kewajiban || 0) - Number(p.realisasi || 0)),
+            kewajibanTotal: Number(p.obligation || 0),
+            realisasiTotal: Number(p.payment || 0),
+            sisaKewajiban: Number(p.remaining != null ? p.remaining : Math.max(0, Number(p.obligation || 0) - Number(p.payment || 0))),
             bank: p.bank || '',
-            status: p.status_sdm || 'Data Master'
+            status: statusOf(p) || p.status_sdm || 'Data Master',
+            provinsi: p.provinsi || '',
+            kabKota: p.kabKota || ''
           })
         }
+      } catch (err) {
+        console.error('Error processing masterSnapshot in masterList:', err)
       }
     }
     // Jika masterSnapshot belum dimuat, fallback ke effectiveCases dari database Supabase
@@ -510,14 +554,16 @@ export default function LetterManager({
           key: `master-case-${c.id || c.nip}`,
           nama: c.nama || 'Tanpa Nama',
           nip: c.nip,
-          pangkat: c.pangkat || 'Pegawai ASN',
-          jabatan: c.jabatan || 'Pegawai Direktorat PSNK',
+          pangkat: c.pangkat || 'Pegawai ASN / PPPK',
+          jabatan: c.jabatan || 'PPPK Direktorat PSNK',
           unitKerja: c.unitKerja || 'Direktorat Perlindungan Sosial Non Kebencanaan',
           kewajibanTotal: kw,
           realisasiTotal: real,
           sisaKewajiban: sisa,
           bank: c.bank || '',
-          status: c.status || 'Data Master'
+          status: c.status || 'Data Master',
+          provinsi: c.provinsi || '',
+          kabKota: c.kab_kota || c.kabKota || ''
         })
       }
     }
@@ -527,10 +573,20 @@ export default function LetterManager({
   // Opsi SDM aktif sesuai sumber yang dipilih
   const activeSDMOptions = useMemo(() => {
     let list = []
-    if (recipientSource === 'bottleneck') list = bottleneckList
-    else if (recipientSource === 'sdm_cases') list = caseList
-    else if (recipientSource === 'judol') list = judolList
-    else if (recipientSource === 'master') list = masterList
+    if (recipientSource === 'bottleneck') {
+      list = bottleneckList
+      // Fallback cerdas: Bila daftar bottleneck nonaktif kosong tetapi ada data riil di database,
+      // tampilkan data kasus riil dengan sisa kewajiban agar pengguna tidak mendapati tabel kosong
+      if (!list.length && caseList.length > 0) {
+        list = caseList.filter(item => item.sisaKewajiban > 0)
+      }
+    } else if (recipientSource === 'sdm_cases') {
+      list = caseList
+    } else if (recipientSource === 'judol') {
+      list = judolList
+    } else if (recipientSource === 'master') {
+      list = masterList
+    }
 
     if (filterStatusSDM === 'unpaid' && recipientSource !== 'judol') {
       list = list.filter(item => item.sisaKewajiban > 0)
@@ -595,17 +651,12 @@ export default function LetterManager({
   // Daftar Penerima yang akan dicetak / diunduh
   const activeRecipients = useMemo(() => {
     if (recipientSource === 'manual') return databaseOnly ? [] : [manualRecipient]
-    let list = []
-    if (recipientSource === 'bottleneck') list = bottleneckList
-    else if (recipientSource === 'sdm_cases') list = caseList
-    else if (recipientSource === 'judol') list = judolList
-    else if (recipientSource === 'master') list = masterList
-
+    const list = activeSDMOptions
     if (!list.length) return []
 
     const filtered = list.filter(x => selectedSDMKeys.has(x.key))
     return filtered.length > 0 ? filtered : list
-  }, [recipientSource, manualRecipient, bottleneckList, caseList, judolList, masterList, selectedSDMKeys, databaseOnly])
+  }, [recipientSource, manualRecipient, activeSDMOptions, selectedSDMKeys, databaseOnly])
 
   // SDM yang dirender di layar pratinjau (dipaginasi per 10 lembar agar performa instan tanpa lag)
   const displayedRecipients = useMemo(() => {
@@ -972,15 +1023,24 @@ NIP. ${official.nip}
       setRecipientSource('judol')
       handleSelectJudolStatus(judolAssessment || 'Terbukti')
     }
-    // 2. Jika Surat Penagihan Pengembalian / Surat Pemanggilan Pengembalian Tukin -> Otomatis alihkan ke Bottleneck Nonaktif
+    // 2. Jika Surat Penagihan Pengembalian / Surat Pemanggilan Pengembalian Tukin -> Otomatis alihkan ke data keuangan
     else if (tpl.category === 'keuangan' || templateId === 'panggilan-tukin' || templateId.startsWith('tagihan')) {
-      setRecipientSource('bottleneck')
-      setFocusNonactiveSDM(true)
-      setSelectedBottleneckNo('')
+      if (bottleneckList.length > 0) {
+        setRecipientSource('bottleneck')
+        setFocusNonactiveSDM(true)
+        setSelectedBottleneckNo('')
+      } else {
+        setRecipientSource('sdm_cases')
+        setFilterStatusSDM('unpaid')
+      }
       setPreviewPage(0)
-      setTimeout(() => {
-        setSelectedSDMKeys(new Set(bottleneckList.map(x => x.key)))
-      }, 0)
+    } else {
+      // 3. Untuk surat panggilan disiplin umum -> Alihkan ke Database Monitoring SDM
+      if (recipientSource === 'bottleneck' && bottleneckList.length === 0) {
+        setRecipientSource('sdm_cases')
+        setFilterStatusSDM('all')
+      }
+      setPreviewPage(0)
     }
   }
 
