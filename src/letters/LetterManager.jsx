@@ -50,6 +50,17 @@ import {
   LETTER_TYPES
 } from './templates'
 import {
+  FOCUSED_ASSESSMENTS,
+  TRANSACTION_AVAILABILITY_LABELS,
+  filterDisciplineRows,
+  isFocusedAssessment,
+  getTransactionAvailability
+} from '../judol/availability.js'
+import {DISCIPLINE_CATEGORIES} from '../judol/analysis.js'
+import {indexSnapshot, selectProgress} from '../recovery/progress.js'
+import {statusOf, targetStatuses, normalizeSdmStatus, isNonactiveStatus, isSpecialTarget} from '../import/sourceMetadata.js'
+import {lookupNipPosition} from './nipPositionReference.js'
+import {
   INDO_DAYS,
   INDO_MONTHS,
   INDO_MONTHS_SHORT,
@@ -58,6 +69,7 @@ import {
   loadInterviewWorkspaceFromStorage,
   lookupBnbaSchedule
 } from './bnbaScheduleHelper.js'
+import './officialLetter.css'
 
 // Helper filter data uji / simulasi agar tidak pernah masuk ke dokumen resmi
 export function isTestRecord(item) {
