@@ -16954,3 +16954,41 @@ export function lookupJadwalWawancara1057(nipOrNik, nama = '') {
   }
   return null
 }
+
+/**
+ * Memformat tampilan baris "Jam" pada bagian "Pada sesi :"
+ * Sesuai aturan:
+ * - Sesi Pagi: 08.30–12.00 WIB (Pagi · Room ...)
+ * - Sesi Siang: 13.00–16.30 WIB (Siang · Room ...)
+ */
+export function formatJadwal1057SessionJam(entryOrSlot, options = {}) {
+  const scope = options.scope || 'session_window' // 'session_window' | 'slot_detail' | 'time_only'
+  const morningTime = options.morningTime || '08.30–12.00 WIB'
+  const afternoonTime = options.afternoonTime || '13.00–16.30 WIB'
+  const backupTime = options.backupTime || '16.30–17.00 WIB'
+
+  if (!entryOrSlot) {
+    return morningTime
+  }
+
+  const rawSesi = entryOrSlot.sesi || (entryOrSlot.sesiName?.includes('Pagi') ? 'Pagi' : (entryOrSlot.sesiName?.includes('Siang') ? 'Siang' : entryOrSlot.sesiName)) || 'Pagi'
+  const sesi = rawSesi.includes('Pagi') ? 'Pagi' : (rawSesi.includes('Siang') ? 'Siang' : rawSesi)
+  const isPagi = sesi.toLowerCase().includes('pagi')
+  const isSiang = sesi.toLowerCase().includes('siang')
+
+  const baseWindowTime = isPagi ? morningTime : (isSiang ? afternoonTime : backupTime)
+  const room = entryOrSlot.room || ''
+  const roomDetail = room ? `${sesi} · ${room}` : sesi
+
+  if (scope === 'slot_detail') {
+    const rawMicroSlot = entryOrSlot.jam || baseWindowTime
+    return roomDetail ? `${rawMicroSlot} (${roomDetail})` : rawMicroSlot
+  }
+
+  if (scope === 'time_only') {
+    return baseWindowTime
+  }
+
+  // default: 'session_window'
+  return roomDetail ? `${baseWindowTime} (${roomDetail})` : baseWindowTime
+}
