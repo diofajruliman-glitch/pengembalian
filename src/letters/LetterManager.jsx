@@ -751,8 +751,12 @@ export default function LetterManager({
     if (recipientSource === 'manual') {
       if (databaseOnly) return []
       const manualJam = customVenueJam || effectiveVenue.jam || '10.00 WIB'
+      const manualNum = letterNumberMode === 'sequential'
+        ? `${sequentialStartNum || '2268'}${sequentialSuffix.startsWith('/') ? sequentialSuffix : `/${sequentialSuffix}`}`
+        : letterNumber
       return [{
         ...manualRecipient,
+        letterNumber: manualNum,
         hari: customVenueHari || effectiveVenue.hari || 'Senin',
         tanggal: customVenueTanggal || effectiveVenue.tanggal || '26 Oktober 2026',
         jam: manualJam,
@@ -773,6 +777,19 @@ export default function LetterManager({
     return rawList.map((r, idx) => {
       const posRef = lookupNipPosition(r.nip || r.nik)
 
+      // Hitung nomor surat resmi penerima (Nomor Berurut Otomatis / Nomor Sama)
+      let assignedLetterNumber = letterNumber
+      if (letterNumberMode === 'sequential') {
+        const startInt = parseInt(sequentialStartNum, 10) || 1
+        const currentInt = startInt + idx
+        const padLength = (String(sequentialStartNum).startsWith('0') && String(sequentialStartNum).length > 1)
+          ? String(sequentialStartNum).length
+          : 0
+        const numStr = padLength > 0 ? String(currentInt).padStart(padLength, '0') : String(currentInt)
+        const cleanSuffix = sequentialSuffix ? (sequentialSuffix.startsWith('/') ? sequentialSuffix : `/${sequentialSuffix}`) : ''
+        assignedLetterNumber = `${numStr}${cleanSuffix}`
+      }
+
       if (scheduleMode === 'bnba_interview') {
         const bnbaSched = lookupBnbaSchedule(r, interviewWorkspace)
         if (bnbaSched) {
@@ -782,6 +799,7 @@ export default function LetterManager({
             nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
             pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
             jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+            letterNumber: assignedLetterNumber,
             hari: bnbaSched.hari,
             tanggal: bnbaSched.tanggal,
             jam: chosenJam,
@@ -798,6 +816,7 @@ export default function LetterManager({
           nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
           pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
           jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+          letterNumber: assignedLetterNumber,
           hari: customVenueHari || effectiveVenue.hari || 'Senin',
           tanggal: customVenueTanggal || effectiveVenue.tanggal || '26 Oktober 2026',
           jam: customVenueJam || effectiveVenue.jam || '10.00 WIB',
@@ -830,6 +849,7 @@ export default function LetterManager({
         nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
         pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
         jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+        letterNumber: assignedLetterNumber,
         hari: customVenueHari || effectiveVenue.hari || 'Senin',
         tanggal: customVenueTanggal || effectiveVenue.tanggal || '26 Oktober 2026',
         jam: r.customJam || assignedJam,
@@ -854,7 +874,11 @@ export default function LetterManager({
     staggerFormat,
     skipLunchBreak,
     interviewWorkspace,
-    filterOnlyBnbaScheduled
+    filterOnlyBnbaScheduled,
+    letterNumberMode,
+    sequentialStartNum,
+    sequentialSuffix,
+    letterNumber
   ])
 
   // Map jadwal per SDM untuk tampilan badge di daftar checklist
@@ -866,6 +890,7 @@ export default function LetterManager({
           jam: r.jam,
           hari: r.hari,
           tanggal: r.tanggal,
+          letterNumber: r.letterNumber,
           hasBnbaSchedule: r.hasBnbaSchedule,
           bnbaRoom: r.bnbaRoom,
           bnbaDateShort: r.bnbaDateShort
@@ -1202,11 +1227,12 @@ export default function LetterManager({
   const handleCopyText = () => {
     const r = activeRecipients[0]
     if (!r) return
+    const effectiveLetterNum = r.letterNumber || letterNumber
     const effectiveCoord = customCoordination || currentTemplate.coordinationText || 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.'
     const text = `
 ${currentTemplate.classification}
 ${currentTemplate.title}
-NOMOR : ${letterNumber}
+NOMOR : ${effectiveLetterNum}
 
 ${customOpening || currentTemplate.openingText}
 Nama        : ${r.nama}
@@ -1246,6 +1272,8 @@ NIP. ${official.nip}
     if (templateId === 'panggilan-judol') {
       setRecipientSource('judol')
       handleSelectJudolStatus(judolAssessment || 'Terbukti')
+      setLetterNumberMode('sequential')
+      setSequentialStartNum('2268')
     }
     // 2. Jika Surat Penagihan Pengembalian / Surat Pemanggilan Pengembalian Tukin -> Otomatis alihkan ke data keuangan
     else if (tpl.category === 'keuangan' || templateId === 'panggilan-tukin' || templateId.startsWith('tagihan')) {
