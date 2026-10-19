@@ -286,7 +286,10 @@ export default function LetterManager({
   }, [currentTemplate?.id])
 
   // Nomor & Tanggal Surat
-  const [letterNumber, setLetterNumber] = useState('       /3.3/KP.06.04/10/2026')
+  const [letterNumberMode, setLetterNumberMode] = useState('sequential') // 'fixed' | 'sequential'
+  const [sequentialStartNum, setSequentialStartNum] = useState('2268')
+  const [sequentialSuffix, setSequentialSuffix] = useState('/3.3/KP.06.04/10/2026')
+  const [letterNumber, setLetterNumber] = useState('2268/3.3/KP.06.04/10/2026')
   const [letterDate, setLetterDate] = useState(() => {
     const d = new Date()
     return d.toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})
@@ -676,7 +679,15 @@ export default function LetterManager({
       const code = currentTemplate.code || 'KP.06.04'
       const m = new Date().getMonth() + 1
       const y = new Date().getFullYear()
-      setLetterNumber(`       /3.3/${code}/${String(m).padStart(2, '0')}/${y}`)
+      const suffix = `/3.3/${code}/${String(m).padStart(2, '0')}/${y}`
+      setSequentialSuffix(suffix)
+      if (currentTemplate.id === 'panggilan-judol') {
+        setSequentialStartNum('2268')
+        setLetterNumber(`2268${suffix}`)
+        setLetterNumberMode('sequential')
+      } else {
+        setLetterNumber(`       ${suffix}`)
+      }
     }
   }, [currentTemplate])
 
