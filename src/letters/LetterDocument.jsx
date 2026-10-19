@@ -436,7 +436,7 @@ export default function LetterDocument({
                     <tr>
                       <td className="col-label">Jam</td>
                       <td className="col-sep">:</td>
-                      <td className="col-val">{recipient.jam || venue.jam || '10.00 WIB'}</td>
+                      <td className="col-val">{recipient.jam || venue.jam || '08.30 WIB'}</td>
                     </tr>
                     <tr>
                       <td className="col-label">Tempat</td>

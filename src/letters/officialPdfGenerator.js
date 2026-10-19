@@ -532,7 +532,7 @@ export async function generateOfficialPdfBatch({
         const linkZoom = recipient.linkZoom || venue.linkZoom
         const effectiveHari = recipient.hari || venue.hari || 'Senin'
         const effectiveTanggal = recipient.tanggal || venue.tanggal || '26 Oktober 2026'
-        const effectiveJam = recipient.jam || venue.jam || '10.00 WIB'
+        const effectiveJam = recipient.jam || venue.jam || '08.30 WIB'
         const effectiveTempat = recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'
 
         doc.setFont('helvetica', 'normal')

@@ -764,7 +764,7 @@ export default function LetterManager({
   const activeRecipients = useMemo(() => {
     if (recipientSource === 'manual') {
       if (databaseOnly) return []
-      const manualJam = customVenueJam || effectiveVenue.jam || '10.00 WIB'
+      const manualJam = customVenueJam || effectiveVenue.jam || '08.30 WIB'
       const manualNum = letterNumberMode === 'sequential'
         ? `${sequentialStartNum || '2268'}${sequentialSuffix.startsWith('/') ? sequentialSuffix : `/${sequentialSuffix}`}`
         : letterNumber
@@ -885,14 +885,14 @@ export default function LetterManager({
           letterNumber: assignedLetterNumber,
           hari: customVenueHari || effectiveVenue.hari || 'Senin',
           tanggal: customVenueTanggal || effectiveVenue.tanggal || '26 Oktober 2026',
-          jam: customVenueJam || effectiveVenue.jam || '10.00 WIB',
+          jam: customVenueJam || effectiveVenue.jam || '08.30 WIB',
           tempat: effectiveVenue.tempat,
           linkZoom: effectiveVenue.linkZoom,
           hasBnbaSchedule: false
         }
       }
 
-      let assignedJam = customVenueJam || effectiveVenue.jam || '10.00 WIB'
+      let assignedJam = customVenueJam || effectiveVenue.jam || '08.30 WIB'
 
       if (scheduleMode === 'staggered') {
         const [hStr, mStr] = (staggerStartTime || '09.00').split(/[:.]/)
@@ -2091,7 +2091,7 @@ NIP. ${official.nip}${tembusanBlock}
                 <div style={{display: 'flex', gap: 6, alignItems: 'center'}}>
                   <input
                     type="text"
-                    placeholder={`Jam: ${venue.jam || '10.00 WIB'}`}
+                    placeholder={`Jam: ${venue.jam || '08.30 WIB'}`}
                     value={customVenueJam}
                     onChange={e => setCustomVenueJam(e.target.value)}
                     style={{fontSize: '0.8rem', padding: '5px 8px', flex: 1}}
@@ -3194,7 +3194,7 @@ NIP. ${official.nip}${tembusanBlock}
                       type="text"
                       value={editingVenue.jam}
                       required
-                      placeholder="10.00 WIB"
+                      placeholder="08.30 WIB"
                       onChange={e => setEditingVenue({...editingVenue, jam: e.target.value})}
                     />
                   </div>
