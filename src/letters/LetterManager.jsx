@@ -1938,9 +1938,9 @@ NIP. ${official.nip}${tembusanBlock}
                       fontWeight: scheduleMode === 'daily_sessions' ? 600 : 400
                     }}
                     onClick={() => setScheduleMode('daily_sessions')}
-                    title="Alokasi kuota 265 orang per hari (Sesi Pagi 08.30-12.00 dan Sesi Siang 13.00-16.30) periode 26-29 Oktober 2026"
+                    title="Mailing merge 1.057 ASN terhubung langsung dengan file Jadwal_Wawancara_1057_Revisi_Sesi_PSNK_26-29_Oktober_2026.xlsx berdasarkan NIP"
                   >
-                    Sesi 26–29 Okt (265/hari)
+                    Jadwal 1.057 Revisi (Mailing Merge NIP)
                   </button>
                   <button
                     type="button"
@@ -2010,10 +2010,16 @@ NIP. ${official.nip}${tembusanBlock}
                     color: '#e2e8f0'
                   }}>
                     <div style={{fontWeight: 700, color: '#38bdf8', marginBottom: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                      <span>Jadwal Sesi Pemanggilan (265 Peserta/Hari)</span>
+                      <span style={{display: 'flex', alignItems: 'center', gap: 5}}>
+                        <CheckCircle2 size={13} color="#38bdf8" />
+                        Jadwal Wawancara 1.057 ASN Terhubung (Mailing Merge NIP)
+                      </span>
                       <span style={{background: 'rgba(56, 189, 248, 0.2)', padding: '1px 6px', borderRadius: 4, fontSize: '0.7rem', color: '#38bdf8'}}>
                         26–29 Oktober 2026
                       </span>
+                    </div>
+                    <div style={{fontSize: '0.73rem', color: '#cbd5e1', lineHeight: 1.4, margin: '4px 0 6px 0'}}>
+                      Bagian <strong>Pada :</strong> ditetapkan untuk pembukaan bersama hari pertama (<em>Senin, 26 Okt 2026 Jam 08.30 WIB</em>). Bagian <strong>Pada sesi :</strong> terisi otomatis dari berkas <em>Jadwal_Wawancara_1057_Revisi_Sesi_PSNK_26-29_Oktober_2026.xlsx</em> (Hari, Tanggal, Jam slot 30 menit, dan Room) berdasarkan NIP masing-masing ASN.
                     </div>
                     <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 6, margin: '6px 0'}}>
                       <div style={{background: 'rgba(0,0,0,0.25)', padding: '5px 8px', borderRadius: 4, borderLeft: '3px solid #38bdf8'}}>

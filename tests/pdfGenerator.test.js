@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { DAILY_SESSION_SLOTS, resolveDailySessionSlot } from '../src/letters/bnbaScheduleHelper.js'
+import { JADWAL_WAWANCARA_1057_REVISI, lookupJadwalWawancara1057 } from '../src/letters/jadwalWawancara1057Data.js'
 
 test('batch pdf generator logic test - 2 sample recipients', async () => {
   const doc = new jsPDF({
@@ -768,6 +769,192 @@ test('pdf layout test: single-line Tanggal & Jam and hybrid Dan Pada sesi table 
   doc.text('NIP. 19761106 200502 1 001', 125, curY + 30)
 
   // Must be strictly 1 page
+  assert.equal(doc.internal.getNumberOfPages(), 1)
+  const buffer = doc.output('arraybuffer')
+  assert.ok(buffer.byteLength > 2000)
+})
+
+test('lookupJadwalWawancara1057 dataset accuracy and NIP matching test', async () => {
+  assert.equal(JADWAL_WAWANCARA_1057_REVISI.length, 1057)
+
+  // 1. First recipient: Sahudin
+  const sahu = lookupJadwalWawancara1057('198610202025211055')
+  assert.ok(sahu)
+  assert.equal(sahu.nama, 'Sahudin')
+  assert.equal(sahu.hari, 'Senin')
+  assert.equal(sahu.tanggal, '26 Oktober 2026')
+  assert.equal(sahu.jam, '08.30–09.00 WIB')
+  assert.equal(sahu.room, 'Room 1')
+  assert.equal(sahu.petugas, 'PSNK 1')
+
+  // 2. Second recipient: Hermawan Kurnia
+  const herm = lookupJadwalWawancara1057('198807152025211094')
+  assert.ok(herm)
+  assert.equal(herm.nama, 'Hermawan Kurnia')
+  assert.equal(herm.hari, 'Senin')
+  assert.equal(herm.jam, '08.30–09.00 WIB')
+  assert.equal(herm.room, 'Room 2')
+
+  // 3. User sample recipient: Ramadhan Syah
+  const rama = lookupJadwalWawancara1057('199004252025211054')
+  assert.ok(rama)
+  assert.equal(rama.nama, 'Ramadhan Syah')
+  assert.equal(rama.hari, 'Rabu')
+  assert.equal(rama.tanggal, '28 Oktober 2026')
+  assert.equal(rama.jam, '08.30–09.00 WIB')
+  assert.equal(rama.room, 'Room 12')
+  assert.equal(rama.petugas, 'Putri Angelina')
+
+  // 4. Last recipient: Muhammad Rajib
+  const rajib = lookupJadwalWawancara1057('198906172025211067')
+  assert.ok(rajib)
+  assert.equal(rajib.nama, 'Muhammad Rajib')
+  assert.equal(rajib.hari, 'Kamis')
+  assert.equal(rajib.tanggal, '29 Oktober 2026')
+  assert.equal(rajib.jam, '16.00–16.30 WIB')
+  assert.equal(rajib.room, 'Room 19')
+
+  // 5. Lookup by name fallback
+  const ramaByName = lookupJadwalWawancara1057('', 'Ramadhan Syah')
+  assert.ok(ramaByName)
+  assert.equal(ramaByName.nip, '199004252025211054')
+})
+
+test('revised docx dual-session layout with unbolded Pada, Dan and Pada sesi', async () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(12)
+
+  let curY = 40
+  doc.text('Bersama ini diminta dengan hormat kehadiran Saudara:', 14, curY)
+  curY += 5
+
+  // Recipient table
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 18, right: 14 },
+    body: [
+      ['Nama', ':', 'Ramadhan Syah'],
+      ['NIP/NIPPPK', ':', '199004252025211054'],
+      ['Pangkat', ':', 'Golongan VII'],
+      ['Jabatan', ':', 'Pengelola Layanan Operasional'],
+      ['Unit Kerja', ':', 'Direktorat Perlindungan Sosial Non Kebencanaan']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 46 },
+      1: { cellWidth: 4, halign: 'center' },
+      2: { cellWidth: 'auto' }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 3
+
+  doc.text('Untuk menghadap kepada:', 14, curY)
+  curY += 5
+
+  // Signer table
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 18, right: 14 },
+    body: [
+      ['Nama', ':', 'Faisal'],
+      ['NIP', ':', '19761106 2005 021 001'],
+      ['Pangkat', ':', 'IV/c'],
+      ['Jabatan', ':', 'Direktur Perlindungan Sosial Non Kebencanaan']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 46 },
+      1: { cellWidth: 4, halign: 'center' },
+      2: { cellWidth: 'auto' }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 3
+
+  // Pada : (Plenary Opening - Normal / Unbolded)
+  doc.setFont('helvetica', 'normal')
+  doc.text('Pada :', 14, curY)
+  curY += 3.5
+
+  const plenaryRows = [
+    ['Hari', ':', { content: 'Senin', colSpan: 4 }],
+    ['Tanggal', ':', '26 Oktober 2026', 'Jam', ':', '08.30 WIB'],
+    ['Link Zoom', ':', { content: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)', colSpan: 4 }]
+  ]
+
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 18, right: 14 },
+    body: plenaryRows,
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 46 },
+      1: { cellWidth: 4, halign: 'center' },
+      2: { cellWidth: 54 },
+      3: { cellWidth: 16 },
+      4: { cellWidth: 4, halign: 'center' },
+      5: { cellWidth: 'auto' }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 2.5
+
+  // Dan & Pada sesi : (Unbolded / Normal font)
+  doc.setFont('helvetica', 'normal')
+  doc.text('Dan', 14, curY)
+  curY += 4.5
+  doc.text('Pada sesi :', 14, curY)
+  curY += 3.5
+
+  // Individual interview session matched by NIP from Jadwal 1.057
+  const sessionRows = [
+    ['Hari', ':', 'Rabu'],
+    ['Tanggal', ':', '28 Oktober 2026'],
+    ['Jam', ':', '08.30–09.00 WIB'],
+    ['Link zoom', ':', 'https://zoom.us/j/kemsos-psnk-tlhp (Room 12)']
+  ]
+
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 18, right: 14 },
+    body: sessionRows,
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 46 },
+      1: { cellWidth: 4, halign: 'center' },
+      2: { cellWidth: 'auto' }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 4
+
+  // Closing text
+  doc.text('Untuk diperiksa/dimintai keterangan sehubungan dengan dugaan pelanggaran disiplin kinerja.', 14, curY)
+  curY += 5.5
+  doc.text('Demikian untuk dilaksanakan.', 14, curY)
+  curY += 7
+
+  // Signature
+  doc.text('Jakarta, 15 Oktober 2026', 125, curY)
+  doc.text('Direktur Perlindungan Sosial Non Kebencanaan', 125, curY + 5)
+  doc.text('Faisal', 125, curY + 25)
+  doc.text('NIP. 19761106 200502 1 001', 125, curY + 30)
+
+  // Tembusan
+  const tembusanY = curY + 36
+  doc.text('Tembusan Yth:', 14, tembusanY)
+  doc.text('1. Sekretaris Direktorat Jenderal Perlindungan dan Jaminan Sosial; dan', 16, tembusanY + 4.5)
+  doc.text('2. Kepala Biro Organisasi dan Sumber Daya Manusia', 16, tembusanY + 9)
+
+  // Strict 1 page guarantee
   assert.equal(doc.internal.getNumberOfPages(), 1)
   const buffer = doc.output('arraybuffer')
   assert.ok(buffer.byteLength > 2000)
