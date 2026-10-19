@@ -2307,6 +2307,20 @@ NIP. ${official.nip}
                                 <span>{item.nama}</span>
                                 {isChecked && itemScheduleMap.has(item.key) && (
                                   <>
+                                    {letterNumberMode === 'sequential' && itemScheduleMap.get(item.key)?.letterNumber && (
+                                      <span style={{
+                                        background: 'rgba(56, 189, 248, 0.15)',
+                                        color: '#38bdf8',
+                                        fontSize: '0.68rem',
+                                        padding: '1px 6px',
+                                        borderRadius: 4,
+                                        fontWeight: 600,
+                                        whiteSpace: 'nowrap',
+                                        border: '1px solid rgba(56, 189, 248, 0.3)'
+                                      }}>
+                                        No. {itemScheduleMap.get(item.key).letterNumber.split('/')[0]}
+                                      </span>
+                                    )}
                                     {scheduleMode === 'bnba_interview' && (
                                       itemScheduleMap.get(item.key).hasBnbaSchedule ? (
                                         <span style={{
