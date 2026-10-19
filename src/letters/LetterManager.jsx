@@ -193,7 +193,11 @@ export default function LetterManager({
   const [venues, setVenues] = useState(() => {
     try {
       const saved = localStorage.getItem('kemensos_tlhp_venues')
-      return saved ? JSON.parse(saved) : DEFAULT_VENUES
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        return parsed.map(v => (v.id === 'ven-1' && v.jam === '10.00 WIB' ? { ...v, jam: '08.30 WIB' } : v))
+      }
+      return DEFAULT_VENUES
     } catch {
       return DEFAULT_VENUES
     }
@@ -232,7 +236,7 @@ export default function LetterManager({
       ...venue,
       hari: customVenueHari.trim() || venue.hari || 'Senin',
       tanggal: customVenueTanggal.trim() || venue.tanggal || '26 Oktober 2026',
-      jam: customVenueJam.trim() || venue.jam || '10.00 WIB'
+      jam: customVenueJam.trim() || venue.jam || '08.30 WIB'
     }
   }, [venue, customVenueHari, customVenueTanggal, customVenueJam])
 
