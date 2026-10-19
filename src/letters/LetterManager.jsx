@@ -1501,14 +1501,180 @@ NIP. ${official.nip}
               </span>
             </div>
 
-            <div className="letter-form-group">
-              <label>Nomor Surat Resmi</label>
-              <input
-                type="text"
-                value={letterNumber}
-                onChange={e => setLetterNumber(e.target.value)}
-                placeholder="       /3.3/KP.06.04/10/2026"
-              />
+            {/* PENGATURAN NOMOR SURAT RESMI (NOMOR TETAP ATAU NOMOR BERURUT OTOMATIS) */}
+            <div style={{
+              background: 'rgba(30, 41, 59, 0.7)',
+              border: '1px solid rgba(56, 189, 248, 0.25)',
+              borderRadius: '8px',
+              padding: '10px 12px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              margin: '2px 0 6px 0'
+            }}>
+              <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 6}}>
+                <label style={{fontWeight: 700, color: '#38bdf8', fontSize: '0.82rem', margin: 0, display: 'flex', alignItems: 'center', gap: 5}}>
+                  <FileText size={14} /> Nomor Surat Resmi
+                </label>
+                <div style={{display: 'flex', gap: 4, flexWrap: 'wrap'}}>
+                  <button
+                    type="button"
+                    style={{
+                      background: letterNumberMode === 'fixed' ? '#0284c7' : 'rgba(255,255,255,0.06)',
+                      color: '#ffffff',
+                      fontSize: '0.72rem',
+                      padding: '2px 8px',
+                      border: 'none',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      fontWeight: letterNumberMode === 'fixed' ? 600 : 400
+                    }}
+                    onClick={() => {
+                      setLetterNumberMode('fixed')
+                      if (sequentialStartNum) {
+                        const cleanSuffix = sequentialSuffix ? (sequentialSuffix.startsWith('/') ? sequentialSuffix : `/${sequentialSuffix}`) : ''
+                        setLetterNumber(`${sequentialStartNum}${cleanSuffix}`)
+                      }
+                    }}
+                    title="Seluruh surat menggunakan satu nomor yang sama"
+                  >
+                    Nomor Sama
+                  </button>
+                  <button
+                    type="button"
+                    style={{
+                      background: letterNumberMode === 'sequential' ? '#0284c7' : 'rgba(255,255,255,0.06)',
+                      color: '#ffffff',
+                      fontSize: '0.72rem',
+                      padding: '2px 8px',
+                      border: 'none',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      fontWeight: letterNumberMode === 'sequential' ? 600 : 400
+                    }}
+                    onClick={() => {
+                      setLetterNumberMode('sequential')
+                      const match = String(letterNumber).trim().match(/^(\d+)(.*)$/)
+                      if (match) {
+                        setSequentialStartNum(match[1])
+                        if (match[2].trim()) setSequentialSuffix(match[2].trim())
+                      }
+                    }}
+                    title="Tiap SDM mendapat nomor berurut otomatis (misal: 2268 s.d. 3324 untuk 1.057 ASN)"
+                  >
+                    Nomor Berurut Otomatis (Per SDM)
+                  </button>
+                </div>
+              </div>
+
+              {letterNumberMode === 'fixed' ? (
+                <div>
+                  <input
+                    type="text"
+                    value={letterNumber}
+                    onChange={e => setLetterNumber(e.target.value)}
+                    placeholder="       /3.3/KP.06.04/10/2026"
+                    style={{fontSize: '0.82rem', padding: '6px 8px', width: '100%', boxSizing: 'border-box'}}
+                  />
+                  <span style={{fontSize: '0.72rem', color: '#94a3b8', display: 'block', marginTop: 3}}>
+                    Satu nomor tetap digunakan serentak untuk seluruh naskah surat.
+                  </span>
+                </div>
+              ) : (
+                <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+                  <div style={{display: 'grid', gridTemplateColumns: '120px 1fr', gap: 8}}>
+                    <div>
+                      <label style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Nomor Awal</label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={sequentialStartNum}
+                        onChange={e => setSequentialStartNum(e.target.value)}
+                        placeholder="2268"
+                        style={{fontSize: '0.82rem', padding: '6px 8px', width: '100%', boxSizing: 'border-box'}}
+                        title="Nomor awal surat berurut (misal: 2268)"
+                      />
+                    </div>
+                    <div>
+                      <label style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Bagian Kode / Suffix Surat</label>
+                      <input
+                        type="text"
+                        value={sequentialSuffix}
+                        onChange={e => setSequentialSuffix(e.target.value)}
+                        placeholder="/3.3/KP.06.04/10/2026"
+                        style={{fontSize: '0.82rem', padding: '6px 8px', width: '100%', boxSizing: 'border-box'}}
+                        title="Format kode klasifikasi, subdit, bulan dan tahun surat"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Info Rentang Nomor Berurut */}
+                  <div style={{
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    border: '1px solid rgba(56, 189, 248, 0.25)',
+                    borderRadius: '6px',
+                    padding: '6px 8px',
+                    fontSize: '0.75rem',
+                    color: '#e2e8f0',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    flexWrap: 'wrap',
+                    gap: 4
+                  }}>
+                    <div>
+                      <span style={{color: '#38bdf8', fontWeight: 600}}>Rentang Otomatis: </span>
+                      <span style={{fontWeight: 700, fontFamily: 'monospace'}}>
+                        {sequentialStartNum || 1} s.d. {(parseInt(sequentialStartNum, 10) || 1) + Math.max(0, activeRecipients.length - 1)}
+                        {sequentialSuffix.startsWith('/') ? sequentialSuffix : `/${sequentialSuffix}`}
+                      </span>
+                    </div>
+                    <span style={{background: 'rgba(255,255,255,0.08)', padding: '1px 6px', borderRadius: 4, fontSize: '0.7rem', color: '#94a3b8'}}>
+                      {activeRecipients.length.toLocaleString('id-ID')} dokumen
+                    </span>
+                  </div>
+
+                  <div style={{display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap'}}>
+                    <span style={{fontSize: '0.72rem', color: '#94a3b8'}}>Preset cepat:</span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSequentialStartNum('2268')
+                        setSequentialSuffix('/3.3/KP.06.04/10/2026')
+                      }}
+                      style={{
+                        background: 'rgba(255,255,255,0.06)',
+                        color: '#38bdf8',
+                        fontSize: '0.7rem',
+                        padding: '2px 6px',
+                        border: '1px solid rgba(56, 189, 248, 0.3)',
+                        borderRadius: 4,
+                        cursor: 'pointer'
+                      }}
+                      title="Terapkan nomor 2268 s.d. 3324/3.3/KP.06.04/10/2026 (1.057 ASN Disiplin)"
+                    >
+                      2268 (1.057 ASN Judol)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSequentialStartNum('1')
+                      }}
+                      style={{
+                        background: 'rgba(255,255,255,0.06)',
+                        color: '#94a3b8',
+                        fontSize: '0.7rem',
+                        padding: '2px 6px',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: 4,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Mulai dari 1
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="letter-form-group">
