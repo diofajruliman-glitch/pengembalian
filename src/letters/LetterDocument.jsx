@@ -52,7 +52,7 @@ export default function LetterDocument({
       {/* 3. JUDUL & NOMOR SURAT */}
       <div className="doc-heading-center">
         <h2 className="doc-heading-title">{template.title}</h2>
-        <div className="doc-heading-number">NOMOR : {letterNumber}</div>
+        <div className="doc-heading-number">NOMOR : {recipient?.letterNumber || letterNumber}</div>
       </div>
 
       {/* 4. KONTEN DOKUMEN SESUAI KATEGORI */}

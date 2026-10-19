@@ -128,7 +128,8 @@ export async function generateOfficialPdfBatch({
     doc.text(template.title || 'SURAT PANGGILAN', 105, 43, { align: 'center' })
     doc.setFontSize(12)
     doc.setFont('helvetica', 'normal')
-    doc.text(`NOMOR : ${letterNumber}`, 105, 48.5, { align: 'center' })
+    const currentLetterNum = recipient?.letterNumber || letterNumber
+    doc.text(`NOMOR : ${currentLetterNum}`, 105, 48.5, { align: 'center' })
 
     let curY = 56
 
