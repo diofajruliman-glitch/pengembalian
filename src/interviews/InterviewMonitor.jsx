@@ -6,9 +6,10 @@ import {loadWorkspace,saveWorkspace,validateWorkspace,recoverWorkspace} from './
 import BnbaPanel from './BnbaPanel.jsx'
 import {getRoutingCategory,isHeavyPerson,isSpecialistRoom,specialistRooms,getRoutingConflicts} from './routing.js'
 import {BulkDistributionDialog,ScheduleImportDialog,InterviewerPackagesDialog} from './DistributionTools.jsx'
+import {OFFICIAL_POPULATION_1057,OFFICIAL_ROOMS_19,OFFICIAL_SETTINGS_2026,createOfficialWorkspace} from './officialSchedule1057.js'
 import './interviews.css'
 
-const DEFAULT_SETTINGS={startDate:'',startTime:'08:00',duration:40,gap:5,perDay:11,skipWeekends:true}
+const DEFAULT_SETTINGS=OFFICIAL_SETTINGS_2026
 const number=value=>Number(value||0).toLocaleString('id-ID')
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jakarta',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date())
 const displayDate=value=>value?new Date(`${value}T12:00:00+07:00`).toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'medium'}):'Belum dijadwalkan'
@@ -16,7 +17,7 @@ const statusOf=entry=>entry?.status||'Belum dijadwalkan'
 const terminal=new Set(['Selesai','Tidak hadir','Terkendala','Jadwal ulang'])
 const roomName=(rooms,id)=>rooms.find(room=>room.id===id)?.name||'Belum ditempatkan'
 const clockText=seconds=>`${String(Math.floor(Math.abs(seconds)/60)).padStart(2,'0')}:${String(Math.abs(seconds)%60).padStart(2,'0')}`
-const broadcastText='Pengingat: waktu wawancara 40 menit. Mohon selesaikan pencatatan dan hubungi Dio sebelum pergantian peserta. Peserta berikutnya menunggu di Main Room.'
+const broadcastText='Pengingat: waktu wawancara 30 menit. Mohon selesaikan pencatatan dan hubungi Dio sebelum pergantian peserta. Peserta berikutnya menunggu di Main Room.'
 function download(content,filename,type){
  const url=URL.createObjectURL(new Blob([content],{type}))
  const link=document.createElement('a');link.href=url;link.download=filename;link.click()
@@ -34,17 +35,40 @@ function Dialog({title,onClose,children}){
 }
 
 export default function InterviewMonitor({snapshot,canEdit=false,accountId='demo',onOpenSource}){
- const population=useMemo(()=>selectPopulation(snapshot),[snapshot])
- const datasetKey=sourceKey(snapshot)
+ const population=useMemo(()=>{
+  const list=selectPopulation(snapshot)
+  return list.length?list:OFFICIAL_POPULATION_1057
+ },[snapshot])
+ const datasetKey=sourceKey(snapshot)||'interviews-v1-official-1057'
  return <div className="interview-module">
-  <div className="page-title"><div><span className="eyebrow">PELAKSANAAN WAWANCARA · DIO</span><h1>Monitoring Wawancara</h1><p>BNBA, antrean Zoom, dan kendali breakout room dalam satu kertas kerja.</p></div><span className="interview-draft">Penugasan sementara</span></div>
-  <div className="notice amber-notice"><Info size={17}/><span>Draft pelaksanaan untuk rapat Senin, 19 Oktober 2026. Acuan: 11 responden per room per hari, durasi 40 menit. Jumlah room, tanggal, dan jeda dapat diubah sesuai keputusan rapat.</span></div>
+  <div className="page-title"><div><span className="eyebrow">PELAKSANAAN WAWANCARA · DIO</span><h1>Monitoring Wawancara</h1><p>BNBA, antrean Zoom, dan kendali breakout room dalam satu kertas kerja.</p></div><span className="interview-draft">Jadwal Resmi 26–29 Okt 2026</span></div>
+  <div className="notice blue-notice"><Info size={17}/><span>Jadwal Resmi Pelaksanaan Wawancara 26–29 Oktober 2026 (1.057 ASN). 19 Breakout Room, 14 sesi per hari @ 30 menit (08.30–12.00 &amp; 13.00–16.30 WIB). Seluruh kategori (Berat/Sedang/Ringan) telah didistribusikan merata ke 19 room.</span></div>
   {!population.length?<section className="panel interview-empty"><Users size={32}/><h2>Hubungkan daftar ASN Terbukti</h2><p>Buka atau muat dataset di Kategorisasi Disiplin ASN. Daftar wawancara otomatis memakai seluruh status Terbukti dari versi aktif, tanpa perlu mengunggah ulang BNBA.</p><button className="btn primary" onClick={onOpenSource}>Buka Kategorisasi Disiplin ASN</button></section>:<InterviewWorkspace key={`${accountId}:${datasetKey}`} population={population} snapshot={snapshot} datasetKey={datasetKey} accountId={accountId} canEdit={canEdit} onOpenSource={onOpenSource}/>}
  </div>
 }
 
 function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,onOpenSource}){
- const [initial]=useState(()=>{try{return {workspace:loadWorkspace(window.localStorage,accountId,datasetKey)}}catch(error){return {error:error.message,errorCode:error.code,workspace:{entries:{},rooms:null,settings:null,revision:0}}}})
+ const [initial]=useState(()=>{
+  try{
+   const loaded=loadWorkspace(window.localStorage,accountId,datasetKey)
+   if(!loaded||!loaded.entries||Object.keys(loaded.entries).length===0){
+    const official=createOfficialWorkspace(population)
+    if(canEdit){
+     try{
+      const saved=saveWorkspace(window.localStorage,accountId,datasetKey,official,0)
+      return {workspace:saved}
+     }catch{
+      return {workspace:official}
+     }
+    }
+    return {workspace:official}
+   }
+   return {workspace:loaded}
+  }catch(error){
+   const official=createOfficialWorkspace(population)
+   return {error:error.message,errorCode:error.code,workspace:official}
+  }
+ })
  const [workspace,setWorkspace]=useState(initial.workspace),[loadError,setLoadError]=useState(initial.error||''),[loadErrorCode,setLoadErrorCode]=useState(initial.errorCode||'')
  const [error,setError]=useState(''),[message,setMessage]=useState(''),[tab,setTab]=useState('rooms'),[selected,setSelected]=useState(null)
  const [query,setQuery]=useState(''),[statusFilter,setStatusFilter]=useState(''),[roomFilter,setRoomFilter]=useState(''),[dateFilter,setDateFilter]=useState(''),[categoryFilter,setCategoryFilter]=useState(''),[page,setPage]=useState(0)

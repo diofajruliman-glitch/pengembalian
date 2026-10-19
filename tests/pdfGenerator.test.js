@@ -704,7 +704,7 @@ test('pdf layout test: single-line Tanggal & Jam and hybrid Dan Pada sesi table 
   const bodyRows = [
     ['Hari', ':', 'Senin'],
     ['Tanggal', ':', '26 Oktober 2026'],
-    ['Jam', ':', '10.00 WIB'],
+    ['Jam', ':', '08.30 WIB'],
     ['Tempat', ':', 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos']
   ]
 
@@ -885,7 +885,7 @@ test('revised docx dual-session layout with unbolded Pada, Dan and Pada sesi', a
   const plenaryRows = [
     ['Hari', ':', 'Senin'],
     ['Tanggal', ':', '26 Oktober 2026'],
-    ['Jam', ':', '10.00 WIB'],
+    ['Jam', ':', '08.30 WIB'],
     ['Link Zoom', ':', 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)']
   ]
 
