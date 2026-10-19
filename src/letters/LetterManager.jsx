@@ -1306,6 +1306,46 @@ export default function LetterManager({
     const effectiveJam = r.jam || effectiveVenue.jam || '08.30–12.00 WIB'
     const effectiveTempat = r.tempat || effectiveVenue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'
 
+    const isDualSession = Boolean(
+      r.isDualSession ||
+      currentTemplate.id === 'panggilan-judol' ||
+      r.sessionHari
+    )
+
+    let scheduleSection = ''
+    if (isDualSession) {
+      const plenaryHari = r.plenaryHari || 'Senin'
+      const plenaryTanggal = r.plenaryTanggal || '26 Oktober 2026'
+      const plenaryJam = r.plenaryJam || '08.30 WIB'
+      const plenaryLinkZoom = r.plenaryLinkZoom || effectiveLinkZoom || ''
+
+      const sessionHari = r.sessionHari || r.hari || 'Senin'
+      const sessionTanggal = r.sessionTanggal || r.tanggal || '26 Oktober 2026'
+      const sessionJam = r.sessionJam || r.jam || '08.30–09.00 WIB'
+      const sessionLinkZoom = r.sessionLinkZoom || effectiveLinkZoom || ''
+
+      scheduleSection = `Pada :
+Hari\t: ${plenaryHari}
+Tanggal\t: ${plenaryTanggal} Jam\t: ${plenaryJam}
+Link Zoom\t: ${plenaryLinkZoom}
+
+Dan 
+Pada sesi\t:
+Hari\t: ${sessionHari}
+Tanggal\t: ${sessionTanggal}
+Jam\t: ${sessionJam}
+Link zoom\t: ${sessionLinkZoom}`
+    } else {
+      scheduleSection = `Pada :
+Hari        : ${effectiveHari}
+Tanggal     : ${effectiveTanggal}    Jam : ${effectiveJam}
+Tempat      : ${effectiveTempat}` + (effectiveLinkZoom ? `\nLink Zoom   : ${effectiveLinkZoom}` : '')
+    }
+
+    const tembusanBlock = (currentTemplate.tembusan && currentTemplate.tembusan.length > 0)
+      ? `\n\nTembusan Yth:\n${currentTemplate.tembusan.map((item, idx) => `${idx + 1}. ${item}`).join('\n')}`
+      : ''
+
     const text = `
 ${currentTemplate.classification}
 ${currentTemplate.title}
@@ -1322,27 +1362,17 @@ Nama        : ${official.nama}
 NIP         : ${official.nip}
 ${showRank ? `Pangkat     : ${official.pangkatSingkat || official.pangkat || 'IV/c'}\n` : ''}Jabatan     : ${official.jabatan}
 
-Pada :
-Hari        : ${effectiveHari}
-Tanggal     : ${effectiveTanggal}    Jam : ${effectiveJam}
-Tempat      : ${effectiveTempat}
-${effectiveLinkZoom ? `
-Dan
+${scheduleSection}
 
-Pada sesi :
-Hari        : ${effectiveHari}
-Tanggal     : ${effectiveTanggal}    Jam : ${effectiveJam}
-Link zoom   : ${effectiveLinkZoom}
-` : ''}
 ${customAgenda || currentTemplate.agendaDefault}
 
 ${currentTemplate.category === 'keuangan' ? effectiveCoord + '\n\n' : ''}${customClosing || currentTemplate.closingText}
 
-${official.kota}, ${letterDate}
+${official.kota || 'Jakarta'}, ${letterDate}
 ${official.jabatan}
 
 ${official.nama}
-NIP. ${official.nip}
+NIP. ${official.nip}${tembusanBlock}
     `.trim()
 
     navigator.clipboard.writeText(text).then(() => {
@@ -2544,7 +2574,7 @@ NIP. ${official.nip}
                                         whiteSpace: 'nowrap',
                                         border: '1px solid rgba(99, 102, 241, 0.35)'
                                       }}>
-                                        {itemScheduleMap.get(item.key).hari}, {itemScheduleMap.get(item.key).tanggalShort || itemScheduleMap.get(item.key).tanggal} · {itemScheduleMap.get(item.key).sesiName}
+                                        {itemScheduleMap.get(item.key).hari}, {itemScheduleMap.get(item.key).tanggalShort || itemScheduleMap.get(item.key).tanggal} · {itemScheduleMap.get(item.key).jam}{itemScheduleMap.get(item.key).room ? ` · ${itemScheduleMap.get(item.key).room}` : ''}
                                       </span>
                                     )}
                                     {scheduleMode === 'staggered' && (
