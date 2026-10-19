@@ -1,0 +1,21 @@
+<USER_REQUEST>
+revisi pakai dasar surat panggilannya seperti ini saja ,
+untuk ini jangan jadikan dasar waktu hari zoom pertama
+Pada :
+Hari	: Senin
+Tanggal	: 26 Oktober 2026 Jam	: 08.30 WIB
+
+untuk pengaturan fontnya tulisan Pada, Dan 
+Pada sesi  tidak usah bold
+
+kemudin untuk kolomnya yg kosong 
+Pada sesi 	    :
+Hari	:
+Tanggal	: 
+Jam	: 
+bisa di sambungkan dengan data Jadwal_Wawancara_1057_Revisi_Sesi_PSNK_26-29_Oktober_2026.xlsx ini mailing marge/ berdasarkan nip
+
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-19T15:15:12+07:00.
+</ADDITIONAL_METADATA>

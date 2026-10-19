@@ -101,11 +101,13 @@ export const LETTER_TYPES = [
     showRank: true,
     title: 'SURAT PANGGILAN',
     openingText: 'Bersama ini diminta dengan hormat kehadiran Saudara:',
-    agendaDefault: 'Untuk diperiksa/dimintai keterangan dan klarifikasi sehubungan dengan dugaan pelanggaran disiplin indikasi aktivitas transaksi judi online berdasarkan Nota Dinas Sekretaris Jenderal Nomor 3513/I/KP.06.08/09/2026.',
+    agendaDefault: 'Untuk diperiksa/dimintai keterangan sehubungan dengan dugaan pelanggaran disiplin kinerja.',
     closingText: 'Demikian untuk dilaksanakan.',
+    defaultSignerDate: '15 Oktober 2026',
+    isDualSession: true,
     tembusan: [
       'Sekretaris Direktorat Jenderal Perlindungan dan Jaminan Sosial; dan',
-      'Kepala Biro Organisasi dan Sumber Daya Manusia.'
+      'Kepala Biro Organisasi dan Sumber Daya Manusia'
     ]
   },
   {
