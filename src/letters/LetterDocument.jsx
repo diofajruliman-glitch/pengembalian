@@ -1,5 +1,6 @@
 import React from 'react'
 import KemensosHeader from './KemensosHeader'
+import ttdCapImage from '../assets/ttd-cap-faisal.png'
 
 const fmtRp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID', {maximumFractionDigits: 0})
 
@@ -17,7 +18,9 @@ export default function LetterDocument({
   showClassification = true,
   classificationPosition = 'left',
   classificationText = '',
-  showRank = true
+  showRank = true,
+  showDigitalSignature = true,
+  signatureImage = null
 }) {
   const isTagihan = template.category === 'keuangan' && !template.id?.startsWith('panggilan')
   const isBeritaAcara = template.category === 'berita-acara'
@@ -25,6 +28,10 @@ export default function LetterDocument({
   const effectivePosition = classificationPosition || template.classificationPosition || 'left'
   const effectiveClassification = classificationText || template.classification || 'RAHASIA'
   const effectiveShowRank = showRank ?? template.showRank ?? true
+  const effectiveShowSignature = showDigitalSignature ?? true
+  const effectiveSignatureImage = effectiveShowSignature
+    ? (signatureImage || official.signatureImage || (official.nama?.toLowerCase().includes('faisal') || official.id === 'off-1' ? ttdCapImage : null))
+    : null
 
   const openingText = customOpening || template.openingText || 'Sehubungan dengan Hasil Pemeriksaan dan Rekonsiliasi Tindak Lanjut Pengembalian Kelebihan Pembayaran Tunjangan Kinerja dan Uang Makan PPPK TA 2025 pada Direktorat Perlindungan Sosial Non Kebencanaan, bersama ini kami sampaikan rincian kewajiban pengembalian yang masih tercatat sebagai berikut:'
   const agendaText = customAgenda || template.agendaDefault
@@ -481,11 +488,22 @@ export default function LetterDocument({
             <div style={{fontWeight: 'bold', textDecoration: 'underline'}}>{recipient.nama}</div>
             <div>NIP. {recipient.nip}</div>
           </div>
-          <div style={{width: 260, fontSize: '12pt'}}>
+          <div style={{width: 260, fontSize: '12pt', position: 'relative'}}>
             <div>{official.kota || 'Jakarta'}, {letterDate}</div>
             <div>Pemeriksa,</div>
-            <div style={{height: 50}} />
-            <div style={{fontWeight: 'bold', textDecoration: 'underline'}}>{official.nama}</div>
+            {effectiveSignatureImage ? (
+              <div className="doc-signoff-img-container" style={{margin: '-4px 0 2px -35px', height: 48}}>
+                <img
+                  src={effectiveSignatureImage}
+                  alt={`Tanda Tangan & Cap ${official.nama}`}
+                  className="doc-signoff-img"
+                  style={{width: 190, top: -4}}
+                />
+              </div>
+            ) : (
+              <div style={{height: 50}} />
+            )}
+            <div style={{fontWeight: 'bold', textDecoration: 'underline', position: 'relative', zIndex: 2}}>{official.nama}</div>
             <div>NIP. {official.nip}</div>
           </div>
         </div>
@@ -494,6 +512,17 @@ export default function LetterDocument({
           <div className="doc-signoff-wrap">
             <div className="doc-signoff-date">{official.kota || 'Jakarta'}, {letterDate}</div>
             <div className="doc-signoff-role">{official.jabatan}</div>
+            {effectiveSignatureImage ? (
+              <div className="doc-signoff-img-container">
+                <img
+                  src={effectiveSignatureImage}
+                  alt={`Tanda Tangan & Cap ${official.nama}`}
+                  className="doc-signoff-img"
+                />
+              </div>
+            ) : (
+              <div className="doc-signoff-spacer" />
+            )}
             <h3 className="doc-signoff-name">{official.nama}</h3>
             <div className="doc-signoff-nip">NIP. {official.nip}</div>
           </div>

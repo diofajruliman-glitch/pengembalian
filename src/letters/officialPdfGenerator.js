@@ -1,10 +1,12 @@
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import kopImage from '../assets/kop-kemensos.png'
+import ttdCapImage from '../assets/ttd-cap-faisal.png'
 
 const fmtRp = n => 'Rp ' + Number(n || 0).toLocaleString('id-ID', { maximumFractionDigits: 0 })
 
 let cachedKopDataUrl = null
+let cachedTtdCapDataUrl = null
 
 /**
  * Mendapatkan base64 Data URL dari Kop Surat Resmi Kemensos
@@ -38,6 +40,38 @@ export async function getKopDataUrl() {
 }
 
 /**
+ * Mendapatkan base64 Data URL dari Tanda Tangan & Cap Faisal
+ */
+export async function getTtdCapDataUrl(customSrc = null) {
+  const target = customSrc || ttdCapImage
+  if (!customSrc && cachedTtdCapDataUrl) return cachedTtdCapDataUrl
+
+  if (typeof window !== 'undefined' && typeof Image !== 'undefined') {
+    return new Promise((resolve) => {
+      const img = new Image()
+      img.crossOrigin = 'Anonymous'
+      img.onload = () => {
+        try {
+          const canvas = document.createElement('canvas')
+          canvas.width = img.naturalWidth || img.width
+          canvas.height = img.naturalHeight || img.height
+          const ctx = canvas.getContext('2d')
+          ctx.drawImage(img, 0, 0)
+          const dataUrl = canvas.toDataURL('image/png')
+          if (!customSrc) cachedTtdCapDataUrl = dataUrl
+          resolve(dataUrl)
+        } catch {
+          resolve(target)
+        }
+      }
+      img.onerror = () => resolve(target)
+      img.src = target
+    })
+  }
+  return target
+}
+
+/**
  * Generator Naskah Dinas Resmi Kemensos Berkecepatan Tinggi (Vector jsPDF)
  * Mampu merender ribuan lembar dokumen dalam hitungan detik tanpa konsumsi memori berlebih.
  */
@@ -56,13 +90,28 @@ export async function generateOfficialPdfBatch({
   showClassification = true,
   classificationPosition = 'left',
   classificationText = '',
-  showRank = true
+  showRank = true,
+  showDigitalSignature = true,
+  signatureImage = null
 }) {
   if (!recipients || recipients.length === 0) {
     throw new Error('Daftar penerima naskah dinas kosong.')
   }
 
   const kopData = await getKopDataUrl()
+  const effectiveShowSignature = showDigitalSignature ?? true
+  let ttdCapData = null
+  if (effectiveShowSignature) {
+    const sigSrc = signatureImage || official.signatureImage || (official.nama?.toLowerCase().includes('faisal') || official.id === 'off-1' ? ttdCapImage : null)
+    if (sigSrc) {
+      try {
+        ttdCapData = await getTtdCapDataUrl(sigSrc)
+      } catch (e) {
+        console.warn('Gagal memuat ttd & cap digital:', e)
+      }
+    }
+  }
+
   const isTagihan = template.category === 'keuangan' && !template.id?.startsWith('panggilan')
   const isBeritaAcara = template.category === 'berita-acara'
   const effectiveShowClassification = showClassification ?? template.showClassification ?? true
@@ -609,14 +658,19 @@ export async function generateOfficialPdfBatch({
       const rightX = 125
       doc.text(`${official.kota || 'Jakarta'}, ${letterDate}`, rightX, signY)
       doc.text('Pemeriksa,', rightX, signY + 5)
+      if (ttdCapData) {
+        try {
+          doc.addImage(ttdCapData, 'PNG', rightX - 18, signY + 4, 48, 28, 'TTD_CAP_FAISAL', 'FAST')
+        } catch (e) {}
+      }
       doc.setFont('helvetica', 'bold')
-      doc.text(official.nama, rightX, signY + 20)
+      doc.text(official.nama, rightX, signY + 22)
       doc.setFont('helvetica', 'normal')
-      doc.text(`NIP. ${official.nip}`, rightX, signY + 25)
-      nameY = signY + 25
+      doc.text(`NIP. ${official.nip}`, rightX, signY + 26.8)
+      nameY = signY + 26.8
     } else {
       // Blok tanda tangan tunggal resmi (Kanan Bawah)
-      const signY = Math.max(curY + 3, 218)
+      const signY = Math.max(curY + 2, 214)
       const signX = 125
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
@@ -625,7 +679,30 @@ export async function generateOfficialPdfBatch({
       const splitRole = doc.splitTextToSize(official.jabatan, 72)
       doc.text(splitRole, signX, signY + 4.8)
 
-      nameY = signY + 4.8 + (splitRole.length * 4.5) + 15
+      const roleBottomY = signY + 4.8 + (splitRole.length * 4.5)
+
+      if (ttdCapData) {
+        // Dimensi proporsional: aspek rasio gambar 654 x 381 (~1.716)
+        // Lebar 56mm, Tinggi ~32.6mm
+        // Stempel bulat dinas berada di sisi kiri (offset -20mm dari signX)
+        // Goresan tanda tangan berada tepat di atas nama Faisal
+        // Stempel menimpa/menyentuh sisi kiri tanda tangan
+        const imgWidth = 56
+        const imgHeight = 32.6
+        const imgX = signX - 20
+        const imgY = roleBottomY - 4
+
+        try {
+          doc.addImage(ttdCapData, 'PNG', imgX, imgY, imgWidth, imgHeight, 'TTD_CAP_FAISAL', 'FAST')
+        } catch (e) {
+          console.warn('Gagal menambahkan ttd & cap ke PDF:', e)
+        }
+
+        nameY = roleBottomY + 22
+      } else {
+        nameY = roleBottomY + 15
+      }
+
       doc.setFont('helvetica', 'bold')
       doc.text(official.nama, signX, nameY)
       doc.setFont('helvetica', 'normal')

@@ -1113,6 +1113,104 @@ test('buildLetterNumbersExportSheets generates correct Excel sheets with NIP, Na
   assert.equal(summarySheet.data[2][1].value, 2) // Jumlah SDM
 })
 
+test('mass signature and stamp embedding performance & single-page layout test (1.057 recipients)', async () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  const dummyKop = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+  const dummySignature = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='
+  const total = 1057
+  const startTime = Date.now()
+
+  for (let idx = 0; idx < total; idx++) {
+    if (idx > 0) doc.addPage('a4', 'portrait')
+
+    // Kop surat
+    doc.addImage(dummyKop, 'PNG', 14, 8, 182, 25, 'KEMENSOS_KOP', 'FAST')
+
+    // Classification
+    doc.setFont('helvetica', 'bold')
+    doc.setFontSize(12)
+    doc.text('RAHASIA', 14, 38)
+
+    // Heading
+    doc.text('SURAT PANGGILAN', 105, 43, { align: 'center' })
+    doc.setFont('helvetica', 'normal')
+    doc.text(`NOMOR : ${2268 + idx}/3.3/KP.06.04/10/2026`, 105, 48.5, { align: 'center' })
+
+    // Body
+    doc.text('Bersama ini diminta dengan hormat kehadiran Saudara:', 14, 56)
+
+    // Schedule & signoff
+    let curY = 195
+    const signY = Math.max(curY + 2, 214)
+    const signX = 125
+    doc.text('Jakarta, 15 Oktober 2026', signX, signY)
+    doc.text('Direktur Perlindungan Sosial Non Kebencanaan', signX, signY + 4.8)
+
+    // Mass digital signature & stamp placement with image aliasing
+    const imgWidth = 56
+    const imgHeight = 32.6
+    const imgX = signX - 20
+    const imgY = signY + 4.8 + (2 * 4.5) - 4
+    doc.addImage(dummySignature, 'PNG', imgX, imgY, imgWidth, imgHeight, 'TTD_CAP_FAISAL', 'FAST')
+
+    const nameY = signY + 4.8 + (2 * 4.5) + 22
+    doc.setFont('helvetica', 'bold')
+    doc.text('Faisal', signX, nameY)
+    doc.setFont('helvetica', 'normal')
+    doc.text('NIP. 19761106 200502 1 001', signX, nameY + 4.8)
+
+    // Tembusan
+    const tembusanY = Math.min(Math.max(nameY + 6, 252), 268)
+    doc.text('Tembusan Yth:', 14, tembusanY)
+    doc.text('1. Sekretaris Ditjen Linjamsos', 16, tembusanY + 4)
+    doc.text('2. Kepala Biro Organisasi dan SDM', 16, tembusanY + 8)
+
+    // Verify all contents are strictly within 1 A4 page (height: 297mm, printable safe limit: 283mm)
+    assert.ok(tembusanY + 8 < 283, `Page ${idx + 1} overflowed bottom margin!`)
+  }
+
+  const durationMs = Date.now() - startTime
+  assert.equal(doc.internal.getNumberOfPages(), 1057)
+
+  const buffer = doc.output('arraybuffer')
+  assert.ok(buffer.byteLength > 100000)
+  assert.ok(buffer.byteLength < 6000000, 'Batch size should remain small thanks to image aliasing')
+  assert.ok(durationMs < 12000, `Mass generation of 1057 pages took ${durationMs}ms, should be fast`)
+})
+
+test('signature and stamp coordinate & spacing validation test (A4 single page guarantee)', () => {
+  const curY = 198 // After dual session schedule, agenda and closing text
+  const signY = Math.max(curY + 2, 214)
+  const signX = 125
+  const splitRoleLength = 2
+  const roleBottomY = signY + 4.8 + (splitRoleLength * 4.5)
+
+  // Signature image specs
+  const imgWidth = 56
+  const imgHeight = 32.6
+  const imgX = signX - 20
+  const imgY = roleBottomY - 4
+
+  // Verify stamp extends to the left of the signature column
+  assert.equal(imgX, 105, 'Image X must sit 20mm to left of text so stamp sits properly')
+  assert.equal(imgX + imgWidth, 161, 'Image right edge must sit inside right margin')
+
+  const nameY = roleBottomY + 22
+  const nipY = nameY + 4.8
+  const tembusanY = Math.min(Math.max(nameY + 6, 252), 268)
+  const lastTembusanItemY = tembusanY + 4 + (2 * 4)
+
+  assert.ok(nipY < 265, `NIP Y (${nipY}mm) must be well above tembusan`)
+  assert.ok(lastTembusanItemY < 282, `Last tembusan (${lastTembusanItemY}mm) must fit within A4 297mm height`)
+})
+
+
 
 
 

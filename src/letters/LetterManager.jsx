@@ -175,7 +175,16 @@ export default function LetterManager({
   const [officials, setOfficials] = useState(() => {
     try {
       const saved = localStorage.getItem('kemensos_tlhp_officials')
-      return saved ? JSON.parse(saved) : DEFAULT_OFFICIALS
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        return parsed.map(o => {
+          if ((o.id === 'off-1' || o.nama?.toLowerCase().includes('faisal')) && !o.signatureImage) {
+            return { ...o, signatureImage: '/ttd-cap-faisal.png' }
+          }
+          return o
+        })
+      }
+      return DEFAULT_OFFICIALS
     } catch {
       return DEFAULT_OFFICIALS
     }
@@ -191,6 +200,24 @@ export default function LetterManager({
     return officials.find(o => o.id === selectedOfficialId) || officials[0] || DEFAULT_OFFICIAL
   }, [officials, selectedOfficialId])
   const [editingOfficial, setEditingOfficial] = useState(null)
+
+  // State Opsi Tanda Tangan & Cap Digital Massal (Faisal)
+  const [showDigitalSignature, setShowDigitalSignature] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kemensos_tlhp_show_digital_signature')
+      return saved !== null ? JSON.parse(saved) : true
+    } catch {
+      return true
+    }
+  })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('kemensos_tlhp_show_digital_signature', JSON.stringify(showDigitalSignature))
+    } catch (e) {
+      console.warn('Gagal menyimpan status show_digital_signature:', e)
+    }
+  }, [showDigitalSignature])
 
   // CMS State: Venue & Sesi Agenda Default (Fleksibel: Bisa Tambah, Ubah, Hapus)
   const [venues, setVenues] = useState(() => {
@@ -1330,6 +1357,8 @@ export default function LetterManager({
         classificationPosition,
         classificationText,
         showRank,
+        showDigitalSignature,
+        signatureImage: official.signatureImage,
         onProgress: (current, total, text) => {
           setDownloadProgress({ current, total, text })
         }
@@ -1693,6 +1722,23 @@ NIP. ${official.nip}${tembusanBlock}
               </label>
               <span style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginTop: 3}}>
                 {showRank ? 'Baris Pangkat/Gol aktif di naskah dan cetakan PDF.' : 'Pangkat/Gol disembunyikan (standar umum pegawai PPPK).'}
+              </span>
+            </div>
+
+            {/* OPSI TANDA TANGAN & CAP DINAS MASSAL (FAISAL) */}
+            <div className="letter-form-group">
+              <label style={{display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: '0.85rem', color: '#f1f5f9', userSelect: 'none', margin: 0}}>
+                <input
+                  type="checkbox"
+                  checked={showDigitalSignature}
+                  onChange={e => setShowDigitalSignature(e.target.checked)}
+                />
+                <span style={{fontWeight: 600, color: '#38bdf8'}}>Sertakan TTD & Cap Dinas Massal ({official.nama})</span>
+              </label>
+              <span style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginTop: 3}}>
+                {showDigitalSignature
+                  ? 'Tanda tangan & stempel dinas Kemensos aktif massal di seluruh naskah A4.'
+                  : 'Mode tanda tangan basah (ruang tanda tangan dikosongkan untuk diteken manual).'}
               </span>
             </div>
 
@@ -3104,6 +3150,8 @@ NIP. ${official.nip}${tembusanBlock}
                   classificationPosition={classificationPosition}
                   classificationText={classificationText}
                   showRank={showRank}
+                  showDigitalSignature={showDigitalSignature}
+                  signatureImage={official.signatureImage}
                 />
               ))}
             </div>
@@ -3236,6 +3284,19 @@ NIP. ${official.nip}${tembusanBlock}
                   </div>
                 </div>
 
+                <div className="letter-form-group">
+                  <label>Path / URL Gambar TTD & Cap Dinas (Opsional)</label>
+                  <input
+                    type="text"
+                    value={editingOfficial.signatureImage || ''}
+                    placeholder="/ttd-cap-faisal.png"
+                    onChange={e => setEditingOfficial({...editingOfficial, signatureImage: e.target.value})}
+                  />
+                  <span style={{fontSize: '0.74rem', color: '#94a3b8', marginTop: 2}}>
+                    Kosongkan jika ingin menggunakan mode tanda tangan manual tanpa cap otomatis.
+                  </span>
+                </div>
+
                 <div style={{display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 4}}>
                   <button
                     type="button"
@@ -3255,6 +3316,7 @@ NIP. ${official.nip}${tembusanBlock}
             <div className="cms-card-grid">
               {officials.map(o => {
                 const isActive = o.id === selectedOfficialId
+                const hasDigitalSig = Boolean(o.signatureImage || o.id === 'off-1' || o.nama?.toLowerCase().includes('faisal'))
                 return (
                   <div key={o.id} className={`cms-item-card ${isActive ? 'is-active' : ''}`}>
                     <div className="cms-item-header">
@@ -3274,6 +3336,17 @@ NIP. ${official.nip}${tembusanBlock}
                       <div><b>Pangkat:</b> {o.pangkat || o.pangkatSingkat}</div>
                       <div><b>Unit:</b> {o.unitKerja}</div>
                       <div><b>Titimangsa:</b> {o.kota}</div>
+                      <div style={{marginTop: 4}}>
+                        {hasDigitalSig ? (
+                          <span style={{fontSize: '0.74rem', color: '#38bdf8', background: 'rgba(56,189,248,0.12)', border: '1px solid rgba(56,189,248,0.25)', padding: '2px 8px', borderRadius: 4, display: 'inline-flex', alignItems: 'center', gap: 4}}>
+                            ✓ TTD & Cap Dinas Aktif
+                          </span>
+                        ) : (
+                          <span style={{fontSize: '0.74rem', color: '#94a3b8', background: 'rgba(148,163,184,0.1)', padding: '2px 8px', borderRadius: 4}}>
+                            Tanda Tangan Manual
+                          </span>
+                        )}
+                      </div>
                     </div>
 
                     <div className="cms-item-actions">

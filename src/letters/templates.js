@@ -7,7 +7,8 @@ export const DEFAULT_OFFICIALS = [
     pangkatSingkat: 'IV/c',
     jabatan: 'Direktur Perlindungan Sosial Non Kebencanaan',
     unitKerja: 'Direktorat Perlindungan Sosial Non Kebencanaan',
-    kota: 'Jakarta'
+    kota: 'Jakarta',
+    signatureImage: '/ttd-cap-faisal.png'
   },
   {
     id: 'off-2',
