@@ -352,7 +352,7 @@ export default function LetterDocument({
 
             const sessionHari = recipient?.sessionHari || recipient?.hari || 'Senin'
             const sessionTanggal = recipient?.sessionTanggal || recipient?.tanggal || '26 Oktober 2026'
-            const sessionJam = recipient?.sessionJam || recipient?.jam || '08.30–09.00 WIB'
+            const sessionJam = recipient?.sessionJam || recipient?.jam || '08.30–12.00 WIB (Pagi · Room 1)'
             const sessionLinkZoom = recipient?.sessionLinkZoom || recipient?.linkZoom || venue.linkZoom || ''
 
             if (isDualSession) {

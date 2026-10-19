@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { DAILY_SESSION_SLOTS, resolveDailySessionSlot } from '../src/letters/bnbaScheduleHelper.js'
-import { JADWAL_WAWANCARA_1057_REVISI, lookupJadwalWawancara1057 } from '../src/letters/jadwalWawancara1057Data.js'
+import { JADWAL_WAWANCARA_1057_REVISI, lookupJadwalWawancara1057, formatJadwal1057SessionJam } from '../src/letters/jadwalWawancara1057Data.js'
 
 test('batch pdf generator logic test - 2 sample recipients', async () => {
   const doc = new jsPDF({
@@ -955,5 +955,60 @@ test('revised docx dual-session layout with unbolded Pada, Dan and Pada sesi', a
   const buffer = doc.output('arraybuffer')
   assert.ok(buffer.byteLength > 2000)
 })
+
+test('formatJadwal1057SessionJam formats Pagi and Siang sessions with room correctly', async () => {
+  // 1. Sahudin (Pagi, Room 1)
+  const sahu = lookupJadwalWawancara1057('198610202025211055')
+  assert.ok(sahu)
+  assert.equal(sahu.sesi, 'Pagi')
+  assert.equal(sahu.room, 'Room 1')
+  const sahuJam = formatJadwal1057SessionJam(sahu)
+  assert.equal(sahuJam, '08.30–12.00 WIB (Pagi · Room 1)')
+
+  // 2. Hermawan Kurnia (Pagi, Room 2)
+  const herm = lookupJadwalWawancara1057('198807152025211094')
+  assert.ok(herm)
+  assert.equal(herm.sesi, 'Pagi')
+  assert.equal(herm.room, 'Room 2')
+  const hermJam = formatJadwal1057SessionJam(herm)
+  assert.equal(hermJam, '08.30–12.00 WIB (Pagi · Room 2)')
+
+  // 3. Ramadhan Syah (Pagi, Room 12)
+  const rama = lookupJadwalWawancara1057('199004252025211054')
+  assert.ok(rama)
+  assert.equal(rama.sesi, 'Pagi')
+  assert.equal(rama.room, 'Room 12')
+  const ramaJam = formatJadwal1057SessionJam(rama)
+  assert.equal(ramaJam, '08.30–12.00 WIB (Pagi · Room 12)')
+
+  // 4. Muhammad Rajib (Siang, Room 19)
+  const rajib = lookupJadwalWawancara1057('198906172025211067')
+  assert.ok(rajib)
+  assert.equal(rajib.sesi, 'Siang')
+  assert.equal(rajib.room, 'Room 19')
+  const rajibJam = formatJadwal1057SessionJam(rajib)
+  assert.equal(rajibJam, '13.00–16.30 WIB (Siang · Room 19)')
+
+  // 5. Custom session times (e.g. colon format: 08:30-12:00 WIB and 13:00-16:30 WIB)
+  const customSahuJam = formatJadwal1057SessionJam(sahu, {
+    morningTime: '08:30-12:00 WIB',
+    afternoonTime: '13:00-16:30 WIB'
+  })
+  assert.equal(customSahuJam, '08:30-12:00 WIB (Pagi · Room 1)')
+
+  const customRajibJam = formatJadwal1057SessionJam(rajib, {
+    morningTime: '08:30-12:00 WIB',
+    afternoonTime: '13:00-16:30 WIB'
+  })
+  assert.equal(customRajibJam, '13:00-16:30 WIB (Siang · Room 19)')
+
+  // 6. Scope options: slot_detail and time_only
+  const slotDetailJam = formatJadwal1057SessionJam(sahu, { scope: 'slot_detail' })
+  assert.equal(slotDetailJam, '08.30–09.00 WIB (Pagi · Room 1)')
+
+  const timeOnlyJam = formatJadwal1057SessionJam(rajib, { scope: 'time_only' })
+  assert.equal(timeOnlyJam, '13.00–16.30 WIB')
+})
+
 
 

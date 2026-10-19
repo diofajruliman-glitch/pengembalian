@@ -2085,15 +2085,48 @@ NIP. ${official.nip}${tembusanBlock}
                     </div>
                   </div>
 
-                  <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
-                    <label style={{display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.75rem', color: '#cbd5e1', cursor: 'pointer'}}>
-                      <input
-                        type="checkbox"
-                        checked={sessionIncludeLabel}
-                        onChange={e => setSessionIncludeLabel(e.target.checked)}
-                      />
-                      Sertakan nama sesi (misal: "Sesi Pagi (08.30–12.00 WIB)")
+                  <div style={{marginTop: 6}}>
+                    <label style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginBottom: 4}}>
+                      Format Jam pada Bagian &quot;Pada sesi :&quot;
                     </label>
+                    <div style={{display: 'flex', flexDirection: 'column', gap: 5, fontSize: '0.74rem', color: '#cbd5e1'}}>
+                      <label style={{display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer'}}>
+                        <input
+                          type="radio"
+                          name="sessionJamScope"
+                          value="session_window"
+                          checked={sessionJamScope === 'session_window'}
+                          onChange={() => setSessionJamScope('session_window')}
+                        />
+                        <span>
+                          <strong style={{color: '#38bdf8'}}>Jam Sesi Penuh + Room</strong> (Standar: <code>08.30–12.00 WIB (Pagi · Room ...)</code> / <code>13.00–16.30 WIB (Siang · Room ...)</code>)
+                        </span>
+                      </label>
+                      <label style={{display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer'}}>
+                        <input
+                          type="radio"
+                          name="sessionJamScope"
+                          value="slot_detail"
+                          checked={sessionJamScope === 'slot_detail'}
+                          onChange={() => setSessionJamScope('slot_detail')}
+                        />
+                        <span>
+                          <strong>Waktu Slot Mikro (30 Menit)</strong>: <code>08.30–09.00 WIB (Pagi · Room ...)</code>
+                        </span>
+                      </label>
+                      <label style={{display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer'}}>
+                        <input
+                          type="radio"
+                          name="sessionJamScope"
+                          value="time_only"
+                          checked={sessionJamScope === 'time_only'}
+                          onChange={() => setSessionJamScope('time_only')}
+                        />
+                        <span>
+                          <strong>Hanya Jam Sesi Tanpa Keterangan Room</strong>: <code>08.30–12.00 WIB</code> / <code>13.00–16.30 WIB</code>
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               )}
@@ -2597,7 +2630,7 @@ NIP. ${official.nip}${tembusanBlock}
                                         whiteSpace: 'nowrap',
                                         border: '1px solid rgba(99, 102, 241, 0.35)'
                                       }}>
-                                        {itemScheduleMap.get(item.key).hari}, {itemScheduleMap.get(item.key).tanggalShort || itemScheduleMap.get(item.key).tanggal} · {itemScheduleMap.get(item.key).jam}{itemScheduleMap.get(item.key).room ? ` · ${itemScheduleMap.get(item.key).room}` : ''}
+                                        {itemScheduleMap.get(item.key).hari}, {itemScheduleMap.get(item.key).tanggalShort || itemScheduleMap.get(item.key).tanggal} · {itemScheduleMap.get(item.key).jam}{itemScheduleMap.get(item.key).room && !itemScheduleMap.get(item.key).jam?.includes(itemScheduleMap.get(item.key).room) ? ` · ${itemScheduleMap.get(item.key).room}` : ''}
                                       </span>
                                     )}
                                     {scheduleMode === 'staggered' && (
