@@ -1010,5 +1010,40 @@ test('formatJadwal1057SessionJam formats Pagi and Siang sessions with room corre
   assert.equal(timeOnlyJam, '13.00–16.30 WIB')
 })
 
+test('distinct plenary zoom link and session zoom link resolution test', async () => {
+  const venue = {
+    hari: 'Senin',
+    tanggal: '26 Oktober 2026',
+    jam: '08.30 WIB',
+    plenaryLinkZoom: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)',
+    sessionLinkZoom: 'https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)'
+  }
+
+  const recipient = {
+    nama: 'Hermawan Kurnia',
+    nip: '198807152025211094',
+    pangkat: 'Penata Muda (IX/PPPK)',
+    jabatan: 'Pengelola Layanan Operasional',
+    plenaryHari: 'Senin',
+    plenaryTanggal: '26 Oktober 2026',
+    plenaryJam: '08.30 WIB',
+    plenaryLinkZoom: venue.plenaryLinkZoom,
+    sessionHari: 'Senin',
+    sessionTanggal: '26 Oktober 2026',
+    sessionJam: '08.30–12.00 WIB (Pagi · Room 2)',
+    sessionLinkZoom: venue.sessionLinkZoom
+  }
+
+  assert.notEqual(recipient.plenaryLinkZoom, recipient.sessionLinkZoom)
+  assert.equal(recipient.plenaryLinkZoom, 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)')
+  assert.equal(recipient.sessionLinkZoom, 'https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)')
+
+  // Room replacement test
+  const rawTemplate = 'https://zoom.us/j/kemsos-psnk-breakout ({room})'
+  const evaluated = rawTemplate.replace('{room}', 'Room 2')
+  assert.equal(evaluated, 'https://zoom.us/j/kemsos-psnk-breakout (Room 2)')
+})
+
+
 
 

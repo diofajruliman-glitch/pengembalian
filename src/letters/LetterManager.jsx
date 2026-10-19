@@ -196,7 +196,19 @@ export default function LetterManager({
       const saved = localStorage.getItem('kemensos_tlhp_venues')
       if (saved) {
         const parsed = JSON.parse(saved)
-        return parsed.map(v => (v.id === 'ven-1' && v.jam === '10.00 WIB' ? { ...v, jam: '08.30 WIB' } : v))
+        return parsed.map(v => {
+          let updated = { ...v }
+          if (updated.id === 'ven-1' && updated.jam === '10.00 WIB') {
+            updated.jam = '08.30 WIB'
+          }
+          if (updated.id === 'ven-1' && !updated.sessionLinkZoom) {
+            updated.sessionLinkZoom = 'https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)'
+          }
+          if (!updated.plenaryLinkZoom && updated.linkZoom) {
+            updated.plenaryLinkZoom = updated.linkZoom
+          }
+          return updated
+        })
       }
       return DEFAULT_VENUES
     } catch {
@@ -225,6 +237,8 @@ export default function LetterManager({
   const [customVenueHari, setCustomVenueHari] = useState('')
   const [customVenueTanggal, setCustomVenueTanggal] = useState('')
   const [customVenueJam, setCustomVenueJam] = useState('')
+  const [customPlenaryLinkZoom, setCustomPlenaryLinkZoom] = useState('')
+  const [customSessionLinkZoom, setCustomSessionLinkZoom] = useState('')
   const [staggerStartTime, setStaggerStartTime] = useState('09.00')
   const [staggerInterval, setStaggerInterval] = useState(30)
   const [staggerBatchSize, setStaggerBatchSize] = useState(1)
@@ -232,15 +246,20 @@ export default function LetterManager({
   const [skipLunchBreak, setSkipLunchBreak] = useState(true)
   const [filterOnlyBnbaScheduled, setFilterOnlyBnbaScheduled] = useState(false)
 
-  // Venue efektif yang menggabungkan preset dengan kustomisasi Hari, Tanggal, dan Jam
+  // Venue efektif yang menggabungkan preset dengan kustomisasi Hari, Tanggal, Jam, dan Zoom
   const effectiveVenue = useMemo(() => {
+    const rawPlenary = customPlenaryLinkZoom.trim() || venue.plenaryLinkZoom || venue.linkZoom || 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+    const rawSession = customSessionLinkZoom.trim() || venue.sessionLinkZoom || venue.linkZoom || 'https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)'
     return {
       ...venue,
       hari: customVenueHari.trim() || venue.hari || 'Senin',
       tanggal: customVenueTanggal.trim() || venue.tanggal || '26 Oktober 2026',
-      jam: customVenueJam.trim() || venue.jam || '08.30 WIB'
+      jam: customVenueJam.trim() || venue.jam || '08.30 WIB',
+      plenaryLinkZoom: rawPlenary,
+      sessionLinkZoom: rawSession,
+      linkZoom: rawPlenary
     }
-  }, [venue, customVenueHari, customVenueTanggal, customVenueJam])
+  }, [venue, customVenueHari, customVenueTanggal, customVenueJam, customPlenaryLinkZoom, customSessionLinkZoom])
 
   // Sinkronisasi Workspace Monitoring Wawancara dari localStorage
   const [interviewWorkspace, setInterviewWorkspace] = useState(() => {
@@ -818,7 +837,7 @@ export default function LetterManager({
         const plenaryHari = customVenueHari.trim() || venue.hari || 'Senin'
         const plenaryTanggal = customVenueTanggal.trim() || venue.tanggal || '26 Oktober 2026'
         const plenaryJam = customVenueJam.trim() || venue.jam || '08.30 WIB'
-        const plenaryLinkZoom = effectiveVenue.linkZoom || 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+        const plenaryLinkZoom = customPlenaryLinkZoom.trim() || effectiveVenue.plenaryLinkZoom || effectiveVenue.linkZoom || 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
 
         // Sesi Individual Wawancara (Mailing Merge berdasarkan NIP dari data Jadwal 1.057)
         const sessionHari = jadwalEntry?.hari || slot.hari
@@ -835,7 +854,12 @@ export default function LetterManager({
           afternoonTime: sessionAfternoonTime,
           backupTime: sessionBackupTime
         })
-        const sessionLinkZoom = jadwalEntry?.linkZoom || effectiveVenue.linkZoom || 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+
+        // Tautan Zoom Sesi Wawancara / Breakout Room (Bisa berbeda dengan Zoom Pembukaan)
+        const rawSessionZoom = customSessionLinkZoom.trim() || jadwalEntry?.linkZoom || effectiveVenue.sessionLinkZoom || effectiveVenue.linkZoom || 'https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)'
+        const sessionLinkZoom = targetRoom && rawSessionZoom.includes('{room}')
+          ? rawSessionZoom.replace('{room}', targetRoom)
+          : rawSessionZoom
 
         return {
           ...r,
@@ -943,6 +967,8 @@ export default function LetterManager({
     customVenueHari,
     customVenueTanggal,
     customVenueJam,
+    customPlenaryLinkZoom,
+    customSessionLinkZoom,
     scheduleMode,
     sessionMorningTime,
     sessionAfternoonTime,
@@ -1116,7 +1142,13 @@ export default function LetterManager({
   const handleSaveVenueForm = (e) => {
     e.preventDefault()
     if (!editingVenue) return
-    const updated = venues.map(v => v.id === editingVenue.id ? editingVenue : v)
+    const payload = {
+      ...editingVenue,
+      linkZoom: editingVenue.plenaryLinkZoom || editingVenue.linkZoom || '',
+      plenaryLinkZoom: editingVenue.plenaryLinkZoom || editingVenue.linkZoom || '',
+      sessionLinkZoom: editingVenue.sessionLinkZoom || ''
+    }
+    const updated = venues.map(v => v.id === editingVenue.id ? payload : v)
     saveVenuesList(updated)
     setEditingVenue(null)
     alert('Preset agenda dan lokasi berhasil disimpan!')
@@ -1332,12 +1364,12 @@ export default function LetterManager({
       const plenaryHari = r.plenaryHari || 'Senin'
       const plenaryTanggal = r.plenaryTanggal || '26 Oktober 2026'
       const plenaryJam = r.plenaryJam || '08.30 WIB'
-      const plenaryLinkZoom = r.plenaryLinkZoom || effectiveLinkZoom || ''
+      const plenaryLinkZoom = r.plenaryLinkZoom || effectiveVenue.plenaryLinkZoom || effectiveLinkZoom || ''
 
       const sessionHari = r.sessionHari || r.hari || 'Senin'
       const sessionTanggal = r.sessionTanggal || r.tanggal || '26 Oktober 2026'
-      const sessionJam = r.sessionJam || r.jam || '08.30–09.00 WIB'
-      const sessionLinkZoom = r.sessionLinkZoom || effectiveLinkZoom || ''
+      const sessionJam = r.sessionJam || r.jam || '08.30–12.00 WIB (Pagi · Room 1)'
+      const sessionLinkZoom = r.sessionLinkZoom || effectiveVenue.sessionLinkZoom || effectiveLinkZoom || ''
 
       scheduleSection = `Pada :
 Hari\t\t: ${plenaryHari}
@@ -2126,6 +2158,82 @@ NIP. ${official.nip}${tembusanBlock}
                           <strong>Hanya Jam Sesi Tanpa Keterangan Room</strong>: <code>08.30–12.00 WIB</code> / <code>13.00–16.30 WIB</code>
                         </span>
                       </label>
+                    </div>
+                  </div>
+
+                  <div style={{marginTop: 8, paddingTop: 8, borderTop: '1px solid rgba(255,255,255,0.08)'}}>
+                    <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4}}>
+                      <label style={{fontSize: '0.74rem', color: '#94a3b8', margin: 0}}>
+                        Pengaturan Tautan Link Zoom (Beda Link)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('cms-official')
+                          setEditingVenue({ ...venue })
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: '#38bdf8',
+                          fontSize: '0.68rem',
+                          cursor: 'pointer',
+                          padding: 0,
+                          textDecoration: 'underline'
+                        }}
+                        title="Buka CMS Preset Jadwal & Lokasi untuk menyimpan permanen"
+                      >
+                        Buka di CMS Preset ↗
+                      </button>
+                    </div>
+
+                    <div style={{display: 'flex', flexDirection: 'column', gap: 6}}>
+                      <div>
+                        <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#cbd5e1', marginBottom: 2}}>
+                          <span>1. Link Zoom Pembukaan (&quot;Pada :&quot;)</span>
+                          {customPlenaryLinkZoom && (
+                            <button
+                              type="button"
+                              onClick={() => setCustomPlenaryLinkZoom('')}
+                              style={{background: 'none', border: 'none', color: '#f87171', fontSize: '0.68rem', cursor: 'pointer', padding: 0}}
+                            >
+                              Reset
+                            </button>
+                          )}
+                        </div>
+                        <input
+                          type="text"
+                          value={customPlenaryLinkZoom || effectiveVenue.plenaryLinkZoom || effectiveVenue.linkZoom || ''}
+                          onChange={e => setCustomPlenaryLinkZoom(e.target.value)}
+                          placeholder="https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)"
+                          style={{fontSize: '0.78rem', padding: '5px 8px', width: '100%', boxSizing: 'border-box'}}
+                        />
+                      </div>
+
+                      <div>
+                        <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: '#38bdf8', marginBottom: 2}}>
+                          <span>2. Link Zoom Sesi Wawancara (&quot;Pada sesi :&quot;)</span>
+                          {customSessionLinkZoom && (
+                            <button
+                              type="button"
+                              onClick={() => setCustomSessionLinkZoom('')}
+                              style={{background: 'none', border: 'none', color: '#f87171', fontSize: '0.68rem', cursor: 'pointer', padding: 0}}
+                            >
+                              Reset
+                            </button>
+                          )}
+                        </div>
+                        <input
+                          type="text"
+                          value={customSessionLinkZoom || effectiveVenue.sessionLinkZoom || ''}
+                          onChange={e => setCustomSessionLinkZoom(e.target.value)}
+                          placeholder="Misal: https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)"
+                          style={{fontSize: '0.78rem', padding: '5px 8px', width: '100%', boxSizing: 'border-box'}}
+                        />
+                        <div style={{fontSize: '0.68rem', color: '#94a3b8', marginTop: 2}}>
+                          * Tautan khusus sesi/breakout room. Gunakan <code>{'{room}'}</code> untuk memasukkan nomor room otomatis.
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -3255,14 +3363,39 @@ NIP. ${official.nip}${tembusanBlock}
                   />
                 </div>
 
-                <div className="letter-form-group">
-                  <label>Tautan Link Zoom / Sesi Daring (Opsional)</label>
-                  <input
-                    type="text"
-                    value={editingVenue.linkZoom || ''}
-                    placeholder="https://zoom.us/j/... (Kosongkan jika hanya luring)"
-                    onChange={e => setEditingVenue({...editingVenue, linkZoom: e.target.value})}
-                  />
+                <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10}}>
+                  <div className="letter-form-group">
+                    <label style={{display: 'flex', justifyContent: 'space-between'}}>
+                      <span>1. Link Zoom Pembukaan (&quot;Pada :&quot;)</span>
+                      <span style={{fontSize: '0.72rem', color: '#94a3b8'}}>Sesi Utama Hari Pertama</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={editingVenue.plenaryLinkZoom ?? editingVenue.linkZoom ?? ''}
+                      placeholder="https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)"
+                      onChange={e => setEditingVenue({
+                        ...editingVenue,
+                        plenaryLinkZoom: e.target.value,
+                        linkZoom: e.target.value
+                      })}
+                    />
+                  </div>
+
+                  <div className="letter-form-group">
+                    <label style={{display: 'flex', justifyContent: 'space-between'}}>
+                      <span>2. Link Zoom Sesi Wawancara (&quot;Pada sesi :&quot;)</span>
+                      <span style={{fontSize: '0.72rem', color: '#38bdf8'}}>Breakout Room Individu</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={editingVenue.sessionLinkZoom ?? ''}
+                      placeholder="Misal: https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)"
+                      onChange={e => setEditingVenue({...editingVenue, sessionLinkZoom: e.target.value})}
+                    />
+                  </div>
+                </div>
+                <div style={{fontSize: '0.72rem', color: '#94a3b8', marginTop: -4}}>
+                  * Tips: Pada Link Zoom Sesi Wawancara, Anda dapat menyisipkan <code>{'{room}'}</code> untuk otomatis menampilkan room (misal: <code>https://zoom.us/j/kemsos-psnk-tlhp ({'{room}'})</code>). Jika dikosongkan, akan mengikuti Link Zoom Pembukaan.
                 </div>
 
                 <div style={{display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 4}}>
@@ -3300,12 +3433,17 @@ NIP. ${official.nip}${tembusanBlock}
 
                     <div className="cms-item-body">
                       <div><b>Tempat:</b> {v.tempat}</div>
-                      {v.linkZoom ? (
+                      {v.plenaryLinkZoom || v.linkZoom ? (
                         <div style={{color: '#38bdf8', wordBreak: 'break-all'}}>
-                          <b>Zoom:</b> {v.linkZoom}
+                          <b>Zoom Pembukaan (&quot;Pada :&quot;):</b> {v.plenaryLinkZoom || v.linkZoom}
                         </div>
                       ) : (
                         <div style={{color: '#64748b'}}><b>Sesi Daring:</b> Tidak ada (Hanya luring)</div>
+                      )}
+                      {v.sessionLinkZoom && (
+                        <div style={{color: '#a5b4fc', wordBreak: 'break-all', marginTop: 2}}>
+                          <b>Zoom Sesi Wawancara (&quot;Pada sesi :&quot;):</b> {v.sessionLinkZoom}
+                        </div>
                       )}
                     </div>
 
