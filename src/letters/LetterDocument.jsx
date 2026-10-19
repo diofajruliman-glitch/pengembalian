@@ -364,24 +364,22 @@ export default function LetterDocument({
                       <tr>
                         <td className="col-label">Hari</td>
                         <td className="col-sep">:</td>
-                        <td className="col-val" colSpan={4}>{plenaryHari}</td>
+                        <td className="col-val">{plenaryHari}</td>
                       </tr>
                       <tr>
                         <td className="col-label">Tanggal</td>
                         <td className="col-sep">:</td>
-                        <td className="col-val" style={{width: '210px', whiteSpace: 'nowrap'}}>
-                          {plenaryTanggal}
-                        </td>
-                        <td style={{width: '45px', whiteSpace: 'nowrap', paddingLeft: '8px'}}>Jam</td>
+                        <td className="col-val">{plenaryTanggal}</td>
+                      </tr>
+                      <tr>
+                        <td className="col-label">Jam</td>
                         <td className="col-sep">:</td>
-                        <td className="col-val" style={{whiteSpace: 'nowrap'}}>
-                          {plenaryJam}
-                        </td>
+                        <td className="col-val">{plenaryJam}</td>
                       </tr>
                       <tr>
                         <td className="col-label">Link Zoom</td>
                         <td className="col-sep">:</td>
-                        <td className="col-val" colSpan={4} style={{wordBreak: 'break-all'}}>
+                        <td className="col-val" style={{wordBreak: 'break-all'}}>
                           {plenaryLinkZoom}
                         </td>
                       </tr>
@@ -428,19 +426,17 @@ export default function LetterDocument({
                     <tr>
                       <td className="col-label">Hari</td>
                       <td className="col-sep">:</td>
-                      <td className="col-val" colSpan={4}>{recipient.hari || venue.hari || 'Senin'}</td>
+                      <td className="col-val">{recipient.hari || venue.hari || 'Senin'}</td>
                     </tr>
                     <tr>
                       <td className="col-label">Tanggal</td>
                       <td className="col-sep">:</td>
-                      <td className="col-val" style={{width: '210px', whiteSpace: 'nowrap'}}>
-                        {recipient.tanggal || venue.tanggal || '26 Oktober 2026'}
-                      </td>
-                      <td style={{width: '45px', whiteSpace: 'nowrap', paddingLeft: '8px'}}>Jam</td>
+                      <td className="col-val">{recipient.tanggal || venue.tanggal || '26 Oktober 2026'}</td>
+                    </tr>
+                    <tr>
+                      <td className="col-label">Jam</td>
                       <td className="col-sep">:</td>
-                      <td className="col-val" style={{whiteSpace: 'nowrap'}}>
-                        {recipient.jam || venue.jam || '10.00 WIB'}
-                      </td>
+                      <td className="col-val">{recipient.jam || venue.jam || '10.00 WIB'}</td>
                     </tr>
                     <tr>
                       <td className="col-label">Tempat</td>
