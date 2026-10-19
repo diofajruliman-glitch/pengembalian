@@ -114,7 +114,7 @@ function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,on
  }
  function reload(){try{const next=loadWorkspace(window.localStorage,accountId,datasetKey);workspaceRef.current=next;setWorkspace(next);setLoadError('');setLoadErrorCode('');setError('');setSchedule(null);setSelected(null);setSelectedIds([]);setDistributionDialog(null);setMessage('Catatan browser dimuat ulang.')}catch(err){setLoadError(err.message);setLoadErrorCode(err.code||'')}}
  function changePerson(nik,patch){
-  try{return commit({entries:updateEntry(nik,patch,workspaceRef.current.entries,rooms,new Date().toISOString(),populationById.get(nik))})}catch(err){setError(err.message);return err.message}
+  try{return commit({entries:updateEntry(nik,patch,workspaceRef.current.entries,rooms,new Date().toISOString(),populationById.get(nik),settings)})}catch(err){setError(err.message);return err.message}
  }
  function applyDistribution(nextEntries,expectedRevision,success,nextSettings){
   if(expectedRevision!==workspaceRef.current.revision)return 'Catatan berubah sejak pratinjau. Tutup dialog dan buat pratinjau dari catatan terbaru.'
