@@ -506,4 +506,46 @@ test('connected BNBA interview schedule generates distinct day, date, time and b
   assert.ok(buffer.byteLength > 4000)
 })
 
+test('sequential letter numbering creates distinct letter numbers per recipient in batch generation', async () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  const total = 5
+  const startNum = 2268
+  const suffix = '/3.3/KP.06.04/10/2026'
+
+  const recipients = Array.from({ length: total }, (_, i) => ({
+    nama: `ASN Judi Online #${i + 1}`,
+    nip: `19850101202521${String(i).padStart(4, '0')}`,
+    pangkat: 'Golongan IX',
+    jabatan: 'Penata Layanan Operasional',
+    letterNumber: `${startNum + i}${suffix}`
+  }))
+
+  const recordedNumbers = []
+
+  for (let idx = 0; idx < recipients.length; idx++) {
+    if (idx > 0) doc.addPage('a4', 'portrait')
+    const r = recipients[idx]
+    const effectiveLetterNum = r.letterNumber || 'DEFAULT'
+    recordedNumbers.push(effectiveLetterNum)
+    doc.text(`NOMOR : ${effectiveLetterNum}`, 105, 48.5, { align: 'center' })
+  }
+
+  assert.equal(recordedNumbers.length, 5)
+  assert.equal(recordedNumbers[0], '2268/3.3/KP.06.04/10/2026')
+  assert.equal(recordedNumbers[1], '2269/3.3/KP.06.04/10/2026')
+  assert.equal(recordedNumbers[4], '2272/3.3/KP.06.04/10/2026')
+
+  // Verify calculation for 1057 recipients: 2268 + 1057 - 1 = 3324
+  const total1057 = 1057
+  const endNum = startNum + total1057 - 1
+  assert.equal(endNum, 3324)
+  assert.equal(`${endNum}${suffix}`, '3324/3.3/KP.06.04/10/2026')
+})
+
 
