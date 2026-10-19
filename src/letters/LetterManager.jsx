@@ -1325,21 +1325,23 @@ export default function LetterManager({
       const sessionLinkZoom = r.sessionLinkZoom || effectiveLinkZoom || ''
 
       scheduleSection = `Pada :
-Hari\t: ${plenaryHari}
-Tanggal\t: ${plenaryTanggal} Jam\t: ${plenaryJam}
+Hari\t\t: ${plenaryHari}
+Tanggal\t\t: ${plenaryTanggal}
+Jam\t\t: ${plenaryJam}
 Link Zoom\t: ${plenaryLinkZoom}
 
 Dan 
 Pada sesi\t:
-Hari\t: ${sessionHari}
-Tanggal\t: ${sessionTanggal}
-Jam\t: ${sessionJam}
+Hari\t\t: ${sessionHari}
+Tanggal\t\t: ${sessionTanggal}
+Jam\t\t: ${sessionJam}
 Link zoom\t: ${sessionLinkZoom}`
     } else {
       scheduleSection = `Pada :
-Hari        : ${effectiveHari}
-Tanggal     : ${effectiveTanggal}    Jam : ${effectiveJam}
-Tempat      : ${effectiveTempat}` + (effectiveLinkZoom ? `\nLink Zoom   : ${effectiveLinkZoom}` : '')
+Hari\t\t: ${effectiveHari}
+Tanggal\t\t: ${effectiveTanggal}
+Jam\t\t: ${effectiveJam}
+Tempat\t\t: ${effectiveTempat}` + (effectiveLinkZoom ? `\nLink Zoom\t: ${effectiveLinkZoom}` : '')
     }
 
     const tembusanBlock = (currentTemplate.tembusan && currentTemplate.tembusan.length > 0)

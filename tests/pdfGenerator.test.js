@@ -700,11 +700,12 @@ test('pdf layout test: single-line Tanggal & Jam and hybrid Dan Pada sesi table 
   doc.text('Pada :', 14, curY)
   curY += 5
 
-  // Hybrid physical and Tanggal & Jam single-line layout
+  // Separate rows for Hari, Tanggal, Jam, Tempat
   const bodyRows = [
-    ['Hari', ':', 'Senin', '', '', ''],
-    ['Tanggal', ':', '26 Oktober 2026', 'Jam', ':', '08.30–12.00 WIB'],
-    ['Tempat', ':', 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos', '', '', '']
+    ['Hari', ':', 'Senin'],
+    ['Tanggal', ':', '26 Oktober 2026'],
+    ['Jam', ':', '10.00 WIB'],
+    ['Tempat', ':', 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos']
   ]
 
   autoTable(doc, {
@@ -716,10 +717,7 @@ test('pdf layout test: single-line Tanggal & Jam and hybrid Dan Pada sesi table 
     columnStyles: {
       0: { cellWidth: 38 },
       1: { cellWidth: 4 },
-      2: { cellWidth: 62 },
-      3: { cellWidth: 18 },
-      4: { cellWidth: 4 },
-      5: { cellWidth: 56 }
+      2: { cellWidth: 'auto' }
     }
   })
   curY = doc.lastAutoTable.finalY + 2.5
@@ -885,9 +883,10 @@ test('revised docx dual-session layout with unbolded Pada, Dan and Pada sesi', a
   curY += 3.5
 
   const plenaryRows = [
-    ['Hari', ':', { content: 'Senin', colSpan: 4 }],
-    ['Tanggal', ':', '26 Oktober 2026', 'Jam', ':', '08.30 WIB'],
-    ['Link Zoom', ':', { content: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)', colSpan: 4 }]
+    ['Hari', ':', 'Senin'],
+    ['Tanggal', ':', '26 Oktober 2026'],
+    ['Jam', ':', '10.00 WIB'],
+    ['Link Zoom', ':', 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)']
   ]
 
   autoTable(doc, {
@@ -899,10 +898,7 @@ test('revised docx dual-session layout with unbolded Pada, Dan and Pada sesi', a
     columnStyles: {
       0: { cellWidth: 46 },
       1: { cellWidth: 4, halign: 'center' },
-      2: { cellWidth: 54 },
-      3: { cellWidth: 16 },
-      4: { cellWidth: 4, halign: 'center' },
-      5: { cellWidth: 'auto' }
+      2: { cellWidth: 'auto' }
     }
   })
   curY = doc.lastAutoTable.finalY + 2.5
