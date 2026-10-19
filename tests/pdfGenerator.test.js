@@ -4,6 +4,7 @@ import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import { DAILY_SESSION_SLOTS, resolveDailySessionSlot } from '../src/letters/bnbaScheduleHelper.js'
 import { JADWAL_WAWANCARA_1057_REVISI, lookupJadwalWawancara1057, formatJadwal1057SessionJam } from '../src/letters/jadwalWawancara1057Data.js'
+import { buildLetterNumbersExportSheets } from '../src/letters/exportLetterNumbers.js'
 
 test('batch pdf generator logic test - 2 sample recipients', async () => {
   const doc = new jsPDF({
@@ -1043,6 +1044,75 @@ test('distinct plenary zoom link and session zoom link resolution test', async (
   const evaluated = rawTemplate.replace('{room}', 'Room 2')
   assert.equal(evaluated, 'https://zoom.us/j/kemsos-psnk-breakout (Room 2)')
 })
+
+test('buildLetterNumbersExportSheets generates correct Excel sheets with NIP, Nama, and Nomor Surat', async () => {
+  const recipients = [
+    {
+      letterNumber: '2268/3.3/KP.06.04/10/2026',
+      nip: '198610202025211055',
+      nama: 'Sahudin',
+      pangkat: 'Golongan IX',
+      jabatan: 'Penata Layanan Operasional',
+      sessionHari: 'Senin',
+      sessionTanggal: '26 Oktober 2026',
+      sessionJam: '08.30–12.00 WIB (Pagi · Room 1)',
+      sessionRoom: 'Room 1',
+      sessionPetugas: 'PSNK 1',
+      sessionLinkZoom: 'https://zoom.us/j/kemsos-psnk-breakout'
+    },
+    {
+      letterNumber: '2269/3.3/KP.06.04/10/2026',
+      nip: '198807152025211094',
+      nama: 'Hermawan Kurnia',
+      pangkat: 'Penata Muda (IX/PPPK)',
+      jabatan: 'Pengelola Layanan Operasional',
+      sessionHari: 'Senin',
+      sessionTanggal: '26 Oktober 2026',
+      sessionJam: '08.30–12.00 WIB (Pagi · Room 2)',
+      sessionRoom: 'Room 2',
+      sessionPetugas: 'PSNK 2',
+      sessionLinkZoom: 'https://zoom.us/j/kemsos-psnk-breakout'
+    }
+  ]
+
+  const sheets = buildLetterNumbersExportSheets(recipients, {
+    templateName: 'Surat Pemanggilan Disiplin ASN — Indikasi Judi Online',
+    letterDate: '15 Oktober 2026',
+    official: { nama: 'Faisal', nip: '19761106 200502 1 001', jabatan: 'Direktur Perlindungan Sosial Non Kebencanaan' }
+  })
+
+  assert.equal(sheets.length, 2)
+  const mainSheet = sheets[0]
+  assert.equal(mainSheet.sheet, 'Rekap Nomor Surat')
+  assert.equal(mainSheet.data.length, 3) // 1 header + 2 recipients
+
+  // Check Header
+  const headers = mainSheet.data[0].map(c => c.value)
+  assert.ok(headers.includes('Nomor Surat'))
+  assert.ok(headers.includes('NIP / NIPPPK'))
+  assert.ok(headers.includes('Nama SDM'))
+
+  // Check Recipient 1
+  const row1 = mainSheet.data[1].map(c => c.value)
+  assert.equal(row1[0], 1) // No.
+  assert.equal(row1[1], '2268/3.3/KP.06.04/10/2026') // Nomor Surat
+  assert.equal(row1[2], '198610202025211055') // NIP
+  assert.equal(row1[3], 'Sahudin') // Nama
+  assert.equal(row1[11], '08.30–12.00 WIB (Pagi · Room 1)') // Jam / Sesi
+  assert.equal(row1[12], 'Room 1') // Room
+
+  // Check Recipient 2
+  const row2 = mainSheet.data[2].map(c => c.value)
+  assert.equal(row2[1], '2269/3.3/KP.06.04/10/2026') // Nomor Surat
+  assert.equal(row2[2], '198807152025211094') // NIP
+  assert.equal(row2[3], 'Hermawan Kurnia') // Nama
+
+  // Check Summary Sheet
+  const summarySheet = sheets[1]
+  assert.equal(summarySheet.sheet, 'Ringkasan & Dasar')
+  assert.equal(summarySheet.data[2][1].value, 2) // Jumlah SDM
+})
+
 
 
 

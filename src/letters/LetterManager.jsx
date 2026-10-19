@@ -35,13 +35,14 @@ import {
   AlignRight,
   Shield,
   Files,
-  Database,
-  CheckCircle2
+  CheckCircle2,
+  FileSpreadsheet
 } from 'lucide-react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import LetterDocument from './LetterDocument'
 import {generateOfficialPdfBatch} from './officialPdfGenerator'
+import {exportLetterNumbersToExcel} from './exportLetterNumbers.js'
 import {
   DEFAULT_OFFICIALS,
   DEFAULT_OFFICIAL,
@@ -106,6 +107,7 @@ export default function LetterManager({
   const [activeTab, setActiveTab] = useState('generator')
   const [copied, setCopied] = useState(false)
   const [isDownloadingPdf, setIsDownloadingPdf] = useState(false)
+  const [isExportingExcel, setIsExportingExcel] = useState(false)
   const [downloadProgress, setDownloadProgress] = useState(null)
   const [dbCases, setDbCases] = useState([])
   const [loadingDbCases, setLoadingDbCases] = useState(false)
@@ -1341,6 +1343,30 @@ export default function LetterManager({
     }
   }
 
+  // Ekspor Rekap Nomor Surat ke Excel (.xlsx)
+  const handleExportExcel = async () => {
+    if (!activeRecipients.length) {
+      alert('Tidak ada penerima surat yang dipilih untuk diekspor.')
+      return
+    }
+
+    setIsExportingExcel(true)
+    try {
+      const fileName = `Rekap_Nomor_Surat_Kemensos_${activeRecipients.length}_SDM.xlsx`
+      await exportLetterNumbersToExcel(activeRecipients, {
+        templateName: currentTemplate.name,
+        letterDate,
+        official,
+        fileName
+      })
+    } catch (err) {
+      console.error('Export Excel error:', err)
+      alert(`Gagal mengekspor data ke Excel: ${err.message || 'Terjadi kesalahan teknis'}`)
+    } finally {
+      setIsExportingExcel(false)
+    }
+  }
+
   // Salin Teks ke Clipboard
   const handleCopyText = () => {
     const r = activeRecipients[0]
@@ -1840,6 +1866,33 @@ NIP. ${official.nip}${tembusanBlock}
                       }}
                     >
                       Mulai dari 1
+                    </button>
+                  </div>
+
+                  <div style={{marginTop: 6}}>
+                    <button
+                      type="button"
+                      onClick={handleExportExcel}
+                      disabled={isExportingExcel || !activeRecipients.length}
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                        background: 'rgba(16, 185, 129, 0.15)',
+                        border: '1px solid rgba(16, 185, 129, 0.35)',
+                        color: '#34d399',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        padding: '6px 10px',
+                        borderRadius: 6,
+                        cursor: isExportingExcel || !activeRecipients.length ? 'not-allowed' : 'pointer'
+                      }}
+                      title="Unduh rekap nomor surat, NIP, nama, dan jadwal dalam format spreadsheet Excel"
+                    >
+                      {isExportingExcel ? <LoaderCircle size={14} className="spin" /> : <FileSpreadsheet size={14} />}
+                      <span>{isExportingExcel ? 'Menyusun File Excel...' : `Ekspor ${activeRecipients.length.toLocaleString('id-ID')} Nomor Surat ke Excel (.xlsx)`}</span>
                     </button>
                   </div>
                 </div>
@@ -2960,6 +3013,22 @@ NIP. ${official.nip}${tembusanBlock}
                 >
                   {copied ? <Check size={16} color="#22c55e" /> : <Copy size={16} />}
                   <span>{copied ? 'Tersalin!' : 'Salin Teks'}</span>
+                </button>
+                <button
+                  type="button"
+                  className="btn secondary"
+                  onClick={handleExportExcel}
+                  disabled={isExportingExcel || !activeRecipients.length}
+                  title={`Ekspor daftar rekap nomor surat, NIP, nama, dan jadwal (${activeRecipients.length.toLocaleString('id-ID')} SDM) ke Excel (.xlsx)`}
+                  style={{
+                    color: '#34d399',
+                    borderColor: 'rgba(52, 211, 153, 0.4)',
+                    background: 'rgba(16, 185, 129, 0.12)',
+                    fontWeight: 600
+                  }}
+                >
+                  {isExportingExcel ? <LoaderCircle size={16} className="spin" /> : <FileSpreadsheet size={16} />}
+                  <span>{isExportingExcel ? 'Mengekspor Excel...' : `Ekspor Excel (${activeRecipients.length.toLocaleString('id-ID')})`}</span>
                 </button>
                 <button
                   type="button"
