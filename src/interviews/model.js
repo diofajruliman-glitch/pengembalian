@@ -1,4 +1,4 @@
-import { assertRoutingAssignment, getRoutingCategory, isHeavyPerson, isSpecialistRoom } from './routing.js'
+import { assertRoutingAssignment, getRoutingCategory, isHeavyPerson, isSpecialistRoom, ROUTING_BASIS } from './routing.js'
 
 // Operational drafts reference the active discipline population; they never copy
 // names, NIPs, or assessment results into monitoring storage.
@@ -143,7 +143,7 @@ export function createSchedule(population,existingEntries={},rooms=DEFAULT_ROOMS
     if(!person)continue
     const nik=text(person.nik)
     const assignment={nik,date,session,roomId:room.id,time:`${String(Math.floor(time/60)).padStart(2,'0')}:${String(time%60).padStart(2,'0')}`,duration,status:'Terjadwal'}
-    try{assertRoutingAssignment(person,room);validateAssignment(assignment,entries,rooms)}catch{continue}
+    try{assertRoutingAssignment(person,room,ROUTING_BASIS,settings.enforceSpecialist!==false);validateAssignment(assignment,entries,rooms)}catch{continue}
     entries[nik]=assignment
     generated.push(assignment)
     if(useHeavy)heavyIndex++;else otherIndex++
@@ -155,7 +155,7 @@ export function createSchedule(population,existingEntries={},rooms=DEFAULT_ROOMS
  return generated
 }
 
-export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Date().toISOString(),person=null) {
+export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Date().toISOString(),person=null,settings={}) {
  nik=text(nik)
  if(!nik)throw Error('Pilih peserta dari populasi Terbukti.')
  if(person!==null&&person!==undefined&&text(person?.nik)!==nik)throw Error('Identitas SDM sumber tidak sesuai dengan NIK catatan monitoring.')
@@ -182,7 +182,7 @@ export function updateEntry(nik,patch,entries={},rooms=DEFAULT_ROOMS,now=new Dat
  const initialAssignment=hasAssignment&&!Boolean(previous.date||previous.roomId||previous.time||previous.session)
  // Existing operational records remain writable for notes and completion. Their
  // routing conflict is shown by the UI; any new placement or start is guarded.
- if(person&&(placementChanged||startingInterview||initialAssignment))assertRoutingAssignment(person,roomFor(rooms,next.roomId))
+ if(person&&(placementChanged||startingInterview||initialAssignment))assertRoutingAssignment(person,roomFor(rooms,next.roomId),ROUTING_BASIS,settings?.enforceSpecialist!==false)
  const scheduleChanged=['date','time','duration','session'].some(field=>Object.hasOwn(safePatch,field)&&String(safePatch[field])!==String(previous[field]??''))
  if(previous.status==='Di room'&&next.status==='Di room'&&scheduleChanged)throw Error('Ubah jadwal setelah wawancara dihentikan; perpindahan room dapat dilakukan langsung.')
  const newAppointment=next.status==='Terjadwal'&&(scheduleChanged||(previous.status&&previous.status!=='Terjadwal'))

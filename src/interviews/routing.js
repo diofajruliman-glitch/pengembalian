@@ -49,14 +49,19 @@ export function specialistRooms(rooms=[]) {
  return (Array.isArray(rooms)?rooms:[]).filter(room=>room?.enabled!==false&&isSpecialistRoom(room))
 }
 
-export function assertRoutingAssignment(person,room,basis=ROUTING_BASIS) {
+export function assertRoutingAssignment(person,room,basis=ROUTING_BASIS,enforceSpecialist=true) {
+ if(enforceSpecialist===false) {
+  if(!room||room.enabled===false)throw Error('Pilih room aktif untuk wawancara.')
+  return true
+ }
  if(isHeavyPerson(person,basis)&&(!isSpecialistRoom(room)||room.enabled===false)) {
   throw Error('SDM kategori Berat wajib ditempatkan pada room aktif dengan pewawancara utama Itjen atau OSDM.')
  }
  return true
 }
 
-export function getRoutingConflicts(population=[],entries={},rooms=[],basis=ROUTING_BASIS) {
+export function getRoutingConflicts(population=[],entries={},rooms=[],basis=ROUTING_BASIS,enforceSpecialist=true) {
+ if(enforceSpecialist===false)return []
  const roomById=new Map((Array.isArray(rooms)?rooms:[]).map(room=>[room.id,room]))
  const seen=new Set(),conflicts=[]
  for(const person of Array.isArray(population)?population:[]) {

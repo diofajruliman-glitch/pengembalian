@@ -1,5 +1,5 @@
 import { DEFAULT_ROOMS, createSchedule, monitoringCsv, validateAssignment } from './model.js'
-import { assertRoutingAssignment } from './routing.js'
+import { assertRoutingAssignment, ROUTING_BASIS } from './routing.js'
 
 const text = value => String(value ?? '').trim()
 const normalized = value => text(value).replace(/\s+/g, ' ').toLocaleLowerCase('id-ID')
@@ -165,7 +165,7 @@ export function prepareBulkDistribution({ population, entries = {}, rooms = DEFA
  }
  const checkedEntries = { ...otherEntries }
  for (const assignment of assignments) {
-  assertRoutingAssignment(personByNik(assignment.nik, index), rooms.find(room => room.id === assignment.roomId))
+  assertRoutingAssignment(personByNik(assignment.nik, index), rooms.find(room => room.id === assignment.roomId), ROUTING_BASIS, settings.enforceSpecialist !== false)
   validateAssignment(assignment, checkedEntries, rooms)
   checkedEntries[assignment.nik] = assignment
  }
@@ -247,7 +247,7 @@ export function prepareScheduleImport({ population, entries = {}, rooms = DEFAUL
    ids.add(nik)
    ensureEditable(nik, entries)
    const room = importedRoom(row, rooms)
-   assertRoutingAssignment(person, room)
+   assertRoutingAssignment(person, room, ROUTING_BASIS, settings.enforceSpecialist !== false)
    const assignment = { nik, date: text(row.date), time: text(row.time), session: hasValue(row.session) ? row.session : 1, roomId: room.id, duration: hasValue(row.duration) ? row.duration : 40, status: 'Terjadwal' }
    validateAssignment(assignment, {}, rooms)
    assignment.session = Number(assignment.session)

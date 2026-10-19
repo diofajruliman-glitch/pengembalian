@@ -4,7 +4,7 @@ const BAD_KEYS=new Set(['__proto__','prototype','constructor'])
 const STATUSES=new Set(['Belum dijadwalkan','Terjadwal','Menunggu','Di room','Selesai','Tidak hadir','Terkendala','Jadwal ulang'])
 const ENTRY_FIELDS=new Set(['nik','date','session','roomId','time','duration','status','verified','zoomName','startedAt','finishedAt','notes','leader','updatedAt'])
 const ROOM_FIELDS=new Set(['id','name','interviewer','crossInterviewer','trafficOfficer','enabled'])
-const SETTINGS_FIELDS=new Set(['startDate','startTime','duration','gap','perDay','skipWeekends'])
+const SETTINGS_FIELDS=new Set(['startDate','startTime','duration','gap','perDay','skipWeekends','enforceSpecialist'])
 const ROOT_FIELDS=new Set(['entries','rooms','settings','revision','leader','broadcast'])
 
 function fail(code,message){const error=new Error(message);error.code=code;return error}
@@ -87,7 +87,7 @@ export function validateWorkspace(payload){
   for(const [field,value] of Object.entries(normalized.settings)){
    if(field==='startDate')date(value)
    else if(field==='startTime')time(value)
-   else if(field==='skipWeekends'){if(typeof value!=='boolean')throw invalid()}
+   else if(['skipWeekends','enforceSpecialist'].includes(field)){if(typeof value!=='boolean')throw invalid()}
    else integer(value,field==='gap'?0:1,field==='perDay'?10000:1440)
   }
  }
