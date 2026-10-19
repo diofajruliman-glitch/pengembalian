@@ -823,10 +823,18 @@ export default function LetterManager({
         // Sesi Individual Wawancara (Mailing Merge berdasarkan NIP dari data Jadwal 1.057)
         const sessionHari = jadwalEntry?.hari || slot.hari
         const sessionTanggal = jadwalEntry?.tanggal || slot.tanggal
-        const rawSessionJam = jadwalEntry?.jam || slot.jam
-        const sessionJam = sessionIncludeLabel && jadwalEntry
-          ? `${rawSessionJam} (${jadwalEntry.sesi} · ${jadwalEntry.room})`
-          : (sessionIncludeLabel ? `${slot.sesiName} (${rawSessionJam})` : rawSessionJam)
+        const targetSesi = jadwalEntry?.sesi || (slot.sesiName?.includes('Pagi') ? 'Pagi' : (slot.sesiName?.includes('Siang') ? 'Siang' : slot.sesiName)) || 'Pagi'
+        const targetRoom = jadwalEntry?.room || slot.room || ''
+
+        // Format Jam Persesi:
+        // Sesi Pagi: 08.30–12.00 WIB (Pagi · Room ...)
+        // Sesi Siang: 13.00–16.30 WIB (Siang · Room ...)
+        const sessionJam = formatJadwal1057SessionJam(jadwalEntry || slot, {
+          scope: sessionJamScope,
+          morningTime: sessionMorningTime,
+          afternoonTime: sessionAfternoonTime,
+          backupTime: sessionBackupTime
+        })
         const sessionLinkZoom = jadwalEntry?.linkZoom || effectiveVenue.linkZoom || 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
 
         return {
@@ -843,15 +851,15 @@ export default function LetterManager({
           sessionHari,
           sessionTanggal,
           sessionJam,
-          sessionRoom: jadwalEntry?.room || '',
+          sessionRoom: targetRoom,
           sessionPetugas: jadwalEntry?.petugas || '',
-          sessionSesi: jadwalEntry?.sesi || slot.sesiName,
+          sessionSesi: targetSesi,
           sessionLinkZoom,
           hari: sessionHari,
           tanggal: sessionTanggal,
           tanggalShort: (sessionTanggal || '').replace('Oktober', 'Okt'),
           jam: sessionJam,
-          sesiName: jadwalEntry?.sesi || slot.sesiName,
+          sesiName: targetSesi,
           tempat: effectiveVenue.tempat,
           linkZoom: sessionLinkZoom,
           hasJadwal1057: Boolean(jadwalEntry)
@@ -939,6 +947,7 @@ export default function LetterManager({
     sessionMorningTime,
     sessionAfternoonTime,
     sessionBackupTime,
+    sessionJamScope,
     sessionIncludeLabel,
     staggerStartTime,
     staggerInterval,
