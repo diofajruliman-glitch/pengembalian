@@ -40,6 +40,8 @@ export const DEFAULT_VENUES = [
     tempat: 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos',
     alamatLuring: 'Jl. Salemba Raya No. 28 Jakarta Pusat',
     linkZoom: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)',
+    plenaryLinkZoom: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)',
+    sessionLinkZoom: 'https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)',
     jam: '08.30 WIB',
     hari: 'Senin',
     tanggal: '26 Oktober 2026',
