@@ -476,9 +476,10 @@ export async function generateOfficialPdfBatch({
         curY += 3.5
 
         const plenaryRows = [
-          ['Hari', ':', { content: plenaryHari, colSpan: 4 }],
-          ['Tanggal', ':', plenaryTanggal, 'Jam', ':', plenaryJam],
-          ['Link Zoom', ':', { content: plenaryLinkZoom, colSpan: 4 }]
+          ['Hari', ':', plenaryHari],
+          ['Tanggal', ':', plenaryTanggal],
+          ['Jam', ':', plenaryJam],
+          ['Link Zoom', ':', plenaryLinkZoom]
         ]
 
         autoTable(doc, {
@@ -490,10 +491,7 @@ export async function generateOfficialPdfBatch({
           columnStyles: {
             0: { cellWidth: 46 },
             1: { cellWidth: 4, halign: 'center' },
-            2: { cellWidth: 54 },
-            3: { cellWidth: 16 },
-            4: { cellWidth: 4, halign: 'center' },
-            5: { cellWidth: 'auto' }
+            2: { cellWidth: 'auto' }
           }
         })
         curY = doc.lastAutoTable.finalY + 2.5
@@ -543,12 +541,13 @@ export async function generateOfficialPdfBatch({
         curY += 3.5
 
         const scheduleRows = [
-          ['Hari', ':', { content: effectiveHari, colSpan: 4 }],
-          ['Tanggal', ':', effectiveTanggal, 'Jam', ':', effectiveJam],
-          ['Tempat', ':', { content: effectiveTempat, colSpan: 4 }]
+          ['Hari', ':', effectiveHari],
+          ['Tanggal', ':', effectiveTanggal],
+          ['Jam', ':', effectiveJam],
+          ['Tempat', ':', effectiveTempat]
         ]
         if (linkZoom) {
-          scheduleRows.push(['Link Zoom', ':', { content: linkZoom, colSpan: 4 }])
+          scheduleRows.push(['Link Zoom', ':', linkZoom])
         }
 
         autoTable(doc, {
@@ -560,10 +559,7 @@ export async function generateOfficialPdfBatch({
           columnStyles: {
             0: { cellWidth: 46 },
             1: { cellWidth: 4, halign: 'center' },
-            2: { cellWidth: 54 },
-            3: { cellWidth: 16 },
-            4: { cellWidth: 4, halign: 'center' },
-            5: { cellWidth: 'auto' }
+            2: { cellWidth: 'auto' }
           }
         })
         curY = doc.lastAutoTable.finalY + 4
