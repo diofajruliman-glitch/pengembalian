@@ -801,25 +801,54 @@ export default function LetterManager({
       }
 
       if (scheduleMode === 'daily_sessions') {
+        const jadwalEntry = lookupJadwalWawancara1057(r.nip || r.nik, r.nama)
         const slot = resolveDailySessionSlot(idx, {
           morningTime: sessionMorningTime,
           afternoonTime: sessionAfternoonTime,
           backupTime: sessionBackupTime
         })
-        const chosenJam = sessionIncludeLabel ? `${slot.sesiName} (${slot.jam})` : slot.jam
+
+        // Waktu Plenary Zoom Hari Pertama (Senin, 26 Okt 08.30 WIB) - Tetap untuk semua ASN
+        const plenaryHari = customVenueHari.trim() || venue.hari || 'Senin'
+        const plenaryTanggal = customVenueTanggal.trim() || venue.tanggal || '26 Oktober 2026'
+        const plenaryJam = customVenueJam.trim() || venue.jam || '08.30 WIB'
+        const plenaryLinkZoom = effectiveVenue.linkZoom || 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+
+        // Sesi Individual Wawancara (Mailing Merge berdasarkan NIP dari data Jadwal 1.057)
+        const sessionHari = jadwalEntry?.hari || slot.hari
+        const sessionTanggal = jadwalEntry?.tanggal || slot.tanggal
+        const rawSessionJam = jadwalEntry?.jam || slot.jam
+        const sessionJam = sessionIncludeLabel && jadwalEntry
+          ? `${rawSessionJam} (${jadwalEntry.sesi} · ${jadwalEntry.room})`
+          : (sessionIncludeLabel ? `${slot.sesiName} (${rawSessionJam})` : rawSessionJam)
+        const sessionLinkZoom = jadwalEntry?.linkZoom || effectiveVenue.linkZoom || 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)'
+
         return {
           ...r,
           nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
           pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
           jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
           letterNumber: assignedLetterNumber,
-          hari: slot.hari,
-          tanggal: slot.tanggal,
-          tanggalShort: slot.tanggalShort,
-          jam: chosenJam,
-          sesiName: slot.sesiName,
+          isDualSession: true,
+          plenaryHari,
+          plenaryTanggal,
+          plenaryJam,
+          plenaryLinkZoom,
+          sessionHari,
+          sessionTanggal,
+          sessionJam,
+          sessionRoom: jadwalEntry?.room || '',
+          sessionPetugas: jadwalEntry?.petugas || '',
+          sessionSesi: jadwalEntry?.sesi || slot.sesiName,
+          sessionLinkZoom,
+          hari: sessionHari,
+          tanggal: sessionTanggal,
+          tanggalShort: (sessionTanggal || '').replace('Oktober', 'Okt'),
+          jam: sessionJam,
+          sesiName: jadwalEntry?.sesi || slot.sesiName,
           tempat: effectiveVenue.tempat,
-          linkZoom: effectiveVenue.linkZoom
+          linkZoom: sessionLinkZoom,
+          hasJadwal1057: Boolean(jadwalEntry)
         }
       }
 
@@ -924,15 +953,18 @@ export default function LetterManager({
     for (const r of activeRecipients) {
       if (r.key) {
         map.set(r.key, {
-          jam: r.jam,
-          hari: r.hari,
-          tanggal: r.tanggal,
+          jam: r.sessionJam || r.jam,
+          hari: r.sessionHari || r.hari,
+          tanggal: r.sessionTanggal || r.tanggal,
           letterNumber: r.letterNumber,
-          sesiName: r.sesiName,
-          tanggalShort: r.tanggalShort,
+          sesiName: r.sessionSesi || r.sesiName,
+          room: r.sessionRoom,
+          petugas: r.sessionPetugas,
+          tanggalShort: r.tanggalShort || (r.sessionTanggal || r.tanggal || '').replace('Oktober', 'Okt'),
           hasBnbaSchedule: r.hasBnbaSchedule,
           bnbaRoom: r.bnbaRoom,
-          bnbaDateShort: r.bnbaDateShort
+          bnbaDateShort: r.bnbaDateShort,
+          hasJadwal1057: r.hasJadwal1057
         })
       }
     }
