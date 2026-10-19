@@ -156,3 +156,49 @@ export function lookupBnbaSchedule(recipient, workspace) {
     status: entry.status || 'Terjadwal'
   }
 }
+
+// Konfigurasi kuota dan alokasi sesi harian 26–29 Oktober 2026 (Total 1.057 ASN Judi Online)
+// Sesi Pagi: 08.30–12.00 (133 orang/hari)
+// Istirahat: 12.00–13.00
+// Sesi Siang: 13.00–16.30 (131–132 orang/hari)
+// Cadangan/Administrasi: 16.30–17.00
+export const DAILY_SESSION_SLOTS = [
+  // Day 1: Senin, 26 Oktober 2026 (Total 265 orang: 133 Pagi, 132 Siang)
+  { dayIndex: 0, hari: 'Senin', tanggal: '26 Oktober 2026', tanggalShort: '26 Okt', sesiName: 'Sesi Pagi', defaultTime: '08.30–12.00 WIB', start: 0, end: 132, quota: 133 },
+  { dayIndex: 0, hari: 'Senin', tanggal: '26 Oktober 2026', tanggalShort: '26 Okt', sesiName: 'Sesi Siang', defaultTime: '13.00–16.30 WIB', start: 133, end: 264, quota: 132 },
+  // Day 2: Selasa, 27 Oktober 2026 (Total 264 orang: 133 Pagi, 131 Siang)
+  { dayIndex: 1, hari: 'Selasa', tanggal: '27 Oktober 2026', tanggalShort: '27 Okt', sesiName: 'Sesi Pagi', defaultTime: '08.30–12.00 WIB', start: 265, end: 397, quota: 133 },
+  { dayIndex: 1, hari: 'Selasa', tanggal: '27 Oktober 2026', tanggalShort: '27 Okt', sesiName: 'Sesi Siang', defaultTime: '13.00–16.30 WIB', start: 398, end: 528, quota: 131 },
+  // Day 3: Rabu, 28 Oktober 2026 (Total 264 orang: 133 Pagi, 131 Siang)
+  { dayIndex: 2, hari: 'Rabu', tanggal: '28 Oktober 2026', tanggalShort: '28 Okt', sesiName: 'Sesi Pagi', defaultTime: '08.30–12.00 WIB', start: 529, end: 661, quota: 133 },
+  { dayIndex: 2, hari: 'Rabu', tanggal: '28 Oktober 2026', tanggalShort: '28 Okt', sesiName: 'Sesi Siang', defaultTime: '13.00–16.30 WIB', start: 662, end: 792, quota: 131 },
+  // Day 4: Kamis, 29 Oktober 2026 (Total 264 orang: 133 Pagi, 131 Siang)
+  { dayIndex: 3, hari: 'Kamis', tanggal: '29 Oktober 2026', tanggalShort: '29 Okt', sesiName: 'Sesi Pagi', defaultTime: '08.30–12.00 WIB', start: 793, end: 925, quota: 133 },
+  { dayIndex: 3, hari: 'Kamis', tanggal: '29 Oktober 2026', tanggalShort: '29 Okt', sesiName: 'Sesi Siang', defaultTime: '13.00–16.30 WIB', start: 926, end: 1056, quota: 131 }
+]
+
+export function resolveDailySessionSlot(idx, customTimes = {}) {
+  const morning = customTimes.morningTime || '08.30–12.00 WIB'
+  const afternoon = customTimes.afternoonTime || '13.00–16.30 WIB'
+  const backup = customTimes.backupTime || '16.30–17.00 WIB'
+
+  for (const s of DAILY_SESSION_SLOTS) {
+    if (idx >= s.start && idx <= s.end) {
+      return {
+        ...s,
+        jam: s.sesiName === 'Sesi Pagi' ? morning : afternoon
+      }
+    }
+  }
+
+  // Jika di atas 1.056 peserta (alokasi ke Cadangan / Administrasi Hari ke-4)
+  return {
+    dayIndex: 3,
+    hari: 'Kamis',
+    tanggal: '29 Oktober 2026',
+    tanggalShort: '29 Okt',
+    sesiName: 'Cadangan/Administrasi',
+    jam: backup,
+    quota: 0
+  }
+}

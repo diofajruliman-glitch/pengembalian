@@ -458,21 +458,22 @@ export async function generateOfficialPdfBatch({
       curY = doc.lastAutoTable.finalY + 3.5
 
       // Jadwal / Pada :
+      const linkZoom = recipient.linkZoom || venue.linkZoom
+      const effectiveHari = recipient.hari || venue.hari || 'Senin'
+      const effectiveTanggal = recipient.tanggal || venue.tanggal || '26 Oktober 2026'
+      const effectiveJam = recipient.jam || venue.jam || '08.30–12.00 WIB'
+      const effectiveTempat = recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'
+
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
       doc.text('Pada :', 14, curY)
       curY += 3.5
 
       const scheduleRows = [
-        ['Hari', ':', recipient.hari || venue.hari || 'Senin'],
-        ['Tanggal', ':', recipient.tanggal || venue.tanggal || '26 Oktober 2026'],
-        ['Jam', ':', recipient.jam || venue.jam || '10.00 WIB'],
-        ['Tempat', ':', recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos']
+        ['Hari', ':', { content: effectiveHari, colSpan: 4 }],
+        ['Tanggal', ':', effectiveTanggal, 'Jam', ':', effectiveJam],
+        ['Tempat', ':', { content: effectiveTempat, colSpan: 4 }]
       ]
-      const linkZoom = recipient.linkZoom || venue.linkZoom
-      if (linkZoom) {
-        scheduleRows.push(['Link Zoom', ':', linkZoom])
-      }
 
       autoTable(doc, {
         startY: curY,
@@ -483,10 +484,48 @@ export async function generateOfficialPdfBatch({
         columnStyles: {
           0: { cellWidth: 46 },
           1: { cellWidth: 4, halign: 'center' },
-          2: { cellWidth: 'auto' }
+          2: { cellWidth: 54 },
+          3: { cellWidth: 16 },
+          4: { cellWidth: 4, halign: 'center' },
+          5: { cellWidth: 'auto' }
         }
       })
-      curY = doc.lastAutoTable.finalY + 4
+      curY = doc.lastAutoTable.finalY + 2.5
+
+      if (linkZoom) {
+        doc.setFont('helvetica', 'bold')
+        doc.setFontSize(12)
+        doc.text('Dan', 18, curY)
+        curY += 4.5
+        doc.setFont('helvetica', 'normal')
+        doc.text('Pada sesi :', 14, curY)
+        curY += 3.5
+
+        const zoomRows = [
+          ['Hari', ':', { content: effectiveHari, colSpan: 4 }],
+          ['Tanggal', ':', effectiveTanggal, 'Jam', ':', effectiveJam],
+          ['Link zoom', ':', { content: linkZoom, colSpan: 4 }]
+        ]
+
+        autoTable(doc, {
+          startY: curY,
+          margin: { left: 18, right: 14 },
+          body: zoomRows,
+          theme: 'plain',
+          styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
+          columnStyles: {
+            0: { cellWidth: 46 },
+            1: { cellWidth: 4, halign: 'center' },
+            2: { cellWidth: 54 },
+            3: { cellWidth: 16 },
+            4: { cellWidth: 4, halign: 'center' },
+            5: { cellWidth: 'auto' }
+          }
+        })
+        curY = doc.lastAutoTable.finalY + 4
+      } else {
+        curY += 1.5
+      }
 
       // Paragraf Agenda
       doc.setFont('helvetica', 'normal')

@@ -345,32 +345,62 @@ export default function LetterDocument({
                 <tr>
                   <td className="col-label">Hari</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{recipient.hari || venue.hari || 'Senin'}</td>
+                  <td className="col-val" colSpan={4}>{recipient.hari || venue.hari || 'Senin'}</td>
                 </tr>
                 <tr>
                   <td className="col-label">Tanggal</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{recipient.tanggal || venue.tanggal || '26 Oktober 2026'}</td>
-                </tr>
-                <tr>
-                  <td className="col-label">Jam</td>
+                  <td className="col-val" style={{width: '210px', whiteSpace: 'nowrap'}}>
+                    {recipient.tanggal || venue.tanggal || '26 Oktober 2026'}
+                  </td>
+                  <td style={{width: '45px', whiteSpace: 'nowrap', paddingLeft: '8px'}}>Jam</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{recipient.jam || venue.jam || '10.00 WIB'}</td>
+                  <td className="col-val" style={{whiteSpace: 'nowrap'}}>
+                    {recipient.jam || venue.jam || '08.30–12.00 WIB'}
+                  </td>
                 </tr>
                 <tr>
                   <td className="col-label">Tempat</td>
                   <td className="col-sep">:</td>
-                  <td className="col-val">{recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
+                  <td className="col-val" colSpan={4}>{recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
                 </tr>
-                {(recipient.linkZoom || venue.linkZoom) && (
-                  <tr>
-                    <td className="col-label">Link Zoom</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val" style={{wordBreak: 'break-all'}}>{recipient.linkZoom || venue.linkZoom}</td>
-                  </tr>
-                )}
               </tbody>
             </table>
+
+            {(recipient.linkZoom || venue.linkZoom) && (
+              <>
+                <div style={{margin: '6px 0 2px 18px', fontWeight: 'bold'}}>Dan</div>
+                <div className="doc-session-heading">Pada sesi :</div>
+                <table className="doc-entry-table" style={{margin: '2px 0 4px 18px'}}>
+                  <tbody>
+                    <tr>
+                      <td className="col-label">Hari</td>
+                      <td className="col-sep">:</td>
+                      <td className="col-val" colSpan={4}>{recipient.hari || venue.hari || 'Senin'}</td>
+                    </tr>
+                    <tr>
+                      <td className="col-label">Tanggal</td>
+                      <td className="col-sep">:</td>
+                      <td className="col-val" style={{width: '210px', whiteSpace: 'nowrap'}}>
+                        {recipient.tanggal || venue.tanggal || '26 Oktober 2026'}
+                      </td>
+                      <td style={{width: '45px', whiteSpace: 'nowrap', paddingLeft: '8px'}}>Jam</td>
+                      <td className="col-sep">:</td>
+                      <td className="col-val" style={{whiteSpace: 'nowrap'}}>
+                        {recipient.jam || venue.jam || '08.30–12.00 WIB'}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="col-label">Link zoom</td>
+                      <td className="col-sep">:</td>
+                      <td className="col-val" colSpan={4} style={{wordBreak: 'break-all'}}>
+                        {recipient.linkZoom || venue.linkZoom}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </>
+            )}
           </div>
 
           <p className="doc-body-paragraph">

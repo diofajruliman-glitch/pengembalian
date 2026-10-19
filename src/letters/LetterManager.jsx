@@ -67,7 +67,9 @@ import {
   formatIndoDate,
   formatIndoTime,
   loadInterviewWorkspaceFromStorage,
-  lookupBnbaSchedule
+  lookupBnbaSchedule,
+  resolveDailySessionSlot,
+  DAILY_SESSION_SLOTS
 } from './bnbaScheduleHelper.js'
 import './officialLetter.css'
 
@@ -204,8 +206,12 @@ export default function LetterManager({
   }, [venues, selectedVenueId])
   const [editingVenue, setEditingVenue] = useState(null)
 
-  // State Pengaturan Jam Pelaksanaan & Penjadwalan Sesi (Bergilir / Multi-Sesi / Terhubung BNBA)
-  const [scheduleMode, setScheduleMode] = useState('uniform') // 'uniform' | 'staggered' | 'bnba_interview'
+  // State Pengaturan Jam Pelaksanaan & Penjadwalan Sesi (Sesi Harian 26-29 Okt / Bergilir / Jam Sama / Terhubung BNBA)
+  const [scheduleMode, setScheduleMode] = useState('daily_sessions') // 'daily_sessions' | 'uniform' | 'staggered' | 'bnba_interview'
+  const [sessionMorningTime, setSessionMorningTime] = useState('08.30–12.00 WIB')
+  const [sessionAfternoonTime, setSessionAfternoonTime] = useState('13.00–16.30 WIB')
+  const [sessionBackupTime, setSessionBackupTime] = useState('16.30–17.00 WIB')
+  const [sessionIncludeLabel, setSessionIncludeLabel] = useState(false)
   const [customVenueHari, setCustomVenueHari] = useState('')
   const [customVenueTanggal, setCustomVenueTanggal] = useState('')
   const [customVenueJam, setCustomVenueJam] = useState('')
@@ -790,6 +796,29 @@ export default function LetterManager({
         assignedLetterNumber = `${numStr}${cleanSuffix}`
       }
 
+      if (scheduleMode === 'daily_sessions') {
+        const slot = resolveDailySessionSlot(idx, {
+          morningTime: sessionMorningTime,
+          afternoonTime: sessionAfternoonTime,
+          backupTime: sessionBackupTime
+        })
+        const chosenJam = sessionIncludeLabel ? `${slot.sesiName} (${slot.jam})` : slot.jam
+        return {
+          ...r,
+          nama: r.nama && r.nama !== 'Tanpa Nama' ? r.nama : (posRef?.nama || r.nama),
+          pangkat: posRef?.pangkat || r.pangkat || 'Golongan IX',
+          jabatan: posRef?.jabatan || r.jabatan || 'Penata Layanan Operasional',
+          letterNumber: assignedLetterNumber,
+          hari: slot.hari,
+          tanggal: slot.tanggal,
+          tanggalShort: slot.tanggalShort,
+          jam: chosenJam,
+          sesiName: slot.sesiName,
+          tempat: effectiveVenue.tempat,
+          linkZoom: effectiveVenue.linkZoom
+        }
+      }
+
       if (scheduleMode === 'bnba_interview') {
         const bnbaSched = lookupBnbaSchedule(r, interviewWorkspace)
         if (bnbaSched) {
@@ -868,6 +897,10 @@ export default function LetterManager({
     customVenueTanggal,
     customVenueJam,
     scheduleMode,
+    sessionMorningTime,
+    sessionAfternoonTime,
+    sessionBackupTime,
+    sessionIncludeLabel,
     staggerStartTime,
     staggerInterval,
     staggerBatchSize,
@@ -891,6 +924,8 @@ export default function LetterManager({
           hari: r.hari,
           tanggal: r.tanggal,
           letterNumber: r.letterNumber,
+          sesiName: r.sesiName,
+          tanggalShort: r.tanggalShort,
           hasBnbaSchedule: r.hasBnbaSchedule,
           bnbaRoom: r.bnbaRoom,
           bnbaDateShort: r.bnbaDateShort
@@ -1229,6 +1264,12 @@ export default function LetterManager({
     if (!r) return
     const effectiveLetterNum = r.letterNumber || letterNumber
     const effectiveCoord = customCoordination || currentTemplate.coordinationText || 'Apabila terdapat ketidaksesuaian perhitungan data atau telah memiliki bukti setor yang belum terverifikasi, Saudara dapat segera berkoordinasi langsung dengan Pokja SD Tim TLHP Direktorat PSNK.'
+    const effectiveLinkZoom = r.linkZoom || effectiveVenue.linkZoom
+    const effectiveHari = r.hari || effectiveVenue.hari || 'Senin'
+    const effectiveTanggal = r.tanggal || effectiveVenue.tanggal || '26 Oktober 2026'
+    const effectiveJam = r.jam || effectiveVenue.jam || '08.30–12.00 WIB'
+    const effectiveTempat = r.tempat || effectiveVenue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'
+
     const text = `
 ${currentTemplate.classification}
 ${currentTemplate.title}
@@ -1237,14 +1278,26 @@ NOMOR : ${effectiveLetterNum}
 ${customOpening || currentTemplate.openingText}
 Nama        : ${r.nama}
 NIP/NIPPPK  : ${r.nip}
-${showRank ? `Pangkat     : ${r.pangkat || '—'}\n` : ''}Jabatan     : ${r.jabatan || 'PPPK'}
+${showRank ? `Pangkat     : ${r.pangkat || '—'}\n` : ''}Jabatan     : ${r.jabatan || 'Penata Layanan Operasional'}
 Unit Kerja  : ${r.unitKerja || official.unitKerja}
+
+Untuk menghadap kepada:
+Nama        : ${official.nama}
+NIP         : ${official.nip}
+${showRank ? `Pangkat     : ${official.pangkatSingkat || official.pangkat || 'IV/c'}\n` : ''}Jabatan     : ${official.jabatan}
+
 Pada :
-Hari        : ${r.hari || effectiveVenue.hari || 'Senin'}
-Tanggal     : ${r.tanggal || effectiveVenue.tanggal || '26 Oktober 2026'}
-Jam         : ${r.jam || effectiveVenue.jam || '10.00 WIB'}
-Tempat      : ${r.tempat || effectiveVenue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}
-${(r.linkZoom || effectiveVenue.linkZoom) ? `Link Zoom   : ${r.linkZoom || effectiveVenue.linkZoom}\n` : ''}
+Hari        : ${effectiveHari}
+Tanggal     : ${effectiveTanggal}    Jam : ${effectiveJam}
+Tempat      : ${effectiveTempat}
+${effectiveLinkZoom ? `
+Dan
+
+Pada sesi :
+Hari        : ${effectiveHari}
+Tanggal     : ${effectiveTanggal}    Jam : ${effectiveJam}
+Link zoom   : ${effectiveLinkZoom}
+` : ''}
 ${customAgenda || currentTemplate.agendaDefault}
 
 ${currentTemplate.category === 'keuangan' ? effectiveCoord + '\n\n' : ''}${customClosing || currentTemplate.closingText}
@@ -1274,6 +1327,7 @@ NIP. ${official.nip}
       handleSelectJudolStatus(judolAssessment || 'Terbukti')
       setLetterNumberMode('sequential')
       setSequentialStartNum('2268')
+      setScheduleMode('daily_sessions')
     }
     // 2. Jika Surat Penagihan Pengembalian / Surat Pemanggilan Pengembalian Tukin -> Otomatis alihkan ke data keuangan
     else if (tpl.category === 'keuangan' || templateId === 'panggilan-tukin' || templateId.startsWith('tagihan')) {
@@ -1808,6 +1862,23 @@ NIP. ${official.nip}
                   <button
                     type="button"
                     style={{
+                      background: scheduleMode === 'daily_sessions' ? '#0284c7' : 'rgba(255,255,255,0.06)',
+                      color: '#ffffff',
+                      fontSize: '0.72rem',
+                      padding: '2px 8px',
+                      border: 'none',
+                      borderRadius: 4,
+                      cursor: 'pointer',
+                      fontWeight: scheduleMode === 'daily_sessions' ? 600 : 400
+                    }}
+                    onClick={() => setScheduleMode('daily_sessions')}
+                    title="Alokasi kuota 265 orang per hari (Sesi Pagi 08.30-12.00 dan Sesi Siang 13.00-16.30) periode 26-29 Oktober 2026"
+                  >
+                    Sesi 26–29 Okt (265/hari)
+                  </button>
+                  <button
+                    type="button"
+                    style={{
                       background: scheduleMode === 'uniform' ? '#0284c7' : 'rgba(255,255,255,0.06)',
                       color: '#ffffff',
                       fontSize: '0.72rem',
@@ -1861,6 +1932,82 @@ NIP. ${official.nip}
                   </button>
                 </div>
               </div>
+
+              {scheduleMode === 'daily_sessions' && (
+                <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
+                  <div style={{
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    border: '1px solid rgba(56, 189, 248, 0.25)',
+                    borderRadius: '6px',
+                    padding: '8px 10px',
+                    fontSize: '0.75rem',
+                    color: '#e2e8f0'
+                  }}>
+                    <div style={{fontWeight: 700, color: '#38bdf8', marginBottom: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                      <span>Jadwal Sesi Pemanggilan (265 Peserta/Hari)</span>
+                      <span style={{background: 'rgba(56, 189, 248, 0.2)', padding: '1px 6px', borderRadius: 4, fontSize: '0.7rem', color: '#38bdf8'}}>
+                        26–29 Oktober 2026
+                      </span>
+                    </div>
+                    <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 6, margin: '6px 0'}}>
+                      <div style={{background: 'rgba(0,0,0,0.25)', padding: '5px 8px', borderRadius: 4, borderLeft: '3px solid #38bdf8'}}>
+                        <div style={{fontWeight: 600, color: '#f1f5f9'}}>Senin, 26 Okt</div>
+                        <div style={{fontSize: '0.7rem', color: '#94a3b8'}}>265 Orang (Pagi 133 · Siang 132)</div>
+                      </div>
+                      <div style={{background: 'rgba(0,0,0,0.25)', padding: '5px 8px', borderRadius: 4, borderLeft: '3px solid #38bdf8'}}>
+                        <div style={{fontWeight: 600, color: '#f1f5f9'}}>Selasa, 27 Okt</div>
+                        <div style={{fontSize: '0.7rem', color: '#94a3b8'}}>264 Orang (Pagi 133 · Siang 131)</div>
+                      </div>
+                      <div style={{background: 'rgba(0,0,0,0.25)', padding: '5px 8px', borderRadius: 4, borderLeft: '3px solid #38bdf8'}}>
+                        <div style={{fontWeight: 600, color: '#f1f5f9'}}>Rabu, 28 Okt</div>
+                        <div style={{fontSize: '0.7rem', color: '#94a3b8'}}>264 Orang (Pagi 133 · Siang 131)</div>
+                      </div>
+                      <div style={{background: 'rgba(0,0,0,0.25)', padding: '5px 8px', borderRadius: 4, borderLeft: '3px solid #38bdf8'}}>
+                        <div style={{fontWeight: 600, color: '#f1f5f9'}}>Kamis, 29 Okt</div>
+                        <div style={{fontSize: '0.7rem', color: '#94a3b8'}}>264 Orang (Pagi 133 · Siang 131)</div>
+                      </div>
+                    </div>
+                    <div style={{fontSize: '0.72rem', color: '#94a3b8', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: 4, marginTop: 4, display: 'flex', justifyContent: 'space-between'}}>
+                      <span>Istirahat: 12.00–13.00 WIB</span>
+                      <span>Cadangan/Adm: 16.30–17.00 WIB</span>
+                    </div>
+                  </div>
+
+                  <div style={{display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8}}>
+                    <div>
+                      <label style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Waktu Sesi Pagi (133 orang)</label>
+                      <input
+                        type="text"
+                        value={sessionMorningTime}
+                        onChange={e => setSessionMorningTime(e.target.value)}
+                        placeholder="08.30–12.00 WIB"
+                        style={{fontSize: '0.8rem', padding: '5px 8px', width: '100%', boxSizing: 'border-box'}}
+                      />
+                    </div>
+                    <div>
+                      <label style={{fontSize: '0.74rem', color: '#94a3b8', display: 'block', marginBottom: 2}}>Waktu Sesi Siang (131–132 orang)</label>
+                      <input
+                        type="text"
+                        value={sessionAfternoonTime}
+                        onChange={e => setSessionAfternoonTime(e.target.value)}
+                        placeholder="13.00–16.30 WIB"
+                        style={{fontSize: '0.8rem', padding: '5px 8px', width: '100%', boxSizing: 'border-box'}}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{display: 'flex', alignItems: 'center', gap: 6}}>
+                    <label style={{display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.75rem', color: '#cbd5e1', cursor: 'pointer'}}>
+                      <input
+                        type="checkbox"
+                        checked={sessionIncludeLabel}
+                        onChange={e => setSessionIncludeLabel(e.target.checked)}
+                      />
+                      Sertakan nama sesi (misal: "Sesi Pagi (08.30–12.00 WIB)")
+                    </label>
+                  </div>
+                </div>
+              )}
 
               {scheduleMode === 'uniform' && (
                 <div style={{display: 'flex', gap: 6, alignItems: 'center'}}>
@@ -2349,6 +2496,20 @@ NIP. ${official.nip}
                                           Belum Terjadwal BNBA
                                         </span>
                                       )
+                                    )}
+                                    {scheduleMode === 'daily_sessions' && itemScheduleMap.get(item.key) && (
+                                      <span style={{
+                                        background: 'rgba(99, 102, 241, 0.2)',
+                                        color: '#a5b4fc',
+                                        fontSize: '0.68rem',
+                                        padding: '1px 6px',
+                                        borderRadius: 4,
+                                        fontWeight: 600,
+                                        whiteSpace: 'nowrap',
+                                        border: '1px solid rgba(99, 102, 241, 0.35)'
+                                      }}>
+                                        {itemScheduleMap.get(item.key).hari}, {itemScheduleMap.get(item.key).tanggalShort || itemScheduleMap.get(item.key).tanggal} · {itemScheduleMap.get(item.key).sesiName}
+                                      </span>
                                     )}
                                     {scheduleMode === 'staggered' && (
                                       <span style={{

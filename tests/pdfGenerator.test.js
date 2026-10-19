@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import { DAILY_SESSION_SLOTS, resolveDailySessionSlot } from '../src/letters/bnbaScheduleHelper.js'
 
 test('batch pdf generator logic test - 2 sample recipients', async () => {
   const doc = new jsPDF({
@@ -546,6 +547,230 @@ test('sequential letter numbering creates distinct letter numbers per recipient 
   const endNum = startNum + total1057 - 1
   assert.equal(endNum, 3324)
   assert.equal(`${endNum}${suffix}`, '3324/3.3/KP.06.04/10/2026')
+})
+
+test('daily session slots quota allocation test (1.057 ASN 26-29 Okt 2026)', async () => {
+  // Verify sum of quotas across slots
+  const totalQuota = DAILY_SESSION_SLOTS.reduce((acc, s) => acc + s.quota, 0)
+  assert.equal(totalQuota, 1057)
+
+  // Verify slots distribution:
+  // Day 1 (Senin, 26 Okt): 265 orang (133 Pagi, 132 Siang)
+  // Day 2 (Selasa, 27 Okt): 264 orang (133 Pagi, 131 Siang)
+  // Day 3 (Rabu, 28 Okt): 264 orang (133 Pagi, 131 Siang)
+  // Day 4 (Kamis, 29 Okt): 264 orang (133 Pagi, 131 Siang)
+  assert.equal(DAILY_SESSION_SLOTS[0].quota, 133)
+  assert.equal(DAILY_SESSION_SLOTS[1].quota, 132)
+  assert.equal(DAILY_SESSION_SLOTS[2].quota, 133)
+  assert.equal(DAILY_SESSION_SLOTS[3].quota, 131)
+  assert.equal(DAILY_SESSION_SLOTS[4].quota, 133)
+  assert.equal(DAILY_SESSION_SLOTS[5].quota, 131)
+  assert.equal(DAILY_SESSION_SLOTS[6].quota, 133)
+  assert.equal(DAILY_SESSION_SLOTS[7].quota, 131)
+
+  // Test slot resolution boundaries
+  const slot0 = resolveDailySessionSlot(0)
+  assert.equal(slot0.hari, 'Senin')
+  assert.equal(slot0.tanggal, '26 Oktober 2026')
+  assert.equal(slot0.sesiName, 'Sesi Pagi')
+  assert.equal(slot0.jam, '08.30–12.00 WIB')
+
+  const slot132 = resolveDailySessionSlot(132)
+  assert.equal(slot132.hari, 'Senin')
+  assert.equal(slot132.sesiName, 'Sesi Pagi')
+
+  const slot133 = resolveDailySessionSlot(133)
+  assert.equal(slot133.hari, 'Senin')
+  assert.equal(slot133.sesiName, 'Sesi Siang')
+  assert.equal(slot133.jam, '13.00–16.30 WIB')
+
+  const slot264 = resolveDailySessionSlot(264)
+  assert.equal(slot264.hari, 'Senin')
+  assert.equal(slot264.sesiName, 'Sesi Siang')
+
+  const slot265 = resolveDailySessionSlot(265)
+  assert.equal(slot265.hari, 'Selasa')
+  assert.equal(slot265.tanggal, '27 Oktober 2026')
+  assert.equal(slot265.sesiName, 'Sesi Pagi')
+
+  const slot528 = resolveDailySessionSlot(528)
+  assert.equal(slot528.hari, 'Selasa')
+  assert.equal(slot528.sesiName, 'Sesi Siang')
+
+  const slot529 = resolveDailySessionSlot(529)
+  assert.equal(slot529.hari, 'Rabu')
+  assert.equal(slot529.tanggal, '28 Oktober 2026')
+  assert.equal(slot529.sesiName, 'Sesi Pagi')
+
+  const slot792 = resolveDailySessionSlot(792)
+  assert.equal(slot792.hari, 'Rabu')
+  assert.equal(slot792.sesiName, 'Sesi Siang')
+
+  const slot793 = resolveDailySessionSlot(793)
+  assert.equal(slot793.hari, 'Kamis')
+  assert.equal(slot793.tanggal, '29 Oktober 2026')
+  assert.equal(slot793.sesiName, 'Sesi Pagi')
+
+  const slot1056 = resolveDailySessionSlot(1056)
+  assert.equal(slot1056.hari, 'Kamis')
+  assert.equal(slot1056.sesiName, 'Sesi Siang')
+
+  // Overflow beyond 1057 (index 1057+)
+  const slotOverflow = resolveDailySessionSlot(1057)
+  assert.equal(slotOverflow.hari, 'Kamis')
+  assert.equal(slotOverflow.sesiName, 'Cadangan/Administrasi')
+  assert.equal(slotOverflow.jam, '16.30–17.00 WIB')
+
+  // Custom times override
+  const customSlot = resolveDailySessionSlot(0, {
+    morningTime: '08.00–11.45 WIB',
+    afternoonTime: '13.15–16.45 WIB',
+    backupTime: '16.45–17.30 WIB'
+  })
+  assert.equal(customSlot.jam, '08.00–11.45 WIB')
+
+  const customSlotAfternoon = resolveDailySessionSlot(150, {
+    morningTime: '08.00–11.45 WIB',
+    afternoonTime: '13.15–16.45 WIB'
+  })
+  assert.equal(customSlotAfternoon.jam, '13.15–16.45 WIB')
+})
+
+test('pdf layout test: single-line Tanggal & Jam and hybrid Dan Pada sesi table layout', async () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  // Set font
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(12)
+
+  let curY = 40
+  doc.text('Bersama ini diminta dengan hormat kehadiran Saudara:', 14, curY)
+  curY += 5
+
+  // Recipient info
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 14, right: 14 },
+    body: [
+      ['Nama', ':', 'Ramadhan Syah'],
+      ['NIP/NIPPPK', ':', '199004252025211054'],
+      ['Pangkat / Golongan', ':', 'Golongan VII'],
+      ['Jabatan', ':', 'Pengelola Layanan Operasional'],
+      ['Unit Kerja', ':', 'Direktorat Perlindungan Sosial Non Kebencanaan']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 38 },
+      1: { cellWidth: 4 },
+      2: { cellWidth: 140 }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 3
+
+  doc.text('Untuk menghadap kepada:', 14, curY)
+  curY += 5
+
+  // Signer / Official info
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 14, right: 14 },
+    body: [
+      ['Nama', ':', 'Faisal'],
+      ['NIP', ':', '19761106 200502 1 001'],
+      ['Pangkat', ':', 'IV/c'],
+      ['Jabatan', ':', 'Direktur Perlindungan Sosial Non Kebencanaan']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 38 },
+      1: { cellWidth: 4 },
+      2: { cellWidth: 140 }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 3
+
+  doc.text('Pada :', 14, curY)
+  curY += 5
+
+  // Hybrid physical and Tanggal & Jam single-line layout
+  const bodyRows = [
+    ['Hari', ':', 'Senin', '', '', ''],
+    ['Tanggal', ':', '26 Oktober 2026', 'Jam', ':', '08.30–12.00 WIB'],
+    ['Tempat', ':', 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos', '', '', '']
+  ]
+
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 14, right: 14 },
+    body: bodyRows,
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 38 },
+      1: { cellWidth: 4 },
+      2: { cellWidth: 62 },
+      3: { cellWidth: 18 },
+      4: { cellWidth: 4 },
+      5: { cellWidth: 56 }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 2.5
+
+  // "Dan" + "Pada sesi :" section
+  doc.text('Dan', 14, curY)
+  curY += 4.5
+  doc.text('Pada sesi :', 14, curY)
+  curY += 5
+
+  const sessionBodyRows = [
+    ['Sesi', ':', 'Sesi Pagi (08.30–12.00 WIB)', '', '', ''],
+    [
+      'Link zoom',
+      ':',
+      { content: 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)', colSpan: 4 }
+    ]
+  ]
+
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 14, right: 14 },
+    body: sessionBodyRows,
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: 0.6, textColor: [0, 0, 0] },
+    columnStyles: {
+      0: { cellWidth: 38 },
+      1: { cellWidth: 4 },
+      2: { cellWidth: 62 },
+      3: { cellWidth: 18 },
+      4: { cellWidth: 4 },
+      5: { cellWidth: 56 }
+    }
+  })
+  curY = doc.lastAutoTable.finalY + 4
+
+  // Closing text
+  doc.text('Untuk diperiksa/dimintai keterangan sehubungan dengan dugaan pelanggaran disiplin kinerja.', 14, curY)
+  curY += 5.5
+  doc.text('Demikian untuk dilaksanakan.', 14, curY)
+  curY += 8
+
+  // Signature
+  doc.text('Jakarta, 26 Oktober 2026', 125, curY)
+  doc.text('Direktur Perlindungan Sosial Non Kebencanaan', 125, curY + 5)
+  doc.text('Faisal', 125, curY + 25)
+  doc.text('NIP. 19761106 200502 1 001', 125, curY + 30)
+
+  // Must be strictly 1 page
+  assert.equal(doc.internal.getNumberOfPages(), 1)
+  const buffer = doc.output('arraybuffer')
+  assert.ok(buffer.byteLength > 2000)
 })
 
 
