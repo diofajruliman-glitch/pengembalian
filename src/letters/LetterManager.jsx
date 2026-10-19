@@ -73,7 +73,8 @@ import {
 } from './bnbaScheduleHelper.js'
 import {
   JADWAL_WAWANCARA_1057_REVISI,
-  lookupJadwalWawancara1057
+  lookupJadwalWawancara1057,
+  formatJadwal1057SessionJam
 } from './jadwalWawancara1057Data.js'
 import './officialLetter.css'
 
@@ -219,6 +220,7 @@ export default function LetterManager({
   const [sessionMorningTime, setSessionMorningTime] = useState('08.30–12.00 WIB')
   const [sessionAfternoonTime, setSessionAfternoonTime] = useState('13.00–16.30 WIB')
   const [sessionBackupTime, setSessionBackupTime] = useState('16.30–17.00 WIB')
+  const [sessionJamScope, setSessionJamScope] = useState('session_window') // 'session_window' | 'slot_detail' | 'time_only'
   const [sessionIncludeLabel, setSessionIncludeLabel] = useState(false)
   const [customVenueHari, setCustomVenueHari] = useState('')
   const [customVenueTanggal, setCustomVenueTanggal] = useState('')
