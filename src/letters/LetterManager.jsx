@@ -71,6 +71,10 @@ import {
   resolveDailySessionSlot,
   DAILY_SESSION_SLOTS
 } from './bnbaScheduleHelper.js'
+import {
+  JADWAL_WAWANCARA_1057_REVISI,
+  lookupJadwalWawancara1057
+} from './jadwalWawancara1057Data.js'
 import './officialLetter.css'
 
 // Helper filter data uji / simulasi agar tidak pernah masuk ke dokumen resmi
