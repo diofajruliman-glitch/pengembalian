@@ -86,7 +86,7 @@ export const LETTER_TYPES = [
     showRank: true,
     title: 'SURAT PANGGILAN',
     openingText: 'Bersama ini diminta dengan hormat kehadiran Saudara:',
-    agendaDefault: 'Untuk diperiksa/dimintai keterangan sehubungan dengan dugaan pelanggaran disiplin kinerja.',
+    agendaDefault: 'Untuk diperiksa, sehubungan dengan dugaan pelanggaran disiplin Peraturan Menteri Sosial Nomor 5 Tahun 2023 tentang Disiplin Aparatur Sipil Negara di lingkungan Kementerian Sosial',
     closingText: 'Demikian untuk dilaksanakan.',
     tembusan: [
       'Sekretaris Direktorat Jenderal Perlindungan dan Jaminan Sosial; dan',
@@ -104,7 +104,7 @@ export const LETTER_TYPES = [
     showRank: true,
     title: 'SURAT PANGGILAN',
     openingText: 'Bersama ini diminta dengan hormat kehadiran Saudara:',
-    agendaDefault: 'Untuk diperiksa/dimintai keterangan sehubungan dengan dugaan pelanggaran disiplin kinerja.',
+    agendaDefault: 'Untuk diperiksa, sehubungan dengan dugaan pelanggaran disiplin Peraturan Menteri Sosial Nomor 5 Tahun 2023 tentang Disiplin Aparatur Sipil Negara di lingkungan Kementerian Sosial',
     closingText: 'Demikian untuk dilaksanakan.',
     defaultSignerDate: '15 Oktober 2026',
     isDualSession: true,
