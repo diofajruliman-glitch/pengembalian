@@ -122,3 +122,39 @@ ini belum mengubah kategori awal dalam modul analisis atau menghasilkan LHP.
 Aktivasi tambahan: `supabase/interview-categories.sql` (sudah diterapkan pada
 project yang terhubung). Jalankan sekali setelah skema portal pada instalasi
 baru. Trigger menangkap kategori awal untuk peserta baru berikutnya.
+
+## SPTJM
+
+Buka peserta dan perluas **SPTJM — pernyataan, pratinjau dan unduhan**. Nama,
+NIP, NIK, jabatan, unit kerja dan tanggal mengikuti BAP. Wilayah dan nomor HP
+berasal dari data surat panggilan; data kosong tetap ditandai untuk dilengkapi.
+
+Pilihan **Mengakui / Tidak mengakui** tidak diisi otomatis dari jawaban bebas.
+Q11 dan Q12 ditampilkan sebagai acuan agar pewawancara dapat mencocokkan isi
+bersama peserta. Untuk pengakuan, tersedia periode sudah berhenti, masih
+berlangsung, atau tidak diingat secara pasti. Pilihan tidak mengakui tidak
+menghasilkan kalimat yang menyatakan peserta pernah mulai bermain. Kalimat
+periode disesuaikan pada template agar tidak memaksa keterangan yang berbeda.
+Pernyataan bukti terlampir hanya dicetak jika pewawancara menandai bahwa dokumen
+pendukung disertakan secara terpisah bersama SPTJM; tidak ada unggahan otomatis.
+
+Draf dapat disimpan dan dipratinjau selama wawancara. Unduhan Word/PDF memerlukan
+BAP final, semua isian wajib lengkap, serta konfirmasi bahwa peserta telah
+memeriksa isi pernyataan. Perubahan isian menghapus konfirmasi lokal sampai
+peserta mengonfirmasinya kembali. Jika revisi BAP berubah, unduhan SPTJM lama
+dikunci sampai peninjauan dan konfirmasi ulang. Tidak ada tanda tangan digital
+atau pengesahan otomatis; ruang tanda tangan dan materai mengikuti template.
+
+Word memakai paket DOCX asli lampiran SPTJM. PDF mengikuti halaman pratinjau.
+Aktivasi: `supabase/interview-statements.sql` setelah skema portal. Untuk mengisi
+kontak dari jadwal resmi pada instalasi baru, siapkan SQL berikut untuk ditinjau
+kemudian dijalankan pada database yang sesuai:
+
+```bash
+node scripts/prepare_sptjm_contacts.mjs > /tmp/sptjm-contacts.sql
+```
+
+Seed hanya mengisi kontak yang kosong pada SPTJM yang belum dikonfirmasi.
+RLS membatasi peserta berdasarkan room; mutasi memeriksa aktor, pemilik
+pemeriksaan, revisi BAP dan revisi SPTJM. Perubahan dicatat pada audit private.
+SPTJM ini tidak mengubah hasil kategorisasi dan belum menghasilkan LHP.

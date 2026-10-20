@@ -1,11 +1,11 @@
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate'
 import {templateData} from './model.js'
 const escapeXml=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&apos;').replaceAll('\n','</w:t><w:br/><w:t xml:space="preserve">')
-export async function buildWord(row,identity,answers){
- const response=await fetch('/templates/bap-2026.docx')
- if(!response.ok)throw Error('Template BAP belum dapat dimuat.')
+export async function buildWord(row,identity,answers){return fillWord('/templates/bap-2026.docx',templateData(row,identity,answers))}
+export async function fillWord(path,data){
+ const response=await fetch(path)
+ if(!response.ok)throw Error('Template dokumen belum dapat dimuat.')
  const files=unzipSync(new Uint8Array(await response.arrayBuffer()))
- const data=templateData(row,identity,answers)
  files['word/document.xml']=strToU8(strFromU8(files['word/document.xml']).replace(/\{(\w+)\}/g,(_,key)=>escapeXml(data[key]??'')))
  return new Blob([zipSync(files)],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
 }
@@ -15,14 +15,16 @@ export function download(blob,filename){
 
 // Render the original Word package, then paginate its table rows to A4. A long
 // answer is split to new pages before PDF capture, rather than cropped.
+let previewSequence=0
 export async function renderPreview(blob,target){
+ const className=`interview-doc-${++previewSequence}`
  const {renderAsync}=await import('docx-preview')
  const source=document.createElement('div');source.className='bap-render-source';document.body.appendChild(source)
  try{
-  await renderAsync(blob,source,source,{ignoreHeight:true,ignoreLastRenderedPageBreak:true,breakPages:false,useBase64URL:true})
+  await renderAsync(blob,source,source,{className,ignoreHeight:true,ignoreLastRenderedPageBreak:true,breakPages:false,useBase64URL:true})
   target.replaceChildren()
   source.querySelectorAll('style').forEach(s=>target.appendChild(s.cloneNode(true)))
-  const original=source.querySelector('section.docx'),originalArticle=original?.querySelector('article')
+  const original=source.querySelector(`section.${className}`),originalArticle=original?.querySelector('article')
   if(!originalArticle)throw Error('Pratinjau template belum dapat dibuat.')
   // Word's anchored letterhead can overlap subsequent titles in HTML renderers.
   // Reserve its actual image height so RAHASIA and the BAP title stay visible.
@@ -30,7 +32,7 @@ export async function renderPreview(blob,target){
    const images=[...p.querySelectorAll('img')]
    if(images.length)p.style.minHeight=Math.ceil(Math.max(...images.map(img=>img.getBoundingClientRect().height)))+16+'px'
   }
-  const wrapper=document.createElement('div');wrapper.className='docx-wrapper';target.appendChild(wrapper)
+  const wrapper=document.createElement('div');wrapper.className=`docx-wrapper ${className}-wrapper`;target.appendChild(wrapper)
   let article,page,table
   function newPage(){
    page=original.cloneNode(false);page.classList.add('bap-page');page.style.height='1122.52px';page.style.minHeight='1122.52px';page.style.width='793.7px';page.style.boxSizing='border-box';page.style.overflow='hidden'
