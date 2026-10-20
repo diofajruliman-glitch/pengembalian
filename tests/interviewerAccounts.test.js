@@ -21,7 +21,7 @@ function backend({ existing = false, conflicting = false } = {}) {
     }
     const body = JSON.parse(options.body)
     writes.push({ path, body })
-    return path.includes('/auth/') ? new Response(JSON.stringify({ id: `created-${writes.length}` })) : new Response(null, { status: 204 })
+    return path.includes('/auth/') ? new Response(JSON.stringify({ id: `created-${writes.length}` })) : new Response(null, { status: 201 })
   }
   return { writes, fetcher }
 }

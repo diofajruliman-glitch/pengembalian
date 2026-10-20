@@ -20,7 +20,8 @@ export async function provision({ url, key, password, fetcher = fetch }) {
     })
     // Jangan cetak payload respons atau kredensial pada kegagalan.
     if (!response.ok) throw new Error(`Supabase ${method} ${path.split('?')[0]} gagal (HTTP ${response.status}).`)
-    return response.status === 204 ? null : response.json()
+    const text = await response.text()
+    return text ? JSON.parse(text) : null
   }
 
   // Pastikan migrasi tersedia sebelum membuat akun Auth.
