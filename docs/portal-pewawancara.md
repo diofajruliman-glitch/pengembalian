@@ -158,3 +158,15 @@ Seed hanya mengisi kontak yang kosong pada SPTJM yang belum dikonfirmasi.
 RLS membatasi peserta berdasarkan room; mutasi memeriksa aktor, pemilik
 pemeriksaan, revisi BAP dan revisi SPTJM. Perubahan dicatat pada audit private.
 SPTJM ini tidak mengubah hasil kategorisasi dan belum menghasilkan LHP.
+
+### Draf LHP
+
+Pada peserta terpilih, buka **Draf LHP — analisis, rekomendasi dan unduhan**. Identitas mengikuti BAP; dasar, temuan awal PPATK **2025**, 22 keterangan BAP, perbandingan kategori, serta pertimbangan peninjau menjadi bahan awal. Nominal/frekuensi yang tidak tersedia ditampilkan sebagai belum tersedia, bukan nol. Seluruh bagian dapat direvisi. Rekomendasi tindak lanjut diisi pemeriksa, tanpa pemetaan sanksi otomatis.
+
+Simpan draf, periksa pratinjau, lalu kembali revisi bila diperlukan. Unduhan Word/PDF memerlukan BAP selesai, kategori akhir yang sudah ditetapkan atas revisi BAP terkini, SPTJM terkonfirmasi atas BAP terkini, seluruh bagian lengkap, serta peninjauan isi LHP. Setiap dokumen tetap bertanda **DRAF — BELUM DISAHKAN**; peninjauan aplikasi bukan pengesahan pejabat. Nomor boleh kosong sampai ditetapkan. Template LHP merupakan format kerja modular, bukan template resmi yang diunggah pengguna.
+
+Jika BAP, penilaian atau SPTJM berubah, unduhan dinonaktifkan. Gunakan **Susun ulang dari sumber terbaru** (meminta konfirmasi karena mengganti bagian narasi); nomor, tempat dan rekomendasi dipertahankan. Periksa kembali semuanya sebelum menandai telah ditinjau. Perubahan belum tersimpan ikut memicu peringatan saat menutup/keluar.
+
+Aktivasi database: `supabase/interview-reports.sql` melalui migrasi Supabase. Tabel ber-RLS, pembacaan dan RPC dibatasi room/role, penulisan menggunakan pemeriksaan pemilik wawancara dan revisi sumber, serta tersimpan pada audit privat. Migrasi menyiapkan draf kosong untuk kasus yang ada dan trigger untuk kasus baru. `scripts/prepare_lhp_template.py` membangun ulang template Word. PDF berupa gambar halaman pratinjau A4; tata letak Word dapat berbeda menurut font/editor.
+
+Validasi: `node --test tests/lhp.test.js tests/sptjm.test.js tests/interviewCategories.test.js tests/bapPortal.test.js`, `npm run build`; uji browser mencakup narasi panjang lintas halaman, unduhan Word/PDF, invalidasi revisi, dan tampilan akun pewawancara tanpa mengubah keterangan peserta.

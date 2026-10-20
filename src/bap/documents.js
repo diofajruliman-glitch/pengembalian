@@ -16,7 +16,7 @@ export function download(blob,filename){
 // Render the original Word package, then paginate its table rows to A4. A long
 // answer is split to new pages before PDF capture, rather than cropped.
 let previewSequence=0
-export async function renderPreview(blob,target){
+export async function renderPreview(blob,target,{draftLabel}={}){
  const className=`interview-doc-${++previewSequence}`
  const {renderAsync}=await import('docx-preview')
  const source=document.createElement('div');source.className='bap-render-source';document.body.appendChild(source)
@@ -44,7 +44,20 @@ export async function renderPreview(blob,target){
   for(const block of originalArticle.children){
    if(block.tagName!=='TABLE'){
     table=null;const copy=block.cloneNode(true);article.appendChild(copy)
-    if(overflow()&&article.children.length>1){copy.remove();newPage();article.appendChild(copy)}
+    if(overflow()&&article.children.length>1&&copy.getBoundingClientRect().height<=article.clientHeight){copy.remove();newPage();article.appendChild(copy)}
+    if(overflow()){
+     if(copy.tagName!=='P'||!copy.textContent)throw Error('Blok dokumen terlalu besar untuk halaman.')
+     let remaining=copy.innerText,current=copy
+     current.style.whiteSpace='pre-wrap'
+     while(remaining){
+      let low=0,high=remaining.length
+      while(low<high){const mid=Math.ceil((low+high)/2);current.textContent=remaining.slice(0,mid);if(overflow())high=mid-1;else low=mid}
+      if(!low)throw Error('Paragraf tidak dapat dimuat pada halaman.')
+      const space=remaining.lastIndexOf(' ',low),cut=space>low*.8?space:low
+      current.textContent=remaining.slice(0,cut);remaining=remaining.slice(cut)
+      if(remaining){newPage();current=copy.cloneNode(false);article.appendChild(current)}
+     }
+    }
     continue
    }
    if(block.rows.length<20&&block.getBoundingClientRect().height<article.clientHeight){
@@ -73,7 +86,7 @@ export async function renderPreview(blob,target){
    }
    table=null
   }
-  wrapper.querySelectorAll('.bap-page').forEach((p,i)=>{const footer=document.createElement('div');footer.className='bap-page-number';footer.textContent=`${i+1}`;p.appendChild(footer)})
+  wrapper.querySelectorAll('.bap-page').forEach((p,i)=>{const footer=document.createElement('div');footer.className='bap-page-number';footer.textContent=`${draftLabel?draftLabel+" · ":""}${i+1}`;p.appendChild(footer)})
  }finally{source.remove()}
 }
 export async function buildPdf(target){
