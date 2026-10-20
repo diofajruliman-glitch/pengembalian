@@ -8,7 +8,7 @@ const protectedEntry=entry=>['Di room','Selesai'].includes(entry?.status)
 const displayDate=value=>value?new Date(`${value}T12:00:00+07:00`).toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'medium'}):'Belum dijadwalkan'
 const maskNik=value=>value?`${value.slice(0,4)}••••••••${value.slice(-4)}`:'—'
 
-export default function BnbaPanel({filtered,entries,rooms,editable,query,statusFilter,roomFilter,categoryFilter,heavyStats,onHeavy,currentPage,onFilters,onPage,onManage,onExportFiltered,selectedIds,onSelectionChange,onBulk,onImport,onPackages}){
+export default function BnbaPanel({filtered,entries,rooms,editable,query,statusFilter,roomFilter,categoryFilter,heavyStats,onHeavy,currentPage,onFilters,onPage,onManage,onExportFiltered,selectedIds,onSelectionChange,onBulk,onImport,onPackages,onOpenBap}){
  const pageRows=filtered.slice(currentPage*25,currentPage*25+25)
  const eligible=useMemo(()=>filtered.filter(person=>!protectedEntry(entries[person.nik])),[filtered,entries])
  const pageEligible=pageRows.filter(person=>!protectedEntry(entries[person.nik]))
@@ -53,7 +53,7 @@ export default function BnbaPanel({filtered,entries,rooms,editable,query,statusF
      <td><b>{room?.name||'—'}</b><small>{room?.interviewer||'—'}</small></td>
      <td>{entry?.verified?'Identitas sesuai':'Belum diverifikasi'}<small>{entry?.zoomName||''}</small></td>
      <td><span className={'interview-status status-'+STATUSES.indexOf(statusOf(entry))}>{statusOf(entry)}</span><small>{entry?.notes||''}</small></td>
-     <td><button className="btn secondary" aria-label={`Kelola ${person.nama}`} onClick={()=>onManage(person.nik)}>Kelola</button></td>
+     <td><button className="btn secondary" aria-label={`Kelola ${person.nama}`} onClick={()=>onManage(person.nik)}>Kelola</button>{onOpenBap&&<button className="btn secondary" onClick={()=>onOpenBap(person.nik)}>Buka BAP</button>}</td>
     </tr>
    })}</tbody>
   </table></div>

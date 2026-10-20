@@ -28,6 +28,7 @@ import {activeDatasetId,loadDatabaseDisciplineSnapshot,operationalDisciplineSnap
 const JudolModule=React.lazy(()=>import('./judol/JudolModule.jsx'))
 const LetterManager=React.lazy(()=>import('./letters/LetterManager.jsx'))
 const InterviewMonitor=React.lazy(()=>import('./interviews/InterviewMonitor.jsx'))
+const InterviewerPortal=React.lazy(()=>import('./bap/InterviewerPortal.jsx'))
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -69,7 +70,8 @@ const menuGroups = [
     items: [
       { id: 'kategorisasi-judol', name: 'Kategorisasi Disiplin ASN', icon: ShieldCheck },
       { id: 'surat-tlhp', name: 'Persuratan & Dokumen Resmi', icon: FileText },
-      { id: 'monitoring-wawancara', name: 'Monitoring Wawancara', icon: Users, tag: 'Operasional' }
+      { id: 'monitoring-wawancara', name: 'Monitoring Wawancara', icon: Users, tag: 'Operasional' },
+      { id: 'portal-pewawancara', name: 'Portal & Hasil BAP', icon: FileText }
     ]
   },
   {
@@ -99,7 +101,7 @@ function App(){
  const [masterLoading,setMasterLoading]=useState(false);const [masterLoadError,setMasterLoadError]=useState('')
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
- const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp','#monitoring-wawancara'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
+ const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp','#monitoring-wawancara','#portal-pewawancara'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
  const [judolSnapshot,setJudolSnapshot]=useState(()=>{
   if(configured||!import.meta.env.DEV)return null
   try{
@@ -129,6 +131,9 @@ function App(){
   })
  },[session?.user?.id])
  const demo=!configured && import.meta.env.DEV;const canEdit=demo?true: ['admin','editor'].includes(profile?.role)
+ const isInterviewer=Boolean(session&&profile?.role==='interviewer')
+ const [bapNik,setBapNik]=useState('')
+ const openBap=(nik='')=>{setBapNik(nik);setPage('portal-pewawancara')}
  const canImport=demo||profile?.role==='admin'
  const isAuthorized=demo || Boolean(session && profile && ['admin','editor','viewer'].includes(profile.role))
  const selectedJudolSnapshot=demo||judolAccountId===session?.user?.id?judolSnapshot:null
@@ -179,7 +184,7 @@ function App(){
    const {data,error}=await supabase.from('profiles').select('id,nama,role').eq('id',session.user.id).maybeSingle()
    if(cancelled)return
    if(error)throw error
-   setProfile(data);setLoginError(!data?'Profil akun ini belum tersedia. Minta administrator menetapkan profil/role.':!['admin','editor','viewer'].includes(data.role)?'Role akun tidak valid. Hubungi administrator.':'')
+   setProfile(data);setLoginError(!data?'Profil akun ini belum tersedia. Minta administrator menetapkan profil/role.':!['admin','editor','viewer','interviewer'].includes(data.role)?'Role akun tidak valid. Hubungi administrator.':'')
   }catch(e){if(!cancelled){setProfile(null);setLoginError('Gagal membaca profil: '+notify(e))}}finally{if(!cancelled)setProfileLoading(false)}})()
   return()=>{cancelled=true}
  },[session?.user?.id,profileAttempt])
@@ -378,8 +383,9 @@ function App(){
  if(!configured && !demo)return <div className="loading-page"><ShieldCheck size={35}/><h2>Konfigurasi aplikasi belum lengkap</h2><p>Hubungi administrator. Koneksi Supabase harus dikonfigurasi di Vercel.</p></div>
  if(recovering)return <PasswordReset busy={busy} error={loginError} onSave={saveNewPassword}/>
  if(!demo && (authLoading || profileLoading || (session&&!profile&&!loginError)))return <div className="loading-page"><LoaderCircle className="spin"/><p>Memverifikasi akses...</p></div>
- if(!demo && session&&!isAuthorized)return <div className="auth-screen"><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">VERIFIKASI AKSES</span><h2>Akses belum dapat dimuat</h2><p>Akun masuk: <b>{session.user.email}</b></p><div className="notice red-notice" role="alert">{loginError}</div><button className="btn primary wide" onClick={()=>setProfileAttempt(x=>x+1)}><RefreshCw size={16}/> Coba lagi</button><button className="btn secondary wide" style={{marginTop:12}} onClick={signOut}><LogOut size={16}/> Keluar dan ganti akun</button></div></div></div>
+ if(!demo && session&&!isAuthorized&&!isInterviewer)return <div className="auth-screen"><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">VERIFIKASI AKSES</span><h2>Akses belum dapat dimuat</h2><p>Akun masuk: <b>{session.user.email}</b></p><div className="notice red-notice" role="alert">{loginError}</div><button className="btn primary wide" onClick={()=>setProfileAttempt(x=>x+1)}><RefreshCw size={16}/> Coba lagi</button><button className="btn secondary wide" style={{marginTop:12}} onClick={signOut}><LogOut size={16}/> Keluar dan ganti akun</button></div></div></div>
  if(!demo && !session)return <Login onSignIn={signIn} onReset={resetPassword} resetMessage={resetMessage} busy={busy} loginError={loginError}/>
+ if(isInterviewer)return <React.Suspense fallback={<div className="loading-page">Memuat portal pewawancara…</div>}><InterviewerPortal key={session.user.id} client={supabase} profile={profile} userId={session.user.id} onSignOut={signOut}/></React.Suspense>
  return <div className="shell">
    <aside className={'sidebar '+(navOpen?'is-open':'')}>
     <div className="brand tlhp-brand"><div className="brand-symbol"><ShieldCheck size={23}/></div><div><b>Pokja SD Tim TLHP</b><small>Monitoring Tindak Lanjut</small></div><button className="mobile-close icon-btn" onClick={()=>setNavOpen(false)}><X size={20}/></button></div>
@@ -417,9 +423,10 @@ function App(){
     {page==='impor-master'&&canImport&&<ImportPreview metadataClient={profile?.role==='admin'?sourceMetadataClient:null} storedSnapshot={profile?.role==='admin'?masterSnapshot:null} sdmClient={profile?.role==='admin'?sdmStatusClient:null} stagingClient={profile?.role==='admin'?importTestClient:null} onMasterCommitted={refreshCommittedMaster} onSnapshot={data=>{setRecoverySnapshot(data);activateMaster(data);go('master-progress')}}/>}
     {page==='master-progress'&&<RecoveryWorkspace adjustmentClient={supabase} client={importTestClient} snapshot={recoverySnapshot} onImport={canImport?()=>go('impor-master'):undefined} onMasterLoaded={activateMaster}/>}
     {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
-    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={selectedJudolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase} onOpenInterviews={()=>go('monitoring-wawancara')}/></React.Suspense>}
+    {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={selectedJudolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase} onOpenInterviews={()=>go('monitoring-wawancara')} onOpenBap={openBap}/></React.Suspense>}
     {!demo&&['monitoring-wawancara','surat-tlhp'].includes(page)&&!operationalJudolSnapshot&&<div className="notice amber-notice" role="status"><Info size={17}/><span>{judolSourceLoading?'Memverifikasi populasi Disiplin ASN dari database…':judolSourceError||'BNBA dan penerima surat Disiplin ASN hanya memakai versi tersimpan di database. Pilih dataset online di Kategorisasi Disiplin ASN; draft Excel belum digunakan.'}</span>{judolSourceError&&<button className="btn secondary" onClick={()=>setJudolSourceAttempt(value=>value+1)}>Coba verifikasi lagi</button>}</div>}
-    {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={operationalJudolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')}/></React.Suspense>}
+    {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={operationalJudolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')} supabase={supabase} onOpenBap={openBap} isAdmin={profile?.role==='admin'}/></React.Suspense>}
+    {page==='portal-pewawancara'&&(demo?<p className="notice amber-notice">Portal BAP memerlukan login dan database aktif.</p>:<React.Suspense fallback={<p>Memuat portal BAP…</p>}><InterviewerPortal key={session.user.id} client={supabase} profile={profile} userId={session.user.id} initialNik={bapNik}/></React.Suspense>)}
     {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager databaseOnly={!demo} cases={cases} judolSnapshot={operationalJudolSnapshot} onJudolSnapshot={updateJudolSnapshot} onOpenJudolSource={()=>go('kategorisasi-judol')} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}

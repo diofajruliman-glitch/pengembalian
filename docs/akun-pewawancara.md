@@ -25,8 +25,7 @@ yang sudah ada. Konfirmasi administratif bukan bukti kepemilikan mailbox.
 Kegagalan dapat meninggalkan sebagian akun; jalankan ulang untuk melanjutkan.
 Konflik peran atau penugasan yang sudah ada menghentikan proses sebelum mutasi.
 
-Tahap ini hanya menyiapkan identitas dan penugasan database. Frontend saat ini
-belum menerima peran `interviewer`; portal, penyimpanan bersama BAP, pratinjau,
-dan unduhan akan ditambahkan berikutnya. Jangan memberikan peran editor/admin
+Frontend menerima peran `interviewer` melalui portal khusus; lihat
+[panduan portal](portal-pewawancara.md). Jangan memberikan peran editor/admin
 sebagai jalan pintas. Kebijakan data modul yang ada tetap membatasi akses
 interviewer; tabel penugasan hanya dapat dibaca akun sendiri dan admin.

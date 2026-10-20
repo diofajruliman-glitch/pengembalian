@@ -8,6 +8,7 @@ import {getRoutingCategory,isHeavyPerson,isSpecialistRoom,specialistRooms,getRou
 import {BulkDistributionDialog,ScheduleImportDialog,InterviewerPackagesDialog} from './DistributionTools.jsx'
 import {OFFICIAL_POPULATION_1057,OFFICIAL_ROOMS_19,OFFICIAL_SETTINGS_2026,createOfficialWorkspace} from './officialSchedule1057.js'
 import './interviews.css'
+import SharedProgress from '../bap/SharedProgress.jsx'
 
 const DEFAULT_SETTINGS=OFFICIAL_SETTINGS_2026
 const number=value=>Number(value||0).toLocaleString('id-ID')
@@ -34,7 +35,7 @@ function Dialog({title,onClose,children}){
  return createPortal(<dialog ref={ref} role="dialog" className="interview-dialog" aria-label={title} onCancel={event=>{event.preventDefault();onClose()}}><div className="interview-dialog-heading"><h2>{title}</h2><button className="btn secondary" type="button" onClick={onClose}>Tutup</button></div>{children}</dialog>,document.body)
 }
 
-export default function InterviewMonitor({snapshot,canEdit=false,accountId='demo',onOpenSource}){
+export default function InterviewMonitor({snapshot,canEdit=false,accountId='demo',onOpenSource,supabase,onOpenBap,isAdmin=false}){
  const population=useMemo(()=>{
   const list=selectPopulation(snapshot)
   return list.length?list:OFFICIAL_POPULATION_1057
@@ -43,11 +44,11 @@ export default function InterviewMonitor({snapshot,canEdit=false,accountId='demo
  return <div className="interview-module">
   <div className="page-title"><div><span className="eyebrow">PELAKSANAAN WAWANCARA · DIO</span><h1>Monitoring Wawancara</h1><p>BNBA, antrean Zoom, dan kendali breakout room dalam satu kertas kerja.</p></div><span className="interview-draft">Jadwal Resmi 26–29 Okt 2026</span></div>
   <div className="notice blue-notice"><Info size={17}/><span>Jadwal Resmi Pelaksanaan Wawancara 26–29 Oktober 2026 (1.057 ASN). 19 Breakout Room, 14 sesi per hari @ 30 menit (08.30–12.00 &amp; 13.00–16.30 WIB). Seluruh kategori (Berat/Sedang/Ringan) telah didistribusikan merata ke 19 room.</span></div>
-  {!population.length?<section className="panel interview-empty"><Users size={32}/><h2>Hubungkan daftar ASN Terbukti</h2><p>Buka atau muat dataset di Kategorisasi Disiplin ASN. Daftar wawancara otomatis memakai seluruh status Terbukti dari versi aktif, tanpa perlu mengunggah ulang BNBA.</p><button className="btn primary" onClick={onOpenSource}>Buka Kategorisasi Disiplin ASN</button></section>:<InterviewWorkspace key={`${accountId}:${datasetKey}`} population={population} snapshot={snapshot} datasetKey={datasetKey} accountId={accountId} canEdit={canEdit} onOpenSource={onOpenSource}/>}
+  {!population.length?<section className="panel interview-empty"><Users size={32}/><h2>Hubungkan daftar ASN Terbukti</h2><p>Buka atau muat dataset di Kategorisasi Disiplin ASN. Daftar wawancara otomatis memakai seluruh status Terbukti dari versi aktif, tanpa perlu mengunggah ulang BNBA.</p><button className="btn primary" onClick={onOpenSource}>Buka Kategorisasi Disiplin ASN</button></section>:<InterviewWorkspace key={`${accountId}:${datasetKey}`} population={population} snapshot={snapshot} datasetKey={datasetKey} accountId={accountId} canEdit={canEdit} onOpenSource={onOpenSource} supabase={supabase} onOpenBap={onOpenBap} isAdmin={isAdmin}/>}
  </div>
 }
 
-function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,onOpenSource}){
+function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,onOpenSource,supabase,onOpenBap,isAdmin}){
  const [initial]=useState(()=>{
   try{
    const loaded=loadWorkspace(window.localStorage,accountId,datasetKey)
@@ -177,6 +178,11 @@ function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,on
  const orphanCount=Object.keys(entries).filter(nik=>!populationById.has(nik)).length
  function filters(patch){if('category'in patch)setCategoryFilter(patch.category);if('query'in patch)setQuery(patch.query);if('status'in patch)setStatusFilter(patch.status);if('room'in patch)setRoomFilter(patch.room);if('date'in patch)setDateFilter(patch.date);setPage(0)}
  return <>
+  {supabase&&onOpenBap&&<SharedProgress client={supabase} onOpenBap={onOpenBap} entries={entries} isAdmin={isAdmin} onLoadSchedule={rows=>{
+   const next={...workspaceRef.current.entries}
+   for(const row of rows){if(!populationById.has(row.nik))continue;next[row.nik]={...next[row.nik],nik:row.nik,date:row.scheduled_date,time:row.scheduled_time.slice(0,5),roomId:row.room_id,duration:30,session:next[row.nik]?.session||1,status:row.status==='Selesai'?'Selesai':row.status==='Terjadwal'?'Terjadwal':'Di room',verified:Boolean(row.started_at),startedAt:row.started_at||'',finishedAt:row.finished_at||''}}
+   commit({entries:next},'Jadwal dan progres BAP dari database dimuat ke kertas kerja lokal.')
+  }}/>}
   <section className="panel interview-source"><div><span className="eyebrow">SUMBER BNBA AKTIF</span><h2>{number(population.length)} ASN Terbukti</h2><p>{snapshot?.name||snapshot?.filename||'Jadwal Resmi 1.057 ASN (26–29 Okt 2026)'} · versi {snapshot?.versions?.[snapshot?.active]?.number||1}. Seluruh daftar Terbukti digunakan, terlepas dari filter analisis.</p>{population.length!==1057&&<p className="interview-warning">Acuan Anda 1.057 peserta; sumber aktif saat ini berisi {number(population.length)}. Periksa versi dataset sebelum menyusun jadwal.</p>}</div><button className="btn secondary" onClick={onOpenSource}>Lihat sumber</button></section>
   <div className="notice demo-notice"><Info size={17}/><span><b>Kertas kerja lokal.</b> Jadwal dan catatan disimpan di browser serta akun ini. Gunakan cadangan JSON sebelum pindah perangkat atau membersihkan browser. Perpindahan peserta dan Broadcast tetap dilakukan melalui Zoom.</span></div>
   {loadError&&<div className="notice red-notice" role="alert">{loadError} Perubahan dikunci agar catatan tersimpan tidak tertimpa.</div>}
@@ -204,7 +210,7 @@ function InterviewWorkspace({population,snapshot,datasetKey,accountId,canEdit,on
    })}</div>
    <section className="panel interview-broadcast"><h2>Pengingat untuk seluruh room</h2><p>{broadcastText}</p><button className="btn secondary" onClick={async()=>{try{await navigator.clipboard.writeText(broadcastText);setMessage('Teks pengingat disalin. Tempel melalui Broadcast di Zoom.')}catch{setError('Teks belum dapat disalin. Pilih dan salin teks pengingat secara manual.')}}}>Salin teks Broadcast</button></section>
   </>}
-  {tab==='bnba'&&<BnbaPanel filtered={filtered} entries={entries} rooms={rooms} editable={editable} query={query} statusFilter={statusFilter} roomFilter={roomFilter} currentPage={currentPage} onFilters={filters} onPage={setPage} onManage={setSelected} categoryFilter={categoryFilter} heavyStats={{total:heavyPeople.length,pending:heavyPending.length,conflicts:routingConflicts.length,locked:routingConflicts.filter(item=>item.readOnly).length,rooms:specialistRooms(rooms).length,perDay:settings.perDay}} onHeavy={distributeHeavy} onExportFiltered={()=>download(monitoringCsv(filtered,entries,rooms),`wawancara-sesuai-filter-${today()}.csv`,'text/csv;charset=utf-8')} selectedIds={selectedIds} onSelectionChange={setSelectedIds} onBulk={()=>setDistributionDialog('bulk')} onImport={()=>setDistributionDialog('import')} onPackages={()=>setDistributionDialog('packages')}/>}
+  {tab==='bnba'&&<BnbaPanel onOpenBap={supabase?onOpenBap:undefined} filtered={filtered} entries={entries} rooms={rooms} editable={editable} query={query} statusFilter={statusFilter} roomFilter={roomFilter} currentPage={currentPage} onFilters={filters} onPage={setPage} onManage={setSelected} categoryFilter={categoryFilter} heavyStats={{total:heavyPeople.length,pending:heavyPending.length,conflicts:routingConflicts.length,locked:routingConflicts.filter(item=>item.readOnly).length,rooms:specialistRooms(rooms).length,perDay:settings.perDay}} onHeavy={distributeHeavy} onExportFiltered={()=>download(monitoringCsv(filtered,entries,rooms),`wawancara-sesuai-filter-${today()}.csv`,'text/csv;charset=utf-8')} selectedIds={selectedIds} onSelectionChange={setSelectedIds} onBulk={()=>setDistributionDialog('bulk')} onImport={()=>setDistributionDialog('import')} onPackages={()=>setDistributionDialog('packages')}/>}
   {tab==='settings'&&<>
    <section className="panel"><h2>Susun draft jadwal</h2><p>14 responden <b>per room per hari</b> (durasi 30 menit). Hanya peserta yang belum memiliki penempatan disusun otomatis. Peserta selesai, terkendala, dan perlu jadwal ulang dikelola melalui rincian.</p><form onSubmit={previewSchedule} className="interview-settings" key={`settings-${workspace.revision}`}><label>Tanggal mulai<input type="date" name="startDate" required defaultValue={settings.startDate} disabled={!editable}/></label><label>Mulai pukul (WIB)<input type="time" name="startTime" required defaultValue={settings.startTime} disabled={!editable}/></label><label>Durasi wawancara (menit)<input type="number" name="duration" min="1" max="240" required defaultValue={settings.duration} disabled={!editable}/></label><label>Jeda pergantian (menit)<input type="number" name="gap" min="0" max="120" required defaultValue={settings.gap} disabled={!editable}/></label><label>Responden / room / hari<input type="number" name="perDay" min="1" max="50" required defaultValue={settings.perDay} disabled={!editable}/></label><label className="interview-checkbox"><input type="checkbox" name="skipWeekends" defaultChecked={settings.skipWeekends} disabled={!editable}/> Lewati Sabtu & Minggu</label><div className="interview-form-actions"><button className="btn primary" disabled={!editable}>Pratinjau jadwal</button><span>{rooms.filter(room=>room.enabled).length} room aktif · kapasitas acuan {number(rooms.filter(room=>room.enabled).length*settings.perDay)} / hari</span></div></form></section>
    <RoomSettings rooms={rooms} entries={entries} editable={editable} onSave={next=>commit({rooms:next},'Draft penugasan room disimpan di browser.')}/>
