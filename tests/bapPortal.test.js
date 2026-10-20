@@ -5,6 +5,35 @@ import {PGlite} from '@electric-sql/pglite'
 import {dateWords,missingFields,initialIdentity,templateData,QUESTIONS} from '../src/bap/model.js'
 import {buildWord} from '../src/bap/documents.js'
 import {unzipSync,strFromU8} from 'fflate'
+import {positions,positionBackfillSql} from '../scripts/prepare_interview_positions.mjs'
+import {lookupNipPosition} from '../src/letters/nipPositionReference.js'
+
+test('all 1057 BAP position mappings match the letter reference exactly',()=>{
+ assert.equal(positions.length,1057)
+ assert.equal(new Set(positions.map(p=>p.nip)).size,1057)
+ for(const p of positions){assert.equal(p.pangkat,lookupNipPosition(p.nip).pangkat);assert.equal(p.jabatan,lookupNipPosition(p.nip).jabatan)}
+ const person={pangkat:positions[0].pangkat,jabatan:positions[0].jabatan}
+ assert.equal(initialIdentity({person,identity_details:{pangkat:'',jabatan:''}}).pangkat,person.pangkat)
+ assert.equal(initialIdentity({person,identity_details:{jabatan:'Koreksi terverifikasi'}}).jabatan,'Koreksi terverifikasi')
+})
+
+test('position backfill fills gaps and preserves finalized BAP, corrections and answers',async()=>{
+ const db=new PGlite()
+ try{
+  await db.exec("create table interview_cases(nik text,person jsonb,status text,revision int default 1,updated_at timestamptz default now(),identity_details jsonb,answers jsonb)")
+  const a=positions[0],b=positions[1]
+  for(const [nik,nip,status,rank] of [['1',a.nip,'Terjadwal',''],['2',b.nip,'Draf','Pangkat terkoreksi'],['3',a.nip,'Selesai',''],['4','000000000000000000','Terjadwal','']]){
+   await db.query('insert into interview_cases(nik,person,status,identity_details,answers) values($1,$2,$3,$4,$5)',[nik,JSON.stringify({nip,pangkat:rank,jabatan:''}),status,'{"jabatan":"Koreksi pemeriksa"}','{"1":"Jawaban asli"}'])
+  }
+  const result=await db.query(positionBackfillSql());assert.equal(Number(result.rows[0].updated_participants),2)
+  const {rows}=await db.query('select * from interview_cases order by nik')
+  assert.equal(rows[0].person.pangkat,a.pangkat);assert.equal(rows[0].person.jabatan,a.jabatan)
+  assert.equal(rows[1].person.pangkat,'Pangkat terkoreksi');assert.equal(rows[1].person.jabatan,b.jabatan)
+  assert.equal(rows[2].person.pangkat,'');assert.equal(rows[3].person.pangkat,'')
+  assert.equal(rows[0].identity_details.jabatan,'Koreksi pemeriksa');assert.equal(rows[0].answers['1'],'Jawaban asli')
+  assert.equal(Number((await db.query(positionBackfillSql())).rows[0].updated_participants),0)
+ }finally{await db.close()}
+})
 
 test('Word preserves the supplied package and safely inserts all answers',async()=>{
  const template=await readFile(new URL('../public/templates/bap-2026.docx',import.meta.url))

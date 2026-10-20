@@ -17,7 +17,12 @@ export function dateWords(timestamp){
  const parts=Object.fromEntries(new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',weekday:'long',day:'numeric',month:'long',year:'numeric'}).formatToParts(date).map(p=>[p.type,p.value]))
  return {hari:parts.weekday,tanggal_huruf:terbilang(Number(parts.day)),bulan:parts.month,tahun_huruf:terbilang(Number(parts.year)).replace(/\b\w/g,c=>c.toUpperCase()),tanggal_angka:parts.day,tahun_angka:parts.year}
 }
-export function initialIdentity(row){return {pangkat:row.person.pangkat||'',jabatan:row.person.jabatan||'',unitKerja:row.person.unitKerja||'Direktorat Perlindungan Sosial Non Kebencanaan',nomorSurat:row.person.nomorSurat||'',tanggalSurat:row.person.tanggalSurat||'2026-10-15',kota:'Jakarta',...row.identity_details}}
+export function initialIdentity(row){
+ const details=row.identity_details||{}
+ return {unitKerja:row.person.unitKerja||'Direktorat Perlindungan Sosial Non Kebencanaan',nomorSurat:row.person.nomorSurat||'',tanggalSurat:row.person.tanggalSurat||'2026-10-15',kota:'Jakarta',...details,
+  pangkat:details.pangkat?.trim()?details.pangkat:row.person.pangkat||'',
+  jabatan:details.jabatan?.trim()?details.jabatan:row.person.jabatan||''}
+}
 export function missingFields(row,identity,answers){
  const missing=[]
  for(const [key,label] of [['nama','Nama'],['nip','NIP']])if(!row.person[key]?.trim())missing.push(label)

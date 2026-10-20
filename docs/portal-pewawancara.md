@@ -12,8 +12,10 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
    mulai aktual satu kali. Tanggal BAP dihitung dalam WIB dan tidak berubah
    ketika dokumen diunduh di hari lain.
 3. Lengkapi administrasi dan 22 jawaban. Nama/NIP tidak ditulis ulang.
-   Pangkat/jabatan kosong ditandai untuk diverifikasi dan dilengkapi; aplikasi
-   tidak mengasumsikan pangkat atau jabatan yang tidak ada pada sumber.
+   Pangkat dan jabatan diambil dari referensi NIP yang sama dengan surat panggilan
+   pada Persuratan & Dokumen Resmi (`nipPositionReference.js`). Koreksi pemeriksa
+   yang sudah diisi tetap dipertahankan. Data yang tidak cocok ditandai untuk
+   diverifikasi dan dilengkapi.
 4. Jawaban disimpan ke database setiap empat detik setelah perubahan. Tunggu
    konfirmasi tersimpan sebelum menutup. Gangguan koneksi ditampilkan dengan
    jelas; jangan tutup halaman sebelum penyimpanan berhasil atau menyalin jawaban.
@@ -79,3 +81,14 @@ Pengujian browser mencakup antrean, mulai pemeriksaan, pengisian, simpan otomati
 pratinjau enam halaman dengan jawaban panjang, revisi, unduhan Word/PDF, tampilan
 ponsel, login nyata, pembatasan room, dan logout. Data jawaban untuk pengujian
 browser menggunakan backend simulasi, sehingga tidak mengisi BAP peserta riil.
+
+Untuk mengisi pangkat/jabatan yang masih kosong pada data portal lama:
+
+```bash
+node scripts/prepare_interview_positions.mjs > /tmp/interview-positions.sql
+```
+
+Tinjau dan jalankan SQL tersebut. Pencocokan memakai NIP, hanya mengisi kolom
+sumber yang kosong, serta mempertahankan jawaban, koreksi pemeriksa, dan BAP yang
+sudah difinalisasi. Akun pewawancara menerima identitas melalui database sesuai
+room; seluruh referensi NIP tidak dimuat ke frontend portal.
