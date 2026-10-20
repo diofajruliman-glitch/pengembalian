@@ -24,8 +24,8 @@ test('SPTJM Word uses the original package and fills identity and declaration',a
  const original=await readFile(new URL('../public/templates/sptjm-2026.docx',import.meta.url));const previous=globalThis.fetch;globalThis.fetch=async()=>new Response(original)
  try{
   const blob=await fillWord('/templates/sptjm-2026.docx',statementTemplateData(row,details));const files=unzipSync(new Uint8Array(await blob.arrayBuffer()));const xml=strFromU8(files['word/document.xml'])
-  for(const text of ['Peserta Uji','MENGAKUI','Januari tahun 2024','Februari tahun 2025','081234567890','materai'])assert.ok(xml.includes(text),text)
-  assert.ok(!/\{\w+\}/.test(xml));assert.deepEqual(Object.keys(files).sort(),Object.keys(unzipSync(original)).sort())
+  for(const text of ['Peserta Uji','MENGAKUI','Januari tahun 2024','Februari tahun 2025','081234567890','materai','(PPATK) Tahun 2025','PPATK Tahun 2025'])assert.ok(xml.includes(text),text)
+  assert.ok(!xml.includes('PPATK Tahun 2026'));assert.ok(!xml.includes('(PPATK) Tahun 2026'));assert.ok(!/\{\w+\}/.test(xml));assert.deepEqual(Object.keys(files).sort(),Object.keys(unzipSync(original)).sort())
  }finally{globalThis.fetch=previous}
 })
 

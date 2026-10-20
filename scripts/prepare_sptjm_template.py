@@ -21,7 +21,7 @@ with ZipFile(sys.argv[1]) as source:
     for node in p.xpath('.//w:t',namespaces=NS):
      if '…' in (node.text or ''):node.text=': {'+key+'}'
   if text.startswith('Berdasarkan Temuan'):
-   settext(p,'Berdasarkan Temuan Pusat Pelaporan dan Analisis Transaksi Keuangan (PPATK) Tahun 2026 terkait dengan dugaan aktivitas Judi online yang dilakukan oleh ASN PPPK di lingkungan Direktorat Perlindungan Sosial Non Kebencanaan (Dit. PSNK), dengan ini saya menyatakan {pengakuan} melakukan aktifitas Judi online sebagaimana data temuan PPATK Tahun 2026. {periode} {lampiran}')
+   settext(p,'Berdasarkan Temuan Pusat Pelaporan dan Analisis Transaksi Keuangan (PPATK) Tahun 2025 terkait dengan dugaan aktivitas Judi online yang dilakukan oleh ASN PPPK di lingkungan Direktorat Perlindungan Sosial Non Kebencanaan (Dit. PSNK), dengan ini saya menyatakan {pengakuan} melakukan aktifitas Judi online sebagaimana data temuan PPATK Tahun 2025. {periode} {lampiran}')
   if text=='Tempat tanggal, bulan, tahun':settext(p,'{kota}, {tanggal_angka} {bulan} {tahun_angka}')
   if text=='--------------------------------':settext(p,'{nama}')
   if text.startswith('NIP. '):settext(p,'NIP. {nip}')
