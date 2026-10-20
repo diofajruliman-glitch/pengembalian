@@ -17,16 +17,17 @@ test('official schedule loads exactly 1057 participants and 19 breakout rooms', 
   assert.equal(OFFICIAL_INTERVIEWERS_19.length, 19)
 
   // Verify room interviewers match user prompt
-  assert.equal(OFFICIAL_ROOMS_19[0].interviewer, 'PSNK 1')
-  assert.equal(OFFICIAL_ROOMS_19[1].interviewer, 'PSNK 2')
-  assert.equal(OFFICIAL_ROOMS_19[2].interviewer, 'PSNK 3')
-  assert.equal(OFFICIAL_ROOMS_19[3].interviewer, 'PSNK 4')
-  assert.equal(OFFICIAL_ROOMS_19[4].interviewer, 'Sekretariat Linjamsos')
+  assert.equal(OFFICIAL_ROOMS_19[0].interviewer, 'Sekretariat Linjamsos')
+  assert.equal(OFFICIAL_ROOMS_19[1].interviewer, 'Sekretariat Linjamsos 2')
+  assert.equal(OFFICIAL_ROOMS_19[2].interviewer, 'TU 1')
+  assert.equal(OFFICIAL_ROOMS_19[3].interviewer, 'TU 2')
+  assert.equal(OFFICIAL_ROOMS_19[4].interviewer, 'Leo Suta')
   assert.equal(OFFICIAL_ROOMS_19[5].interviewer, 'Indra Maulana')
-  assert.equal(OFFICIAL_ROOMS_19[16].interviewer, 'TU 1')
-  assert.equal(OFFICIAL_ROOMS_19[17].interviewer, 'TU 2')
+  assert.equal(OFFICIAL_ROOMS_19[15].interviewer, 'Astri')
+  assert.equal(OFFICIAL_ROOMS_19[16].interviewer, 'Novie')
+  assert.equal(OFFICIAL_ROOMS_19[17].interviewer, 'Dede Soleh')
   assert.equal(OFFICIAL_ROOMS_19[18].interviewer, 'Abi Setiadi Halim')
-  assert.equal(OFFICIAL_ROOMS_19[0].trafficOfficer, 'Dio')
+  assert.equal(OFFICIAL_ROOMS_19[0].trafficOfficer, 'Dio Fajrul Iman')
 })
 
 test('official settings conform to 26–29 October 2026 execution window', () => {

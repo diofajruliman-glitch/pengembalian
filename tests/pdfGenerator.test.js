@@ -784,7 +784,7 @@ test('lookupJadwalWawancara1057 dataset accuracy and NIP matching test', async (
   assert.equal(sahu.tanggal, '26 Oktober 2026')
   assert.equal(sahu.jam, '08.30–09.00 WIB')
   assert.equal(sahu.room, 'Room 1')
-  assert.equal(sahu.petugas, 'PSNK 1')
+  assert.equal(sahu.petugas, 'Sekretariat Linjamsos')
 
   // 2. Second recipient: Hermawan Kurnia
   const herm = lookupJadwalWawancara1057('198807152025211094')

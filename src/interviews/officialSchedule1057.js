@@ -6,11 +6,11 @@ export const OFFICIAL_POPULATION_1057 = REAL_DISCIPLINE_DATA.filter(r => r.hasil
 
 // 19 Pewawancara resmi sesuai hasil alokasi jadwal 26–29 Oktober 2026
 export const OFFICIAL_INTERVIEWERS_19 = [
-  'PSNK 1',
-  'PSNK 2',
-  'PSNK 3',
-  'PSNK 4',
   'Sekretariat Linjamsos',
+  'Sekretariat Linjamsos 2',
+  'TU 1',
+  'TU 2',
+  'Leo Suta',
   'Indra Maulana',
   'Achmad Mustaqim',
   'Tasria Efrizka',
@@ -21,9 +21,9 @@ export const OFFICIAL_INTERVIEWERS_19 = [
   'Prabasari',
   'Wawan Soedarso',
   'Ivo Nilasari',
-  'Alfi Sudirasmita',
-  'TU 1',
-  'TU 2',
+  'Astri',
+  'Novie',
+  'Dede Soleh',
   'Abi Setiadi Halim'
 ]
 
@@ -33,7 +33,7 @@ export const OFFICIAL_ROOMS_19 = OFFICIAL_INTERVIEWERS_19.map((interviewer, idx)
   name: `Room ${idx + 1}`,
   interviewer,
   crossInterviewer: '',
-  trafficOfficer: idx < 9 ? 'Dio' : '',
+  trafficOfficer: 'Dio Fajrul Iman',
   enabled: true
 }))
 
@@ -112,7 +112,12 @@ export function buildOfficialEntries(population = OFFICIAL_POPULATION_1057) {
       status: 'Terjadwal',
       verified: false,
       zoomName: '',
-      notes: item.linkZoom ? `Link Zoom: ${item.linkZoom}` : '',
+      notes: [
+        item.nomorSurat ? `Surat: ${item.nomorSurat}` : '',
+        item.noHp ? `HP: ${item.noHp}` : '',
+        item.linkZoom ? `Link Zoom: ${item.linkZoom}` : '',
+        item.catatan ? item.catatan : ''
+      ].filter(Boolean).join(' · '),
       leader: '',
       startedAt: '',
       finishedAt: '',
