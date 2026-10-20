@@ -92,3 +92,33 @@ Tinjau dan jalankan SQL tersebut. Pencocokan memakai NIP, hanya mengisi kolom
 sumber yang kosong, serta mempertahankan jawaban, koreksi pemeriksa, dan BAP yang
 sudah difinalisasi. Akun pewawancara menerima identitas melalui database sesuai
 room; seluruh referensi NIP tidak dimuat ke frontend portal.
+
+## Perbandingan kategori sebelum dan sesudah wawancara
+
+Buka peserta lalu perluas **Perbandingan kategori awal dan hasil wawancara**.
+Panel menampilkan kategori awal setelah ASN, kategori historis, status sumber,
+nama dataset dan versinya. Snapshot awal diambil dari dataset asal peserta dan
+tersimpan terpisah; jawaban BAP maupun usulan tidak menimpa data ini.
+
+Pewawancara dapat memilih usulan kategori, menuliskan alasan dan hasil verifikasi
+bukti, serta merujuk nomor jawaban BAP yang telah tersimpan. Draf dapat dibuat
+selama wawancara; pengajuan kepada admin memerlukan BAP yang sudah difinalisasi,
+alasan minimal 20 karakter, kategori yang dipilih, dan setidaknya satu jawaban
+pendukung. Tidak ada kesimpulan atau sanksi yang dipilih otomatis dari pengakuan,
+penyangkalan, nominal transaksi, atau kondisi ekonomi.
+
+Status penilaian: **Belum diisi → Draf / Perlu pendalaman → Diajukan → Ditetapkan**.
+Admin dapat menetapkan kategori akhir yang berbeda dari usulan dengan alasan,
+atau mengembalikannya untuk pendalaman. Editor/pewawancara tidak dapat menetapkan
+kategori akhir; viewer hanya membaca. Riwayat menampilkan 15 perubahan terakhir,
+nama petugas, waktu WIB, kategori, dan pertimbangan. Seluruh peristiwa tersimpan
+pada tabel riwayat tanpa izin ubah/hapus langsung dari aplikasi.
+
+Penilaian merujuk nomor revisi BAP. Jika BAP dibuka atau diubah, keputusan lama
+langsung ditampilkan sebagai **Perlu ditinjau ulang**, bukan kategori akhir aktif.
+Pemeriksa perlu meninjau dan mengajukan kembali berdasarkan BAP terbaru. Hasil
+ini belum mengubah kategori awal dalam modul analisis atau menghasilkan LHP.
+
+Aktivasi tambahan: `supabase/interview-categories.sql` (sudah diterapkan pada
+project yang terhubung). Jalankan sekali setelah skema portal pada instalasi
+baru. Trigger menangkap kategori awal untuk peserta baru berikutnya.
