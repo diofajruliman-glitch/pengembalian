@@ -1210,6 +1210,134 @@ test('signature and stamp coordinate & spacing validation test (A4 single page g
   assert.ok(lastTembusanItemY < 282, `Last tembusan (${lastTembusanItemY}mm) must fit within A4 297mm height`)
 })
 
+test('surat panggilan numbered layout (1 and 2) and flush-indented sections matching uploaded image', () => {
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4',
+    compress: true
+  })
+
+  let curY = 56
+  // Item 1
+  doc.setFont('helvetica', 'normal')
+  doc.setFontSize(12)
+  doc.text('1.', 14, curY)
+  const opening = 'Bersama ini diminta dengan hormat kehadiran Saudara:'
+  const splitOpening = doc.splitTextToSize(opening, 176)
+  doc.text(splitOpening, 20, curY)
+  curY += (splitOpening.length * 4.8) + 2
+
+  // Recipient table (indented at 20mm)
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 20, right: 14 },
+    body: [
+      ['Nama', ':', 'Dina Mariana Br Sembiring'],
+      ['NIP/NI PPPK', ':', '19860427 202521 2 048'],
+      ['Pangkat', ':', 'IX'],
+      ['Jabatan', ':', 'Penata Layanan Operasional'],
+      ['Unit Kerja', ':', 'Direktorat Perlindungan Sosial Non Kebencanaan']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+    columnStyles: { 0: { cellWidth: 44 }, 1: { cellWidth: 4, halign: 'center' }, 2: { cellWidth: 'auto' } }
+  })
+  curY = doc.lastAutoTable.finalY + 3.5
+
+  // Untuk menghadap kepada (indented at 20mm)
+  doc.text('Untuk menghadap kepada:', 20, curY)
+  curY += 3.5
+
+  // Official table (indented at 20mm)
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 20, right: 14 },
+    body: [
+      ['Nama', ':', 'Faisal'],
+      ['NIP', ':', '19761106 200502 1 001'],
+      ['Pangkat', ':', 'IV/c'],
+      ['Jabatan', ':', 'Direktur Perlindungan Sosial Non Kebencanaan']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+    columnStyles: { 0: { cellWidth: 44 }, 1: { cellWidth: 4, halign: 'center' }, 2: { cellWidth: 'auto' } }
+  })
+  curY = doc.lastAutoTable.finalY + 3.5
+
+  // Pada : (indented at 20mm)
+  doc.text('Pada :', 20, curY)
+  curY += 3.5
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 20, right: 14 },
+    body: [
+      ['Hari', ':', 'Senin'],
+      ['Tanggal', ':', '26 Oktober 2026'],
+      ['Jam', ':', '08.30 WIB'],
+      ['Link Zoom', ':', 'https://zoom.us/j/kemsos-psnk-tlhp (Passcode: PSNK2026)']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+    columnStyles: { 0: { cellWidth: 44 }, 1: { cellWidth: 4, halign: 'center' }, 2: { cellWidth: 'auto' } }
+  })
+  curY = doc.lastAutoTable.finalY + 2.5
+
+  // Dan & Pada sesi : (indented at 20mm)
+  doc.text('Dan', 20, curY)
+  curY += 4.5
+  doc.text('Pada sesi :', 20, curY)
+  curY += 3.5
+  autoTable(doc, {
+    startY: curY,
+    margin: { left: 20, right: 14 },
+    body: [
+      ['Hari', ':', 'Senin'],
+      ['Tanggal', ':', '26 Oktober 2026'],
+      ['Jam', ':', '08.30–12.00 WIB (Pagi · Room 2)'],
+      ['Link zoom', ':', 'https://zoom.us/j/kemsos-psnk-breakout (Passcode: PSNK2026)']
+    ],
+    theme: 'plain',
+    styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 } },
+    columnStyles: { 0: { cellWidth: 44 }, 1: { cellWidth: 4, halign: 'center' }, 2: { cellWidth: 'auto' } }
+  })
+  curY = doc.lastAutoTable.finalY + 3.5
+
+  // Agenda Permensos (indented at 20mm)
+  const agenda = 'Untuk diperiksa, sehubungan dengan dugaan pelanggaran disiplin Peraturan Menteri Sosial Nomor 5 Tahun 2023 tentang Disiplin Aparatur Sipil Negara di lingkungan Kementerian Sosial'
+  const splitAgenda = doc.splitTextToSize(agenda, 176)
+  doc.text(splitAgenda, 20, curY)
+  curY += (splitAgenda.length * 4.8) + 3
+
+  // Item 2 (outer margin 14mm, content 20mm)
+  doc.text('2.', 14, curY)
+  const closing = 'Demikian untuk dilaksanakan.'
+  const splitClosing = doc.splitTextToSize(closing, 176)
+  doc.text(splitClosing, 20, curY)
+  curY += (splitClosing.length * 4.8) + 3
+
+  // Signoff block
+  const signY = Math.max(curY + 2, 214)
+  const signX = 125
+  doc.text('Jakarta, 15 Oktober 2026', signX, signY)
+  doc.text('Direktur Perlindungan Sosial Non Kebencanaan', signX, signY + 4.8)
+
+  const nameY = signY + 4.8 + (2 * 4.5) + 22
+  doc.setFont('helvetica', 'bold')
+  doc.text('Faisal', signX, nameY)
+  doc.setFont('helvetica', 'normal')
+  doc.text('NIP. 19761106 200502 1 001', signX, nameY + 4.8)
+
+  const tembusanY = Math.min(Math.max(nameY + 6, 252), 268)
+  doc.text('Tembusan Yth:', 14, tembusanY)
+  doc.text('1. Sekretaris Ditjen Linjamsos', 16, tembusanY + 4)
+  doc.text('2. Kepala Biro Organisasi dan SDM', 16, tembusanY + 8)
+
+  assert.equal(doc.internal.getNumberOfPages(), 1, 'Must strictly remain on 1 page')
+  assert.ok(tembusanY + 8 < 283, 'Tembusan must fit safely within A4 page height')
+})
+
+
 
 
 

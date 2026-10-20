@@ -399,6 +399,64 @@
   letter-spacing: 0.3px;
 }
 
+/* Format Bernomor Standar Kemensos (Poin 1 dan 2) */
+.doc-num-item {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.doc-num-prefix {
+  width: 24px;
+  min-width: 24px;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  line-height: 1.35;
+  color: #111827;
+  font-weight: normal;
+}
+
+.doc-num-body {
+  flex: 1;
+}
+
+.doc-num-body .doc-salutation {
+  margin-bottom: 4px;
+}
+
+.doc-num-body .doc-entry-table {
+  margin: 2px 0 6px 0 !important;
+  width: 100%;
+}
+
+.doc-num-body .doc-section-lead {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  margin: 6px 0 2px 0;
+  color: #111827;
+}
+
+.doc-num-body .doc-schedule-block {
+  margin: 4px 0 6px 0;
+}
+
+.doc-num-body .doc-session-heading {
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  font-weight: normal;
+  margin: 4px 0 2px 0;
+  color: #111827;
+}
+
+.doc-num-body .doc-body-paragraph {
+  margin: 6px 0;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  font-size: 12pt;
+  text-align: justify;
+  line-height: 1.35;
+  color: #111827;
+}
+
 .doc-salutation {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
   font-size: 12pt;
