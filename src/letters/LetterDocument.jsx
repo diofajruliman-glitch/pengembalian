@@ -218,274 +218,264 @@ export default function LetterDocument({
       ) : (
         // ================= KONTEN SURAT PANGGILAN (FORMAT RESMI KEMENSOS) =================
         <div className="doc-body">
-          <div className="doc-num-item">
-            <div className="doc-num-prefix">1.</div>
-            <div className="doc-num-body">
-              <div className="doc-salutation">
-                {customOpening || template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:'}
-              </div>
+          <div className="doc-salutation">
+            {customOpening || template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:'}
+          </div>
 
-              <table className="doc-entry-table">
+          <table className="doc-entry-table">
+            <tbody>
+              <tr>
+                <td className="col-label">Nama</td>
+                <td className="col-sep">:</td>
+                <td className="col-val"><strong>{recipient.nama || '—'}</strong></td>
+              </tr>
+              <tr>
+                <td className="col-label">NIP/NIPPPK</td>
+                <td className="col-sep">:</td>
+                <td className="col-val">{recipient.nip || '—'}</td>
+              </tr>
+              {effectiveShowRank && (
+                <tr>
+                  <td className="col-label">Pangkat / Golongan</td>
+                  <td className="col-sep">:</td>
+                  <td className="col-val">{recipient.pangkat || 'Golongan IX'}</td>
+                </tr>
+              )}
+              <tr>
+                <td className="col-label">Jabatan</td>
+                <td className="col-sep">:</td>
+                <td className="col-val">{recipient.jabatan || 'Penata Layanan Operasional'}</td>
+              </tr>
+              <tr>
+                <td className="col-label">Unit Kerja</td>
+                <td className="col-sep">:</td>
+                <td className="col-val">{recipient.unitKerja || official.unitKerja}</td>
+              </tr>
+              {Number(recipient.sisaKewajiban || 0) > 0 && (
+                <tr>
+                  <td className="col-label">Sisa yang Wajib Disetor</td>
+                  <td className="col-sep">:</td>
+                  <td className="col-val" style={{fontWeight: 'bold', color: '#b91c1c'}}>
+                    {fmtRp(recipient.sisaKewajiban)}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+
+          {Number(recipient.sisaKewajiban || 0) > 0 && (
+            <div style={{margin: '8px 0 10px 0'}}>
+              <div style={{fontSize: '11pt', fontWeight: 600, color: '#1e293b', marginBottom: '4px'}}>
+                Rincian Kewajiban Pengembalian yang Masih Tercatat :
+              </div>
+              <table className="doc-invoice-table">
+                <colgroup>
+                  <col style={{width: '32px'}} />
+                  <col style={{width: 'auto'}} />
+                  <col style={{width: '110px'}} />
+                  <col style={{width: '110px'}} />
+                  <col style={{width: '185px'}} />
+                </colgroup>
+                <thead>
+                  <tr>
+                    <th style={{width: '32px', textAlign: 'center'}}>No</th>
+                    <th style={{textAlign: 'center'}}>Uraian Kewajiban</th>
+                    <th style={{width: '110px', textAlign: 'center'}}>Kewajiban Awal</th>
+                    <th style={{width: '110px', textAlign: 'center'}}>Telah Disetor</th>
+                    <th className="col-sisa" style={{width: '185px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
+                  </tr>
+                </thead>
                 <tbody>
                   <tr>
-                    <td className="col-label">Nama</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val"><strong>{recipient.nama || '—'}</strong></td>
+                    <td style={{textAlign: 'center', fontWeight: 'bold'}}>1</td>
+                    <td>
+                      <div style={{fontWeight: 'bold'}}>Pengembalian Kelebihan Pembayaran Tukin & Uang Makan</div>
+                      <div style={{fontSize: '9pt', color: '#475569', marginTop: '2px', lineHeight: 1.25}}>
+                        {recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'}
+                        {recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''}
+                      </div>
+                    </td>
+                    <td className="num">{fmtRp(recipient.kewajibanTotal || 0)}</td>
+                    <td className="num">{fmtRp(recipient.realisasiTotal || 0)}</td>
+                    <td className="num remaining-val col-sisa">{fmtRp(recipient.sisaKewajiban || 0)}</td>
                   </tr>
-                  <tr>
-                    <td className="col-label">NIP/NIPPPK</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val">{recipient.nip || '—'}</td>
-                  </tr>
-                  {effectiveShowRank && (
-                    <tr>
-                      <td className="col-label">Pangkat / Golongan</td>
-                      <td className="col-sep">:</td>
-                      <td className="col-val">{recipient.pangkat || 'Golongan IX'}</td>
-                    </tr>
-                  )}
-                  <tr>
-                    <td className="col-label">Jabatan</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val">{recipient.jabatan || 'Penata Layanan Operasional'}</td>
-                  </tr>
-                  <tr>
-                    <td className="col-label">Unit Kerja</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val">{recipient.unitKerja || official.unitKerja}</td>
-                  </tr>
-                  {Number(recipient.sisaKewajiban || 0) > 0 && (
-                    <tr>
-                      <td className="col-label">Sisa yang Wajib Disetor</td>
-                      <td className="col-sep">:</td>
-                      <td className="col-val" style={{fontWeight: 'bold', color: '#b91c1c'}}>
-                        {fmtRp(recipient.sisaKewajiban)}
-                      </td>
-                    </tr>
-                  )}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '6px 8px'}}>
+                      Total Sisa Kewajiban :
+                    </th>
+                    <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10pt', padding: '6px 8px'}}>
+                      {fmtRp(recipient.sisaKewajiban || 0)}
+                    </th>
+                  </tr>
+                </tfoot>
               </table>
+            </div>
+          )}
 
-              {Number(recipient.sisaKewajiban || 0) > 0 && (
-                <div style={{margin: '8px 0 10px 0'}}>
-                  <div style={{fontSize: '11pt', fontWeight: 600, color: '#1e293b', marginBottom: '4px'}}>
-                    Rincian Kewajiban Pengembalian yang Masih Tercatat :
-                  </div>
-                  <table className="doc-invoice-table">
-                    <colgroup>
-                      <col style={{width: '32px'}} />
-                      <col style={{width: 'auto'}} />
-                      <col style={{width: '110px'}} />
-                      <col style={{width: '110px'}} />
-                      <col style={{width: '185px'}} />
-                    </colgroup>
-                    <thead>
-                      <tr>
-                        <th style={{width: '32px', textAlign: 'center'}}>No</th>
-                        <th style={{textAlign: 'center'}}>Uraian Kewajiban</th>
-                        <th style={{width: '110px', textAlign: 'center'}}>Kewajiban Awal</th>
-                        <th style={{width: '110px', textAlign: 'center'}}>Telah Disetor</th>
-                        <th className="col-sisa" style={{width: '185px', textAlign: 'center', whiteSpace: 'nowrap'}}>Sisa yang Wajib Disetor</th>
-                      </tr>
-                    </thead>
+          <div style={{margin: '10px 0 4px 0'}}>
+            Untuk menghadap kepada:
+          </div>
+
+          <table className="doc-entry-table">
+            <tbody>
+              <tr>
+                <td className="col-label">Nama</td>
+                <td className="col-sep">:</td>
+                <td className="col-val"><strong>{official.nama}</strong></td>
+              </tr>
+              <tr>
+                <td className="col-label">NIP</td>
+                <td className="col-sep">:</td>
+                <td className="col-val">{official.nip}</td>
+              </tr>
+              {effectiveShowRank && (
+                <tr>
+                  <td className="col-label">Pangkat</td>
+                  <td className="col-sep">:</td>
+                  <td className="col-val">{official.pangkatSingkat || 'IV/c'}</td>
+                </tr>
+              )}
+              <tr>
+                <td className="col-label">Jabatan</td>
+                <td className="col-sep">:</td>
+                <td className="col-val">{official.jabatan}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          {(() => {
+            const isDualSession = Boolean(
+              recipient?.isDualSession ||
+              template.id === 'panggilan-judol' ||
+              recipient?.sessionHari
+            )
+
+            const plenaryHari = recipient?.plenaryHari || venue.plenaryHari || 'Senin'
+            const plenaryTanggal = recipient?.plenaryTanggal || venue.plenaryTanggal || '26 Oktober 2026'
+            const plenaryJam = recipient?.plenaryJam || venue.plenaryJam || '08.30 WIB'
+            const plenaryLinkZoom = recipient?.plenaryLinkZoom || venue.plenaryLinkZoom || venue.linkZoom || recipient?.linkZoom || ''
+
+            const sessionHari = recipient?.sessionHari || recipient?.hari || 'Senin'
+            const sessionTanggal = recipient?.sessionTanggal || recipient?.tanggal || '26 Oktober 2026'
+            const sessionJam = recipient?.sessionJam || recipient?.jam || '08.30–12.00 WIB (Pagi · Room 1)'
+            const sessionLinkZoom = recipient?.sessionLinkZoom || venue.sessionLinkZoom || recipient?.linkZoom || venue.linkZoom || ''
+
+            if (isDualSession) {
+              return (
+                <div className="doc-schedule-block">
+                  <div className="doc-session-heading" style={{fontWeight: 'normal'}}>Pada :</div>
+                  <table className="doc-entry-table" style={{margin: '2px 0 4px 18px'}}>
                     <tbody>
                       <tr>
-                        <td style={{textAlign: 'center', fontWeight: 'bold'}}>1</td>
-                        <td>
-                          <div style={{fontWeight: 'bold'}}>Pengembalian Kelebihan Pembayaran Tukin & Uang Makan</div>
-                          <div style={{fontSize: '9pt', color: '#475569', marginTop: '2px', lineHeight: 1.25}}>
-                            {recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'}
-                            {recipient.bank ? ` · Payroll Bank ${recipient.bank}` : ''}
-                          </div>
+                        <td className="col-label">Hari</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val">{plenaryHari}</td>
+                      </tr>
+                      <tr>
+                        <td className="col-label">Tanggal</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val">{plenaryTanggal}</td>
+                      </tr>
+                      <tr>
+                        <td className="col-label">Jam</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val">{plenaryJam}</td>
+                      </tr>
+                      <tr>
+                        <td className="col-label">Link Zoom</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val" style={{wordBreak: 'break-all'}}>
+                          {plenaryLinkZoom}
                         </td>
-                        <td className="num">{fmtRp(recipient.kewajibanTotal || 0)}</td>
-                        <td className="num">{fmtRp(recipient.realisasiTotal || 0)}</td>
-                        <td className="num remaining-val col-sisa">{fmtRp(recipient.sisaKewajiban || 0)}</td>
                       </tr>
                     </tbody>
-                    <tfoot>
+                  </table>
+
+                  <div style={{margin: '6px 0 2px 18px', fontWeight: 'normal'}}>Dan</div>
+                  <div className="doc-session-heading" style={{fontWeight: 'normal'}}>Pada sesi :</div>
+                  <table className="doc-entry-table" style={{margin: '2px 0 4px 18px'}}>
+                    <tbody>
                       <tr>
-                        <th colSpan="4" style={{textAlign: 'right', fontWeight: 'bold', padding: '6px 8px'}}>
-                          Total Sisa Kewajiban :
-                        </th>
-                        <th className="num remaining-val col-sisa" style={{textAlign: 'right', fontSize: '10pt', padding: '6px 8px'}}>
-                          {fmtRp(recipient.sisaKewajiban || 0)}
-                        </th>
+                        <td className="col-label">Hari</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val">{sessionHari}</td>
                       </tr>
-                    </tfoot>
+                      <tr>
+                        <td className="col-label">Tanggal</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val">{sessionTanggal}</td>
+                      </tr>
+                      <tr>
+                        <td className="col-label">Jam</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val">{sessionJam}</td>
+                      </tr>
+                      <tr>
+                        <td className="col-label">Link zoom</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val" style={{wordBreak: 'break-all'}}>
+                          {sessionLinkZoom}
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
                 </div>
-              )}
+              )
+            }
 
-              <div className="doc-section-lead">
-                Untuk menghadap kepada:
-              </div>
-
-              <table className="doc-entry-table">
-                <tbody>
-                  <tr>
-                    <td className="col-label">Nama</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val"><strong>{official.nama}</strong></td>
-                  </tr>
-                  <tr>
-                    <td className="col-label">NIP</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val">{official.nip}</td>
-                  </tr>
-                  {effectiveShowRank && (
+            return (
+              <div className="doc-schedule-block">
+                <div className="doc-session-heading" style={{fontWeight: 'normal'}}>Pada :</div>
+                <table className="doc-entry-table" style={{margin: '2px 0 4px 18px'}}>
+                  <tbody>
                     <tr>
-                      <td className="col-label">Pangkat</td>
+                      <td className="col-label">Hari</td>
                       <td className="col-sep">:</td>
-                      <td className="col-val">{official.pangkatSingkat || 'IV/c'}</td>
+                      <td className="col-val">{recipient.hari || venue.hari || 'Senin'}</td>
                     </tr>
-                  )}
-                  <tr>
-                    <td className="col-label">Jabatan</td>
-                    <td className="col-sep">:</td>
-                    <td className="col-val">{official.jabatan}</td>
-                  </tr>
-                </tbody>
-              </table>
-
-              {(() => {
-                const isDualSession = Boolean(
-                  recipient?.isDualSession ||
-                  template.id === 'panggilan-judol' ||
-                  recipient?.sessionHari
-                )
-
-                const plenaryHari = recipient?.plenaryHari || venue.plenaryHari || 'Senin'
-                const plenaryTanggal = recipient?.plenaryTanggal || venue.plenaryTanggal || '26 Oktober 2026'
-                const plenaryJam = recipient?.plenaryJam || venue.plenaryJam || '08.30 WIB'
-                const plenaryLinkZoom = recipient?.plenaryLinkZoom || venue.plenaryLinkZoom || venue.linkZoom || recipient?.linkZoom || ''
-
-                const sessionHari = recipient?.sessionHari || recipient?.hari || 'Senin'
-                const sessionTanggal = recipient?.sessionTanggal || recipient?.tanggal || '26 Oktober 2026'
-                const sessionJam = recipient?.sessionJam || recipient?.jam || '08.30–12.00 WIB (Pagi · Room 1)'
-                const sessionLinkZoom = recipient?.sessionLinkZoom || venue.sessionLinkZoom || recipient?.linkZoom || venue.linkZoom || ''
-
-                if (isDualSession) {
-                  return (
-                    <div className="doc-schedule-block">
-                      <div className="doc-session-heading">Pada :</div>
-                      <table className="doc-entry-table">
-                        <tbody>
-                          <tr>
-                            <td className="col-label">Hari</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val">{plenaryHari}</td>
-                          </tr>
-                          <tr>
-                            <td className="col-label">Tanggal</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val">{plenaryTanggal}</td>
-                          </tr>
-                          <tr>
-                            <td className="col-label">Jam</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val">{plenaryJam}</td>
-                          </tr>
-                          <tr>
-                            <td className="col-label">Link Zoom</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val" style={{wordBreak: 'break-all'}}>
-                              {plenaryLinkZoom}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-
-                      <div style={{margin: '4px 0 2px 0', fontWeight: 'normal'}}>Dan</div>
-                      <div className="doc-session-heading">Pada sesi :</div>
-                      <table className="doc-entry-table">
-                        <tbody>
-                          <tr>
-                            <td className="col-label">Hari</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val">{sessionHari}</td>
-                          </tr>
-                          <tr>
-                            <td className="col-label">Tanggal</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val">{sessionTanggal}</td>
-                          </tr>
-                          <tr>
-                            <td className="col-label">Jam</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val">{sessionJam}</td>
-                          </tr>
-                          <tr>
-                            <td className="col-label">Link zoom</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val" style={{wordBreak: 'break-all'}}>
-                              {sessionLinkZoom}
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  )
-                }
-
-                return (
-                  <div className="doc-schedule-block">
-                    <div className="doc-session-heading">Pada :</div>
-                    <table className="doc-entry-table">
-                      <tbody>
-                        <tr>
-                          <td className="col-label">Hari</td>
-                          <td className="col-sep">:</td>
-                          <td className="col-val">{recipient.hari || venue.hari || 'Senin'}</td>
-                        </tr>
-                        <tr>
-                          <td className="col-label">Tanggal</td>
-                          <td className="col-sep">:</td>
-                          <td className="col-val">{recipient.tanggal || venue.tanggal || '26 Oktober 2026'}</td>
-                        </tr>
-                        <tr>
-                          <td className="col-label">Jam</td>
-                          <td className="col-sep">:</td>
-                          <td className="col-val">{recipient.jam || venue.jam || '08.30 WIB'}</td>
-                        </tr>
-                        <tr>
-                          <td className="col-label">Tempat</td>
-                          <td className="col-sep">:</td>
-                          <td className="col-val" colSpan={4}>{recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
-                        </tr>
-                        {(recipient.linkZoom || venue.linkZoom) && (
-                          <tr>
-                            <td className="col-label">Link Zoom</td>
-                            <td className="col-sep">:</td>
-                            <td className="col-val" colSpan={4} style={{wordBreak: 'break-all'}}>{recipient.linkZoom || venue.linkZoom}</td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-                )
-              })()}
-
-              <p className="doc-body-paragraph">
-                {customAgenda || template.agendaDefault}
-              </p>
-
-              {(customCoordination || template.coordinationText) && (
-                <p className="doc-body-paragraph">
-                  {customCoordination || template.coordinationText}
-                </p>
-              )}
-            </div>
-          </div>
-
-          <div className="doc-num-item" style={{ marginTop: 10 }}>
-            <div className="doc-num-prefix">2.</div>
-            <div className="doc-num-body">
-              <div className="doc-closing-line" style={{ fontSize: '12pt', lineHeight: 1.35 }}>
-                {customClosing || template.closingText || 'Demikian untuk dilaksanakan.'}
+                    <tr>
+                      <td className="col-label">Tanggal</td>
+                      <td className="col-sep">:</td>
+                      <td className="col-val">{recipient.tanggal || venue.tanggal || '26 Oktober 2026'}</td>
+                    </tr>
+                    <tr>
+                      <td className="col-label">Jam</td>
+                      <td className="col-sep">:</td>
+                      <td className="col-val">{recipient.jam || venue.jam || '08.30 WIB'}</td>
+                    </tr>
+                    <tr>
+                      <td className="col-label">Tempat</td>
+                      <td className="col-sep">:</td>
+                      <td className="col-val" colSpan={4}>{recipient.tempat || venue.tempat || 'Kementerian Sosial Gedung A Lantai 3 Dit. Jamsos'}</td>
+                    </tr>
+                    {(recipient.linkZoom || venue.linkZoom) && (
+                      <tr>
+                        <td className="col-label">Link Zoom</td>
+                        <td className="col-sep">:</td>
+                        <td className="col-val" colSpan={4} style={{wordBreak: 'break-all'}}>{recipient.linkZoom || venue.linkZoom}</td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
-            </div>
-          </div>
+            )
+          })()}
+
+          <p className="doc-body-paragraph">
+            {customAgenda || template.agendaDefault}
+          </p>
+
+          {(customCoordination || template.coordinationText) && (
+            <p className="doc-body-paragraph">
+              {customCoordination || template.coordinationText}
+            </p>
+          )}
+
+          <p className="doc-body-paragraph" style={{marginTop: 10}}>
+            {customClosing || template.closingText || 'Demikian untuk dilaksanakan.'}
+          </p>
         </div>
       )}
 

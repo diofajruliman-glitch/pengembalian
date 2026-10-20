@@ -316,19 +316,7 @@ export default function LetterManager({
   const [templates, setTemplates] = useState(() => {
     try {
       const saved = localStorage.getItem('kemensos_tlhp_templates')
-      if (saved) {
-        const parsed = JSON.parse(saved)
-        return parsed.map(t => {
-          if (t.agendaDefault === 'Untuk diperiksa/dimintai keterangan sehubungan dengan dugaan pelanggaran disiplin kinerja.') {
-            return {
-              ...t,
-              agendaDefault: 'Untuk diperiksa, sehubungan dengan dugaan pelanggaran disiplin Peraturan Menteri Sosial Nomor 5 Tahun 2023 tentang Disiplin Aparatur Sipil Negara di lingkungan Kementerian Sosial'
-            }
-          }
-          return t
-        })
-      }
-      return LETTER_TYPES
+      return saved ? JSON.parse(saved) : LETTER_TYPES
     } catch {
       return LETTER_TYPES
     }

@@ -367,10 +367,9 @@ export async function generateOfficialPdfBatch({
       // ================= KONTEN SURAT PEMANGGILAN (FONT ARIAL 12 PT) =================
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
-      doc.text('1.', 14, curY)
       const opening = customOpening || template.openingText || 'Bersama ini diminta dengan hormat kehadiran Saudara:'
-      const splitOpening = doc.splitTextToSize(opening, 176)
-      doc.text(splitOpening, 20, curY)
+      const splitOpening = doc.splitTextToSize(opening, 182)
+      doc.text(splitOpening, 14, curY)
       curY += (splitOpening.length * 4.8) + 2
 
       // Tabel Data Penerima
@@ -392,12 +391,12 @@ export async function generateOfficialPdfBatch({
 
       autoTable(doc, {
         startY: curY,
-        margin: { left: 20, right: 14 },
+        margin: { left: 18, right: 14 },
         body: recipientRows,
         theme: 'plain',
         styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
         columnStyles: {
-          0: { cellWidth: 44 },
+          0: { cellWidth: 46 },
           1: { cellWidth: 4, halign: 'center' },
           2: { cellWidth: 'auto' }
         }
@@ -408,7 +407,7 @@ export async function generateOfficialPdfBatch({
       if (Number(recipient.sisaKewajiban || 0) > 0) {
         doc.setFont('helvetica', 'bold')
         doc.setFontSize(11)
-        doc.text('Rincian Kewajiban Pengembalian yang Masih Tercatat :', 20, curY)
+        doc.text('Rincian Kewajiban Pengembalian yang Masih Tercatat :', 14, curY)
         curY += 3.5
 
         const catDesc = recipient.kategori ? `Status/Kategori: ${recipient.kategori}` : 'PPPK Dit. PSNK'
@@ -417,7 +416,7 @@ export async function generateOfficialPdfBatch({
 
         autoTable(doc, {
           startY: curY,
-          margin: { left: 20, right: 14 },
+          margin: { left: 14, right: 14 },
           head: [['No', 'Uraian Kewajiban', 'Kewajiban Awal', 'Telah Disetor', 'Sisa yang Wajib Disetor']],
           body: [
             [
@@ -481,7 +480,7 @@ export async function generateOfficialPdfBatch({
       // Untuk Menghadap Kepada
       doc.setFont('helvetica', 'normal')
       doc.setFontSize(12)
-      doc.text('Untuk menghadap kepada:', 20, curY)
+      doc.text('Untuk menghadap kepada:', 14, curY)
       curY += 3.5
 
       const faceRows = [
@@ -495,12 +494,12 @@ export async function generateOfficialPdfBatch({
 
       autoTable(doc, {
         startY: curY,
-        margin: { left: 20, right: 14 },
+        margin: { left: 18, right: 14 },
         body: faceRows,
         theme: 'plain',
         styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
         columnStyles: {
-          0: { cellWidth: 44 },
+          0: { cellWidth: 46 },
           1: { cellWidth: 4, halign: 'center' },
           2: { cellWidth: 'auto' }
         }
@@ -522,7 +521,7 @@ export async function generateOfficialPdfBatch({
 
         doc.setFont('helvetica', 'normal')
         doc.setFontSize(12)
-        doc.text('Pada :', 20, curY)
+        doc.text('Pada :', 14, curY)
         curY += 3.5
 
         const plenaryRows = [
@@ -534,12 +533,12 @@ export async function generateOfficialPdfBatch({
 
         autoTable(doc, {
           startY: curY,
-          margin: { left: 20, right: 14 },
+          margin: { left: 18, right: 14 },
           body: plenaryRows,
           theme: 'plain',
           styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
           columnStyles: {
-            0: { cellWidth: 44 },
+            0: { cellWidth: 46 },
             1: { cellWidth: 4, halign: 'center' },
             2: { cellWidth: 'auto' }
           }
@@ -548,9 +547,9 @@ export async function generateOfficialPdfBatch({
 
         doc.setFont('helvetica', 'normal')
         doc.setFontSize(12)
-        doc.text('Dan', 20, curY)
+        doc.text('Dan', 14, curY)
         curY += 4.5
-        doc.text('Pada sesi :', 20, curY)
+        doc.text('Pada sesi :', 14, curY)
         curY += 3.5
 
         const sessionHari = recipient.sessionHari || recipient.hari || 'Senin'
@@ -567,12 +566,12 @@ export async function generateOfficialPdfBatch({
 
         autoTable(doc, {
           startY: curY,
-          margin: { left: 20, right: 14 },
+          margin: { left: 18, right: 14 },
           body: sessionRows,
           theme: 'plain',
           styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
           columnStyles: {
-            0: { cellWidth: 44 },
+            0: { cellWidth: 46 },
             1: { cellWidth: 4, halign: 'center' },
             2: { cellWidth: 'auto' }
           }
@@ -587,7 +586,7 @@ export async function generateOfficialPdfBatch({
 
         doc.setFont('helvetica', 'normal')
         doc.setFontSize(12)
-        doc.text('Pada :', 20, curY)
+        doc.text('Pada :', 14, curY)
         curY += 3.5
 
         const scheduleRows = [
@@ -602,12 +601,12 @@ export async function generateOfficialPdfBatch({
 
         autoTable(doc, {
           startY: curY,
-          margin: { left: 20, right: 14 },
+          margin: { left: 18, right: 14 },
           body: scheduleRows,
           theme: 'plain',
           styles: { fontSize: 12, cellPadding: { top: 0.8, bottom: 0.8, left: 0, right: 0 }, textColor: [30, 41, 59] },
           columnStyles: {
-            0: { cellWidth: 44 },
+            0: { cellWidth: 46 },
             1: { cellWidth: 4, halign: 'center' },
             2: { cellWidth: 'auto' }
           }
@@ -620,24 +619,23 @@ export async function generateOfficialPdfBatch({
       doc.setFontSize(12)
       const agenda = customAgenda || template.agendaDefault
       if (agenda) {
-        const splitAgenda = doc.splitTextToSize(agenda, 176)
-        doc.text(splitAgenda, 20, curY)
-        curY += (splitAgenda.length * 4.8) + 2.5
+        const splitAgenda = doc.splitTextToSize(agenda, 182)
+        doc.text(splitAgenda, 14, curY)
+        curY += (splitAgenda.length * 4.8) + 3
       }
 
       // Paragraf Koordinasi (Jika ada, misal untuk Panggilan Pengembalian Tukin / Finansial)
       const coordText = customCoordination || template.coordinationText
       if (coordText) {
-        const splitCoord = doc.splitTextToSize(coordText, 176)
-        doc.text(splitCoord, 20, curY)
-        curY += (splitCoord.length * 4.8) + 2.5
+        const splitCoord = doc.splitTextToSize(coordText, 182)
+        doc.text(splitCoord, 14, curY)
+        curY += (splitCoord.length * 4.8) + 3
       }
 
-      // Paragraf Penutup (Poin 2)
+      // Paragraf Penutup
       const closing = customClosing || template.closingText || 'Demikian untuk dilaksanakan.'
-      doc.text('2.', 14, curY)
-      const splitClosing = doc.splitTextToSize(closing, 176)
-      doc.text(splitClosing, 20, curY)
+      const splitClosing = doc.splitTextToSize(closing, 182)
+      doc.text(splitClosing, 14, curY)
       curY += (splitClosing.length * 4.8) + 3
     }
 
