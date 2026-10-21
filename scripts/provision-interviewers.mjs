@@ -1,11 +1,16 @@
 import { pathToFileURL } from 'node:url'
 import { OFFICIAL_ROOMS_19 } from '../src/interviews/officialSchedule1057.js'
 
-export const accounts = OFFICIAL_ROOMS_19.map(room => ({
-  room_id: room.id,
-  nama: room.interviewer,
-  email: `${room.interviewer.toLowerCase().trim().replace(/\s+/g, '.')}@kemensos.go.id`
-}))
+export const accounts = OFFICIAL_ROOMS_19.map((room, idx) => {
+  const base = room.interviewer.toLowerCase().trim().replace(/\s+/g, '.')
+  const isDuplicate = OFFICIAL_ROOMS_19.findIndex(r => r.interviewer.toLowerCase().trim() === room.interviewer.toLowerCase().trim()) !== idx
+  const emailPrefix = isDuplicate ? `${base}.${idx + 1}` : base
+  return {
+    room_id: room.id,
+    nama: isDuplicate ? `${room.interviewer} ${idx + 1}` : room.interviewer,
+    email: `${emailPrefix}@kemensos.go.id`
+  }
+})
 
 export async function provision({ url, key, password, fetcher = fetch }) {
   if (!url || !key || !password) throw new Error('Set SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, dan INTERVIEWER_INITIAL_PASSWORD.')
