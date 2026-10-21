@@ -2,7 +2,7 @@ begin;
 create schema if not exists interview_private;
 revoke all on schema interview_private from public, anon, authenticated;
 
-create table public.interview_cases (
+create table if not exists public.interview_cases (
  nik text primary key check (nik ~ '^[0-9]{16}$'),
  dataset_id uuid references public.discipline_datasets(id),
  person jsonb not null,
@@ -18,9 +18,13 @@ create table public.interview_cases (
  revision integer not null default 1,
  updated_at timestamptz not null default now()
 );
-create index interview_cases_room_idx on public.interview_cases(room_id,scheduled_date,scheduled_time);
-alter table public.interview_cases add constraint interview_schedule_slot unique(room_id,scheduled_date,scheduled_time) deferrable initially deferred;
-create table interview_private.audit (
+create index if not exists interview_cases_room_idx on public.interview_cases(room_id,scheduled_date,scheduled_time);
+do $$ begin
+ if not exists (select 1 from pg_constraint where conname = 'interview_schedule_slot') then
+  alter table public.interview_cases add constraint interview_schedule_slot unique(room_id,scheduled_date,scheduled_time) deferrable initially deferred;
+ end if;
+end $$;
+create table if not exists interview_private.audit (
  id bigint generated always as identity primary key,
  nik text not null, actor uuid not null, action text not null,
  occurred_at timestamptz not null default now(), before_data jsonb, after_data jsonb
@@ -30,12 +34,13 @@ alter table interview_private.audit enable row level security;
 revoke all on public.interview_cases from public,anon,authenticated;
 grant select on public.interview_cases to authenticated;
 grant all on public.interview_cases to service_role;
+drop policy if exists interview_case_read on public.interview_cases;
 create policy interview_case_read on public.interview_cases for select to authenticated
 using ((select public.current_app_role()) in ('admin','editor','viewer') or
  ((select public.current_app_role())='interviewer' and room_id in
  (select a.room_id from public.interviewer_assignments a where a.user_id=(select auth.uid()))));
 
-create function interview_private.interview_action(p_nik text,p_action text,p_revision integer,p_payload jsonb default '{}'::jsonb)
+create or replace function interview_private.interview_action(p_nik text,p_action text,p_revision integer,p_payload jsonb default '{}'::jsonb)
 returns public.interview_cases language plpgsql security definer
 set search_path=pg_catalog,public,interview_private as $$
 declare c public.interview_cases; old_c public.interview_cases; actor uuid:=auth.uid(); app_role text:=public.current_app_role(); k text; v jsonb;
@@ -95,7 +100,7 @@ end $$;
 revoke all on function interview_private.interview_action(text,text,integer,jsonb) from public,anon;
 grant usage on schema interview_private to authenticated;
 grant execute on function interview_private.interview_action(text,text,integer,jsonb) to authenticated;
-create function public.interview_action(p_nik text,p_action text,p_revision integer,p_payload jsonb default '{}'::jsonb)
+create or replace function public.interview_action(p_nik text,p_action text,p_revision integer,p_payload jsonb default '{}'::jsonb)
 returns public.interview_cases language sql security invoker
 set search_path=pg_catalog,public,interview_private as $$
  select interview_private.interview_action(p_nik,p_action,p_revision,p_payload)
@@ -103,7 +108,7 @@ $$;
 revoke all on function public.interview_action(text,text,integer,jsonb) from public,anon;
 grant execute on function public.interview_action(text,text,integer,jsonb) to authenticated;
 
-create function public.interview_schedule_batch(p_items jsonb) returns integer
+create or replace function public.interview_schedule_batch(p_items jsonb) returns integer
 language plpgsql security invoker set search_path=pg_catalog,public as $$
 declare item jsonb; n integer:=0;
 begin
