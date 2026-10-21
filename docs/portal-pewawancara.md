@@ -7,12 +7,12 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
 
 ## Alur
 
-1. Setiap SDM di antrean memiliki tombol **Buka BAP**. Tepat di bawahnya tersedia
-   **Perbandingan kategori awal dan hasil wawancara** serta **Draf LHP — analisis,
-   rekomendasi dan unduhan**, yang dibuka langsung pada kartu SDM. Kedua panel
-   tersebut berada di halaman utama. Popup **Buka BAP** berisi isian/pratinjau BAP
+1. Setiap SDM di antrean memiliki tombol utama **Buka BAP**. Tepat di bawahnya tersedia
+   dua tombol sekunder berukuran lebih kecil: **Perbandingan kategori awal dan hasil wawancara**
+   serta **Draf LHP — analisis, rekomendasi dan unduhan**. Masing-masing tombol
+   membuka popup khusus untuk SDM tersebut. Popup **Buka BAP** berisi isian/pratinjau BAP
    dan SPTJM. Pilih peserta yang hadir; urutan jadwal tidak wajib diikuti.
-   Draf kategori/LHP tetap dipertahankan ketika bagian ditutup, BAP dibuka,
+   Draf kategori/LHP tetap dipertahankan ketika popup ditutup lalu dibuka lagi, BAP dibuka,
    atau daftar difilter. Keluar atau pindah menu meminta konfirmasi jika masih
    ada perubahan yang belum disimpan.
 2. Konfirmasi identitas dan tekan **Mulai wawancara**. Server mencatat waktu
@@ -112,8 +112,8 @@ room; seluruh referensi NIP tidak dimuat ke frontend portal.
 
 ## Perbandingan kategori sebelum dan sesudah wawancara
 
-Pada kartu SDM di antrean, perluas **Perbandingan kategori awal dan hasil
-wawancara** di bawah tombol **Buka BAP**.
+Pada kartu SDM di antrean, tekan tombol kecil **Perbandingan kategori awal dan hasil
+wawancara** di bawah tombol **Buka BAP** untuk membuka popup kategorisasi.
 Panel menampilkan kategori awal setelah ASN, kategori historis, status sumber,
 nama dataset dan versinya. Snapshot awal diambil dari dataset asal peserta dan
 tersimpan terpisah; jawaban BAP maupun usulan tidak menimpa data ini.
@@ -179,11 +179,11 @@ SPTJM ini tidak mengubah hasil kategorisasi dan belum menghasilkan LHP.
 
 ### Draf LHP
 
-Pada kartu SDM di antrean, buka **Draf LHP — analisis, rekomendasi dan unduhan** di bawah tombol **Buka BAP**. Identitas mengikuti BAP; dasar, temuan awal PPATK **2025**, 22 keterangan BAP, perbandingan kategori, serta pertimbangan peninjau menjadi bahan awal. Nominal/frekuensi yang tidak tersedia ditampilkan sebagai belum tersedia, bukan nol. Seluruh bagian dapat direvisi. Rekomendasi tindak lanjut diisi pemeriksa, tanpa pemetaan sanksi otomatis.
+Pada kartu SDM di antrean, tekan tombol kecil **Draf LHP — analisis, rekomendasi dan unduhan** di bawah tombol **Buka BAP** untuk membuka popup LHP tersendiri. Identitas mengikuti BAP; dasar, temuan awal PPATK **2025**, 22 keterangan BAP, perbandingan kategori, serta pertimbangan peninjau menjadi bahan awal. Nominal/frekuensi yang tidak tersedia ditampilkan sebagai belum tersedia, bukan nol. Seluruh bagian dapat direvisi. Rekomendasi tindak lanjut diisi pemeriksa, tanpa pemetaan sanksi otomatis.
 
 Simpan draf, periksa pratinjau, lalu kembali revisi bila diperlukan. Unduhan Word/PDF memerlukan BAP selesai, kategori akhir yang sudah ditetapkan atas revisi BAP terkini, SPTJM terkonfirmasi atas BAP terkini, seluruh bagian lengkap, serta peninjauan isi LHP. Setiap dokumen tetap bertanda **DRAF — BELUM DISAHKAN**; peninjauan aplikasi bukan pengesahan pejabat. Nomor boleh kosong sampai ditetapkan. Template LHP merupakan format kerja modular, bukan template resmi yang diunggah pengguna.
 
-Jika BAP, penilaian atau SPTJM berubah, unduhan dinonaktifkan. Gunakan **Susun ulang dari sumber terbaru** (meminta konfirmasi karena mengganti bagian narasi); nomor, tempat dan rekomendasi dipertahankan. Periksa kembali semuanya sebelum menandai telah ditinjau. Perubahan belum tersimpan ikut memicu peringatan saat menutup/keluar.
+Jika BAP, penilaian atau SPTJM berubah, unduhan dinonaktifkan. Gunakan **Susun ulang dari sumber terbaru** (meminta konfirmasi karena mengganti bagian narasi); nomor, tempat dan rekomendasi dipertahankan. Periksa kembali semuanya sebelum menandai telah ditinjau. Menutup popup mempertahankan perubahan lokal; perubahan belum tersimpan memicu peringatan saat keluar atau pindah menu.
 
 Aktivasi database: `supabase/interview-reports.sql` melalui migrasi Supabase. Tabel ber-RLS, pembacaan dan RPC dibatasi room/role, penulisan menggunakan pemeriksaan pemilik wawancara dan revisi sumber, serta tersimpan pada audit privat. Migrasi menyiapkan draf kosong untuk kasus yang ada dan trigger untuk kasus baru. `scripts/prepare_lhp_template.py` membangun ulang template Word. PDF berupa gambar halaman pratinjau A4; tata letak Word dapat berbeda menurut font/editor.
 

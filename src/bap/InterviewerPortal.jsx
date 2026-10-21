@@ -40,23 +40,38 @@ export default function InterviewerPortal({client,profile,userId,onSignOut,onDir
 }
 
 function ParticipantCard({row,client,profile,userId,hidden,editing,onOpen,onClose,onSaved,onDirty}){
- const [categoryOpen,setCategoryOpen]=useState(false),[categoryLoaded,setCategoryLoaded]=useState(false),[categoryDirty,setCategoryDirty]=useState(false)
- const [reportOpen,setReportOpen]=useState(false),[reportLoaded,setReportLoaded]=useState(false),[reportDirty,setReportDirty]=useState(false)
+ const [activePanel,setActivePanel]=useState(null)
+ const [categoryLoaded,setCategoryLoaded]=useState(false),[categoryDirty,setCategoryDirty]=useState(false)
+ const [reportLoaded,setReportLoaded]=useState(false),[reportDirty,setReportDirty]=useState(false)
  const [bapState,setBapState]=useState(cleanBapState)
  const pending=bapState.dirty||bapState.statementDirty||categoryDirty||reportDirty
  useEffect(()=>{onDirty(row.nik,pending);return()=>onDirty(row.nik,false)},[row.nik,pending,onDirty])
+ function openPanel(name){if(name==='category')setCategoryLoaded(true);else setReportLoaded(true);setActivePanel(name)}
  function closeBap(){
   if((bapState.dirty||bapState.statementDirty)&&!window.confirm('Ada perubahan BAP atau SPTJM belum tersimpan. Tetap tutup dan buang perubahan?'))return
   onClose()
  }
- return <article className="bap-case" hidden={hidden&&!editing} aria-label={`Peserta ${row.person.nama}`}>
-  <div className="bap-queue-item"><span><b>{row.person.nama}</b><small>NIP {row.person.nip}</small><small>{when(row)} · {row.room_id.replace('room-','Room ')}</small></span><div className="bap-case-actions"><span className={'bap-badge '+(row.status==='Selesai'?'done':'')}>{row.status}</span><button className="btn primary" onClick={onOpen} aria-label={`Buka BAP ${row.person.nama}`}>Buka BAP →</button></div></div>
-  <div className="bap-case-panels">
-   <details className="panel bap-case-section" open={categoryOpen} onToggle={event=>{const open=event.currentTarget.open;setCategoryOpen(open);if(open)setCategoryLoaded(true)}}><summary><b>Perbandingan kategori awal dan hasil wawancara</b>{categoryDirty&&<small> · Belum tersimpan</small>}</summary>{categoryLoaded&&<CategoryComparison client={client} row={row} profile={profile} userId={userId} active={categoryOpen&&!hidden} bapDirty={bapState.dirty} bapBusy={bapState.busy} onDirty={setCategoryDirty}/>}</details>
-   <details className="panel bap-case-section" open={reportOpen} onToggle={event=>{const open=event.currentTarget.open;setReportOpen(open);if(open)setReportLoaded(true)}}><summary><b>Draf LHP — analisis, rekomendasi dan unduhan</b>{reportDirty&&<small> · Belum tersimpan</small>}</summary>{reportLoaded&&<LhpPanel client={client} row={row} profile={profile} userId={userId} active={reportOpen&&!hidden} bapDirty={bapState.dirty||categoryDirty||bapState.statementDirty} bapBusy={bapState.busy} onDirty={setReportDirty}/>}</details>
-  </div>
+ return <article className="bap-case" hidden={hidden&&!editing&&!activePanel} aria-label={`Peserta ${row.person.nama}`}>
+  <div className="bap-queue-item"><span><b>{row.person.nama}</b><small>NIP {row.person.nip}</small><small>{when(row)} · {row.room_id.replace('room-','Room ')}</small></span><div className="bap-case-actions"><span className={'bap-badge '+(row.status==='Selesai'?'done':'')}>{row.status}</span><div className="bap-case-controls"><button className="btn primary bap-open-button" onClick={onOpen} aria-label={`Buka BAP ${row.person.nama}`}>Buka BAP →</button><div className="bap-secondary-actions"><button type="button" className="btn secondary bap-document-button" onClick={()=>openPanel('category')} aria-haspopup="dialog">Perbandingan kategori awal dan hasil wawancara{categoryDirty&&<small className="bap-unsaved-badge">Belum tersimpan</small>}</button><button type="button" className="btn secondary bap-document-button" onClick={()=>openPanel('report')} aria-haspopup="dialog">Draf LHP — analisis, rekomendasi dan unduhan{reportDirty&&<small className="bap-unsaved-badge">Belum tersimpan</small>}</button></div></div></div></div>
+  {categoryLoaded&&<DocumentDialog open={activePanel==='category'} title="Perbandingan kategori awal dan hasil wawancara" row={row} dirty={categoryDirty} onClose={()=>setActivePanel(null)}><CategoryComparison client={client} row={row} profile={profile} userId={userId} active={activePanel==='category'} bapDirty={bapState.dirty} bapBusy={bapState.busy} onDirty={setCategoryDirty}/></DocumentDialog>}
+  {reportLoaded&&<DocumentDialog open={activePanel==='report'} title="Draf LHP — analisis, rekomendasi dan unduhan" row={row} dirty={reportDirty} onClose={()=>setActivePanel(null)}><LhpPanel client={client} row={row} profile={profile} userId={userId} active={activePanel==='report'} bapDirty={bapState.dirty||categoryDirty||bapState.statementDirty} bapBusy={bapState.busy} onDirty={setReportDirty}/></DocumentDialog>}
   {editing&&<BapEditor row={row} client={client} profile={profile} userId={userId} onStateChange={setBapState} onClose={closeBap} onSaved={onSaved}/>}
  </article>
+}
+
+function DocumentDialog({open,title,row,dirty,onClose,children}){
+ const dialog=useRef(null)
+ useEffect(()=>{
+  const element=dialog.current
+  if(!open)return
+  element.showModal()
+  return()=>element.close()
+ },[open])
+ return <dialog ref={dialog} className="bap-dialog bap-document-dialog" aria-label={`${title} — ${row.person.nama}`} onCancel={event=>{event.preventDefault();onClose()}}>
+  <header className="bap-editor-header"><div><h2>{title}</h2><p>{row.person.nama} · NIP {row.person.nip} · {row.room_id.replace('room-','Room ')} · {row.status}</p></div><button type="button" className="btn secondary" onClick={onClose}>Tutup</button></header>
+  {dirty&&<p className="notice amber-notice" role="status">Draf belum tersimpan. Perubahan tetap tersedia saat popup ditutup.</p>}
+  {children}
+ </dialog>
 }
 
 function BapEditor({row:remote,client,profile,userId,onStateChange,onClose,onSaved}){
