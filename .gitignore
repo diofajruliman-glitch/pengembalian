@@ -6,3 +6,4 @@ dist/
 *.log
 .DS_Store
 .local-analysis/
+__pycache__/

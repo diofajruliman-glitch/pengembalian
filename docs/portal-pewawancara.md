@@ -8,9 +8,9 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
 ## Alur
 
 1. Setiap SDM di antrean memiliki tombol utama **Buka BAP**. Tepat di bawahnya tersedia
-   dua tombol sekunder berukuran lebih kecil: **Perbandingan kategori awal dan hasil wawancara**
-   serta **Draf LHP — analisis, rekomendasi dan unduhan**. Masing-masing tombol
-   membuka popup khusus untuk SDM tersebut. Popup **Buka BAP** berisi isian/pratinjau BAP
+   dua tombol sekunder berukuran lebih kecil: **Perbandingan kategori** dan **Draf LHP**.
+   Masing-masing tombol membuka popup khusus dengan judul lengkap untuk SDM tersebut.
+   Popup **Buka BAP** berisi isian/pratinjau BAP
    dan SPTJM. Pilih peserta yang hadir; urutan jadwal tidak wajib diikuti.
    Draf kategori/LHP tetap dipertahankan ketika popup ditutup lalu dibuka lagi, BAP dibuka,
    atau daftar difilter. Keluar atau pindah menu meminta konfirmasi jika masih
@@ -164,6 +164,9 @@ dikunci sampai peninjauan dan konfirmasi ulang. Tidak ada tanda tangan digital
 atau pengesahan otomatis; ruang tanda tangan dan materai mengikuti template.
 
 Word memakai paket DOCX asli lampiran SPTJM. PDF mengikuti halaman pratinjau.
+Blok identitas memakai tiga kolom tanpa garis (label, titik dua, dan isi) agar
+Nama, NIP, NIK, Jabatan, Unit Kerja, Provinsi, Kabupaten/Kota, dan Nomor Handphone
+sejajar. Isian panjang membungkus pada kolom isi tanpa menggeser titik dua.
 Aktivasi: `supabase/interview-statements.sql` setelah skema portal. Untuk mengisi
 kontak dari jadwal resmi pada instalasi baru, siapkan SQL berikut untuk ditinjau
 kemudian dijalankan pada database yang sesuai:
