@@ -18,11 +18,13 @@ test('official schedule loads exactly 1057 participants and 19 breakout rooms', 
 
   // Verify room interviewers match user prompt
   assert.equal(OFFICIAL_ROOMS_19[0].interviewer, 'Sekretariat Linjamsos')
-  assert.equal(OFFICIAL_ROOMS_19[1].interviewer, 'Sekretariat Linjamsos 2')
+  assert.equal(OFFICIAL_ROOMS_19[1].interviewer, 'Sekretariat Linjamsos')
   assert.equal(OFFICIAL_ROOMS_19[2].interviewer, 'TU 1')
   assert.equal(OFFICIAL_ROOMS_19[3].interviewer, 'TU 2')
   assert.equal(OFFICIAL_ROOMS_19[4].interviewer, 'Leo Suta')
   assert.equal(OFFICIAL_ROOMS_19[5].interviewer, 'Indra Maulana')
+  assert.equal(OFFICIAL_ROOMS_19[9].interviewer, 'Iwien')
+  assert.equal(OFFICIAL_ROOMS_19[10].interviewer, 'Mahmud syahputra')
   assert.equal(OFFICIAL_ROOMS_19[15].interviewer, 'Astri')
   assert.equal(OFFICIAL_ROOMS_19[16].interviewer, 'Novie')
   assert.equal(OFFICIAL_ROOMS_19[17].interviewer, 'Dede Soleh')

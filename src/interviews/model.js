@@ -36,6 +36,8 @@ function assignmentWindow(entry) {
 function roomFor(rooms,id) { return (rooms||[]).find(room=>room.id===id) }
 function sameInterviewer(first,second) {
  const name=normalizedInterviewer(first)
+ if(!name) return false
+ if(['sekretariat linjamsos'].includes(name)&&first?.id!==second?.id) return false
  return Boolean(name&&name===normalizedInterviewer(second))
 }
 function validRooms(rooms) {

@@ -1,5 +1,6 @@
 // Data Master Jadwal Pemanggilan & Wawancara 1.057 ASN (26–29 Oktober 2026)
 // Sumber: Jadwal Wawancara 1.057 ASN & Rekap Room Terbaru (26–29 Oktober 2026)
+// Diperbarui sesuai alokasi 19 Room resmi & penugasan pewawancara terbaru
 
 export const JADWAL_WAWANCARA_1057_REVISI = [
   {
@@ -24,7 +25,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -36,7 +37,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Hermawan Kurnia",
     "nip": "198807152025211094",
     "provinsi": "Banten",
@@ -49,7 +50,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -74,7 +75,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -99,7 +100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -124,7 +125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -149,7 +150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -174,7 +175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -199,7 +200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -224,7 +225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -236,7 +237,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Ariyanto",
     "nip": "198406302025211042",
     "provinsi": "Jambi",
@@ -249,7 +250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -261,7 +262,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ananda Syahputra",
     "nip": "199104212025211064",
     "provinsi": "Aceh",
@@ -274,7 +275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -299,7 +300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -324,7 +325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -349,7 +350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -374,7 +375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -399,7 +400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -424,7 +425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -449,7 +450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -474,7 +475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -499,7 +500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -511,7 +512,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Oma Irawan",
     "nip": "199105012025211066",
     "provinsi": "Bengkulu",
@@ -524,7 +525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -549,7 +550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -574,7 +575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -599,7 +600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -624,7 +625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -649,7 +650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -674,7 +675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -699,7 +700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -711,7 +712,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Zeri Efriyan",
     "nip": "199309072025211048",
     "provinsi": "Bengkulu",
@@ -724,7 +725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -736,7 +737,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Rio Irawan",
     "nip": "199407172025211063",
     "provinsi": "Jambi",
@@ -749,7 +750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -774,7 +775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -799,7 +800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -824,7 +825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -849,7 +850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -874,7 +875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -899,7 +900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -924,7 +925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -949,7 +950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -974,7 +975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -986,7 +987,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Taufik Ramadhan",
     "nip": "199303122025211049",
     "provinsi": "Jawa Barat",
@@ -999,7 +1000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1024,7 +1025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1049,7 +1050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1074,7 +1075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1099,7 +1100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1124,7 +1125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1149,7 +1150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1174,7 +1175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1186,7 +1187,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Mawar Dinur",
     "nip": "198905102025211096",
     "provinsi": "Jawa Barat",
@@ -1199,7 +1200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1211,7 +1212,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Mohamad Husni Mubarok",
     "nip": "198511132025211047",
     "provinsi": "Jawa Barat",
@@ -1224,7 +1225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1249,7 +1250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1274,7 +1275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1299,7 +1300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1324,7 +1325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1349,7 +1350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1374,7 +1375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1399,7 +1400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1424,7 +1425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1449,7 +1450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1461,7 +1462,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Bayu Suhendar",
     "nip": "198507102025211068",
     "provinsi": "Jawa Barat",
@@ -1474,7 +1475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1499,7 +1500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1524,7 +1525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1549,7 +1550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1574,7 +1575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1599,7 +1600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1624,7 +1625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1649,7 +1650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1661,7 +1662,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Beni Albar",
     "nip": "198210262025211034",
     "provinsi": "Jawa Barat",
@@ -1674,7 +1675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1686,7 +1687,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Angga Juliana",
     "nip": "199007042025211069",
     "provinsi": "Jawa Barat",
@@ -1699,7 +1700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1724,7 +1725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1749,7 +1750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1774,7 +1775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1799,7 +1800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1824,7 +1825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1849,7 +1850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1874,7 +1875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1899,7 +1900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1924,7 +1925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1936,7 +1937,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Sugiyanto",
     "nip": "198906142025211063",
     "provinsi": "Jawa Barat",
@@ -1949,7 +1950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1974,7 +1975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -1999,7 +2000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2024,7 +2025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2049,7 +2050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2074,7 +2075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2099,7 +2100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2124,7 +2125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2136,7 +2137,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Dede Heryanto",
     "nip": "198907182025211071",
     "provinsi": "Jawa Barat",
@@ -2149,7 +2150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2161,7 +2162,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ismet Lugito",
     "nip": "198707252025211052",
     "provinsi": "Jawa Tengah",
@@ -2174,7 +2175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2199,7 +2200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2224,7 +2225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2249,7 +2250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2274,7 +2275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2299,7 +2300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2324,7 +2325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2349,7 +2350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2374,7 +2375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2399,7 +2400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2411,7 +2412,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Tri Adi Yulianto",
     "nip": "198207132025211055",
     "provinsi": "Jawa Timur",
@@ -2424,7 +2425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2449,7 +2450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2474,7 +2475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2499,7 +2500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2524,7 +2525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2549,7 +2550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2574,7 +2575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2599,7 +2600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2611,7 +2612,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Asfarian Andhita Nugraha",
     "nip": "199105242025211055",
     "provinsi": "Jawa Tengah",
@@ -2624,7 +2625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2636,7 +2637,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Bayu Eko Saputro",
     "nip": "198607152025211071",
     "provinsi": "Jawa Tengah",
@@ -2649,7 +2650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2674,7 +2675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2699,7 +2700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2724,7 +2725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2749,7 +2750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2774,7 +2775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2799,7 +2800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2824,7 +2825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2849,7 +2850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2874,7 +2875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2886,7 +2887,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Firman Alif Rosidin",
     "nip": "199303112025211061",
     "provinsi": "Jawa Timur",
@@ -2899,7 +2900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2924,7 +2925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2949,7 +2950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2974,7 +2975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -2999,7 +3000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3024,7 +3025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3049,7 +3050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3074,7 +3075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3086,7 +3087,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Nisam",
     "nip": "199302182025211054",
     "provinsi": "Jawa Timur",
@@ -3099,7 +3100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3111,7 +3112,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Taufik Hidayat",
     "nip": "198908112025211054",
     "provinsi": "Jawa Barat",
@@ -3124,7 +3125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3149,7 +3150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3174,7 +3175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3199,7 +3200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3224,7 +3225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3249,7 +3250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3274,7 +3275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3299,7 +3300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3324,7 +3325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3349,7 +3350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3361,7 +3362,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Santri",
     "nip": "198410062025211053",
     "provinsi": "Lampung",
@@ -3374,7 +3375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3399,7 +3400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3424,7 +3425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3449,7 +3450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3474,7 +3475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3499,7 +3500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3524,7 +3525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3549,7 +3550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3561,7 +3562,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Angga Buana",
     "nip": "199004142025211087",
     "provinsi": "Lampung",
@@ -3574,7 +3575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3586,7 +3587,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Paham Kurniawan",
     "nip": "198902112025211062",
     "provinsi": "Lampung",
@@ -3599,7 +3600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3624,7 +3625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3649,7 +3650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3674,7 +3675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3699,7 +3700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3724,7 +3725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3749,7 +3750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3774,7 +3775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3799,7 +3800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3824,7 +3825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3836,7 +3837,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Kiky Aprianto Rivay Rumoning",
     "nip": "199404072025211123",
     "provinsi": "Papua Barat",
@@ -3849,7 +3850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3874,7 +3875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3899,7 +3900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3924,7 +3925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3949,7 +3950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3974,7 +3975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -3999,7 +4000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4024,7 +4025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4036,7 +4037,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "M. Azhar Al Hijri",
     "nip": "199103182025211061",
     "provinsi": "Kepulauan Bangka Belitung",
@@ -4049,7 +4050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4061,7 +4062,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Yohanes Honoris Langa",
     "nip": "198904062025211067",
     "provinsi": "Nusa Tenggara Timur",
@@ -4074,7 +4075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4099,7 +4100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4124,7 +4125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4149,7 +4150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4174,7 +4175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4199,7 +4200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4224,7 +4225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4249,7 +4250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4274,7 +4275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4299,7 +4300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4311,7 +4312,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Munawir",
     "nip": "198809122025211078",
     "provinsi": "Maluku",
@@ -4324,7 +4325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4349,7 +4350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4374,7 +4375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4399,7 +4400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4424,7 +4425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4449,7 +4450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4474,7 +4475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4499,7 +4500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4511,7 +4512,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Oktoberta Baky",
     "nip": "197810272025212012",
     "provinsi": "Nusa Tenggara Timur",
@@ -4524,7 +4525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4536,7 +4537,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Defrinda Mahatma Vayodha",
     "nip": "199007222025211094",
     "provinsi": "Lampung",
@@ -4549,7 +4550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4574,7 +4575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4599,7 +4600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4624,7 +4625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4649,7 +4650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4674,7 +4675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4699,7 +4700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4724,7 +4725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4749,7 +4750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4774,7 +4775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4786,7 +4787,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Zukri Rahmat",
     "nip": "198601032025211051",
     "provinsi": "Nusa Tenggara Barat",
@@ -4799,7 +4800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4824,7 +4825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4849,7 +4850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4874,7 +4875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4899,7 +4900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4924,7 +4925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4949,7 +4950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4974,7 +4975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -4986,7 +4987,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Andri Winanda",
     "nip": "198709182025211051",
     "provinsi": "Riau",
@@ -4999,7 +5000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5011,7 +5012,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Danial Sobri",
     "nip": "198604172025211057",
     "provinsi": "Lampung",
@@ -5024,7 +5025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5049,7 +5050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5074,7 +5075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5099,7 +5100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5124,7 +5125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5149,7 +5150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5174,7 +5175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5199,7 +5200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5224,7 +5225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5249,7 +5250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5261,7 +5262,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "A. Were Sappewali",
     "nip": "199210092025211059",
     "provinsi": "Sulawesi Selatan",
@@ -5274,7 +5275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5299,7 +5300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5324,7 +5325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5349,7 +5350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5374,7 +5375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5399,7 +5400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5424,7 +5425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5449,7 +5450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5461,7 +5462,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Yusrizal",
     "nip": "198403262025211043",
     "provinsi": "Sumatera Barat",
@@ -5474,7 +5475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5486,7 +5487,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ziko Ahmad",
     "nip": "199110262025211057",
     "provinsi": "Sumatera Barat",
@@ -5499,7 +5500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5524,7 +5525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5549,7 +5550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5574,7 +5575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5599,7 +5600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5624,7 +5625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5649,7 +5650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5674,7 +5675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5699,7 +5700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5724,7 +5725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5736,7 +5737,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Hepi Apriyanti",
     "nip": "198804172025212049",
     "provinsi": "Sumatera Selatan",
@@ -5749,7 +5750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5774,7 +5775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5799,7 +5800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5824,7 +5825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5849,7 +5850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5874,7 +5875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5899,7 +5900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5924,7 +5925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5936,7 +5937,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Muhammad Dika Diansyah",
     "nip": "199212172025211048",
     "provinsi": "Sumatera Utara",
@@ -5949,7 +5950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5961,7 +5962,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Syukur Hati Harefa",
     "nip": "198809292025211060",
     "provinsi": "Sumatera Utara",
@@ -5974,7 +5975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -5999,7 +6000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6024,7 +6025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6049,7 +6050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6074,7 +6075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6099,7 +6100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6124,7 +6125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6149,7 +6150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6174,7 +6175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6186,7 +6187,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Dame Hasibuan",
     "nip": "199301222025211047",
     "provinsi": "Sumatera Utara",
@@ -6199,7 +6200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6224,7 +6225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6249,7 +6250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6274,7 +6275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6299,7 +6300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6324,7 +6325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6349,7 +6350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6374,7 +6375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6386,7 +6387,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "David",
     "nip": "198506062025211069",
     "provinsi": "Sumatera Utara",
@@ -6399,7 +6400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6411,7 +6412,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Anggi Sanjaya Purba",
     "nip": "199201282025211046",
     "provinsi": "Sumatera Utara",
@@ -6424,7 +6425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6449,7 +6450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6474,7 +6475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6499,7 +6500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6524,7 +6525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6549,7 +6550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6574,7 +6575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6599,7 +6600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6624,7 +6625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6649,7 +6650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6661,7 +6662,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Kamilatu Kausar",
     "nip": "199703062025211025",
     "provinsi": "Bengkulu",
@@ -6674,7 +6675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6699,7 +6700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6724,7 +6725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6749,7 +6750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6774,7 +6775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6799,7 +6800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6824,7 +6825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6849,7 +6850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6861,7 +6862,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Dede Muhtar Syarip",
     "nip": "199310192025211049",
     "provinsi": "Banten",
@@ -6874,7 +6875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6886,7 +6887,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Darlan Efendi",
     "nip": "199412092025211066",
     "provinsi": "Bengkulu",
@@ -6899,7 +6900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6924,7 +6925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6949,7 +6950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6974,7 +6975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -6999,7 +7000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7024,7 +7025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7049,7 +7050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7074,7 +7075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7099,7 +7100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7124,7 +7125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7136,7 +7137,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Ahmad Annajmi",
     "nip": "198706182025211057",
     "provinsi": "Jambi",
@@ -7149,7 +7150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7174,7 +7175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7199,7 +7200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7224,7 +7225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7249,7 +7250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7274,7 +7275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7299,7 +7300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7324,7 +7325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7336,7 +7337,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "M. Dedat Hizbul Islami",
     "nip": "199402062025211048",
     "provinsi": "Dki Jakarta",
@@ -7349,7 +7350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7361,7 +7362,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Hengki Jusman",
     "nip": "198406122025211084",
     "provinsi": "Bengkulu",
@@ -7374,7 +7375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7399,7 +7400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7424,7 +7425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7449,7 +7450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7474,7 +7475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7499,7 +7500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7524,7 +7525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7549,7 +7550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7574,7 +7575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7599,7 +7600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7611,7 +7612,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Tohid",
     "nip": "199107172025211070",
     "provinsi": "Jawa Barat",
@@ -7624,7 +7625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7649,7 +7650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7674,7 +7675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7699,7 +7700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7724,7 +7725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7749,7 +7750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7774,7 +7775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7799,7 +7800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7811,7 +7812,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Ofik Taofik Eskandar",
     "nip": "198610012025211066",
     "provinsi": "Jawa Barat",
@@ -7824,7 +7825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7836,7 +7837,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Heri Setiyadi",
     "nip": "198506122025211067",
     "provinsi": "Jawa Barat",
@@ -7849,7 +7850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7874,7 +7875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7899,7 +7900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7924,7 +7925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7949,7 +7950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7974,7 +7975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -7999,7 +8000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8024,7 +8025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8049,7 +8050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8074,7 +8075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8086,7 +8087,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Parid Miftahudin",
     "nip": "199604082025211049",
     "provinsi": "Jawa Barat",
@@ -8099,7 +8100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8124,7 +8125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8149,7 +8150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8174,7 +8175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8199,7 +8200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8224,7 +8225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8249,7 +8250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8274,7 +8275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8286,7 +8287,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Barkah Fauzi",
     "nip": "198705192025211037",
     "provinsi": "Jawa Barat",
@@ -8299,7 +8300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8311,7 +8312,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Nano Romansyah",
     "nip": "198912242025211053",
     "provinsi": "Jawa Barat",
@@ -8324,7 +8325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8349,7 +8350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8374,7 +8375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8399,7 +8400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8424,7 +8425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8449,7 +8450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8474,7 +8475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8499,7 +8500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8524,7 +8525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8549,7 +8550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8561,7 +8562,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Panji Satria Aji",
     "nip": "199111302025211043",
     "provinsi": "Jawa Barat",
@@ -8574,7 +8575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8599,7 +8600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8624,7 +8625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8649,7 +8650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8674,7 +8675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8699,7 +8700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8724,7 +8725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8749,7 +8750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8761,7 +8762,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Denova Anggi Ardhianto",
     "nip": "199811152025211033",
     "provinsi": "Jawa Tengah",
@@ -8774,7 +8775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8786,7 +8787,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Agus Sobir Akbar",
     "nip": "198808012025211070",
     "provinsi": "Jawa Tengah",
@@ -8799,7 +8800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8824,7 +8825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8849,7 +8850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8874,7 +8875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8899,7 +8900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8924,7 +8925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8949,7 +8950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8974,7 +8975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -8999,7 +9000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9024,7 +9025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9036,7 +9037,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Yosep Purnama",
     "nip": "198901222025211052",
     "provinsi": "Jawa Barat",
@@ -9049,7 +9050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9074,7 +9075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9099,7 +9100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9124,7 +9125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9149,7 +9150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9174,7 +9175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9199,7 +9200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9224,7 +9225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9236,7 +9237,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Fajar Setiadi",
     "nip": "199005142025211058",
     "provinsi": "Jawa Tengah",
@@ -9249,7 +9250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9261,7 +9262,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Andi Syapaat",
     "nip": "199602222025211035",
     "provinsi": "Jawa Barat",
@@ -9274,7 +9275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9299,7 +9300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9324,7 +9325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9349,7 +9350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9374,7 +9375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9399,7 +9400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9424,7 +9425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9449,7 +9450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9474,7 +9475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9499,7 +9500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9511,7 +9512,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Mochamad Marsuki",
     "nip": "199106202025211059",
     "provinsi": "Jawa Timur",
@@ -9524,7 +9525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9549,7 +9550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9574,7 +9575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9599,7 +9600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9624,7 +9625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9649,7 +9650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9674,7 +9675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9699,7 +9700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9711,7 +9712,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Ahmad Toyib",
     "nip": "198212162025211040",
     "provinsi": "Jawa Tengah",
@@ -9724,7 +9725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9736,7 +9737,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Bambang Nurcholis",
     "nip": "198104052025211053",
     "provinsi": "Jawa Timur",
@@ -9749,7 +9750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9774,7 +9775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9799,7 +9800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9824,7 +9825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9849,7 +9850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9874,7 +9875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9899,7 +9900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9924,7 +9925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9949,7 +9950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9974,7 +9975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -9986,7 +9987,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Dedi Irwanto",
     "nip": "198911062025211071",
     "provinsi": "Kalimantan Tengah",
@@ -9999,7 +10000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10024,7 +10025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10049,7 +10050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10074,7 +10075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10099,7 +10100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10124,7 +10125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10149,7 +10150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10174,7 +10175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10186,7 +10187,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Moh. Wedi Arifin",
     "nip": "198506072025211051",
     "provinsi": "Jawa Timur",
@@ -10199,7 +10200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10211,7 +10212,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Jhoni Yunizar",
     "nip": "198906162025211087",
     "provinsi": "Lampung",
@@ -10224,7 +10225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10249,7 +10250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10274,7 +10275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10299,7 +10300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10324,7 +10325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10349,7 +10350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10374,7 +10375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10399,7 +10400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10424,7 +10425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10449,7 +10450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10461,7 +10462,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Lorensius Marselinus Gerak",
     "nip": "198605182025211049",
     "provinsi": "Nusa Tenggara Timur",
@@ -10474,7 +10475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10499,7 +10500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10524,7 +10525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10549,7 +10550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10574,7 +10575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10599,7 +10600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10624,7 +10625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10649,7 +10650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10661,7 +10662,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Idris Afandi",
     "nip": "198709192025211069",
     "provinsi": "Lampung",
@@ -10674,7 +10675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10686,7 +10687,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ulul Azmi",
     "nip": "199404042025211100",
     "provinsi": "Nusa Tenggara Barat",
@@ -10699,7 +10700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10724,7 +10725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10749,7 +10750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10774,7 +10775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10799,7 +10800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10824,7 +10825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10849,7 +10850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10874,7 +10875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10899,7 +10900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10924,7 +10925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10936,7 +10937,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Adrianus Kutiom",
     "nip": "198409092025211074",
     "provinsi": "Nusa Tenggara Timur",
@@ -10949,7 +10950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10974,7 +10975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -10999,7 +11000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11024,7 +11025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11049,7 +11050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11074,7 +11075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11099,7 +11100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11124,7 +11125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11136,7 +11137,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Abner Aprianus Leba",
     "nip": "198704052025211070",
     "provinsi": "Nusa Tenggara Timur",
@@ -11149,7 +11150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11161,7 +11162,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Irwansyah",
     "nip": "198910292025211043",
     "provinsi": "Nusa Tenggara Barat",
@@ -11174,7 +11175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11199,7 +11200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11224,7 +11225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11249,7 +11250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11274,7 +11275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11299,7 +11300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11324,7 +11325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11349,7 +11350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11374,7 +11375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11399,7 +11400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11411,7 +11412,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Tahir",
     "nip": "199007082025211060",
     "provinsi": "Sulawesi Barat",
@@ -11424,7 +11425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11449,7 +11450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11474,7 +11475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11499,7 +11500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11524,7 +11525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11549,7 +11550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11574,7 +11575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11599,7 +11600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11611,7 +11612,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Ambok Assek",
     "nip": "198810262025211051",
     "provinsi": "Riau",
@@ -11624,7 +11625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11636,7 +11637,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Venska Tuwanakotta",
     "nip": "198806032025212060",
     "provinsi": "Maluku",
@@ -11649,7 +11650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11674,7 +11675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11699,7 +11700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11724,7 +11725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11749,7 +11750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11774,7 +11775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11799,7 +11800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11824,7 +11825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11849,7 +11850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11874,7 +11875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11886,7 +11887,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Buana Perdata'",
     "nip": "198403132025211054",
     "provinsi": "Sumatera Selatan",
@@ -11899,7 +11900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11924,7 +11925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11949,7 +11950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11974,7 +11975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -11999,7 +12000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12024,7 +12025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12049,7 +12050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12074,7 +12075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12086,7 +12087,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Hazlan Syah",
     "nip": "199210202025211073",
     "provinsi": "Riau",
@@ -12099,7 +12100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12111,7 +12112,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ruslan",
     "nip": "198509272025211047",
     "provinsi": "Sulawesi Tenggara",
@@ -12124,7 +12125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12149,7 +12150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12174,7 +12175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12199,7 +12200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12224,7 +12225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12249,7 +12250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12274,7 +12275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12299,7 +12300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12324,7 +12325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12349,7 +12350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12361,7 +12362,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Rimson Siagian",
     "nip": "198609282025211042",
     "provinsi": "Sumatera Utara",
@@ -12374,7 +12375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12399,7 +12400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12424,7 +12425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12449,7 +12450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12474,7 +12475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12499,7 +12500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12524,7 +12525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12549,7 +12550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12561,7 +12562,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Bangun Iskandar Siahaan",
     "nip": "198211042025211037",
     "provinsi": "Sumatera Utara",
@@ -12574,7 +12575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12586,7 +12587,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Sandra Efendi",
     "nip": "198802252025211055",
     "provinsi": "Sumatera Selatan",
@@ -12599,7 +12600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12624,7 +12625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12649,7 +12650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12674,7 +12675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12699,7 +12700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12724,7 +12725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12749,7 +12750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12774,7 +12775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12799,7 +12800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12824,7 +12825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12849,7 +12850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12874,7 +12875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12899,7 +12900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12924,7 +12925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12949,7 +12950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12974,7 +12975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -12986,7 +12987,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Rony Dian Noventa Ginting",
     "nip": "198711282025211052",
     "provinsi": "Sumatera Utara",
@@ -12999,7 +13000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13011,7 +13012,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ratu Ulva Cahya Herista",
     "nip": "199512082025212067",
     "provinsi": "Sumatera Utara",
@@ -13024,7 +13025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13049,7 +13050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13074,7 +13075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13099,7 +13100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13124,7 +13125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13149,7 +13150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13174,7 +13175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13199,7 +13200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13224,7 +13225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13249,7 +13250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13261,7 +13262,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Rahmatullah",
     "nip": "198807012025211081",
     "provinsi": "Banten",
@@ -13274,7 +13275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13299,7 +13300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13324,7 +13325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13349,7 +13350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13374,7 +13375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13399,7 +13400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13424,7 +13425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13449,7 +13450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13461,7 +13462,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Iskandar Yajene",
     "nip": "199211032025211049",
     "provinsi": "Gorontalo",
@@ -13474,7 +13475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13486,7 +13487,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Hendri Juntan",
     "nip": "199103082025211052",
     "provinsi": "Banten",
@@ -13499,7 +13500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13524,7 +13525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13549,7 +13550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13574,7 +13575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13599,7 +13600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13624,7 +13625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13649,7 +13650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13674,7 +13675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13699,7 +13700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13724,7 +13725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13736,7 +13737,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Dena Permana",
     "nip": "199004062025211068",
     "provinsi": "Dki Jakarta",
@@ -13749,7 +13750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13774,7 +13775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13799,7 +13800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13824,7 +13825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13849,7 +13850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13874,7 +13875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13899,7 +13900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13924,7 +13925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13936,7 +13937,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Anggi Firmansyah",
     "nip": "199106052025211078",
     "provinsi": "Jawa Barat",
@@ -13949,7 +13950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13961,7 +13962,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Marwandi Dwi Jaya",
     "nip": "198410282025211059",
     "provinsi": "Bengkulu",
@@ -13974,7 +13975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -13999,7 +14000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14024,7 +14025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14049,7 +14050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14074,7 +14075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14099,7 +14100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14124,7 +14125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14149,7 +14150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14174,7 +14175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14199,7 +14200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14211,7 +14212,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Cecep Hani Setiadi",
     "nip": "198309132025211050",
     "provinsi": "Jawa Barat",
@@ -14224,7 +14225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14249,7 +14250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14274,7 +14275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14299,7 +14300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14324,7 +14325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14349,7 +14350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14374,7 +14375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14399,7 +14400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14411,7 +14412,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Budi Setia Rahman",
     "nip": "198907242025211072",
     "provinsi": "Jawa Barat",
@@ -14424,7 +14425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14436,7 +14437,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Anggi Resmana",
     "nip": "198602062025211047",
     "provinsi": "Jawa Barat",
@@ -14449,7 +14450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14474,7 +14475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14499,7 +14500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14524,7 +14525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14549,7 +14550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14574,7 +14575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14599,7 +14600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14624,7 +14625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14649,7 +14650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14674,7 +14675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14686,7 +14687,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Yogi Iskandar",
     "nip": "198805102025211081",
     "provinsi": "Jawa Barat",
@@ -14699,7 +14700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14724,7 +14725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14749,7 +14750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14774,7 +14775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14799,7 +14800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14824,7 +14825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14849,7 +14850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14874,7 +14875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14886,7 +14887,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Haris Nugraha",
     "nip": "199109042025211040",
     "provinsi": "Jawa Barat",
@@ -14899,7 +14900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14911,7 +14912,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Didi Kunaedi",
     "nip": "198302202025211033",
     "provinsi": "Jawa Barat",
@@ -14924,7 +14925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14949,7 +14950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14974,7 +14975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -14999,7 +15000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15024,7 +15025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15049,7 +15050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15074,7 +15075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15099,7 +15100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15124,7 +15125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15149,7 +15150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15161,7 +15162,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Bayu Alim Pribadi",
     "nip": "199111122025211078",
     "provinsi": "Jawa Tengah",
@@ -15174,7 +15175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15199,7 +15200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15224,7 +15225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15249,7 +15250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15274,7 +15275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15299,7 +15300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15324,7 +15325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15349,7 +15350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15361,7 +15362,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Abdul Mutholib",
     "nip": "199006122025211072",
     "provinsi": "Jawa Timur",
@@ -15374,7 +15375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15386,7 +15387,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Didi",
     "nip": "198805092025211079",
     "provinsi": "Jawa Barat",
@@ -15399,7 +15400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15424,7 +15425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15449,7 +15450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15474,7 +15475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15499,7 +15500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15524,7 +15525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15549,7 +15550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15574,7 +15575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15599,7 +15600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15624,7 +15625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15636,7 +15637,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Muhammad Jaya Abil Istiqlal",
     "nip": "199308122025211057",
     "provinsi": "Jawa Tengah",
@@ -15649,7 +15650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15674,7 +15675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15699,7 +15700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15724,7 +15725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15749,7 +15750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15774,7 +15775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15799,7 +15800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15824,7 +15825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15836,7 +15837,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Galuh Murdani",
     "nip": "198807172025211083",
     "provinsi": "Jawa Timur",
@@ -15849,7 +15850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15861,7 +15862,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Catur Kurnia Hartanto",
     "nip": "198703252025211055",
     "provinsi": "Jawa Tengah",
@@ -15874,7 +15875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15899,7 +15900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15924,7 +15925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15949,7 +15950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15974,7 +15975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -15999,7 +16000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16024,7 +16025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16049,7 +16050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16074,7 +16075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16099,7 +16100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16111,7 +16112,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Desyanto",
     "nip": "197812242025211030",
     "provinsi": "Lampung",
@@ -16124,7 +16125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16149,7 +16150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16174,7 +16175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16199,7 +16200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16224,7 +16225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16249,7 +16250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16274,7 +16275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16299,7 +16300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16311,7 +16312,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Abu Sirri",
     "nip": "198804252025211055",
     "provinsi": "Jawa Timur",
@@ -16324,7 +16325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16336,7 +16337,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Teguh Yuswo",
     "nip": "198304072025211063",
     "provinsi": "Jawa Timur",
@@ -16349,7 +16350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16374,7 +16375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16399,7 +16400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16424,7 +16425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16449,7 +16450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16474,7 +16475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16499,7 +16500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16524,7 +16525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16549,7 +16550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16574,7 +16575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16586,7 +16587,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Saidul Bahri",
     "nip": "199302142025211042",
     "provinsi": "Kalimantan Selatan",
@@ -16599,7 +16600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16624,7 +16625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16649,7 +16650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16674,7 +16675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16699,7 +16700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16724,7 +16725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16749,7 +16750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16774,7 +16775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16786,7 +16787,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Riswan Rifany",
     "nip": "198002012025211041",
     "provinsi": "Kalimantan Selatan",
@@ -16799,7 +16800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16811,7 +16812,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ermar Hari Yayandra",
     "nip": "198703092025211056",
     "provinsi": "Kepulauan Riau",
@@ -16824,7 +16825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16849,7 +16850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16874,7 +16875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16899,7 +16900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16924,7 +16925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16949,7 +16950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16974,7 +16975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -16999,7 +17000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17024,7 +17025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17049,7 +17050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17061,7 +17062,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Risaldi Levinus Ayomi",
     "nip": "199212272025211074",
     "provinsi": "Papua Barat",
@@ -17074,7 +17075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17099,7 +17100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17124,7 +17125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17149,7 +17150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17174,7 +17175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17199,7 +17200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17224,7 +17225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17249,7 +17250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17261,7 +17262,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Hasan",
     "nip": "198306132025211052",
     "provinsi": "Riau",
@@ -17274,7 +17275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17286,7 +17287,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Prawira Warsita",
     "nip": "198503052025211087",
     "provinsi": "Jawa Timur",
@@ -17299,7 +17300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17324,7 +17325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17349,7 +17350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17374,7 +17375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17399,7 +17400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17424,7 +17425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17449,7 +17450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17474,7 +17475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17499,7 +17500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17524,7 +17525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17536,7 +17537,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Ade Titapasanea",
     "nip": "199108312025211044",
     "provinsi": "P A P U A",
@@ -17549,7 +17550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17574,7 +17575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17599,7 +17600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17624,7 +17625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17649,7 +17650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17674,7 +17675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17699,7 +17700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17724,7 +17725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17736,7 +17737,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Eufranius Edwin",
     "nip": "199108092025211049",
     "provinsi": "Nusa Tenggara Timur",
@@ -17749,7 +17750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17761,7 +17762,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Memeng Fauzi",
     "nip": "198107212025211052",
     "provinsi": "Riau",
@@ -17774,7 +17775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17799,7 +17800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17824,7 +17825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17849,7 +17850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17874,7 +17875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17899,7 +17900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17924,7 +17925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17949,7 +17950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17974,7 +17975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -17999,7 +18000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18011,7 +18012,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Firman Sawito",
     "nip": "198902132025211065",
     "provinsi": "Riau",
@@ -18024,7 +18025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18049,7 +18050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18074,7 +18075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18099,7 +18100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18124,7 +18125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18149,7 +18150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18174,7 +18175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18199,7 +18200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18211,7 +18212,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Arpan",
     "nip": "198709192025211067",
     "provinsi": "Sulawesi Tenggara",
@@ -18224,7 +18225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18236,7 +18237,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Wahyudin",
     "nip": "198211102025211077",
     "provinsi": "Nusa Tenggara Barat",
@@ -18249,7 +18250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18274,7 +18275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18299,7 +18300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18324,7 +18325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18349,7 +18350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18374,7 +18375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18399,7 +18400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18424,7 +18425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18449,7 +18450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18474,7 +18475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18486,7 +18487,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Fuadi Hasmar",
     "nip": "198705092025211067",
     "provinsi": "Sumatera Barat",
@@ -18499,7 +18500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18524,7 +18525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18549,7 +18550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18574,7 +18575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18599,7 +18600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18624,7 +18625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18649,7 +18650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18674,7 +18675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18686,7 +18687,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "A. Rezi Maulana",
     "nip": "199103062025211062",
     "provinsi": "Sumatera Barat",
@@ -18699,7 +18700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18711,7 +18712,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Soemitro",
     "nip": "198403312025211035",
     "provinsi": "Sulawesi Selatan",
@@ -18724,7 +18725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18749,7 +18750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18774,7 +18775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18799,7 +18800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18824,7 +18825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18849,7 +18850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18874,7 +18875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18899,7 +18900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18924,7 +18925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18949,7 +18950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18961,7 +18962,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Zulvianto Maduwu",
     "nip": "199007132025211053",
     "provinsi": "Sumatera Utara",
@@ -18974,7 +18975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -18999,7 +19000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19024,7 +19025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19049,7 +19050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19074,7 +19075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19099,7 +19100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19124,7 +19125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19149,7 +19150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19161,7 +19162,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Irpan Pasaribu",
     "nip": "198812132025211063",
     "provinsi": "Sumatera Utara",
@@ -19174,7 +19175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19186,7 +19187,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Afridan Irsa",
     "nip": "198904262025211063",
     "provinsi": "Sumatera Selatan",
@@ -19199,7 +19200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19224,7 +19225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19249,7 +19250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19274,7 +19275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19299,7 +19300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19324,7 +19325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19349,7 +19350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19374,7 +19375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19399,7 +19400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19424,7 +19425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19436,7 +19437,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Agus Enmono Sodipta Berutu",
     "nip": "199008142025211063",
     "provinsi": "Sumatera Utara",
@@ -19449,7 +19450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19474,7 +19475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19499,7 +19500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19524,7 +19525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19549,7 +19550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19574,7 +19575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19586,7 +19587,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Andar Susanto",
     "nip": "198206272025211046",
     "provinsi": "Sumatera Utara",
@@ -19599,7 +19600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19611,7 +19612,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Evi Tamala Simamora",
     "nip": "199112012025212059",
     "provinsi": "Sumatera Utara",
@@ -19624,7 +19625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19649,7 +19650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19674,7 +19675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19699,7 +19700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19724,7 +19725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19749,7 +19750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19774,7 +19775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19799,7 +19800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19824,7 +19825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19849,7 +19850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19861,7 +19862,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Hilmi",
     "nip": "199202112025211052",
     "provinsi": "Banten",
@@ -19874,7 +19875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19899,7 +19900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19924,7 +19925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19949,7 +19950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19974,7 +19975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -19999,7 +20000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20024,7 +20025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20049,7 +20050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20061,7 +20062,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Zulkifli Noho",
     "nip": "198807042025211068",
     "provinsi": "Gorontalo",
@@ -20074,7 +20075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20086,7 +20087,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "08:30",
     "selesai": "09:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Sigif Desrian",
     "nip": "198912242025211047",
     "provinsi": "Jambi",
@@ -20099,7 +20100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20124,7 +20125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20149,7 +20150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20174,7 +20175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20199,7 +20200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20224,7 +20225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20249,7 +20250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20274,7 +20275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20299,7 +20300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20324,7 +20325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20336,7 +20337,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Fajar Hari Wijaya",
     "nip": "199401132025211036",
     "provinsi": "Daerah Istimewa Yogyakarta",
@@ -20349,7 +20350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20374,7 +20375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20399,7 +20400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20424,7 +20425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20449,7 +20450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20474,7 +20475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20499,7 +20500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20524,7 +20525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20536,7 +20537,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Wahyu Budiyanto",
     "nip": "198601072025211034",
     "provinsi": "Daerah Istimewa Yogyakarta",
@@ -20549,7 +20550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20561,7 +20562,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:00",
     "selesai": "09:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Sri Yunarni",
     "nip": "199208172025212112",
     "provinsi": "Jambi",
@@ -20574,7 +20575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20599,7 +20600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20624,7 +20625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20649,7 +20650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20674,7 +20675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20699,7 +20700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20724,7 +20725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20749,7 +20750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20774,7 +20775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20799,7 +20800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20811,7 +20812,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Devi Dermawan",
     "nip": "198705012025211053",
     "provinsi": "Jawa Barat",
@@ -20824,7 +20825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20849,7 +20850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20874,7 +20875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20899,7 +20900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20924,7 +20925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20949,7 +20950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20974,7 +20975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -20999,7 +21000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21011,7 +21012,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Dadan Fiet Hardan",
     "nip": "198611052025211063",
     "provinsi": "Jawa Barat",
@@ -21024,7 +21025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21036,7 +21037,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "09:30",
     "selesai": "10:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Akbar Nugraha",
     "nip": "199011272025211053",
     "provinsi": "Jawa Barat",
@@ -21049,7 +21050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21074,7 +21075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21099,7 +21100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21124,7 +21125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21149,7 +21150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21174,7 +21175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21199,7 +21200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21224,7 +21225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21249,7 +21250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21274,7 +21275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21286,7 +21287,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Prida Permana",
     "nip": "198603282025211045",
     "provinsi": "Jawa Barat",
@@ -21299,7 +21300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21324,7 +21325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21349,7 +21350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21374,7 +21375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21399,7 +21400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21424,7 +21425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21449,7 +21450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21474,7 +21475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21486,7 +21487,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Agung Budi Prasetio",
     "nip": "199108082025211065",
     "provinsi": "Jawa Barat",
@@ -21499,7 +21500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21511,7 +21512,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:00",
     "selesai": "10:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ahmad Damayadi",
     "nip": "198502162025211054",
     "provinsi": "Jawa Barat",
@@ -21524,7 +21525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21549,7 +21550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21574,7 +21575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21599,7 +21600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21624,7 +21625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21649,7 +21650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21674,7 +21675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21699,7 +21700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21724,7 +21725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21749,7 +21750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21761,7 +21762,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Deden Abdul Wahab",
     "nip": "198103032025211060",
     "provinsi": "Jawa Barat",
@@ -21774,7 +21775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21799,7 +21800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21824,7 +21825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21849,7 +21850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21874,7 +21875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21899,7 +21900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21924,7 +21925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21949,7 +21950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21961,7 +21962,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Dani Nurdiani",
     "nip": "198410292025211036",
     "provinsi": "Jawa Barat",
@@ -21974,7 +21975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -21986,7 +21987,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "10:30",
     "selesai": "11:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Asfariza Yudhi Prabowo",
     "nip": "199504252025211043",
     "provinsi": "Jawa Tengah",
@@ -21999,7 +22000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22024,7 +22025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22049,7 +22050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22074,7 +22075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22099,7 +22100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22124,7 +22125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22149,7 +22150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22174,7 +22175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22199,7 +22200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22224,7 +22225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22236,7 +22237,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Nur Hadi",
     "nip": "199310212025211048",
     "provinsi": "Jawa Tengah",
@@ -22249,7 +22250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22274,7 +22275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22299,7 +22300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22324,7 +22325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22349,7 +22350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22374,7 +22375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22399,7 +22400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22424,7 +22425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22436,7 +22437,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Andriawan",
     "nip": "199102212025211037",
     "provinsi": "Jawa Barat",
@@ -22449,7 +22450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22461,7 +22462,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:00",
     "selesai": "11:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Mohamad Nur Ali Hasmy",
     "nip": "199309282025211050",
     "provinsi": "Jawa Barat",
@@ -22474,7 +22475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22499,7 +22500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22524,7 +22525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22549,7 +22550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22574,7 +22575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22599,7 +22600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22624,7 +22625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22649,7 +22650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22674,7 +22675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22699,7 +22700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22711,7 +22712,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Pindra Irdiyana",
     "nip": "198701302025211039",
     "provinsi": "Jawa Barat",
@@ -22724,7 +22725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22749,7 +22750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22774,7 +22775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22799,7 +22800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22824,7 +22825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22849,7 +22850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22874,7 +22875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22899,7 +22900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22911,7 +22912,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Harris",
     "nip": "199005252025211081",
     "provinsi": "Kalimantan Timur",
@@ -22924,7 +22925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22936,7 +22937,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "11:30",
     "selesai": "12:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Muhammad Rizal Luthfi",
     "nip": "199103232025211067",
     "provinsi": "Jawa Timur",
@@ -22949,7 +22950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22974,7 +22975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -22999,7 +23000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23024,7 +23025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23049,7 +23050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23074,7 +23075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23099,7 +23100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23124,7 +23125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23149,7 +23150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23174,7 +23175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23186,7 +23187,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Yosa Nipada Putra",
     "nip": "199403152025211066",
     "provinsi": "Kalimantan Tengah",
@@ -23199,7 +23200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23224,7 +23225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23249,7 +23250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23274,7 +23275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23299,7 +23300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23324,7 +23325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23349,7 +23350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23374,7 +23375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23386,7 +23387,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Eko Wahyudi",
     "nip": "199009042025211052",
     "provinsi": "Lampung",
@@ -23399,7 +23400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23411,7 +23412,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:00",
     "selesai": "13:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Abdus Salam",
     "nip": "197801092025211012",
     "provinsi": "Jawa Timur",
@@ -23424,7 +23425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23449,7 +23450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23474,7 +23475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23499,7 +23500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23524,7 +23525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23549,7 +23550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23574,7 +23575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23599,7 +23600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23624,7 +23625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23649,7 +23650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23661,7 +23662,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Alfianus Irno",
     "nip": "198909292025211073",
     "provinsi": "Nusa Tenggara Timur",
@@ -23674,7 +23675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23699,7 +23700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23724,7 +23725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23749,7 +23750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23774,7 +23775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23799,7 +23800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23824,7 +23825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23849,7 +23850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23861,7 +23862,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Adi Siswanto",
     "nip": "198909122025211069",
     "provinsi": "Kalimantan Barat",
@@ -23874,7 +23875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23886,7 +23887,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "13:30",
     "selesai": "14:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Oskar Primus Gene Da Santo",
     "nip": "198907052025211072",
     "provinsi": "Nusa Tenggara Timur",
@@ -23899,7 +23900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23924,7 +23925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23949,7 +23950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23974,7 +23975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -23999,7 +24000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24024,7 +24025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24049,7 +24050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24074,7 +24075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24099,7 +24100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24124,7 +24125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24136,7 +24137,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Krisantus Erwin Asa Mau",
     "nip": "198905152025211088",
     "provinsi": "Nusa Tenggara Timur",
@@ -24149,7 +24150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24174,7 +24175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24199,7 +24200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24224,7 +24225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24249,7 +24250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24274,7 +24275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24299,7 +24300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24324,7 +24325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24336,7 +24337,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Hirsan Fitrajaya",
     "nip": "199211012025211053",
     "provinsi": "Nusa Tenggara Barat",
@@ -24349,7 +24350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24361,7 +24362,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:00",
     "selesai": "14:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Yudha Yuanda",
     "nip": "199405232025211059",
     "provinsi": "Riau",
@@ -24374,7 +24375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24399,7 +24400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24424,7 +24425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24449,7 +24450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24474,7 +24475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24499,7 +24500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24524,7 +24525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24549,7 +24550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24574,7 +24575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24599,7 +24600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24611,7 +24612,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Frengqi Pance Atakama",
     "nip": "199005072025211147",
     "provinsi": "Nusa Tenggara Timur",
@@ -24624,7 +24625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24649,7 +24650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24674,7 +24675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24699,7 +24700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24724,7 +24725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24749,7 +24750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24774,7 +24775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24799,7 +24800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24811,7 +24812,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Muhammad Husain Hasan",
     "nip": "199109142025211054",
     "provinsi": "Sulawesi Selatan",
@@ -24824,7 +24825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24836,7 +24837,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "14:30",
     "selesai": "15:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Ahmad Samil",
     "nip": "198807022025211076",
     "provinsi": "Sulawesi Barat",
@@ -24849,7 +24850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24874,7 +24875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24899,7 +24900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24924,7 +24925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24949,7 +24950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24974,7 +24975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -24999,7 +25000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25024,7 +25025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25049,7 +25050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25074,7 +25075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25086,7 +25087,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Adice Mutiara Ramadhan",
     "nip": "198505202025211069",
     "provinsi": "Sumatera Barat",
@@ -25099,7 +25100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25124,7 +25125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25149,7 +25150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25174,7 +25175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25199,7 +25200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25224,7 +25225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25249,7 +25250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25274,7 +25275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25286,7 +25287,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Basyarudin",
     "nip": "198305182025211040",
     "provinsi": "Sumatera Selatan",
@@ -25299,7 +25300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25311,7 +25312,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:00",
     "selesai": "15:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Hendra",
     "nip": "198902102025211066",
     "provinsi": "Sumatera Selatan",
@@ -25324,7 +25325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25349,7 +25350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25374,7 +25375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25399,7 +25400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25424,7 +25425,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25449,7 +25450,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25474,7 +25475,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25499,7 +25500,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25524,7 +25525,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25549,7 +25550,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25561,7 +25562,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Hendra Gunawan",
     "nip": "198907052025211075",
     "provinsi": "Sumatera Selatan",
@@ -25574,7 +25575,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25599,7 +25600,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25624,7 +25625,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25649,7 +25650,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25674,7 +25675,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25699,7 +25700,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25724,7 +25725,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25749,7 +25750,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25761,7 +25762,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Hasanema Laia",
     "nip": "199705282025211033",
     "provinsi": "Sumatera Utara",
@@ -25774,7 +25775,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25786,7 +25787,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "15:30",
     "selesai": "16:00",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Doni Hidayat Bangun",
     "nip": "199110222025211051",
     "provinsi": "Sumatera Utara",
@@ -25799,7 +25800,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25824,7 +25825,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25849,7 +25850,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25874,7 +25875,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25899,7 +25900,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25924,7 +25925,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25949,7 +25950,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25974,7 +25975,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -25999,7 +26000,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26024,7 +26025,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26036,7 +26037,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 2",
-    "petugas": "Sekretariat Linjamsos 2",
+    "petugas": "Sekretariat Linjamsos",
     "nama": "Hendrik Delvian",
     "nip": "198607042025211063",
     "provinsi": "Sumatera Utara",
@@ -26049,7 +26050,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26074,7 +26075,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26099,7 +26100,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26124,7 +26125,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26149,7 +26150,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26174,7 +26175,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26186,7 +26187,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 10",
-    "petugas": "Asiafry Raynaldi",
+    "petugas": "Iwien",
     "nama": "Amdi Pasya Harahap",
     "nip": "198807252025211067",
     "provinsi": "Sumatera Utara",
@@ -26199,7 +26200,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26211,7 +26212,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "mulai": "16:00",
     "selesai": "16:30",
     "room": "Room 11",
-    "petugas": "Donny Anugerah Perkasa",
+    "petugas": "Mahmud syahputra",
     "nama": "Lisnawati",
     "nip": "199310202025212064",
     "provinsi": "Sumatera Utara",
@@ -26224,7 +26225,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26249,7 +26250,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26274,7 +26275,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26299,7 +26300,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26324,7 +26325,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26349,7 +26350,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26374,7 +26375,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26399,7 +26400,7 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   },
   {
@@ -26424,12 +26425,12 @@ export const JADWAL_WAWANCARA_1057_REVISI = [
     "kehadiran": "Belum dikonfirmasi",
     "statusZoom": "Belum dibuat",
     "statusBerkas": "Belum diverifikasi",
-    "linkZoom": "",
+    "linkZoom": "https://bit.ly/TLHP_2 (Kode Sandi: 690971)",
     "catatan": ""
   }
 ]
 
-const cleanNipKey = (val) => String(val || '').replace(/\\D/g, '').trim()
+const cleanNipKey = (val) => String(val || '').replace(/\D/g, '').trim()
 
 export const JADWAL_WAWANCARA_BY_NIP = new Map()
 export const JADWAL_WAWANCARA_BY_NAME = new Map()

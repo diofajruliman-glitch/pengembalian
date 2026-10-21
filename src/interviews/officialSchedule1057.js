@@ -7,7 +7,7 @@ export const OFFICIAL_POPULATION_1057 = REAL_DISCIPLINE_DATA.filter(r => r.hasil
 // 19 Pewawancara resmi sesuai hasil alokasi jadwal 26–29 Oktober 2026
 export const OFFICIAL_INTERVIEWERS_19 = [
   'Sekretariat Linjamsos',
-  'Sekretariat Linjamsos 2',
+  'Sekretariat Linjamsos',
   'TU 1',
   'TU 2',
   'Leo Suta',
@@ -15,8 +15,8 @@ export const OFFICIAL_INTERVIEWERS_19 = [
   'Achmad Mustaqim',
   'Tasria Efrizka',
   'Helmy',
-  'Asiafry Raynaldi',
-  'Donny Anugerah Perkasa',
+  'Iwien',
+  'Mahmud syahputra',
   'Putri Angelina',
   'Prabasari',
   'Wawan Soedarso',

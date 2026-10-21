@@ -29,6 +29,7 @@ const JudolModule=React.lazy(()=>import('./judol/JudolModule.jsx'))
 const LetterManager=React.lazy(()=>import('./letters/LetterManager.jsx'))
 const InterviewMonitor=React.lazy(()=>import('./interviews/InterviewMonitor.jsx'))
 const InterviewerPortal=React.lazy(()=>import('./bap/InterviewerPortal.jsx'))
+const PortalWawancara=React.lazy(()=>import('./interviews/PortalWawancara.jsx'))
 
 const url = import.meta.env.VITE_SUPABASE_URL
 const key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY
@@ -70,6 +71,7 @@ const menuGroups = [
     items: [
       { id: 'kategorisasi-judol', name: 'Kategorisasi Disiplin ASN', icon: ShieldCheck },
       { id: 'surat-tlhp', name: 'Persuratan & Dokumen Resmi', icon: FileText },
+      { id: 'portal-wawancara', name: 'Portal Wawancara', icon: Video, tag: 'Cek Jadwal' },
       { id: 'monitoring-wawancara', name: 'Monitoring Wawancara', icon: Users, tag: 'Operasional' },
       { id: 'portal-pewawancara', name: 'Portal & Hasil BAP', icon: FileText }
     ]
@@ -101,7 +103,7 @@ function App(){
  const [masterLoading,setMasterLoading]=useState(false);const [masterLoadError,setMasterLoadError]=useState('')
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
- const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp','#monitoring-wawancara','#portal-pewawancara'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
+ const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp','#monitoring-wawancara','#portal-pewawancara','#portal-wawancara'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
  const [judolSnapshot,setJudolSnapshot]=useState(()=>{
   if(configured||!import.meta.env.DEV)return null
   try{
@@ -425,6 +427,7 @@ function App(){
     {page==='perubahan-pengembalian'&&<AdjustmentMonitor supabase={supabase} local={demo}/>}
     {page==='kategorisasi-judol'&&<React.Suspense fallback={<p role="status">Memuat modul kategorisasi…</p>}><JudolModule key={session?.user?.id||'demo'} snapshot={selectedJudolSnapshot} onSnapshot={updateJudolSnapshot} canImport={canImport} canEdit={canEdit} supabase={supabase} onOpenInterviews={()=>go('monitoring-wawancara')} onOpenBap={openBap}/></React.Suspense>}
     {!demo&&['monitoring-wawancara','surat-tlhp'].includes(page)&&!operationalJudolSnapshot&&<div className="notice amber-notice" role="status"><Info size={17}/><span>{judolSourceLoading?'Memverifikasi populasi Disiplin ASN dari database…':judolSourceError||'BNBA dan penerima surat Disiplin ASN hanya memakai versi tersimpan di database. Pilih dataset online di Kategorisasi Disiplin ASN; draft Excel belum digunakan.'}</span>{judolSourceError&&<button className="btn secondary" onClick={()=>setJudolSourceAttempt(value=>value+1)}>Coba verifikasi lagi</button>}</div>}
+    {page==='portal-wawancara'&&<React.Suspense fallback={<p role="status">Memuat portal wawancara…</p>}><PortalWawancara onManagePerson={nip=>go('monitoring-wawancara')}/></React.Suspense>}
     {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={operationalJudolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')} supabase={supabase} onOpenBap={openBap} isAdmin={profile?.role==='admin'}/></React.Suspense>}
     {page==='portal-pewawancara'&&(demo?<p className="notice amber-notice">Portal BAP memerlukan login dan database aktif.</p>:<React.Suspense fallback={<p>Memuat portal BAP…</p>}><InterviewerPortal key={session.user.id} client={supabase} profile={profile} userId={session.user.id} initialNik={bapNik}/></React.Suspense>)}
     {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager databaseOnly={!demo} cases={cases} judolSnapshot={operationalJudolSnapshot} onJudolSnapshot={updateJudolSnapshot} onOpenJudolSource={()=>go('kategorisasi-judol')} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
