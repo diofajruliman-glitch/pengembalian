@@ -16,7 +16,9 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
    pada Persuratan & Dokumen Resmi (`nipPositionReference.js`). Koreksi pemeriksa
    yang sudah diisi tetap dipertahankan. Data yang tidak cocok ditandai untuk
    diverifikasi dan dilengkapi.
-4. Jawaban disimpan otomatis ke database setiap **15 menit** bila ada perubahan.
+4. Jawaban disimpan otomatis ke database **1 menit setelah berhenti mengetik**.
+   Setiap perubahan isian mengulang hitungan jeda, sehingga penyimpanan menunggu
+   jeda mengetik berikutnya.
    Gunakan **Simpan draf** untuk menyimpan atau memperbarui isian kapan saja. Tunggu
    konfirmasi tersimpan sebelum menutup. Gangguan koneksi ditampilkan dengan
    jelas; jangan tutup halaman sebelum penyimpanan berhasil atau menyalin jawaban.
@@ -190,4 +192,4 @@ dan membuka draf untuk aktor berwenang. Revisi yang usang ditolak.
 `node --test tests/bapTemplateLayout.test.js tests/interviewRevisions.test.js`
 menguji struktur kop inline, footer paraf, perataan identitas, tanda tangan bersih,
 serta otorisasi dan riwayat revisi. Uji browser memeriksa jawaban panjang,
-kop di PDF, paraf tiap halaman, tanggal jadwal, simpan manual, dan timer 900000 ms.
+kop di PDF, paraf tiap halaman, tanggal jadwal, simpan manual, dan jeda mengetik 60000 ms (diulang setiap perubahan).
