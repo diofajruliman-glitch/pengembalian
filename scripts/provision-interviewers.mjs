@@ -7,7 +7,7 @@ export const accounts = OFFICIAL_ROOMS_19.map((room, idx) => {
   const emailPrefix = isDuplicate ? `${base}.${idx + 1}` : base
   return {
     room_id: room.id,
-    nama: isDuplicate ? `${room.interviewer} ${idx + 1}` : room.interviewer,
+    nama: room.interviewer,
     email: `${emailPrefix}@kemensos.go.id`
   }
 })

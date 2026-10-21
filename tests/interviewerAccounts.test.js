@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { accounts, provision } from '../scripts/provision-interviewers.mjs'
+import { OFFICIAL_ROOMS_19 } from '../src/interviews/officialSchedule1057.js'
 
 test('19 unique emails follow the official room assignments', () => {
   assert.equal(accounts.length, 19)
@@ -8,6 +9,24 @@ test('19 unique emails follow the official room assignments', () => {
   assert.equal(accounts[0].email, 'sekretariat.linjamsos@kemensos.go.id')
   assert.equal(accounts[4].email, 'leo.suta@kemensos.go.id')
   assert.equal(accounts[18].room_id, 'room-19')
+})
+
+test('account display names match every official schedule room exactly', () => {
+  assert.deepEqual(
+    accounts.map(({ room_id, nama }) => ({ room_id, nama })),
+    OFFICIAL_ROOMS_19.map(({ id, interviewer }) => ({ room_id: id, nama: interviewer }))
+  )
+  assert.equal(accounts.find(a => a.room_id === 'room-10').nama, 'Iwien')
+  assert.equal(accounts.find(a => a.room_id === 'room-11').nama, 'Mahmud syahputra')
+})
+
+test('rooms sharing an institutional display name keep distinct login emails', () => {
+  const first = accounts.find(a => a.room_id === 'room-1')
+  const second = accounts.find(a => a.room_id === 'room-2')
+  assert.equal(first.nama, 'Sekretariat Linjamsos')
+  assert.equal(second.nama, first.nama)
+  assert.equal(second.email, 'sekretariat.linjamsos.2@kemensos.go.id')
+  assert.notEqual(first.email, second.email)
 })
 
 function backend({ existing = false, conflicting = false } = {}) {
