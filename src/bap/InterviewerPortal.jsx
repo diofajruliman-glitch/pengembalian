@@ -36,6 +36,8 @@ function BapEditor({row:remote,client,profile,userId,dirtyRef,onClose,onSaved}){
  const [categoryDirty,setCategoryDirty]=useState(false)
  const [statementDirty,setStatementDirty]=useState(false)
  const [reportDirty,setReportDirty]=useState(false)
+ const [categoryOpen,setCategoryOpen]=useState(remote.status==='Selesai')
+ const previousStatus=useRef(remote.status)
  const dirty=useRef(false),saving=useRef(false),conflict=useRef(false),editSeq=useRef(0),current=useRef({row,identity,answers}),previewNode=useRef(null),dialog=useRef(null),mounted=useRef(true)
  current.current={row,identity,answers}
  dirtyRef.current=dirty.current||categoryDirty||statementDirty||reportDirty
@@ -44,6 +46,13 @@ function BapEditor({row:remote,client,profile,userId,dirtyRef,onClose,onSaved}){
  const missing=missingFields(row,identity,answers)
  const progress=Object.values(answers).filter(a=>a.trim()).length
  useEffect(()=>{mounted.current=true;const el=dialog.current;el.showModal();return()=>{mounted.current=false;el.close()}},[])
+ useEffect(()=>{
+  const completed=row.status==='Selesai'
+  if(completed||previousStatus.current==='Selesai'){
+   setCategoryOpen(completed);dialog.current?.scrollTo({top:0})
+  }
+  previousStatus.current=row.status
+ },[row.status])
  useEffect(()=>{function leave(e){if(dirtyRef.current){e.preventDefault();e.returnValue=''}}window.addEventListener('beforeunload',leave);return()=>window.removeEventListener('beforeunload',leave)},[])
  useEffect(()=>{
   if(remote.revision<=current.current.row.revision)return
@@ -60,7 +69,7 @@ function BapEditor({row:remote,client,profile,userId,dirtyRef,onClose,onSaved}){
   const seq=editSeq.current,c=current.current
   try{
    const next=await act(client,c.row,action,{identity:c.identity,answers:c.answers})
-   if(mounted.current){saved(next);if(seq===editSeq.current){dirty.current=false}setNotice(action==='finalize'?'BAP selesai. Gunakan Revisi BAP jika perlu memperbaiki isian.':'Tersimpan di database · '+new Date().toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta'}))}
+   if(mounted.current){saved(next);if(seq===editSeq.current){dirty.current=false}if(action==='finalize'){setPreview(false);setWord(null)}setNotice(action==='finalize'?'BAP selesai. Gunakan Revisi BAP jika perlu memperbaiki isian.':'Tersimpan di database · '+new Date().toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta'}))}
    return true
   }catch(e){if(mounted.current){setError(e.message);if(e.message.includes('CONFLICT')||e.message.includes('LOCKED'))conflict.current=true}return false}
   finally{saving.current=false;if(mounted.current)setBusy(false)}
@@ -78,21 +87,27 @@ function BapEditor({row:remote,client,profile,userId,dirtyRef,onClose,onSaved}){
   try{const c=current.current;const blob=await buildWord(c.row,c.identity,c.answers);flushSync(()=>setWord(blob));await renderPreview(blob,previewNode.current)}catch(e){setError(e.message);setWord(null)}finally{setPreviewBusy(false)}
  }
  async function exportPdf(){setBusy(true);setError('');try{download(await buildPdf(previewNode.current),`BAP-${row.person.nip}.pdf`)}catch(e){setError(e.message)}finally{setBusy(false)}}
- return <dialog ref={dialog} className="bap-dialog" aria-label={`BAP ${row.person.nama}`} onCancel={e=>{e.preventDefault();onClose()}}>
-  <header className="bap-editor-header"><div><h2>{row.person.nama}</h2><p>NIP {row.person.nip} · {row.room_id.replace('room-','Room ')} · {row.status}</p></div><button className="btn secondary" onClick={onClose} disabled={busy}>Tutup</button></header>
-  {error&&<p className="notice red-notice" role="alert">{error}{conflict.current&&' Salin jawaban yang belum tersimpan sebelum menutup, lalu buka kembali data terbaru.'}</p>}
-  {notice&&<p role="status">{notice}</p>}
+ const panels={
+  bap:(<section key="bap" className="bap-workspace" aria-label="Berita Acara Pemeriksaan"><h3>Berita Acara Pemeriksaan (BAP)</h3>
   {!row.started_at&&<section className="notice blue-notice"><span>Jadwal: {when(row)}. Pastikan peserta yang hadir sesuai identitas ini.</span>{profile.role!=='viewer'&&<button className="btn primary" disabled={busy} onClick={()=>action('start')}>Identitas sesuai — Mulai wawancara</button>}</section>}
   {row.started_at&&<p>Tanggal BAP sesuai jadwal: {dateWords(interviewTimestamp(row)).hari}, {dateWords(interviewTimestamp(row)).tanggal_huruf} {dateWords(interviewTimestamp(row)).bulan} {dateWords(interviewTimestamp(row)).tahun_huruf} (WIB)</p>}
   {canRevise&&<section className="notice blue-notice"><span>BAP sudah selesai dan dapat diperbaiki. Revisi akan menjadi draf kembali; kategori, SPTJM dan LHP terkait perlu ditinjau ulang.</span><button className="btn secondary" disabled={busy||conflict.current} onClick={()=>action('revise',{reason:'Perbaikan BAP setelah selesai'})}>Revisi BAP</button></section>}
   {row.started_at&&row.status!=='Selesai'&&row.locked_by!==userId&&<p className="notice amber-notice">{row.locked_by?'Sedang ditangani pewawancara lain.':'Draf siap dilanjutkan.'}{!row.locked_by&&profile.role!=='viewer'&&<button className="btn primary" disabled={busy} onClick={()=>action('start')}>Lanjutkan wawancara</button>}</p>}
-  {profile.role==='admin'&&<details className="panel"><summary>Administrasi penugasan / pembukaan draf</summary>{!row.started_at&&<div className="bap-filters"><label>Room<select value={schedule.roomId} onChange={e=>setSchedule({...schedule,roomId:e.target.value})}>{Array.from({length:19},(_,i)=><option key={i} value={`room-${i+1}`}>Room {i+1}</option>)}</select></label><label>Tanggal<input type="date" value={schedule.date} onChange={e=>setSchedule({...schedule,date:e.target.value})}/></label><label>Jam WIB<input type="time" value={schedule.time} onChange={e=>setSchedule({...schedule,time:e.target.value})}/></label><button className="btn secondary" disabled={busy} onClick={()=>action('schedule',schedule)}>Simpan penugasan</button></div>}{row.started_at&&<><label>Alasan membuka / melepas kunci<input value={reason} onChange={e=>setReason(e.target.value)} placeholder="Minimal 5 karakter"/></label><button className="btn secondary" disabled={busy||reason.trim().length<5} onClick={()=>action('reopen',{reason})}>Buka kembali / lepaskan kunci</button></>}</details>}
-  <details hidden={preview} className="panel"><summary><b>Perbandingan kategori awal dan hasil wawancara</b></summary><CategoryComparison client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current} bapBusy={busy} onDirty={setCategoryDirty}/></details>
-  <details hidden={preview} className="panel"><summary><b>SPTJM — pernyataan, pratinjau dan unduhan</b></summary><StatementPanel client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current} bapBusy={busy} onDirty={setStatementDirty}/></details>
-  <details hidden={preview} className="panel"><summary><b>Draf LHP — analisis, rekomendasi dan unduhan</b></summary><LhpPanel client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current||categoryDirty||statementDirty} bapBusy={busy} onDirty={setReportDirty}/></details>
   {!preview&&<><section className="panel"><h3>Identitas & administrasi</h3><p>Nama dan NIP mengikuti peserta terjadwal. Pangkat dan jabatan terhubung ke data surat panggilan berdasarkan NIP. Periksa kesesuaiannya sebelum melanjutkan.</p><div className="bap-identity">{IDENTITY_FIELDS.map(([key,label])=><label key={key}>{label}{!identity[key]&&<small className="bap-required">Belum diisi</small>}<input aria-label={label} type={key==='tanggalSurat'?'date':'text'} maxLength={500} value={identity[key]||''} disabled={readOnly||busy} onChange={e=>change('identity',key,e.target.value)}/></label>)}</div></section>
    <section className="panel"><h3>Jawaban BAP · {progress}/22 terisi</h3>{QUESTIONS.map((q,i)=><label className="bap-question" key={i}><b>{i+1}. {q.replace('{nomorSurat}',identity.nomorSurat||'…').replace('{tanggalSuratTeks}',identity.tanggalSurat||'…')}</b><textarea rows={3} maxLength={8000} value={answers[i+1]||''} disabled={readOnly||busy} onChange={e=>change('answer',i+1,e.target.value)} placeholder="Catat jawaban peserta sesuai keterangannya"/></label>)}</section></>}
   {preview&&<section><div className="bap-preview-actions"><button className="btn secondary" disabled={busy||previewBusy} onClick={()=>setPreview(false)}>Kembali ke isian / revisi</button><button className="btn primary" disabled={busy||previewBusy||!word||missing.length>0} onClick={()=>download(word,`BAP-${row.person.nip}.docx`)}>Unduh Word</button><button className="btn primary" disabled={busy||previewBusy||!word||missing.length>0} onClick={exportPdf}>{busy?'Menyiapkan…':'Unduh PDF'}</button></div>{missing.length>0&&<p role="alert" className="notice amber-notice">Lengkapi sebelum unduh: {missing.join(', ')}.</p>}{previewBusy&&<p role="status">Menyiapkan halaman pratinjau…</p>}<div className="bap-preview-scroll"><div ref={previewNode}/></div><p className="bap-preview-note">PDF mengikuti halaman pratinjau ini. Word menggunakan template asli; pemenggalan halaman dapat menyesuaikan aplikasi Word/WPS dan font yang tersedia.</p></section>}
+  </section>),
+  category:(<details key="category" hidden={preview} className="panel" open={categoryOpen} onToggle={event=>setCategoryOpen(event.currentTarget.open)}><summary><b>Perbandingan kategori awal dan hasil wawancara</b></summary><CategoryComparison client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current} bapBusy={busy} onDirty={setCategoryDirty}/></details>),
+  statement:(<details key="statement" hidden={preview} className="panel"><summary><b>SPTJM — pernyataan, pratinjau dan unduhan</b></summary><StatementPanel client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current} bapBusy={busy} onDirty={setStatementDirty}/></details>),
+  report:(<details key="report" hidden={preview} className="panel"><summary><b>Draf LHP — analisis, rekomendasi dan unduhan</b></summary><LhpPanel client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current||categoryDirty||statementDirty} bapBusy={busy} onDirty={setReportDirty}/></details>),
+ }
+ const panelOrder=row.status==='Selesai'?['category','bap','statement','report']:['bap','category','statement','report']
+ return <dialog ref={dialog} className="bap-dialog" aria-label={`BAP ${row.person.nama}`} onCancel={e=>{e.preventDefault();onClose()}}>
+  <header className="bap-editor-header"><div><h2>{row.person.nama}</h2><p>NIP {row.person.nip} · {row.room_id.replace('room-','Room ')} · {row.status}</p></div><button className="btn secondary" onClick={onClose} disabled={busy}>Tutup</button></header>
+  {error&&<p className="notice red-notice" role="alert">{error}{conflict.current&&' Salin jawaban yang belum tersimpan sebelum menutup, lalu buka kembali data terbaru.'}</p>}
+  {notice&&<p role="status">{notice}</p>}
+  {panelOrder.map(key=>panels[key])}
+  {profile.role==='admin'&&<details className="panel"><summary>Administrasi penugasan / pembukaan draf</summary>{!row.started_at&&<div className="bap-filters"><label>Room<select value={schedule.roomId} onChange={e=>setSchedule({...schedule,roomId:e.target.value})}>{Array.from({length:19},(_,i)=><option key={i} value={`room-${i+1}`}>Room {i+1}</option>)}</select></label><label>Tanggal<input type="date" value={schedule.date} onChange={e=>setSchedule({...schedule,date:e.target.value})}/></label><label>Jam WIB<input type="time" value={schedule.time} onChange={e=>setSchedule({...schedule,time:e.target.value})}/></label><button className="btn secondary" disabled={busy} onClick={()=>action('schedule',schedule)}>Simpan penugasan</button></div>}{row.started_at&&<><label>Alasan membuka / melepas kunci<input value={reason} onChange={e=>setReason(e.target.value)} placeholder="Minimal 5 karakter"/></label><button className="btn secondary" disabled={busy||reason.trim().length<5} onClick={()=>action('reopen',{reason})}>Buka kembali / lepaskan kunci</button></>}</details>}
   <footer className="bap-editor-footer"><span>{busy?'Memproses…':notice||'Draf tersimpan otomatis setelah berhenti mengetik selama 1 menit. Gunakan Simpan draf untuk menyimpan sekarang.'}</span><div>{!readOnly&&<button className="btn secondary" disabled={busy||conflict.current} onClick={()=>save()}>Simpan draf</button>}<button className="btn primary" disabled={busy||previewBusy||!row.started_at||conflict.current} onClick={openPreview}>Pratinjau BAP</button>{!readOnly&&<button className="btn primary" disabled={busy||missing.length>0||!preview||!word||conflict.current} onClick={()=>save('finalize')}>Finalisasi BAP</button>}</div></footer>
  </dialog>
 }

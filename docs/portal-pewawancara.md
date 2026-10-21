@@ -8,6 +8,10 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
 ## Alur
 
 1. Pilih peserta yang hadir dari antrean; urutan jadwal tidak wajib diikuti.
+   Peserta Terjadwal/Dalam wawancara/Draf langsung menampilkan BAP paling atas;
+   panel kategorisasi dan dokumen lanjutan berada di bawah. Untuk peserta
+   Selesai, perbandingan kategori tampil paling atas dan terbuka otomatis.
+   **Revisi BAP** mengembalikan fokus ke BAP tanpa membuang isian panel lain.
 2. Konfirmasi identitas dan tekan **Mulai wawancara**. Server mencatat waktu
    mulai aktual satu kali untuk riwayat. Hari/tanggal/bulan/tahun BAP mengikuti
    jadwal wawancara peserta dalam WIB, bukan tanggal saat tombol mulai atau unduh ditekan.
