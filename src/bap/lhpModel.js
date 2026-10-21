@@ -1,4 +1,4 @@
-import {QUESTIONS,initialIdentity,dateWords} from './model.js'
+import {QUESTIONS,initialIdentity,dateWords,interviewTimestamp} from './model.js'
 export const REPORT_SECTIONS=[['dasar','Dasar dan ruang lingkup'],['temuan','Temuan awal'],['fakta','Fakta hasil wawancara'],['analisis','Analisis dan pertimbangan'],['kesimpulan','Kesimpulan'],['rekomendasi','Rekomendasi tindak lanjut']]
 export function sameVersions(a,b){return Boolean(a&&b&&['bap','category','statement'].every(k=>a[k]===b[k]))}
 export function reportReadiness(source){
@@ -11,7 +11,7 @@ export function reportReadiness(source){
 }
 export function generatedReport(source){
  const row=source.case,category=source.category||{},baseline=category.initial_snapshot||{},identity=initialIdentity(row)
- const date=row.started_at?new Date(row.started_at).toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'}):'[Wawancara belum dimulai]'
+ const date=row.started_at?new Date(interviewTimestamp(row)).toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'}):'[Wawancara belum dimulai]'
  const finalCurrent=category.review_status==='Ditetapkan'&&category.decision_bap_revision===row.revision
  const metrics=source.metrics||{}
  const nominal=typeof metrics.nominal==='number'?'Rp '+metrics.nominal.toLocaleString('id-ID'):'Belum tersedia pada sumber'
@@ -26,7 +26,7 @@ export function generatedReport(source){
  }
 }
 export function reportTemplateData(source,form){
- const row=source.case,identity=initialIdentity(row),date=row.started_at?dateWords(row.started_at):null
+ const row=source.case,identity=initialIdentity(row),date=row.started_at?dateWords(interviewTimestamp(row)):null
  return {...form.sections,nomor:form.nomor?.trim()||'[Nomor belum ditetapkan]',kota:form.kota||identity.kota,
   tanggal:date?`${date.tanggal_angka} ${date.bulan} ${date.tahun_angka}`:'[Belum tersedia]',
   identitas:`Nama: ${row.person.nama}\nNIP: ${row.person.nip}\nNIK: ${row.nik}\nPangkat / golongan: ${identity.pangkat||'[Belum diisi]'}\nJabatan: ${identity.jabatan||'[Belum diisi]'}\nUnit kerja: ${identity.unitKerja||'[Belum diisi]'}`,

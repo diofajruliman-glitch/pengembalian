@@ -9,24 +9,32 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
 
 1. Pilih peserta yang hadir dari antrean; urutan jadwal tidak wajib diikuti.
 2. Konfirmasi identitas dan tekan **Mulai wawancara**. Server mencatat waktu
-   mulai aktual satu kali. Tanggal BAP dihitung dalam WIB dan tidak berubah
-   ketika dokumen diunduh di hari lain.
+   mulai aktual satu kali untuk riwayat. Hari/tanggal/bulan/tahun BAP mengikuti
+   jadwal wawancara peserta dalam WIB, bukan tanggal saat tombol mulai atau unduh ditekan.
 3. Lengkapi administrasi dan 22 jawaban. Nama/NIP tidak ditulis ulang.
    Pangkat dan jabatan diambil dari referensi NIP yang sama dengan surat panggilan
    pada Persuratan & Dokumen Resmi (`nipPositionReference.js`). Koreksi pemeriksa
    yang sudah diisi tetap dipertahankan. Data yang tidak cocok ditandai untuk
    diverifikasi dan dilengkapi.
-4. Jawaban disimpan ke database setiap empat detik setelah perubahan. Tunggu
+4. Jawaban disimpan otomatis ke database setiap **15 menit** bila ada perubahan.
+   Gunakan **Simpan draf** untuk menyimpan atau memperbarui isian kapan saja. Tunggu
    konfirmasi tersimpan sebelum menutup. Gangguan koneksi ditampilkan dengan
    jelas; jangan tutup halaman sebelum penyimpanan berhasil atau menyalin jawaban.
 5. Buka **Pratinjau BAP**. Isian yang belum lengkap mengunci unduhan dan finalisasi.
    Gunakan **Kembali ke isian / revisi** untuk memperbaiki.
 6. Unduh **Word** atau **PDF**. Unduh tidak otomatis memfinalisasi.
-7. **Finalisasi BAP** mengunci perubahan. Admin harus memasukkan alasan jika
-   berkas perlu dibuka kembali. Tanda tangan tetap kosong untuk pengesahan.
+7. **Finalisasi BAP** menandai pemeriksaan selesai. Pewawancara sesuai room dapat
+   menekan **Revisi BAP** untuk memperbaiki berkas; status kembali menjadi draf.
+   Finalisasi ulang setelah diperiksa. Perubahan revisi mengharuskan kategori,
+   SPTJM dan LHP terkait ditinjau kembali. Riwayat perubahan tetap tersimpan;
+   tanda tangan tetap kosong untuk pengesahan. Admin juga tetap dapat membuka
+   kembali/melepas kunci dengan alasan audit.
 
-Word dihasilkan dengan mengisi placeholder pada paket DOCX asli yang diberikan
-pengelola. PDF mengambil setiap halaman A4 dari pratinjau; teks jawaban panjang
+Word dihasilkan dari template BAP yang mempertahankan naskah, kop dan footer
+asli. Identitas memakai kolom label/titik dua/nilai yang sejajar; tabel isi dan
+tanda tangan putih tanpa garis. Pemeriksa tercantum Faisal. Jawaban diakhiri
+strip pengisi sisa baris, dengan jarak antarbagiannya. Kotak paraf dan nomor
+halaman dari footer dicetak pada setiap halaman Word dan PDF. PDF mengambil setiap halaman A4 dari pratinjau; teks jawaban panjang
 dipindah ke halaman lanjutan. PDF berisi gambar halaman untuk menjaga tampilan,
 sehingga teksnya tidak dapat diseleksi seperti pada Word. Font/editor Word/WPS
 dapat menghasilkan pemenggalan halaman berbeda dari pratinjau browser.
@@ -170,3 +178,16 @@ Jika BAP, penilaian atau SPTJM berubah, unduhan dinonaktifkan. Gunakan **Susun u
 Aktivasi database: `supabase/interview-reports.sql` melalui migrasi Supabase. Tabel ber-RLS, pembacaan dan RPC dibatasi room/role, penulisan menggunakan pemeriksaan pemilik wawancara dan revisi sumber, serta tersimpan pada audit privat. Migrasi menyiapkan draf kosong untuk kasus yang ada dan trigger untuk kasus baru. `scripts/prepare_lhp_template.py` membangun ulang template Word. PDF berupa gambar halaman pratinjau A4; tata letak Word dapat berbeda menurut font/editor.
 
 Validasi: `node --test tests/lhp.test.js tests/sptjm.test.js tests/interviewCategories.test.js tests/bapPortal.test.js`, `npm run build`; uji browser mencakup narasi panjang lintas halaman, unduhan Word/PDF, invalidasi revisi, dan tampilan akun pewawancara tanpa mengubah keterangan peserta.
+
+
+### Pembaruan format dan revisi BAP
+
+Terapkan `supabase/interview-revisions.sql` setelah skema portal. Migrasi hanya
+memperbarui fungsi tindakan: tidak mengubah jawaban peserta. Aksi `revise`
+memeriksa role/room/revisi, mempertahankan waktu mulai serta isi, menulis audit,
+dan membuka draf untuk aktor berwenang. Revisi yang usang ditolak.
+
+`node --test tests/bapTemplateLayout.test.js tests/interviewRevisions.test.js`
+menguji struktur kop inline, footer paraf, perataan identitas, tanda tangan bersih,
+serta otorisasi dan riwayat revisi. Uji browser memeriksa jawaban panjang,
+kop di PDF, paraf tiap halaman, tanggal jadwal, simpan manual, dan timer 900000 ms.

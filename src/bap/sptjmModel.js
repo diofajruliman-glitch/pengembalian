@@ -1,4 +1,4 @@
-import {dateWords,initialIdentity} from './model.js'
+import {dateWords,initialIdentity,interviewTimestamp} from './model.js'
 export const SPTJM_FIELDS=[['provinsi','Provinsi'],['kabKota','Kabupaten/Kota'],['noHp','Nomor handphone'],['kota','Tempat pernyataan']]
 export function initialStatement(row,record){return {provinsi:row.person.provinsi||'',kabKota:row.person.kabKota||'',noHp:row.person.noHp||'',kota:initialIdentity(row).kota,admission:'',activityState:'',startMonth:'',endMonth:'',periodNote:'',hasAttachments:false,...record?.details}}
 export function monthValid(value){return /^\d{4}-(0[1-9]|1[0-2])$/.test(value)&&Number(value.slice(0,4))>=1900}
@@ -31,5 +31,5 @@ export function statementTemplateData(row,details){
   if(details.activityState==='ongoing')periode=`Saya mulai melakukan aktifitas Judi online sejak bulan ${monthText(details.startMonth)} dan sampai pernyataan ini dibuat aktivitas tersebut masih berlangsung.`
   if(details.activityState==='stopped'&&monthValid(details.endMonth))periode=`Saya mulai melakukan aktifitas Judi online sejak bulan ${monthText(details.startMonth)} dan mengakhiri aktifitas judi online pada bulan ${monthText(details.endMonth)}.`
  }
- return {...row.person,...initialIdentity(row),...details,...dateWords(row.started_at),pengakuan:details.admission?details.admission.toUpperCase():'[Pilihan belum dikonfirmasi]',periode,lampiran:details.hasAttachments?'Bukti Pendukung Terlampir.':'Dokumen pendukung belum dilampirkan.'}
+ return {...row.person,...initialIdentity(row),...details,...dateWords(interviewTimestamp(row)),pengakuan:details.admission?details.admission.toUpperCase():'[Pilihan belum dikonfirmasi]',periode,lampiran:details.hasAttachments?'Bukti Pendukung Terlampir.':'Dokumen pendukung belum dilampirkan.'}
 }

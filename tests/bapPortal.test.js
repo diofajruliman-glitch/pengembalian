@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
 import {PGlite} from '@electric-sql/pglite'
-import {dateWords,missingFields,initialIdentity,templateData,QUESTIONS} from '../src/bap/model.js'
+import {dateWords,interviewTimestamp,missingFields,initialIdentity,templateData,QUESTIONS} from '../src/bap/model.js'
 import {buildWord} from '../src/bap/documents.js'
 import {unzipSync,strFromU8} from 'fflate'
 import {positions,positionBackfillSql} from '../scripts/prepare_interview_positions.mjs'
@@ -51,7 +51,7 @@ test('Word preserves the supplied package and safely inserts all answers',async(
  }finally{globalThis.fetch=previous}
 })
 
-test('BAP uses actual WIB date in words and preserves literal answers',()=>{
+test('BAP follows scheduled WIB date in words and preserves literal answers',()=>{
  const row={started_at:'2026-10-25T18:30:00.000Z',person:{nama:'Peserta & keluarga',nip:'123456789012345678'},identity_details:{}}
  const date=dateWords(row.started_at)
  assert.equal(date.hari,'Senin');assert.equal(date.tanggal_huruf,'dua puluh enam');assert.equal(date.tahun_huruf,'Dua Ribu Dua Puluh Enam')
@@ -60,6 +60,10 @@ test('BAP uses actual WIB date in words and preserves literal answers',()=>{
  assert.ok(missingFields(row,identity,{}).includes('Pangkat / golongan'))
  assert.equal(QUESTIONS.length,22)
  assert.equal(templateData(row,identity,{11:'Tidak mengakui <apa pun>'}).jawaban_11,'Tidak mengakui <apa pun>')
+ const scheduled={...row,scheduled_date:'2026-10-29',scheduled_time:'09:30:00'}
+ assert.equal(interviewTimestamp(scheduled),'2026-10-29T09:30:00+07:00')
+ assert.equal(templateData(scheduled,identity,{}).hari,'Kamis');assert.equal(templateData(scheduled,identity,{}).tanggal_huruf,'dua puluh sembilan')
+ assert.equal(row.started_at,'2026-10-25T18:30:00.000Z')
 })
 
 test('database enforces room access, revision checks, immutable start, finalization and admin reopening',async()=>{
