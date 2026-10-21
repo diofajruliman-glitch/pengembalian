@@ -7,6 +7,41 @@ import {initialStatement,statementMissing,statementTemplateData} from '../src/ba
 import {fillWord} from '../src/bap/documents.js'
 const row={nik:'1111111111111111',person:{nik:'1111111111111111',nip:'123456789012345678',nama:'Peserta Uji',jabatan:'Jabatan uji',unitKerja:'PSNK'},identity_details:{kota:'Jakarta'},started_at:'2026-10-26T01:00:00Z',status:'Selesai',revision:2}
 const details={...initialStatement(row,null),provinsi:'Aceh',kabKota:'Kabupaten Uji',noHp:'081234567890',admission:'Mengakui',activityState:'stopped',startMonth:'2024-01',endMonth:'2025-02'}
+const identityFields=[['Nama','nama'],['NIP','nip'],['NIK','nik'],['Jabatan','jabatan'],['Unit Kerja','unitKerja'],['Provinsi','provinsi'],['Kabupaten/Kota','kabKota'],['Nomor Handphone','noHp']]
+const xmlText=xml=>[...xml.matchAll(/<w:t\b[^>]*>([\s\S]*?)<\/w:t>/g)].map(match=>match[1]).join('')
+
+test('SPTJM identity keeps every colon aligned in a fixed borderless column',async()=>{
+ const files=unzipSync(await readFile(new URL('../public/templates/sptjm-2026.docx',import.meta.url)))
+ const xml=strFromU8(files['word/document.xml']),tables=xml.match(/<w:tbl\b[^>]*>[\s\S]*?<\/w:tbl>/g)
+ assert.equal(tables?.length,1,'only the eight identity lines become a table')
+ const table=tables[0],rows=table.match(/<w:tr\b[^>]*>[\s\S]*?<\/w:tr>/g)
+ assert.equal(rows.length,8)
+ assert.ok(table.includes('<w:tblLayout w:type="fixed"/>'))
+ const widths=[...table.matchAll(/<w:gridCol w:w="(\d+)"\/>/g)].map(match=>Number(match[1]))
+ assert.deepEqual(widths,[2700,220,6719],'label, colon and wrapping value have independent columns')
+ const pageWidth=Number(xml.match(/<w:pgSz\b[^>]*w:w="(\d+)"/)[1]),margins=xml.match(/<w:pgMar\b[^>]*>/)[0]
+ assert.equal(widths.reduce((sum,width)=>sum+width,0),pageWidth-Number(margins.match(/w:left="(\d+)"/)[1])-Number(margins.match(/w:right="(\d+)"/)[1]))
+ assert.ok(!/<w:tab\b/.test(table),'identity alignment does not depend on implicit tab stops')
+ for(const edge of ['top','left','bottom','right','insideH','insideV'])assert.ok(table.includes(`<w:${edge} w:val="nil"/>`),`${edge} border is not printed`)
+ rows.forEach((identityRow,index)=>{
+  const cells=identityRow.match(/<w:tc\b[^>]*>[\s\S]*?<\/w:tc>/g)
+  assert.equal(cells.length,3)
+  assert.deepEqual(cells.map(xmlText),[identityFields[index][0],':',`{${identityFields[index][1]}}`])
+  assert.ok(identityRow.includes('<w:cantSplit/>'),'wrapped values stay with their label and colon')
+  cells.forEach((cell,column)=>{
+   assert.ok(cell.includes(`<w:tcW w:w="${widths[column]}" w:type="dxa"/>`))
+   for(const edge of ['top','left','bottom','right'])assert.ok(cell.includes(`<w:${edge} w:w="0" w:type="dxa"/>`),'inherited table margins do not shift columns')
+   assert.ok(cell.includes('<w:jc w:val="left"/>'))
+   assert.ok(cell.includes('w:ascii="Bookman Old Style"'),'original body typeface retained')
+   assert.ok(cell.includes('<w:sz w:val="24"/>'),'original 12pt body size retained')
+   assert.ok(cell.includes('<w:color w:val="000000"/>'),'identity prints black even when the frontend table style has another color')
+   assert.ok(cell.includes('w:line="360" w:lineRule="auto"'),'original 1.5 line spacing retained')
+  })
+ })
+ const surrounding=xml.replace(table,'')
+ for(const text of ['SURAT PERNYATAAN TANGGUNG JAWAB MUTLAK','Yang bertanda tangan dibawah ini :','Berdasarkan Temuan Pusat Pelaporan dan Analisis Transaksi Keuangan (PPATK) Tahun 2025','Apabila diketahui pernyataan saya tidak benar, saya bertanggung jawab dan bersedia menerima segala konsekuensi yang timbul atas pernyataan ini.','Demikian Surat Pernyataan ini saya buat dengan sebenar-benarnya dalam keadaan sadar, tanpa ada paksaan dari pihak manapun dan surat pernyataan ini dapat dijadikan sebagai alat bukti yang sah untuk keperluan pemeriksaan.','{kota}, {tanggal_angka} {bulan} {tahun_angka}','Yang membuat pernyataan,','materai','{nama}','NIP. {nip}'])assert.ok(surrounding.includes(text),`original form content retained: ${text}`)
+ assert.equal([...surrounding.matchAll(/<w:t\b[^>]*>\{nama\}<\/w:t>/g)].length,1,'signature name retained separately from the identity table')
+})
 
 test('SPTJM does not assume admission or a historical period',()=>{
  assert.equal(initialStatement(row,null).admission,'')
@@ -26,6 +61,10 @@ test('SPTJM Word uses the original package and fills identity and declaration',a
   const blob=await fillWord('/templates/sptjm-2026.docx',statementTemplateData(row,details));const files=unzipSync(new Uint8Array(await blob.arrayBuffer()));const xml=strFromU8(files['word/document.xml'])
   for(const text of ['Peserta Uji','MENGAKUI','Januari tahun 2024','Februari tahun 2025','081234567890','materai','(PPATK) Tahun 2025','PPATK Tahun 2025'])assert.ok(xml.includes(text),text)
   assert.ok(!xml.includes('PPATK Tahun 2026'));assert.ok(!xml.includes('(PPATK) Tahun 2026'));assert.ok(!/\{\w+\}/.test(xml));assert.deepEqual(Object.keys(files).sort(),Object.keys(unzipSync(original)).sort())
+  const templateFiles=unzipSync(original)
+  for(const [path,content] of Object.entries(templateFiles))if(path!=='word/document.xml')assert.deepEqual(files[path],content,`original package part retained: ${path}`)
+  const identityRows=xml.match(/<w:tr\b[^>]*>[\s\S]*?<\/w:tr>/g),data=statementTemplateData(row,details)
+  assert.deepEqual(identityRows.map(identityRow=>identityRow.match(/<w:tc\b[^>]*>[\s\S]*?<\/w:tc>/g).map(xmlText)),identityFields.map(([label,key])=>[label,':',data[key]]),'filled values remain in their own column')
  }finally{globalThis.fetch=previous}
 })
 
