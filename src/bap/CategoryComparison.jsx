@@ -2,7 +2,7 @@ import React,{useEffect,useRef,useState} from 'react'
 import {CATEGORY_OPTIONS,categoryState,initialCategoryForm} from './categoryModel.js'
 import './portal.css'
 const labels={draft:'Draf disimpan',deepen:'Perlu pendalaman',submit:'Usulan diajukan',approve:'Kategori ditetapkan',return:'Dikembalikan untuk pendalaman'}
-export default function CategoryComparison({client,row,profile,userId,bapDirty,bapBusy,onDirty}){
+export default function CategoryComparison({client,row,profile,userId,bapDirty,bapBusy,onDirty,active=true}){
  const [review,setReview]=useState(null),[history,setHistory]=useState([]),[form,setForm]=useState({category:'',reason:'',evidence:'',questionRefs:[]}),[decision,setDecision]=useState({category:'',reason:''}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState('')
  const dirty=useRef(false),alive=useRef(true),reviewRef=useRef(null)
  async function load(){
@@ -14,7 +14,8 @@ export default function CategoryComparison({client,row,profile,userId,bapDirty,b
    if(!dirty.current){setForm(initialCategoryForm(r.data));setDecision(d=>({...d,category:r.data.final_category||r.data.proposed_category||''}))}
   }catch(e){if(alive.current)setError(e.message)}
  }
- useEffect(()=>{alive.current=true;load();const timer=setInterval(load,15000);return()=>{alive.current=false;clearInterval(timer)}},[row.nik,row.revision])
+ useEffect(()=>{alive.current=true;return()=>{alive.current=false}},[])
+ useEffect(()=>{if(!active)return;load();const timer=setInterval(load,15000);return()=>clearInterval(timer)},[row.nik,row.revision,active])
  function change(key,value){dirty.current=true;onDirty(true);setForm(f=>({...f,[key]:value}));setNotice('Usulan belum tersimpan')}
  async function action(name){
   setBusy(true);setError('');setNotice('')

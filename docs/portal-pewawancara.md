@@ -7,11 +7,14 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
 
 ## Alur
 
-1. Pilih peserta yang hadir dari antrean; urutan jadwal tidak wajib diikuti.
-   Peserta Terjadwal/Dalam wawancara/Draf langsung menampilkan BAP paling atas;
-   panel kategorisasi dan dokumen lanjutan berada di bawah. Untuk peserta
-   Selesai, perbandingan kategori tampil paling atas dan terbuka otomatis.
-   **Revisi BAP** mengembalikan fokus ke BAP tanpa membuang isian panel lain.
+1. Setiap SDM di antrean memiliki tombol **Buka BAP**. Tepat di bawahnya tersedia
+   **Perbandingan kategori awal dan hasil wawancara** serta **Draf LHP — analisis,
+   rekomendasi dan unduhan**, yang dibuka langsung pada kartu SDM. Kedua panel
+   tersebut berada di halaman utama. Popup **Buka BAP** berisi isian/pratinjau BAP
+   dan SPTJM. Pilih peserta yang hadir; urutan jadwal tidak wajib diikuti.
+   Draf kategori/LHP tetap dipertahankan ketika bagian ditutup, BAP dibuka,
+   atau daftar difilter. Keluar atau pindah menu meminta konfirmasi jika masih
+   ada perubahan yang belum disimpan.
 2. Konfirmasi identitas dan tekan **Mulai wawancara**. Server mencatat waktu
    mulai aktual satu kali untuk riwayat. Hari/tanggal/bulan/tahun BAP mengikuti
    jadwal wawancara peserta dalam WIB, bukan tanggal saat tombol mulai atau unduh ditekan.
@@ -109,7 +112,8 @@ room; seluruh referensi NIP tidak dimuat ke frontend portal.
 
 ## Perbandingan kategori sebelum dan sesudah wawancara
 
-Buka peserta lalu perluas **Perbandingan kategori awal dan hasil wawancara**.
+Pada kartu SDM di antrean, perluas **Perbandingan kategori awal dan hasil
+wawancara** di bawah tombol **Buka BAP**.
 Panel menampilkan kategori awal setelah ASN, kategori historis, status sumber,
 nama dataset dan versinya. Snapshot awal diambil dari dataset asal peserta dan
 tersimpan terpisah; jawaban BAP maupun usulan tidak menimpa data ini.
@@ -175,7 +179,7 @@ SPTJM ini tidak mengubah hasil kategorisasi dan belum menghasilkan LHP.
 
 ### Draf LHP
 
-Pada peserta terpilih, buka **Draf LHP — analisis, rekomendasi dan unduhan**. Identitas mengikuti BAP; dasar, temuan awal PPATK **2025**, 22 keterangan BAP, perbandingan kategori, serta pertimbangan peninjau menjadi bahan awal. Nominal/frekuensi yang tidak tersedia ditampilkan sebagai belum tersedia, bukan nol. Seluruh bagian dapat direvisi. Rekomendasi tindak lanjut diisi pemeriksa, tanpa pemetaan sanksi otomatis.
+Pada kartu SDM di antrean, buka **Draf LHP — analisis, rekomendasi dan unduhan** di bawah tombol **Buka BAP**. Identitas mengikuti BAP; dasar, temuan awal PPATK **2025**, 22 keterangan BAP, perbandingan kategori, serta pertimbangan peninjau menjadi bahan awal. Nominal/frekuensi yang tidak tersedia ditampilkan sebagai belum tersedia, bukan nol. Seluruh bagian dapat direvisi. Rekomendasi tindak lanjut diisi pemeriksa, tanpa pemetaan sanksi otomatis.
 
 Simpan draf, periksa pratinjau, lalu kembali revisi bila diperlukan. Unduhan Word/PDF memerlukan BAP selesai, kategori akhir yang sudah ditetapkan atas revisi BAP terkini, SPTJM terkonfirmasi atas BAP terkini, seluruh bagian lengkap, serta peninjauan isi LHP. Setiap dokumen tetap bertanda **DRAF — BELUM DISAHKAN**; peninjauan aplikasi bukan pengesahan pejabat. Nomor boleh kosong sampai ditetapkan. Template LHP merupakan format kerja modular, bukan template resmi yang diunggah pengguna.
 

@@ -3,7 +3,7 @@ import {flushSync} from 'react-dom'
 import {initialIdentity} from './model.js'
 import {REPORT_SECTIONS,generatedReport,reportReadiness,reportTemplateData,sameVersions} from './lhpModel.js'
 import {fillWord,renderPreview,buildPdf,download} from './documents.js'
-export default function LhpPanel({client,row,profile,userId,bapDirty,bapBusy,onDirty}){
+export default function LhpPanel({client,row,profile,userId,bapDirty,bapBusy,onDirty,active=true}){
  const [source,setSource]=useState(null),[record,setRecord]=useState(null),[form,setForm]=useState(null),[reviewed,setReviewed]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[busy,setBusy]=useState(false),[preview,setPreview]=useState(false),[word,setWord]=useState(null)
  const dirty=useRef(false),alive=useRef(false),target=useRef(null),sourceRef=useRef(null),recordRef=useRef(null),formVersions=useRef(null)
  function markDirty(){dirty.current=true;onDirty(true);setReviewed(false);setWord(null);setPreview(false)}
@@ -20,7 +20,8 @@ export default function LhpPanel({client,row,profile,userId,bapDirty,bapBusy,onD
   setReviewed(Boolean(r.reviewed_at&&sameVersions(r.source_versions,next.versions)))
   if(changed||reportChanged){setWord(null);setPreview(false)}
  }catch(e){if(alive.current)setError(e.message)}}
- useEffect(()=>{alive.current=true;load();const timer=setInterval(load,15000);return()=>{alive.current=false;clearInterval(timer)}},[row.nik,row.revision])
+ useEffect(()=>{alive.current=true;return()=>{alive.current=false}},[])
+ useEffect(()=>{if(!active)return;load();const timer=setInterval(load,15000);return()=>clearInterval(timer)},[row.nik,row.revision,active])
  const canEdit=row.started_at&&profile.role!=='viewer'&&(profile.role==='admin'||row.locked_by===userId)
  const missing=reportReadiness(source),stale=source&&form&&!sameVersions(formVersions.current,source.versions)
  const valid=form&&REPORT_SECTIONS.every(([k])=>form.sections[k]?.trim())&&form.sections.rekomendasi.trim().length>=20&&form.kota.trim()

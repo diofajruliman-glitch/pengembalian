@@ -103,6 +103,8 @@ function App(){
  const [masterLoading,setMasterLoading]=useState(false);const [masterLoadError,setMasterLoadError]=useState('')
  const [recovering,setRecovering]=useState(false);const [resetMessage,setResetMessage]=useState('')
  const [profileAttempt,setProfileAttempt]=useState(0);const [profileLoading,setProfileLoading]=useState(false)
+ const portalDirty=useRef(false)
+ const onPortalDirtyChange=useCallback(value=>{portalDirty.current=value},[])
  const [page,setPage]=useState(()=>['#perubahan-pengembalian','#kategorisasi-judol','#surat-tlhp','#monitoring-wawancara','#portal-pewawancara','#portal-wawancara'].includes(window.location.hash)?window.location.hash.slice(1):'dashboard');const [navOpen,setNavOpen]=useState(false)
  const [judolSnapshot,setJudolSnapshot]=useState(()=>{
   if(configured||!import.meta.env.DEV)return null
@@ -243,7 +245,7 @@ function App(){
   setBusy(true);setLoginError('')
   try{const {error}=await supabase.auth.updateUser({password});if(error)throw error;setRecovering(false);await supabase.auth.signOut();window.history.replaceState({},'',window.location.pathname);setResetMessage('Password berhasil diperbarui. Silakan masuk dengan password baru.')}catch(e){setLoginError(notify(e))}finally{setBusy(false)}
  }
- const signOut=async()=>{setVerifiedJudol(null);updateJudolSnapshot(null);await supabase.auth.signOut();setPage('dashboard');setRecoverySnapshot(null);setMasterSnapshot(null)}
+ const signOut=async(discardConfirmed=false)=>{if(discardConfirmed!==true&&portalDirty.current&&!window.confirm('Ada perubahan BAP, kategori, SPTJM atau LHP belum tersimpan. Tetap keluar?'))return;portalDirty.current=false;setVerifiedJudol(null);updateJudolSnapshot(null);await supabase.auth.signOut();setPage('dashboard');setRecoverySnapshot(null);setMasterSnapshot(null)}
  const updateData=async(table,no,patch)=>{
    if(!canEdit)return;setError('');if(demo){const setter=table==='bottlenecks'?setMatrix:setActions;setter(old=>old.map(r=>r.no===no?{...r,...patch}:r));return}
    const {error}=await supabase.from(table).update(patch).eq('no',no);if(error)setError(notify(error));else fetchAll()
@@ -325,7 +327,7 @@ function App(){
  const focusMatrix=specialFocus?matrix.filter(isSpecialTarget):matrix
  const doneActions=actions.filter(x=>x.status==='Selesai').length
  const doneMatrix=matrix.filter(x=>x.status==='Selesai').length
- const go=(p)=>{setPage(p);setNavOpen(false);setError('')}
+ const go=(p)=>{if(p!==page&&portalDirty.current&&!window.confirm('Ada perubahan BAP, kategori, SPTJM atau LHP belum tersimpan. Tetap pindah menu dan buang perubahan?'))return;if(p!==page)portalDirty.current=false;setPage(p);setNavOpen(false);setError('')}
  const activateMaster=useCallback(snapshot=>{setMasterSnapshot(current=>committedMaster(current,snapshot));if(snapshot?.source==='database'){setMasterLoadError('');setMasterLoading(false)}},[])
  const refreshCommittedMaster=async()=>{
   setMasterLoading(true);setMasterLoadError('')
@@ -387,7 +389,7 @@ function App(){
  if(!demo && (authLoading || profileLoading || (session&&!profile&&!loginError)))return <div className="loading-page"><LoaderCircle className="spin"/><p>Memverifikasi akses...</p></div>
  if(!demo && session&&!isAuthorized&&!isInterviewer)return <div className="auth-screen"><div className="auth-form-wrap"><div className="auth-form"><span className="eyebrow">VERIFIKASI AKSES</span><h2>Akses belum dapat dimuat</h2><p>Akun masuk: <b>{session.user.email}</b></p><div className="notice red-notice" role="alert">{loginError}</div><button className="btn primary wide" onClick={()=>setProfileAttempt(x=>x+1)}><RefreshCw size={16}/> Coba lagi</button><button className="btn secondary wide" style={{marginTop:12}} onClick={signOut}><LogOut size={16}/> Keluar dan ganti akun</button></div></div></div>
  if(!demo && !session)return <Login onSignIn={signIn} onReset={resetPassword} resetMessage={resetMessage} busy={busy} loginError={loginError}/>
- if(isInterviewer)return <React.Suspense fallback={<div className="loading-page">Memuat portal pewawancara…</div>}><InterviewerPortal key={session.user.id} client={supabase} profile={profile} userId={session.user.id} onSignOut={signOut}/></React.Suspense>
+ if(isInterviewer)return <React.Suspense fallback={<div className="loading-page">Memuat portal pewawancara…</div>}><InterviewerPortal key={session.user.id} client={supabase} profile={profile} userId={session.user.id} onSignOut={signOut} onDirtyChange={onPortalDirtyChange}/></React.Suspense>
  return <div className="shell">
    <aside className={'sidebar '+(navOpen?'is-open':'')}>
     <div className="brand tlhp-brand"><div className="brand-symbol"><ShieldCheck size={23}/></div><div><b>Pokja SD Tim TLHP</b><small>Monitoring Tindak Lanjut</small></div><button className="mobile-close icon-btn" onClick={()=>setNavOpen(false)}><X size={20}/></button></div>
@@ -429,7 +431,7 @@ function App(){
     {!demo&&['monitoring-wawancara','surat-tlhp'].includes(page)&&!operationalJudolSnapshot&&<div className="notice amber-notice" role="status"><Info size={17}/><span>{judolSourceLoading?'Memverifikasi populasi Disiplin ASN dari database…':judolSourceError||'BNBA dan penerima surat Disiplin ASN hanya memakai versi tersimpan di database. Pilih dataset online di Kategorisasi Disiplin ASN; draft Excel belum digunakan.'}</span>{judolSourceError&&<button className="btn secondary" onClick={()=>setJudolSourceAttempt(value=>value+1)}>Coba verifikasi lagi</button>}</div>}
     {page==='portal-wawancara'&&<React.Suspense fallback={<p role="status">Memuat portal wawancara…</p>}><PortalWawancara onManagePerson={nip=>go('monitoring-wawancara')}/></React.Suspense>}
     {page==='monitoring-wawancara'&&<React.Suspense fallback={<p role="status">Memuat monitoring wawancara…</p>}><InterviewMonitor snapshot={operationalJudolSnapshot} canEdit={canEdit} accountId={session?.user?.id||'demo'} onOpenSource={()=>go('kategorisasi-judol')} supabase={supabase} onOpenBap={openBap} isAdmin={profile?.role==='admin'}/></React.Suspense>}
-    {page==='portal-pewawancara'&&(demo?<p className="notice amber-notice">Portal BAP memerlukan login dan database aktif.</p>:<React.Suspense fallback={<p>Memuat portal BAP…</p>}><InterviewerPortal key={session.user.id} client={supabase} profile={profile} userId={session.user.id} initialNik={bapNik}/></React.Suspense>)}
+    {page==='portal-pewawancara'&&(demo?<p className="notice amber-notice">Portal BAP memerlukan login dan database aktif.</p>:<React.Suspense fallback={<p>Memuat portal BAP…</p>}><InterviewerPortal key={session.user.id} client={supabase} profile={profile} userId={session.user.id} initialNik={bapNik} onDirtyChange={onPortalDirtyChange}/></React.Suspense>)}
     {page==='surat-tlhp'&&<React.Suspense fallback={<p role="status">Memuat modul persuratan…</p>}><LetterManager databaseOnly={!demo} cases={cases} judolSnapshot={operationalJudolSnapshot} onJudolSnapshot={updateJudolSnapshot} onOpenJudolSource={()=>go('kategorisasi-judol')} masterSnapshot={masterSnapshot} matrix={matrix} actions={actions} supabase={supabase}/></React.Suspense>}
     {page==='dashboard'&&<><div className="page-title"><div><span className="eyebrow">OVERVIEW • TA 2025</span><h1>Pusat Kendali Pengembalian</h1><p>Monitoring kewajiban Tukin dan Uang Makan PPPK. Pastikan setiap nominal memiliki bukti penerimaan yang sah.</p></div><button className="btn secondary" disabled={demo||loading} onClick={fetchAll}><RefreshCw size={16}/> Perbarui data</button></div>
       {masterLoading&&!masterSnapshot&&<div className="notice amber-notice"><LoaderCircle size={18} className="spin"/><span>Memuat master tersimpan untuk Dashboard…</span></div>}

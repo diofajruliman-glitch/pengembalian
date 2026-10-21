@@ -9,51 +9,68 @@ import StatementPanel from './StatementPanel.jsx'
 import LhpPanel from './LhpPanel.jsx'
 
 const when=row=>`${row.scheduled_date} · ${row.scheduled_time.slice(0,5)} WIB`
-export default function InterviewerPortal({client,profile,userId,onSignOut,initialNik=''}){
+const cleanBapState={dirty:false,statementDirty:false,busy:false}
+export default function InterviewerPortal({client,profile,userId,onSignOut,onDirtyChange,initialNik=''}){
  const [rows,setRows]=useState([]),[error,setError]=useState(''),[loading,setLoading]=useState(true),[query,setQuery]=useState(''),[date,setDate]=useState(''),[room,setRoom]=useState(''),[selected,setSelected]=useState(null)
- const alive=useRef(true),dirty=useRef(false)
+ const alive=useRef(true),dirtyParticipants=useRef(new Set())
+ const trackDirty=useCallback((nik,value)=>{
+  if(value)dirtyParticipants.current.add(nik);else dirtyParticipants.current.delete(nik)
+  onDirtyChange?.(dirtyParticipants.current.size>0)
+ },[onDirtyChange])
+ useEffect(()=>{
+  function leave(event){if(dirtyParticipants.current.size){event.preventDefault();event.returnValue=''}}
+  window.addEventListener('beforeunload',leave)
+  return()=>{window.removeEventListener('beforeunload',leave);onDirtyChange?.(false)}
+ },[onDirtyChange])
  const reload=useCallback(async()=>{try{const data=await listCases(client);if(alive.current){setRows(data);setError('')}}catch(e){if(alive.current)setError(e.message)}finally{if(alive.current)setLoading(false)}},[client])
  useEffect(()=>{alive.current=true;reload();const id=setInterval(reload,15000);return()=>{alive.current=false;clearInterval(id)}},[reload])
  useEffect(()=>{if(initialNik&&rows.some(r=>r.nik===initialNik))setSelected(initialNik)},[initialNik,rows.length])
- const row=rows.find(r=>r.nik===selected)
  const privileged=['admin','editor','viewer'].includes(profile.role)
  const filtered=rows.filter(r=>(!date||r.scheduled_date===date)&&(!room||r.room_id===room)&&`${r.person.nama} ${r.person.nip}`.toLowerCase().includes(query.toLowerCase()))
- function close(){if(dirty.current&&!window.confirm('Jawaban belum tersimpan. Tetap tutup dan buang perubahan?'))return;dirty.current=false;setSelected(null)}
+ const visibleIds=new Set(filtered.map(r=>r.nik))
  return <div className="bap-portal">
-  <header className="bap-portal-heading"><div><span className="eyebrow">PELAKSANAAN WAWANCARA</span><h1>{privileged?'Hasil & Portal BAP':'Portal Pewawancara'}</h1><p>{profile.nama} · {privileged?'Seluruh room':rows[0]?.room_id.replace('room-','Room ')||'Penugasan Anda'}</p></div>{onSignOut&&<button className="btn secondary" onClick={()=>{if(!dirty.current||window.confirm('Ada jawaban belum tersimpan. Tetap keluar?'))onSignOut()}}>Keluar</button>}</header>
+  <header className="bap-portal-heading"><div><span className="eyebrow">PELAKSANAAN WAWANCARA</span><h1>{privileged?'Hasil & Portal BAP':'Portal Pewawancara'}</h1><p>{profile.nama} · {privileged?'Seluruh room':rows[0]?.room_id.replace('room-','Room ')||'Penugasan Anda'}</p></div>{onSignOut&&<button className="btn secondary" onClick={()=>{if(!dirtyParticipants.current.size||window.confirm('Ada perubahan BAP, kategori, SPTJM atau LHP belum tersimpan. Tetap keluar?'))onSignOut(true)}}>Keluar</button>}</header>
   <p className="notice blue-notice">Pilih peserta yang sudah hadir tanpa harus mengikuti urutan jadwal. Tanggal BAP mengikuti jadwal wawancara peserta dalam WIB. Progres diperbarui setiap 15 detik.</p>
   <div className="bap-stats">{['Terjadwal','Dalam wawancara','Draf','Selesai'].map(s=><div key={s}><strong>{rows.filter(r=>r.status===s).length}</strong><span>{s}</span></div>)}</div>
   {error&&<p role="alert" className="notice red-notice">{error} <button className="btn secondary" onClick={reload}>Coba lagi</button></p>}
   <section className="panel"><div className="bap-filters"><label>Cari peserta<input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Nama atau NIP"/></label><label>Tanggal jadwal<select value={date} onChange={e=>setDate(e.target.value)}><option value="">Semua tanggal</option>{[...new Set(rows.map(r=>r.scheduled_date))].map(d=><option key={d}>{d}</option>)}</select></label>{privileged&&<label>Room<select value={room} onChange={e=>setRoom(e.target.value)}><option value="">Semua room</option>{[...new Set(rows.map(r=>r.room_id))].sort((a,b)=>Number(a.slice(5))-Number(b.slice(5))).map(r=><option key={r} value={r}>{r.replace('room-','Room ')}</option>)}</select></label>}<button className="btn secondary" onClick={reload}>Perbarui</button></div>
-   <p>{loading?'Memuat antrean…':`${filtered.length} peserta`}</p><div className="bap-queue">{filtered.map(r=><button className="bap-queue-item" key={r.nik} onClick={()=>setSelected(r.nik)}><span><b>{r.person.nama}</b><small>NIP {r.person.nip}</small><small>{when(r)} · {r.room_id.replace('room-','Room ')}</small></span><span className={'bap-badge '+(r.status==='Selesai'?'done':'')}>{r.status}</span><span>Buka BAP →</span></button>)}</div>{!loading&&!rows.length&&!error&&<p>Belum ada peserta pada penugasan akun ini. Hubungi admin untuk memeriksa pembagian room.</p>}
+   <p>{loading?'Memuat antrean…':`${filtered.length} peserta`}</p><div className="bap-queue">{rows.map(r=><ParticipantCard key={r.nik} row={r} client={client} profile={profile} userId={userId} hidden={!visibleIds.has(r.nik)} editing={selected===r.nik} onOpen={()=>setSelected(r.nik)} onClose={()=>setSelected(null)} onDirty={trackDirty} onSaved={saved=>setRows(current=>current.map(item=>item.nik===saved.nik?saved:item))}/>)}</div>{!loading&&!rows.length&&!error&&<p>Belum ada peserta pada penugasan akun ini. Hubungi admin untuk memeriksa pembagian room.</p>}
   </section>
-  {row&&<BapEditor key={row.nik} row={row} client={client} profile={profile} userId={userId} dirtyRef={dirty} onClose={close} onSaved={saved=>setRows(current=>current.map(r=>r.nik===saved.nik?saved:r))}/>}
  </div>
 }
 
-function BapEditor({row:remote,client,profile,userId,dirtyRef,onClose,onSaved}){
+function ParticipantCard({row,client,profile,userId,hidden,editing,onOpen,onClose,onSaved,onDirty}){
+ const [categoryOpen,setCategoryOpen]=useState(false),[categoryLoaded,setCategoryLoaded]=useState(false),[categoryDirty,setCategoryDirty]=useState(false)
+ const [reportOpen,setReportOpen]=useState(false),[reportLoaded,setReportLoaded]=useState(false),[reportDirty,setReportDirty]=useState(false)
+ const [bapState,setBapState]=useState(cleanBapState)
+ const pending=bapState.dirty||bapState.statementDirty||categoryDirty||reportDirty
+ useEffect(()=>{onDirty(row.nik,pending);return()=>onDirty(row.nik,false)},[row.nik,pending,onDirty])
+ function closeBap(){
+  if((bapState.dirty||bapState.statementDirty)&&!window.confirm('Ada perubahan BAP atau SPTJM belum tersimpan. Tetap tutup dan buang perubahan?'))return
+  onClose()
+ }
+ return <article className="bap-case" hidden={hidden&&!editing} aria-label={`Peserta ${row.person.nama}`}>
+  <div className="bap-queue-item"><span><b>{row.person.nama}</b><small>NIP {row.person.nip}</small><small>{when(row)} · {row.room_id.replace('room-','Room ')}</small></span><div className="bap-case-actions"><span className={'bap-badge '+(row.status==='Selesai'?'done':'')}>{row.status}</span><button className="btn primary" onClick={onOpen} aria-label={`Buka BAP ${row.person.nama}`}>Buka BAP →</button></div></div>
+  <div className="bap-case-panels">
+   <details className="panel bap-case-section" open={categoryOpen} onToggle={event=>{const open=event.currentTarget.open;setCategoryOpen(open);if(open)setCategoryLoaded(true)}}><summary><b>Perbandingan kategori awal dan hasil wawancara</b>{categoryDirty&&<small> · Belum tersimpan</small>}</summary>{categoryLoaded&&<CategoryComparison client={client} row={row} profile={profile} userId={userId} active={categoryOpen&&!hidden} bapDirty={bapState.dirty} bapBusy={bapState.busy} onDirty={setCategoryDirty}/>}</details>
+   <details className="panel bap-case-section" open={reportOpen} onToggle={event=>{const open=event.currentTarget.open;setReportOpen(open);if(open)setReportLoaded(true)}}><summary><b>Draf LHP — analisis, rekomendasi dan unduhan</b>{reportDirty&&<small> · Belum tersimpan</small>}</summary>{reportLoaded&&<LhpPanel client={client} row={row} profile={profile} userId={userId} active={reportOpen&&!hidden} bapDirty={bapState.dirty||categoryDirty||bapState.statementDirty} bapBusy={bapState.busy} onDirty={setReportDirty}/>}</details>
+  </div>
+  {editing&&<BapEditor row={row} client={client} profile={profile} userId={userId} onStateChange={setBapState} onClose={closeBap} onSaved={onSaved}/>}
+ </article>
+}
+
+function BapEditor({row:remote,client,profile,userId,onStateChange,onClose,onSaved}){
  const [row,setRow]=useState(remote),[identity,setIdentity]=useState(()=>initialIdentity(remote)),[answers,setAnswers]=useState(remote.answers||{}),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[preview,setPreview]=useState(false),[previewBusy,setPreviewBusy]=useState(false),[word,setWord]=useState(null),[reason,setReason]=useState(''),[schedule,setSchedule]=useState({roomId:remote.room_id,date:remote.scheduled_date,time:remote.scheduled_time.slice(0,5)})
- const [categoryDirty,setCategoryDirty]=useState(false)
  const [statementDirty,setStatementDirty]=useState(false)
- const [reportDirty,setReportDirty]=useState(false)
- const [categoryOpen,setCategoryOpen]=useState(remote.status==='Selesai')
- const previousStatus=useRef(remote.status)
  const dirty=useRef(false),saving=useRef(false),conflict=useRef(false),editSeq=useRef(0),current=useRef({row,identity,answers}),previewNode=useRef(null),dialog=useRef(null),mounted=useRef(true)
  current.current={row,identity,answers}
- dirtyRef.current=dirty.current||categoryDirty||statementDirty||reportDirty
  const readOnly=profile.role==='viewer'||row.status==='Selesai'||!row.started_at||row.locked_by!==userId
  const canRevise=row.status==='Selesai'&&['admin','editor','interviewer'].includes(profile.role)&&(profile.role==='admin'||profile.role==='interviewer'||row.locked_by===userId)
  const missing=missingFields(row,identity,answers)
  const progress=Object.values(answers).filter(a=>a.trim()).length
  useEffect(()=>{mounted.current=true;const el=dialog.current;el.showModal();return()=>{mounted.current=false;el.close()}},[])
- useEffect(()=>{
-  const completed=row.status==='Selesai'
-  if(completed||previousStatus.current==='Selesai'){
-   setCategoryOpen(completed);dialog.current?.scrollTo({top:0})
-  }
-  previousStatus.current=row.status
- },[row.status])
- useEffect(()=>{function leave(e){if(dirtyRef.current){e.preventDefault();e.returnValue=''}}window.addEventListener('beforeunload',leave);return()=>window.removeEventListener('beforeunload',leave)},[])
+ useEffect(()=>{onStateChange({dirty:dirty.current,statementDirty,busy})},[identity,answers,statementDirty,busy,onStateChange])
+ useEffect(()=>()=>onStateChange(cleanBapState),[onStateChange])
  useEffect(()=>{
   if(remote.revision<=current.current.row.revision)return
   // A read poll can observe our own pending save before its response arrives.
@@ -79,7 +96,7 @@ function BapEditor({row:remote,client,profile,userId,dirtyRef,onClose,onSaved}){
   const id=setTimeout(()=>{if(dirty.current&&!saving.current&&!conflict.current)save()},60000)
   return()=>clearTimeout(id)
  },[identity,answers,readOnly])
- function change(kind,key,value){editSeq.current++;dirty.current=true;dirtyRef.current=true;setWord(null);setPreview(false);setNotice('Perubahan belum tersimpan · otomatis disimpan setelah berhenti mengetik 1 menit');if(kind==='identity')setIdentity(prev=>({...prev,[key]:value}));else setAnswers(prev=>({...prev,[key]:value}))}
+ function change(kind,key,value){editSeq.current++;dirty.current=true;setWord(null);setPreview(false);setNotice('Perubahan belum tersimpan · otomatis disimpan setelah berhenti mengetik 1 menit');if(kind==='identity')setIdentity(prev=>({...prev,[key]:value}));else setAnswers(prev=>({...prev,[key]:value}))}
  async function action(name,payload={}){setBusy(true);setError('');try{const next=await act(client,current.current.row,name,payload);saved(next);conflict.current=false;setWord(null);setPreview(false);setNotice(name==='revise'?'BAP dibuka untuk diperbarui. Kategori, SPTJM dan LHP perlu ditinjau kembali setelah revisi.':'Data pemeriksaan diperbarui.')}catch(e){setError(e.message)}finally{setBusy(false)}}
  async function openPreview(){
   if(dirty.current&&!(await save()))return
@@ -97,11 +114,9 @@ function BapEditor({row:remote,client,profile,userId,dirtyRef,onClose,onSaved}){
    <section className="panel"><h3>Jawaban BAP · {progress}/22 terisi</h3>{QUESTIONS.map((q,i)=><label className="bap-question" key={i}><b>{i+1}. {q.replace('{nomorSurat}',identity.nomorSurat||'…').replace('{tanggalSuratTeks}',identity.tanggalSurat||'…')}</b><textarea rows={3} maxLength={8000} value={answers[i+1]||''} disabled={readOnly||busy} onChange={e=>change('answer',i+1,e.target.value)} placeholder="Catat jawaban peserta sesuai keterangannya"/></label>)}</section></>}
   {preview&&<section><div className="bap-preview-actions"><button className="btn secondary" disabled={busy||previewBusy} onClick={()=>setPreview(false)}>Kembali ke isian / revisi</button><button className="btn primary" disabled={busy||previewBusy||!word||missing.length>0} onClick={()=>download(word,`BAP-${row.person.nip}.docx`)}>Unduh Word</button><button className="btn primary" disabled={busy||previewBusy||!word||missing.length>0} onClick={exportPdf}>{busy?'Menyiapkan…':'Unduh PDF'}</button></div>{missing.length>0&&<p role="alert" className="notice amber-notice">Lengkapi sebelum unduh: {missing.join(', ')}.</p>}{previewBusy&&<p role="status">Menyiapkan halaman pratinjau…</p>}<div className="bap-preview-scroll"><div ref={previewNode}/></div><p className="bap-preview-note">PDF mengikuti halaman pratinjau ini. Word menggunakan template asli; pemenggalan halaman dapat menyesuaikan aplikasi Word/WPS dan font yang tersedia.</p></section>}
   </section>),
-  category:(<details key="category" hidden={preview} className="panel" open={categoryOpen} onToggle={event=>setCategoryOpen(event.currentTarget.open)}><summary><b>Perbandingan kategori awal dan hasil wawancara</b></summary><CategoryComparison client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current} bapBusy={busy} onDirty={setCategoryDirty}/></details>),
   statement:(<details key="statement" hidden={preview} className="panel"><summary><b>SPTJM — pernyataan, pratinjau dan unduhan</b></summary><StatementPanel client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current} bapBusy={busy} onDirty={setStatementDirty}/></details>),
-  report:(<details key="report" hidden={preview} className="panel"><summary><b>Draf LHP — analisis, rekomendasi dan unduhan</b></summary><LhpPanel client={client} row={row} profile={profile} userId={userId} bapDirty={dirty.current||categoryDirty||statementDirty} bapBusy={busy} onDirty={setReportDirty}/></details>),
  }
- const panelOrder=row.status==='Selesai'?['category','bap','statement','report']:['bap','category','statement','report']
+ const panelOrder=['bap','statement']
  return <dialog ref={dialog} className="bap-dialog" aria-label={`BAP ${row.person.nama}`} onCancel={e=>{e.preventDefault();onClose()}}>
   <header className="bap-editor-header"><div><h2>{row.person.nama}</h2><p>NIP {row.person.nip} · {row.room_id.replace('room-','Room ')} · {row.status}</p></div><button className="btn secondary" onClick={onClose} disabled={busy}>Tutup</button></header>
   {error&&<p className="notice red-notice" role="alert">{error}{conflict.current&&' Salin jawaban yang belum tersimpan sebelum menutup, lalu buka kembali data terbaru.'}</p>}
