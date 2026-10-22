@@ -41,7 +41,8 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
 
 Word dihasilkan dari template BAP yang mempertahankan naskah, kop dan footer
 asli. Identitas memakai kolom label/titik dua/nilai yang sejajar; tabel isi dan
-tanda tangan putih tanpa garis. Pemeriksa tercantum Faisal. Jawaban diakhiri
+tanda tangan putih tanpa garis. Blok Faisal dipertahankan, dan di bawahnya
+terdapat blok pewawancara pendamping dengan nama serta NIP tersendiri. Jawaban diakhiri
 strip pengisi sisa baris, dengan jarak antarbagiannya. Kotak paraf dan nomor
 halaman dari footer dicetak pada setiap halaman Word dan PDF. PDF mengambil setiap halaman A4 dari pratinjau; teks jawaban panjang
 dipindah ke halaman lanjutan. PDF berisi gambar halaman untuk menjaga tampilan,
@@ -204,3 +205,29 @@ dan membuka draf untuk aktor berwenang. Revisi yang usang ditolak.
 menguji struktur kop inline, footer paraf, perataan identitas, tanda tangan bersih,
 serta otorisasi dan riwayat revisi. Uji browser memeriksa jawaban panjang,
 kop di PDF, paraf tiap halaman, tanggal jadwal, simpan manual, dan jeda mengetik 60000 ms (diulang setiap perubahan).
+
+
+### Penandatangan pewawancara pendamping
+
+BAP memuat tiga blok: yang diperiksa di kiri, pemeriksa Faisal di kanan, serta
+pewawancara pendamping di bawah Faisal. Ruang tanda tangan tetap kosong.
+Nama/NIP peserta dan identitas Faisal tidak diganti oleh identitas pewawancara.
+
+Pada **Identitas & administrasi → Pewawancara pendamping**, nama awal mengikuti
+akun yang menangani berkas (`locked_by`), atau penugasan room jika belum dimulai.
+Admin/viewer yang membuka berkas memakai sumber petugas berkas tersebut.
+Untuk akun unit/room, isi nama lengkap orang yang melaksanakan wawancara.
+Nama/NIP yang sudah disimpan dalam BAP dipertahankan saat dibuka ulang.
+
+Data akun saat pembaruan ini belum memuat NIP. Pewawancara melengkapi NIP
+18 digit pada kolom tersebut; aplikasi tidak menebak atau memakai NIP peserta.
+Draf dan simpan otomatis boleh menyimpan NIP yang belum lengkap. Unduhan
+serta finalisasi memerlukan nama dan NIP pewawancara yang lengkap dan valid.
+Berkas lama yang telah selesai dapat dilengkapi melalui **Revisi BAP**.
+
+Aktivasi tambahan: `supabase/interview-signatories.sql` setelah migrasi revisi.
+RPC `interview_signatory_source` dibatasi per role dan room. Identitas pendamping
+disimpan dalam `identity_details` melalui RPC BAP yang memeriksa revisi dan
+mencatat audit; penyiapan ini tidak mengganti jawaban atau identitas berkas lama.
+Tes: `tests/interviewSignatories.test.js`, `tests/bapTemplateLayout.test.js`,
+dan `tests/bapPortal.test.js`, ditambah pemeriksaan browser dan Word/PDF.

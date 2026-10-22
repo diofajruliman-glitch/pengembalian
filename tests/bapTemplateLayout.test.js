@@ -13,7 +13,8 @@ test('BAP template prints inline letterhead, aligned borderless identities and c
  const tables=xml.match(/<w:tbl\b[^>]*>[\s\S]*?<\/w:tbl>/g)
  assert.equal(tables.length,4)
  const rowCount=t=>[...t.matchAll(/<w:tr\b/g)].length
- assert.deepEqual(tables.map(rowCount),[4,5,88,5])
+ assert.deepEqual(tables.slice(0,3).map(rowCount),[4,5,88])
+ assert.ok(rowCount(tables[3])>=10,'each signature has writing room')
  for(const table of tables){
   assert.ok(!/<w:(?:top|left|right|bottom|insideH|insideV)\b[^>]*w:val="single"/.test(table),'layout cells do not print gridlines')
   assert.ok(!/w:fill="(?!FFFFFF)[0-9A-Fa-f]{6}"/.test(table),'layout cells have white background')
@@ -26,8 +27,14 @@ test('BAP template prints inline letterhead, aligned borderless identities and c
  const signature=tables[3]
  assert.ok(signature.includes('19761106 200502 1 001'))
  assert.equal([...signature.matchAll(/>Faisal<\/w:t>/g)].length,1)
- assert.equal([...signature.matchAll(/>Nama<\/w:t>/g)].length,2,'no empty third examiner')
- assert.equal([...signature.matchAll(/>Tanda tangan<\/w:t>/g)].length,2)
+ assert.equal([...signature.matchAll(/>Nama<\/w:t>/g)].length,3,'participant, Faisal and assigned interviewer')
+ assert.equal([...signature.matchAll(/>Tanda tangan<\/w:t>/g)].length,3)
+ assert.ok(signature.includes('Pewawancara:'))
+ assert.ok(signature.includes('{pewawancaraNama}'))
+ assert.ok(signature.includes('{pewawancaraNip}'))
+ const signatureRows=signature.match(/<w:tr\b[^>]*>[\s\S]*?<\/w:tr>/g)
+ assert.ok(signatureRows.findIndex(r=>r.includes('Pewawancara:'))>signatureRows.findIndex(r=>r.includes('>Faisal</w:t>')),'interviewer block sits below Faisal')
+ assert.equal([...signature.matchAll(/w:val="800"/g)].length,2,'separate blank space for both right signatures')
  assert.equal([...tables[2].matchAll(/w:leader="hyphen"/g)].length,22,'answer ends use Word dash leaders')
  assert.ok(!/>{?_{3,}/.test(tables[2]),'spacer rows contain no placeholder underlines')
 })

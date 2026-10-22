@@ -79,7 +79,7 @@ def borderless_table(widths, values, signature=False):
         tr = etree.SubElement(table, W + 'tr')
         trpr = etree.SubElement(tr, W + 'trPr')
         trpr.append(element('cantSplit'))
-        if signature and index == len(values) - 1:
+        if signature and not any(row):
             trpr.append(element('trHeight', val=800, hRule='atLeast'))
         for width, value in zip(widths, row):
             tc = etree.SubElement(tr, W + 'tc')
@@ -238,16 +238,40 @@ clean_signature = borderless_table([1400, 200, 2920, 450, 1400, 200, 3047], [
     ['NIP', ':', '{nip}', '', 'NIP', ':', '19761106 200502 1 001'],
     ['Tanda tangan', ':', '', '', 'Tanda tangan', ':', ''],
     ['', '', '', '', '', '', ''],
+    ['', '', '', '', 'Pewawancara:', '', ''],
+    ['', '', '', '', 'Nama', ':', '{pewawancaraNama}'],
+    ['', '', '', '', 'NIP', ':', '{pewawancaraNip}'],
+    ['', '', '', '', 'Tanda tangan', ':', ''],
+    ['', '', '', '', '', '', ''],
 ], signature=True)
 # Headings span the complete left/right signature groups without wrapping.
-heading_cells = clean_signature.find('w:tr', NS).findall('w:tc', NS)
-for start, width in [(0, 4520), (4, 4647)]:
-    cp = heading_cells[start].find('w:tcPr', NS)
-    cp.find('w:tcW', NS).set(W + 'w', str(width))
-    cp.append(element('gridSpan', val=3))
-    for removed in heading_cells[start + 1:start + 3]:
-        removed.getparent().remove(removed)
+for heading_index in [0, 5]:
+    heading_cells = clean_signature.findall('w:tr', NS)[heading_index].findall('w:tc', NS)
+    for start, width in [(0, 4520), (4, 4647)]:
+        cp = heading_cells[start].find('w:tcPr', NS)
+        cp.find('w:tcW', NS).set(W + 'w', str(width))
+        cp.append(element('gridSpan', val=3))
+        for removed in heading_cells[start + 1:start + 3]:
+            removed.getparent().remove(removed)
+        for run in heading_cells[start].findall('.//w:r', NS):
+            property_node(property_node(run, 'rPr'), 'b')
 body.replace(signature, clean_signature)
+# Word requires a paragraph after the final table. Replace inherited blank
+# paragraphs with one 1-point paragraph so signature space cannot create an
+# otherwise empty final page.
+section = body.find('w:sectPr', NS)
+last_content = body.index(section) - 1 if section is not None else len(body) - 1
+while last_content >= 0:
+    node = body[last_content]
+    if node.tag != W + 'p' or text(node).strip() or node.find('.//w:drawing', NS) is not None:
+        break
+    body.remove(node)
+    last_content -= 1
+trailer = paragraph('', after=0)
+trailer.find('w:pPr/w:spacing', NS).set(W + 'line', '20')
+trailer.find('w:pPr/w:spacing', NS).set(W + 'lineRule', 'exact')
+trailer.find('w:r/w:rPr/w:sz', NS).set(W + 'val', '2')
+body.insert(body.index(section) if section is not None else len(body), trailer)
 
 # Imported theme/table styles must not tint text blue or change body fonts.
 for run in document.findall('.//w:r', NS):

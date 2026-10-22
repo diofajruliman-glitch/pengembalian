@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import {readFile} from 'node:fs/promises'
 import {PGlite} from '@electric-sql/pglite'
-import {dateWords,interviewTimestamp,missingFields,initialIdentity,templateData,QUESTIONS} from '../src/bap/model.js'
+import {dateWords,interviewTimestamp,validInterviewerNip,missingFields,initialIdentity,templateData,QUESTIONS} from '../src/bap/model.js'
 import {buildWord} from '../src/bap/documents.js'
 import {unzipSync,strFromU8} from 'fflate'
 import {positions,positionBackfillSql} from '../scripts/prepare_interview_positions.mjs'
@@ -40,13 +40,15 @@ test('Word preserves the supplied package and safely inserts all answers',async(
  const previous=globalThis.fetch;globalThis.fetch=async()=>new Response(template)
  try{
   const row={person:{nama:'Nama & <contoh>',nip:'123456789012345678'},started_at:'2026-10-26T01:30:00Z'}
-  const identity={...initialIdentity(row),pangkat:'IX',jabatan:'Jabatan Uji'}
+  const identity={...initialIdentity(row,{nama:'Petugas Uji & pendamping',nip:'198501012010011001'}),pangkat:'IX',jabatan:'Jabatan Uji'}
   const answers=Object.fromEntries(Array.from({length:22},(_,i)=>[i+1,`Jawaban ${i+1}\nBaris berikutnya & benar`]))
   const word=await buildWord(row,identity,answers);const files=unzipSync(new Uint8Array(await word.arrayBuffer()))
   const xml=strFromU8(files['word/document.xml'])
   assert.ok(xml.includes('Nama &amp; &lt;contoh&gt;'));assert.ok(xml.includes('Jawaban 22'))
   assert.ok(xml.includes('<w:br/>'));assert.ok(!/\{jawaban_|\{nama\}|\{nip\}/.test(xml))
   assert.ok(xml.includes('RAHASIA'));assert.ok(xml.includes('BERITA  ACARA PEMERIKSAAN'))
+  assert.ok(xml.includes('Petugas Uji &amp; pendamping'));assert.ok(xml.includes('198501012010011001'));assert.ok(xml.includes('Faisal'));assert.ok(xml.includes('19761106 200502 1 001'))
+  assert.ok(!xml.includes('{pewawancara'))
   assert.deepEqual(Object.keys(files).sort(),Object.keys(unzipSync(template)).sort())
  }finally{globalThis.fetch=previous}
 })
@@ -64,6 +66,16 @@ test('BAP follows scheduled WIB date in words and preserves literal answers',()=
  assert.equal(interviewTimestamp(scheduled),'2026-10-29T09:30:00+07:00')
  assert.equal(templateData(scheduled,identity,{}).hari,'Kamis');assert.equal(templateData(scheduled,identity,{}).tanggal_huruf,'dua puluh sembilan')
  assert.equal(row.started_at,'2026-10-25T18:30:00.000Z')
+})
+
+test('BAP keeps the participant, Faisal and interviewer identities distinct',()=>{
+ const row={person:{nama:'Peserta',nip:'198601132025211048'},identity_details:{pewawancaraNama:'Petugas tersimpan',pewawancaraNip:'198501012010011001'}}
+ const identity=initialIdentity(row,{nama:'Admin pembaca',nip:'197001012000011001'})
+ assert.equal(identity.pewawancaraNama,'Petugas tersimpan');assert.equal(identity.pewawancaraNip,'198501012010011001')
+ assert.equal(initialIdentity({...row,identity_details:{}},{nama:'Petugas room'}).pewawancaraNip,'')
+ assert.equal(validInterviewerNip('19850101 201001 1 001'),true);assert.equal(validInterviewerNip(row.person.nip+'0'),false)
+ const missing=missingFields({...row,started_at:'2026-10-26T01:00:00Z'},{...identity,pewawancaraNama:'',pewawancaraNip:'123'}, {})
+ assert.ok(missing.includes('Nama pewawancara'));assert.ok(missing.includes('NIP pewawancara harus 18 digit'))
 })
 
 test('database enforces room access, revision checks, immutable start, finalization and admin reopening',async()=>{

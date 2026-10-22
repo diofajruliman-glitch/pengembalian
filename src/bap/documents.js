@@ -95,7 +95,13 @@ export async function renderPreview(blob,target,{draftLabel}={}){
    }
    if(block.rows.length<20&&block.getBoundingClientRect().height<article.clientHeight){
     table=null;const copy=block.cloneNode(true);article.appendChild(copy)
-    if(overflow()){copy.remove();newPage();article.appendChild(copy)}
+    if(overflow()){
+     copy.remove()
+     const previous=article.lastElementChild
+     const signature=copy.textContent.includes('Yang diperiksa:')&&copy.textContent.includes('Pemeriksa:')
+     const date=signature&&previous?.tagName==='P'&&/\d{1,2} \p{L}+ \d{4}/u.test(previous.textContent)?previous:null
+     date?.remove();newPage();if(date)article.appendChild(date);article.appendChild(copy)
+    }
     continue
    }
    table=null

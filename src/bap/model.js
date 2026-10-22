@@ -1,6 +1,8 @@
 import questions from './questions.json' with {type:'json'}
 export const QUESTIONS=questions
 export const IDENTITY_FIELDS=[['pangkat','Pangkat / golongan'],['jabatan','Jabatan'],['unitKerja','Unit kerja'],['nomorSurat','Nomor surat panggilan'],['tanggalSurat','Tanggal surat panggilan'],['kota','Tempat pemeriksaan']]
+export const INTERVIEWER_FIELDS=[['pewawancaraNama','Nama pewawancara'],['pewawancaraNip','NIP pewawancara']]
+export function validInterviewerNip(value){return /^[0-9]{18}$/.test((value||'').replace(/\s/g,''))}
 export function terbilang(n){
  const words=['nol','satu','dua','tiga','empat','lima','enam','tujuh','delapan','sembilan','sepuluh','sebelas']
  if(n<12)return words[n]
@@ -27,16 +29,19 @@ export function interviewTimestamp(row){
  }
  return row.started_at
 }
-export function initialIdentity(row){
+export function initialIdentity(row,signatory={}){
  const details=row.identity_details||{}
  return {unitKerja:row.person.unitKerja||'Direktorat Perlindungan Sosial Non Kebencanaan',nomorSurat:row.person.nomorSurat||'',tanggalSurat:row.person.tanggalSurat||'2026-10-15',kota:'Jakarta',...details,
   pangkat:details.pangkat?.trim()?details.pangkat:row.person.pangkat||'',
-  jabatan:details.jabatan?.trim()?details.jabatan:row.person.jabatan||''}
+  jabatan:details.jabatan?.trim()?details.jabatan:row.person.jabatan||'',
+  pewawancaraNama:details.pewawancaraNama?.trim()?details.pewawancaraNama:signatory.nama||'',
+  pewawancaraNip:details.pewawancaraNip?.trim()?details.pewawancaraNip:signatory.nip||''}
 }
 export function missingFields(row,identity,answers){
  const missing=[]
  for(const [key,label] of [['nama','Nama'],['nip','NIP']])if(!row.person[key]?.trim())missing.push(label)
- for(const [key,label] of IDENTITY_FIELDS)if(!identity[key]?.trim())missing.push(label)
+ for(const [key,label] of [...IDENTITY_FIELDS,...INTERVIEWER_FIELDS])if(!identity[key]?.trim())missing.push(label)
+ if(identity.pewawancaraNip?.trim()&&!validInterviewerNip(identity.pewawancaraNip))missing.push('NIP pewawancara harus 18 digit')
  if(identity.tanggalSurat&&(!/^\d{4}-\d{2}-\d{2}$/.test(identity.tanggalSurat)||!Number.isFinite(Date.parse(identity.tanggalSurat))||new Date(identity.tanggalSurat).toISOString().slice(0,10)!==identity.tanggalSurat))missing.push('Format tanggal surat')
  if(!row.started_at)missing.push('Waktu mulai wawancara')
  for(let n=1;n<=22;n++)if(!answers[n]?.trim())missing.push(`Jawaban ${n}`)
@@ -46,6 +51,6 @@ export function templateData(row,identity,answers){
  const data={...row.person,...identity,...dateWords(interviewTimestamp(row))}
  data.tanggalSuratTeks=identity.tanggalSurat?new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'}).format(new Date(identity.tanggalSurat+'T12:00:00+07:00')):'[tanggal surat belum diisi]'
  for(let n=1;n<=22;n++)data[`jawaban_${n}`]=answers[n]?.trim()||'[Belum diisi]'
- for(const [key] of IDENTITY_FIELDS)if(!data[key])data[key]='[Belum diisi]'
+ for(const [key] of [...IDENTITY_FIELDS,...INTERVIEWER_FIELDS])if(!data[key])data[key]='[Belum diisi]'
  return data
 }
