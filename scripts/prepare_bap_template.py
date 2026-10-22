@@ -238,14 +238,13 @@ clean_signature = borderless_table([1400, 200, 2920, 450, 1400, 200, 3047], [
     ['NIP', ':', '{nip}', '', 'NIP', ':', '19761106 200502 1 001'],
     ['Tanda tangan', ':', '', '', 'Tanda tangan', ':', ''],
     ['', '', '', '', '', '', ''],
-    ['', '', '', '', 'Pewawancara:', '', ''],
     ['', '', '', '', 'Nama', ':', '{pewawancaraNama}'],
     ['', '', '', '', 'NIP', ':', '{pewawancaraNip}'],
     ['', '', '', '', 'Tanda tangan', ':', ''],
     ['', '', '', '', '', '', ''],
 ], signature=True)
 # Headings span the complete left/right signature groups without wrapping.
-for heading_index in [0, 5]:
+for heading_index in [0]:
     heading_cells = clean_signature.findall('w:tr', NS)[heading_index].findall('w:tc', NS)
     for start, width in [(0, 4520), (4, 4647)]:
         cp = heading_cells[start].find('w:tcPr', NS)
