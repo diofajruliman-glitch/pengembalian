@@ -16,7 +16,9 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
    atau daftar difilter. Keluar atau pindah menu meminta konfirmasi jika masih
    ada perubahan yang belum disimpan.
 2. Konfirmasi identitas dan tekan **Mulai wawancara**. Server mencatat waktu
-   mulai aktual satu kali untuk riwayat. Hari/tanggal/bulan/tahun BAP mengikuti
+   mulai aktual satu kali untuk riwayat. Isian identitas/administrasi dan 22 jawaban
+   BAP baru dibuka setelah tombol ini berhasil; sebelum itu popup menampilkan
+   verifikasi peserta dan pilihan penundaan. Hari/tanggal/bulan/tahun BAP mengikuti
    jadwal wawancara peserta dalam WIB, bukan tanggal saat tombol mulai atau unduh ditekan.
 3. Lengkapi administrasi dan 22 jawaban. Nama/NIP tidak ditulis ulang.
    Pangkat dan jabatan diambil dari referensi NIP yang sama dengan surat panggilan
@@ -29,12 +31,12 @@ dan membuka kembali BAP dengan alasan yang dicatat dalam audit.
    Gunakan **Simpan draf** untuk menyimpan atau memperbarui isian kapan saja. Tunggu
    konfirmasi tersimpan sebelum menutup. Gangguan koneksi ditampilkan dengan
    jelas; jangan tutup halaman sebelum penyimpanan berhasil atau menyalin jawaban.
-5. Buka **Pratinjau BAP**. Isian yang belum lengkap mengunci unduhan dan finalisasi.
-   Gunakan **Kembali ke isian / revisi** untuk memperbaiki.
-6. Unduh **Word** atau **PDF**. Unduh tidak otomatis memfinalisasi.
-7. **Finalisasi BAP** menandai pemeriksaan selesai. Pewawancara sesuai room dapat
+5. Bila peserta atau pelaksanaan terkendala, gunakan **Aktivitas & kendala wawancara → Laporkan kendala** pada popup BAP. Tulis 5–2.000 karakter lalu tekan **Kirim laporan kendala**. Laporan langsung tersedia pada monitoring pimpinan setelah tersimpan; jawaban BAP dapat tetap dikerjakan. Gunakan **Tandai kendala teratasi** setelah penanganan, dengan catatan penanganan opsional.
+6. Jika wawancara belum dapat dimulai atau harus berhenti sementara, tekan **Tunda wawancara**, isi alasan wajib 5–2.000 karakter, lalu **Simpan sebagai Tertunda**. Alasan dan jawaban yang sedang diisi disimpan bersama. Pimpinan melihat status Tertunda beserta alasan dan waktunya. Gunakan **Lanjutkan wawancara** untuk meneruskan isian.
+7. Setelah semua identitas wajib, nama/NIP pewawancara pendamping, dan **22 jawaban** lengkap, tekan **Selesai wawancara**. Penyelesaian memerlukan klik ini; mengetik atau menyimpan draf tidak menyelesaikan wawancara otomatis. Pratinjau dapat dipakai untuk memeriksa isi tetapi tidak menjadi syarat menekan tombol selesai.
+8. Buka **Pratinjau BAP** bila ingin mengunduh **Word/PDF**. Isian belum lengkap mengunci unduhan. Gunakan **Kembali ke isian / revisi** untuk memperbaiki. Unduhan tidak otomatis menyelesaikan wawancara. Tombol **Selesai wawancara** menandai pemeriksaan selesai. Pewawancara sesuai room dapat
    menekan **Revisi BAP** untuk memperbaiki berkas; status kembali menjadi draf.
-   Finalisasi ulang setelah diperiksa. Perubahan revisi mengharuskan kategori,
+   Tekan **Selesai wawancara** lagi setelah diperiksa. Perubahan revisi mengharuskan kategori,
    SPTJM dan LHP terkait ditinjau kembali. Riwayat perubahan tetap tersimpan;
    tanda tangan tetap kosong untuk pengesahan. Admin juga tetap dapat membuka
    kembali/melepas kunci dengan alasan audit.
@@ -49,23 +51,96 @@ dipindah ke halaman lanjutan. PDF berisi gambar halaman untuk menjaga tampilan,
 sehingga teksnya tidak dapat diseleksi seperti pada Word. Font/editor Word/WPS
 dapat menghasilkan pemenggalan halaman berbeda dari pratinjau browser.
 
-## Monitoring dan kategorisasi
+## Monitoring, progres, dan kendala
 
-Portal menggunakan 1.057 jadwal resmi 26–29 Oktober 2026 dari sumber yang sama
-dengan Monitoring Wawancara. Identitas dicocokkan dengan NIK pada dataset
-Disiplin ASN tersimpan; setiap berkas mereferensikan ID dataset asal.
+Portal pewawancara, menu **Portal Wawancara**, dan **Monitoring Wawancara**
+membaca `interview_cases` serta `interview_activity` dari database bersama.
+Akun pimpinan dengan role `viewer` dapat membaca seluruh room; akun
+`interviewer` hanya membaca room penugasannya. Identitas peserta terhubung
+melalui NIK dan ID dataset asal. Acuan awal adalah jadwal resmi 1.057 ASN pada
+26–29 Oktober 2026 dengan 19 room. Perubahan tanggal, jam, dan room dari database
+langsung dipakai oleh monitoring dan roster portal.
 
-Panel database bersama pada monitoring menampilkan progres BAP setiap 15 detik.
-Kertas kerja operasional Zoom tetap lokal. Admin dapat meninjau jumlah perbedaan
-jadwal dan menekan **Kirim perubahan jadwal lokal** untuk meneruskannya ke portal.
-Batch ditolak seluruhnya jika ada versi data berubah, slot bentrok, atau peserta
-sudah memulai wawancara. **Ambil jadwal dari portal** menyalin jadwal/progres BAP
-ke kertas kerja lokal. Perubahan label pewawancara lokal tidak mengganti akun
-atau penugasan database.
+| Tampilan | Makna |
+| --- | --- |
+| Terjadwal | Wawancara belum dimulai pada data BAP. |
+| BAP dibuka | Petugas berwenang sedang membuka BAP; identitas belum tentu dikonfirmasi dan waktu mulai belum dicatat. |
+| Dalam wawancara | Tombol Mulai wawancara telah berhasil mencatat waktu mulai aktual. |
+| Draf | BAP telah disimpan atau dibuka kembali untuk revisi; belum dinyatakan selesai. |
+| Tertunda | Wawancara dihentikan sementara atau belum dapat dimulai; alasan wajib dan waktu penundaan tersimpan. |
+| Selesai | BAP telah difinalisasi dan memiliki waktu selesai. |
+| Kendala terbuka | Laporan kendala perlu ditangani; dapat menyertai status wawancara. |
+| Belum dimuat / Belum terhubung | Status database belum tersedia atau peserta belum terhubung ke kasus BAP. |
 
-Tombol **Buka BAP** tersedia pada baris BNBA monitoring. Di Kategorisasi Disiplin
-ASN tersedia tautan hasil BAP, termasuk peserta terpilih. Jawaban tidak mengubah
-kategori/sanksi secara otomatis.
+Saat popup BAP dibuka petugas yang berhak, aplikasi mengirim sinyal pembukaan
+segera lalu heartbeat setiap **20 detik** selama popup terbuka. Viewer tidak
+mengirim sinyal ini. Indikator kehadiran berlaku selama **90 detik** sejak
+heartbeat terakhir; menutup popup atau kehilangan koneksi tidak mempertahankan
+indikator aktif tanpa batas. Waktu mulai dan status selesai tetap mengikuti
+kasus BAP. Status Tertunda tidak menampilkan indikator BAP aktif walaupun heartbeat terakhir masih baru. Sinyal membuka berkas tidak menekan Mulai wawancara secara otomatis.
+
+Pembacaan kasus dan aktivitas berjalan setiap **5 detik** ketika halaman
+terlihat, serta dicoba kembali saat kembali ke tab, fokus aplikasi, atau koneksi
+pulih. Tombol **Perbarui monitoring** dapat dipakai untuk pembacaan manual.
+Monitoring memakai satu pembacaan bersama untuk panel ringkasan, room, BNBA,
+dan portal di dalam halaman tersebut; pengguna tidak perlu menyalin progres
+ke kertas kerja lokal.
+
+Progres menunjukkan **jawaban yang sudah tersimpan dari 22 pertanyaan** dan
+persentasenya. Isian yang masih diketik belum masuk rekap pimpinan. Penyimpanan
+BAP otomatis tetap menunggu satu menit setelah berhenti mengetik; **Simpan draf**
+memperbarui progres lebih cepat. Kartu room menampilkan waktu sejak mulai;
+aktivitas yang masih berlangsung tetap terlihat saat filter tanggal berbeda.
+Antrean dan rekap selesai mengikuti tanggal terpilih.
+
+Laporan kendala dapat dikirim sebelum atau selama wawancara, lalu diperbarui
+atau ditandai teratasi. Laporan baru setelah BAP selesai ditolak; kendala yang
+masih terbuka dapat ditandai teratasi. Admin/editor serta pewawancara sesuai
+room dapat mengelola kendala; viewer hanya membaca. Kartu room, BNBA, dan portal
+menampilkan isi laporan serta waktu pelaporan. Rincian BAP dan ekspor juga
+menampilkan waktu serta catatan penanganan. Gunakan filter **Kendala terbuka**
+pada BNBA untuk meninjau laporan yang memerlukan perhatian.
+
+Status **Tertunda** berbeda dari laporan kendala. Laporan dapat menandai masalah
+sambil wawancara tetap berjalan; **Tunda wawancara** mengubah status kasus BAP
+menjadi Tertunda dan menghentikan isian sampai dilanjutkan. Monitoring memberi
+hitungan/filter tersendiri dan menempatkan peserta tertunda di bagian terpisah
+pada kartu room, tanpa timer aktif. Jadwalnya dikunci dari perubahan atau
+distribusi, termasuk jika penundaan terjadi sebelum waktu mulai dicatat.
+
+Saat dilanjutkan, jawaban tersimpan serta waktu mulai yang sudah ada dipertahankan.
+Jika belum pernah dimulai, waktu mulai dicatat ketika Lanjutkan wawancara berhasil.
+Alasan/waktu penundaan terakhir tetap tersimpan untuk audit dan ekspor; banner
+penundaan aktif hanya tampil selama status Tertunda. CSV mencantumkan **Alasan
+penundaan terakhir** dan **Waktu penundaan terakhir**, termasuk sesudah dilanjutkan.
+Status lokal **Terkendala** pada mode offline tetap merupakan catatan browser.
+
+Kendala mempunyai revisi tersendiri pada `interview_activity`. Perubahan laporan
+tidak menaikkan `interview_cases.revision`, mengambil alih kunci BAP, mengubah
+jawaban, atau membatalkan status selesai maupun dokumen terkait. Heartbeat tidak
+menaikkan revisi laporan. Konflik perubahan laporan antarakun ditolak;
+catatan formulir tetap tersedia untuk disalin sebelum membuka laporan terbaru.
+Hanya pembukaan pertama dan perubahan laporan masuk audit aktivitas permanen.
+
+Jika pembacaan gagal, halaman memperlihatkan gangguan koneksi dan waktu
+pembaruan terakhir. Data terakhir diberi penanda; status lokal tidak menggantikan
+status database. Jika kasus BAP berhasil dibaca tetapi aktivitas/kendala belum
+pernah berhasil dibaca, kendala ditampilkan **belum tersedia**. Laporan lama yang
+sudah dimuat dipertahankan dengan penanda data terakhir sampai pembacaan pulih.
+
+Jadwal kerja, nama Zoom, catatan koordinasi, dan posisi/catatan kunjungan pimpinan
+pada kertas kerja tetap lokal per browser/akun/sumber. Catatan ini tidak menjadi
+laporan kendala bersama. Gunakan panel kendala pada BAP untuk laporan lintas akun.
+Admin dapat meninjau perbedaan lalu menekan **Kirim perubahan jadwal lokal**;
+batch ditolak seluruhnya jika revisi berubah, slot bentrok, atau peserta sudah
+mulai/tertunda. Mengubah label penugasan room lokal tidak mengganti akun database.
+Ekspor monitoring bersama membedakan catatan lokal dari laporan kendala dan
+mencantumkan sumber jadwal serta kesegaran pembacaan. Mode offline mempertahankan
+format ekspor dan penyimpanan lokalnya.
+
+Tombol **Buka BAP** tersedia pada BNBA monitoring dan pencarian/roster portal.
+Di Kategorisasi Disiplin ASN juga tersedia tautan hasil BAP, termasuk peserta
+terpilih. Jawaban dan kendala tidak mengubah kategori/sanksi secara otomatis.
 
 ## Database
 
@@ -88,17 +163,64 @@ publik berjenis `SECURITY INVOKER`. Skema private tidak boleh dimasukkan ke daft
 schema Data API yang diekspos. Tabel audit tidak memiliki grant atau policy untuk
 akses langsung pengguna. Tidak ada kata sandi atau kunci admin di frontend.
 
+### Aktivasi monitoring bersama
+
+Jalankan `supabase/interview-monitoring-activation.sql` setelah skema portal,
+`supabase/interview-revisions.sql`, dan `supabase/interview-signatories.sql` pada
+instalasi baru. SQL menambahkan `interview_activity`, audit privat, RLS, grant
+baca, dan RPC `interview_activity_action` untuk sinyal pembukaan serta laporan
+kendala. Status, jawaban, dan revisi BAP berada pada tabel terpisah.
+
+Pada **23 Oktober 2026**, aktivasi monitoring ini sudah diterapkan ke project
+Supabase yang terhubung melalui `execute_sql`. Penerapan tersebut tidak membuat
+entri riwayat migrasi Supabase. Frontend dirilis melalui branch `main` ke proyek
+Vercel `pengembalian` pada https://pengembalian.vercel.app. Pemeriksaan baca akun pimpinan sebagai `viewer` berhasil
+mengakses 1.057 kasus dan tabel aktivitas. Pemeriksaan tidak menambahkan sinyal
+aktivitas atau jawaban peserta produksi.
+
+Verifikasi 23 Oktober 2026: 145 pengujian terkait BAP/wawancara lulus,
+diikuti 19 pemeriksaan terarah pada proyeksi status, ekspor, tampilan, dan API
+setelah perbaikan terakhir; build produksi berhasil. Uji browser lintas tab
+dengan tiga peserta sintetis memeriksa BAP dibuka, mulai, laporan kendala saat
+jawaban belum disimpan, simpan draf tanpa konflik, progres 1/22 pada akun
+pimpinan, kendala teratasi, status selesai 22/22, dan penanda data usang saat
+pembacaan aktivitas terputus. Data peserta produksi tidak digunakan sebagai
+fixture. RPC pembukaan juga diuji di database terhubung dalam transaksi yang
+di-rollback; revisi BAP tetap sama dan tidak ada aktivitas uji yang disimpan.
+
+### Aktivasi alur Tertunda
+
+`supabase/interview-deferral.sql` menambahkan status `Tertunda`, kolom
+`deferred_reason`, `deferred_at`, `deferred_by`, dan aksi BAP `defer`. Penundaan
+merupakan perubahan kasus BAP dengan pemeriksaan revisi/kepemilikan; jawaban dan
+waktu mulai dipertahankan. Aksi `start` melanjutkan dan alasan terakhir tetap
+tersimpan. Jalankan setelah skema portal, revisi, penandatangan, dan aktivasi
+monitoring bersama. SQL penundaan telah diterapkan pada project terhubung pada
+**23 Oktober 2026** melalui `execute_sql`, tanpa entri riwayat migrasi. Uji
+transaksi defer → start dan penolakan selesai saat tertunda berhasil di database
+terhubung, lalu di-rollback. Jumlah/status dan jawaban peserta produksi tetap
+sama. Deployment frontend diverifikasi terpisah dari aktivasi database melalui
+status produksi Vercel dan pemeriksaan halaman online.
+
+Pembaruan alur ini lulus **157 pengujian** serta build produksi. Browser simulasi
+lintas tab memverifikasi isian tersembunyi sebelum Mulai, alasan kosong ditolak,
+penundaan sebelum/sesudah mulai, penyimpanan jawaban bersama alasan, kelanjutan
+tanpa kehilangan jawaban, dan tombol Selesai terkunci sampai seluruh isian
+lengkap. Mengisi 22 jawaban tetap menghasilkan draf sampai tombol Selesai ditekan.
+
 ## Verifikasi
 
 ```bash
-node --test tests/bapPortal.test.js tests/interviewerAccounts.test.js tests/interviewOfficialSchedule.test.js tests/interviewStorage.test.js tests/interviews.test.js tests/interviewRoutingIntegration.test.js
+node --test tests/interviewLifecycle.test.js tests/interviewDeferralDatabase.test.js tests/interviewProgressApi.test.js tests/interviewMonitoringDatabase.test.js tests/interviewLiveMonitoring.test.js tests/interviewMonitoringView.test.js tests/interviewMonitoringExport.test.js tests/bapPortal.test.js tests/interviewerAccounts.test.js tests/interviewOfficialSchedule.test.js tests/interviewStorage.test.js
 npm run build
 ```
 
-Pengujian browser mencakup antrean, mulai pemeriksaan, pengisian, simpan otomatis,
-pratinjau enam halaman dengan jawaban panjang, revisi, unduhan Word/PDF, tampilan
-ponsel, login nyata, pembatasan room, dan logout. Data jawaban untuk pengujian
-browser menggunakan backend simulasi, sehingga tidak mengisi BAP peserta riil.
+Tes monitoring memeriksa pembacaan lintas room untuk viewer, pembatasan penulisan,
+revisi kendala terpisah, progres tersimpan, kedaluwarsa indikator pembukaan,
+pembacaan parsial/gagal, pindah jadwal/room, dan keamanan ekspor CSV. Verifikasi
+browser menggunakan backend simulasi untuk menghindari pengisian keterangan atau
+aktivitas peserta riil. Cakupan portal dokumen meliputi mulai pemeriksaan,
+pengisian dan penyimpanan, pratinjau, revisi, serta unduhan Word/PDF.
 
 Untuk mengisi pangkat/jabatan yang masih kosong pada data portal lama:
 

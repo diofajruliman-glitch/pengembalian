@@ -1,14 +1,16 @@
 import React,{useEffect,useMemo,useRef} from 'react'
 import {STATUSES} from './model.js'
 import {getRoutingCategory} from './routing.js'
+import {LIVE_STATUSES,displayInterviewStatus,isProtectedInterview} from './liveProgress.js'
+import LiveProgressDetails from './LiveProgressDetails.jsx'
 
 const number=value=>Number(value||0).toLocaleString('id-ID')
-const statusOf=entry=>entry?.status||'Belum dijadwalkan'
-const protectedEntry=entry=>['Di room','Selesai'].includes(entry?.status)
+const statusOf=displayInterviewStatus
+const protectedEntry=isProtectedInterview
 const displayDate=value=>value?new Date(`${value}T12:00:00+07:00`).toLocaleDateString('id-ID',{timeZone:'Asia/Jakarta',dateStyle:'medium'}):'Belum dijadwalkan'
 const maskNik=value=>value?`${value.slice(0,4)}••••••••${value.slice(-4)}`:'—'
 
-export default function BnbaPanel({filtered,entries,rooms,editable,query,statusFilter,roomFilter,categoryFilter,heavyStats,onHeavy,currentPage,onFilters,onPage,onManage,onExportFiltered,selectedIds,onSelectionChange,onBulk,onImport,onPackages,onOpenBap}){
+export default function BnbaPanel({filtered,entries,rooms,editable,query,statusFilter,roomFilter,categoryFilter,heavyStats,onHeavy,currentPage,onFilters,onPage,onManage,onExportFiltered,selectedIds,onSelectionChange,onBulk,onImport,onPackages,onOpenBap,connected=false}){
  const pageRows=filtered.slice(currentPage*25,currentPage*25+25)
  const eligible=useMemo(()=>filtered.filter(person=>!protectedEntry(entries[person.nik])),[filtered,entries])
  const pageEligible=pageRows.filter(person=>!protectedEntry(entries[person.nik]))
@@ -32,7 +34,7 @@ export default function BnbaPanel({filtered,entries,rooms,editable,query,statusF
   <div className="interview-filters">
    <label>Cari nama / NIP / NIK / nama Zoom<input type="search" value={query} onChange={event=>onFilters({query:event.target.value})} placeholder="Cari peserta…"/></label>
    <label>Kategori Pairing Sekjen<select value={categoryFilter} onChange={event=>onFilters({category:event.target.value})}><option value="">Semua kategori</option>{['Ringan','Sedang','Berat','Belum tersedia'].map(category=><option key={category}>{category}</option>)}</select></label>
-   <label>Status<select value={statusFilter} onChange={event=>onFilters({status:event.target.value})}><option value="">Semua status</option>{STATUSES.map(status=><option key={status}>{status}</option>)}</select></label>
+   <label>Status<select value={statusFilter} onChange={event=>onFilters({status:event.target.value})}><option value="">Semua status</option>{(connected?LIVE_STATUSES:STATUSES).map(status=><option key={status}>{status}</option>)}</select></label>
    <label>Pewawancara / room<select value={roomFilter} onChange={event=>onFilters({room:event.target.value})}><option value="">Semua pewawancara / room</option>{rooms.map(room=><option key={room.id} value={room.id}>{room.interviewer||'Belum ditetapkan'} · {room.name}</option>)}</select></label>
   </div>
   <div className="interview-selection-bar" role="group" aria-label="Pilihan distribusi BNBA">
@@ -41,18 +43,18 @@ export default function BnbaPanel({filtered,entries,rooms,editable,query,statusF
    <button className="btn secondary" disabled={!selectedIds.length} onClick={()=>onSelectionChange([])}>Kosongkan pilihan</button>
    <button className="btn primary" disabled={!editable||!selectedIds.length} onClick={onBulk}>Distribusikan / ubah pilihan</button>
   </div>
-  <p className="interview-muted">SDM dengan status Di room atau Selesai dikunci dari distribusi massal dan impor jadwal. Gunakan rincian untuk melihat catatan pelaksanaannya.</p>
+  <p className="interview-muted">{connected?'Status, progres jawaban tersimpan, dan kendala diambil otomatis dari portal BAP. Jadwal lokal dapat disusun lalu dikirim admin melalui panel database bersama. Peserta yang sudah mulai atau tertunda dikunci dari distribusi.':'SDM dengan status Di room atau Selesai dikunci dari distribusi massal dan impor jadwal. Gunakan rincian untuk melihat catatan pelaksanaannya.'}</p>
   <div className="table-scroll" tabIndex={0} role="region" aria-label="Daftar responden wawancara"><table>
    <thead><tr><th scope="col"><input ref={pageCheckbox} type="checkbox" aria-label="Pilih SDM pada halaman ini" checked={allPageSelected} disabled={!editable||!pageEligible.length} onChange={selectPage}/></th>{['Responden','Jadwal / sesi','Room / pewawancara','Kehadiran','Status / catatan','Tindakan'].map(label=><th scope="col" key={label}>{label}</th>)}</tr></thead>
    <tbody>{pageRows.map(person=>{
     const entry=entries[person.nik],room=rooms.find(room=>room.id===entry?.roomId),locked=protectedEntry(entry)
     return <tr key={person.nik} className={picked.has(person.nik)?'interview-selected-row':undefined}>
-     <td><input type="checkbox" aria-label={`Pilih ${person.nama}`} checked={picked.has(person.nik)} disabled={!editable||locked} onChange={()=>toggle(person.nik)} title={locked?'Wawancara aktif atau selesai tidak dapat didistribusikan ulang.':undefined}/></td>
+     <td><input type="checkbox" aria-label={`Pilih ${person.nama}`} checked={picked.has(person.nik)} disabled={!editable||locked} onChange={()=>toggle(person.nik)} title={locked?(connected?'Wawancara aktif, tertunda, atau selesai tidak dapat didistribusikan ulang.':'Wawancara aktif atau selesai tidak dapat didistribusikan ulang.'):undefined}/></td>
      <td><b>{person.nama}</b><span className={'interview-category '+(getRoutingCategory(person).category==='Berat'?'is-heavy':'')} title={getRoutingCategory(person).sourceLabel}>{getRoutingCategory(person).category} · {getRoutingCategory(person).sourceLabel}</span><small>NIP {person.nip||'—'}</small><small>NIK {maskNik(person.nik)}</small></td>
-     <td>{displayDate(entry?.date)}<small>{entry?.time?`${entry.time} WIB · ${entry.duration} menit`:''}</small><small>{entry?.session?`Sesi ${entry.session}`:''}</small></td>
+     <td>{displayDate(entry?.date)}{connected&&!entry?.live?.available&&<small>Acuan lokal; jadwal portal belum tersedia</small>}<small>{entry?.time?`${entry.time} WIB · ${entry.duration} menit`:''}</small><small>{entry?.session?`Sesi ${entry.session}`:''}</small></td>
      <td><b>{room?.name||'—'}</b><small>{room?.interviewer||'—'}</small></td>
      <td>{entry?.verified?'Identitas sesuai':'Belum diverifikasi'}<small>{entry?.zoomName||''}</small></td>
-     <td><span className={'interview-status status-'+STATUSES.indexOf(statusOf(entry))}>{statusOf(entry)}</span><small>{entry?.notes||''}</small></td>
+     <td><span className={'interview-status status-'+STATUSES.indexOf(statusOf(entry))}>{statusOf(entry)}</span><LiveProgressDetails entry={entry} compact/>{entry?.notes&&<small>Catatan lokal: {entry.notes}</small>}</td>
      <td><button className="btn secondary" aria-label={`Kelola ${person.nama}`} onClick={()=>onManage(person.nik)}>Kelola</button>{onOpenBap&&<button className="btn secondary" onClick={()=>onOpenBap(person.nik)}>Buka BAP</button>}</td>
     </tr>
    })}</tbody>

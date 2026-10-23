@@ -1,21 +1,72 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import {
   Search, Users, Calendar, Clock, Video, FileText, CheckCircle2,
   Copy, ExternalLink, Download, ShieldCheck, ChevronRight, Filter, Building2, Phone
 } from 'lucide-react'
 import { JADWAL_WAWANCARA_1057_REVISI, lookupJadwalWawancara1057 } from '../letters/jadwalWawancara1057Data.js'
 import { NIP_POSITION_REFERENCE } from '../letters/nipPositionReference.js'
-import { OFFICIAL_ROOMS_19 } from './officialSchedule1057.js'
+import { OFFICIAL_ROOMS_19, OFFICIAL_POPULATION_1057 } from './officialSchedule1057.js'
 
-export default function PortalWawancara({ onManagePerson }) {
+import {watchInterviewProgress} from '../bap/api.js'
+import {displayInterviewStatus,liveMonitoringEntries,liveProgressCounts,LIVE_STATUSES,interviewTime,initialLiveProgressState,receivedLiveProgress,failedLiveProgress,sharedMonitoringCsv,liveMonitoringRooms} from './liveProgress.js'
+import LiveProgressDetails from './LiveProgressDetails.jsx'
+
+const officialByNip=new Map(OFFICIAL_POPULATION_1057.map(person=>[person.nip,person]))
+const officialScheduleEntries=Object.fromEntries(OFFICIAL_POPULATION_1057.map(person=>[person.nik,{status:'Terjadwal'}]))
+
+export default function PortalWawancara({ onManagePerson,client,onOpenBap,liveEntries:providedEntries,liveState:providedState }) {
   const [activeTab, setActiveTab] = useState('search') // 'search' | 'roster' | 'rekap'
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedDay, setSelectedDay] = useState('')
   const [selectedSession, setSelectedSession] = useState('')
   const [selectedRoom, setSelectedRoom] = useState('')
+  const [selectedStatus,setSelectedStatus]=useState('')
   const [selectedPerson, setSelectedPerson] = useState(null)
   const [copiedText, setCopiedText] = useState('')
   const [selectedRosterRoom, setSelectedRosterRoom] = useState('Room 1')
+
+  const [remoteState,setRemoteState]=useState(initialLiveProgressState)
+  const [now,setNow]=useState(Date.now())
+  const connected=Boolean(client)
+  useEffect(()=>{
+    if(!client||providedEntries)return
+    setRemoteState(initialLiveProgressState())
+    const stop=watchInterviewProgress(client,{onData:data=>setRemoteState(receivedLiveProgress(data)),onError:error=>setRemoteState(current=>failedLiveProgress(current,error))})
+    const timer=setInterval(()=>setNow(Date.now()),5000)
+    return()=>{stop();clearInterval(timer)}
+  },[client,providedEntries])
+  const liveState=providedState||remoteState
+  const liveEntries=useMemo(()=>providedEntries||liveMonitoringEntries(officialScheduleEntries,remoteState.rows,remoteState.activity,{connected,ready:remoteState.ready,activityReady:remoteState.activityReady,stale:Boolean(remoteState.error),now}),[providedEntries,remoteState.rows,remoteState.activity,remoteState.ready,remoteState.activityReady,remoteState.error,connected,now])
+  const portalRooms=useMemo(()=>connected?liveMonitoringRooms(OFFICIAL_ROOMS_19,liveState.rows):OFFICIAL_ROOMS_19,[connected,liveState.rows])
+  const counts=useMemo(()=>liveProgressCounts(liveEntries),[liveEntries])
+  const participants=useMemo(()=>{
+    const seen=new Set()
+    const withLive=item=>{
+      const nik=item.nik||officialByNip.get(item.nip)?.nik
+      const entry=liveEntries[nik]
+      seen.add(nik)
+      if(!connected||!entry?.live?.available)return {...item,nik,liveEntry:connected?(entry||{live:{available:false,status:liveState.ready?'Belum terhubung':'Belum dimuat'}}):undefined}
+      const room=portalRooms.find(room=>room.id===entry.roomId)
+      const date=entry.date?new Date(`${entry.date}T12:00:00+07:00`):null
+      const start=entry.time,minutes=Number(start?.slice(0,2))*60+Number(start?.slice(3,5))+30
+      const end=Number.isFinite(minutes)?`${String(Math.floor(minutes/60)).padStart(2,'0')}:${String(minutes%60).padStart(2,'0')}`:''
+      return {...item,nik,liveEntry:entry,dateKey:entry.date,durasi:30,hari:date?new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',weekday:'long'}).format(date):item.hari,tanggal:date?new Intl.DateTimeFormat('id-ID',{timeZone:'Asia/Jakarta',day:'numeric',month:'long',year:'numeric'}).format(date):item.tanggal,sesi:start<'12:00'?'Pagi':'Siang',mulai:start,selesai:end,jam:`${start}–${end} WIB`,room:room?.name||entry.roomId,petugas:room?.interviewer||'Belum ditetapkan'}
+    }
+    const list=JADWAL_WAWANCARA_1057_REVISI.map(withLive)
+    if(connected)for(const [nik,entry] of Object.entries(liveEntries))if(entry.live?.available&&!seen.has(nik))list.push(withLive({...entry.live.person,nik}))
+    return list
+  },[liveEntries,connected,portalRooms,liveState.ready])
+  const currentSelectedPerson=participants.find(person=>person.nip===selectedPerson?.nip&&person.nik===selectedPerson?.nik)||selectedPerson
+  const dayOptions=useMemo(()=>{
+    const dates=new Map()
+    for(const person of participants){
+      const key=person.dateKey||person.tanggal
+      if(!key)continue
+      const previous=dates.get(person.tanggal)
+      dates.set(person.tanggal,{value:person.tanggal,label:`${person.hari}, ${person.tanggal}`,count:(previous?.count||0)+1,key:person.dateKey||previous?.key||key})
+    }
+    return [...dates.values()].sort((a,b)=>a.key.localeCompare(b.key))
+  },[participants])
 
   const copyToClipboard = async (text, label) => {
     try {
@@ -30,10 +81,11 @@ export default function PortalWawancara({ onManagePerson }) {
   // Filtered participants list for search tab
   const filteredParticipants = useMemo(() => {
     const q = searchQuery.trim().toLowerCase()
-    return JADWAL_WAWANCARA_1057_REVISI.filter(item => {
+    return participants.filter(item => {
       if (selectedDay && item.tanggal !== selectedDay) return false
       if (selectedSession && item.sesi !== selectedSession) return false
       if (selectedRoom && item.room !== selectedRoom) return false
+      if (selectedStatus && (selectedStatus==='Kendala terbuka'?item.liveEntry?.live?.obstacleStatus!=='open':displayInterviewStatus(item.liveEntry)!==selectedStatus)) return false
       if (!q) return true
       return (
         item.nama?.toLowerCase().includes(q) ||
@@ -44,15 +96,15 @@ export default function PortalWawancara({ onManagePerson }) {
         item.kabKota?.toLowerCase().includes(q)
       )
     })
-  }, [searchQuery, selectedDay, selectedSession, selectedRoom])
+  }, [participants, searchQuery, selectedDay, selectedSession, selectedRoom,selectedStatus])
 
   // Grouping by Room for Roster View
   const participantsByRoom = useMemo(() => {
     const map = new Map()
-    for (const r of OFFICIAL_ROOMS_19) {
+    for (const r of portalRooms) {
       map.set(r.name, [])
     }
-    for (const item of JADWAL_WAWANCARA_1057_REVISI) {
+    for (const item of participants) {
       if (map.has(item.room)) {
         map.get(item.room).push(item)
       } else {
@@ -60,11 +112,11 @@ export default function PortalWawancara({ onManagePerson }) {
       }
     }
     return map
-  }, [])
+  }, [participants,portalRooms])
 
   const currentRosterList = useMemo(() => {
-    return (participantsByRoom.get(selectedRosterRoom) || []).sort((a, b) => {
-      const dComp = (a.tanggal || '').localeCompare(b.tanggal || '')
+    return [...(participantsByRoom.get(selectedRosterRoom) || [])].sort((a, b) => {
+      const dComp = (a.dateKey||a.tanggal||'').localeCompare(b.dateKey||b.tanggal||'')
       if (dComp !== 0) return dComp
       return (a.mulai || '').localeCompare(b.mulai || '')
     })
@@ -72,15 +124,20 @@ export default function PortalWawancara({ onManagePerson }) {
 
   // Roster room metadata
   const currentRoomMeta = useMemo(() => {
-    return OFFICIAL_ROOMS_19.find(r => r.name === selectedRosterRoom) || {
+    return portalRooms.find(r => r.name === selectedRosterRoom) || {
       name: selectedRosterRoom,
       interviewer: 'Pewawancara Resmi',
       trafficOfficer: 'Dio Fajrul Iman'
     }
-  }, [selectedRosterRoom])
+  }, [selectedRosterRoom,portalRooms])
 
   // Download CSV for current roster room
   const downloadRoomCsv = () => {
+    if(connected){
+      const csv=sharedMonitoringCsv(currentRosterList.map(person=>({...person,nik:person.nik})),liveEntries,portalRooms,{connected:true,error:liveState.error,updatedAt:liveState.updatedAt})
+      const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}))
+      const link=document.createElement('a');link.href=url;link.download=`Monitoring_BAP_${selectedRosterRoom.replace(/\s+/g,'_')}.csv`;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);return
+    }
     const headers = ['No', 'Hari', 'Tanggal', 'Sesi', 'Jam', 'Room', 'Pewawancara', 'Nama ASN', 'NIP', 'Nomor Surat', 'No HP', 'Kategori Sekjen', 'Link Zoom']
     const rows = currentRosterList.map((p, idx) => [
       idx + 1,
@@ -162,6 +219,8 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
         </div>
       </div>
 
+      {connected&&<section className="panel interview-portal-live-summary"><h3>Monitoring wawancara bersama</h3><p>{liveState.ready?`${liveState.activityReady===false?'Pembukaan BAP belum tersedia':`${counts.opened} BAP dibuka`} · ${counts.ongoing} dalam wawancara · ${counts.draft} draf · ${counts.deferred} tertunda · ${counts.completed} selesai · ${liveState.activityReady===false?'Kendala belum tersedia':`${counts.obstacles} kendala terbuka` }.`:'Memuat status dari database…'}</p><p>Progres dan kendala diperbarui otomatis setiap 5 detik. BAP dibuka berarti persiapan; wawancara dimulai setelah pewawancara menekan Mulai wawancara.</p>{liveState.updatedAt&&<small>Pembaruan terakhir: {interviewTime(liveState.updatedAt)}</small>}{liveState.error&&<p role="alert" className="danger-text">Koneksi monitoring terganggu: {liveState.error}. {liveState.ready?'Data terakhir dapat berubah.':'Status pelaksanaan belum tersedia.'}</p>}{onOpenBap&&<button className="btn primary" onClick={()=>onOpenBap()}>Buka antrean & hasil BAP</button>}</section>}
+
       {copiedText && (
         <div className="portal-toast" role="alert">
           <CheckCircle2 size={16} /> Berhasil disalin: <b>{copiedText}</b>
@@ -191,11 +250,8 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
               <label>
                 <span>Filter Tanggal:</span>
                 <select value={selectedDay} onChange={e => setSelectedDay(e.target.value)}>
-                  <option value="">Semua Tanggal (26–29 Okt)</option>
-                  <option value="26 Oktober 2026">Senin, 26 Okt 2026 (265 ASN)</option>
-                  <option value="27 Oktober 2026">Selasa, 27 Okt 2026 (264 ASN)</option>
-                  <option value="28 Oktober 2026">Rabu, 28 Okt 2026 (264 ASN)</option>
-                  <option value="29 Oktober 2026">Kamis, 29 Okt 2026 (264 ASN)</option>
+                  <option value="">{connected?'Semua tanggal jadwal':'Semua Tanggal (26–29 Okt)'}</option>
+                  {connected?dayOptions.map(day=><option key={day.key} value={day.value}>{day.label} ({day.count} ASN)</option>):<><option value="26 Oktober 2026">Senin, 26 Okt 2026 (265 ASN)</option><option value="27 Oktober 2026">Selasa, 27 Okt 2026 (264 ASN)</option><option value="28 Oktober 2026">Rabu, 28 Okt 2026 (264 ASN)</option><option value="29 Oktober 2026">Kamis, 29 Okt 2026 (264 ASN)</option></>}
                 </select>
               </label>
 
@@ -212,31 +268,32 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                 <span>Filter Breakout Room:</span>
                 <select value={selectedRoom} onChange={e => setSelectedRoom(e.target.value)}>
                   <option value="">Semua 19 Room</option>
-                  {OFFICIAL_ROOMS_19.map(r => (
+                  {portalRooms.map(r => (
                     <option key={r.id} value={r.name}>{r.name} · {r.interviewer}</option>
                   ))}
                 </select>
               </label>
 
+              {connected&&<label><span>Status portal BAP:</span><select value={selectedStatus} onChange={event=>setSelectedStatus(event.target.value)}><option value="">Semua status</option>{LIVE_STATUSES.map(status=><option key={status} value={status}>{status}</option>)}</select></label>}
               <div className="portal-search-summary">
-                Menemukan <b>{filteredParticipants.length}</b> dari 1.057 ASN
+                Menemukan <b>{filteredParticipants.length}</b> dari {participants.length} ASN
               </div>
             </div>
           </div>
 
           {/* DETAIL KARTU ASN TERPILIH */}
-          {selectedPerson && (
+          {currentSelectedPerson && (
             <div className="portal-person-card panel">
               <div className="portal-person-card-header">
                 <div>
                   <span className="portal-card-tag">INFORMASI PEMANGGILAN RESMI</span>
-                  <h3>{selectedPerson.nama}</h3>
+                  <h3>{currentSelectedPerson.nama}</h3>
                   <div className="portal-meta-chips">
-                    <span>NIP: <b>{selectedPerson.nip}</b></span>
-                    <span>Provinsi: <b>{selectedPerson.provinsi}</b></span>
-                    <span>Kab/Kota: <b>{selectedPerson.kabKota}</b></span>
-                    <span className={'category-chip ' + (selectedPerson.kategoriSekjen === 'Berat' ? 'is-heavy' : '')}>
-                      Kategori: {selectedPerson.kategoriSekjen}
+                    <span>NIP: <b>{currentSelectedPerson.nip}</b></span>
+                    <span>Provinsi: <b>{currentSelectedPerson.provinsi}</b></span>
+                    <span>Kab/Kota: <b>{currentSelectedPerson.kabKota}</b></span>
+                    <span className={'category-chip ' + (currentSelectedPerson.kategoriSekjen === 'Berat' ? 'is-heavy' : '')}>
+                      Kategori: {currentSelectedPerson.kategoriSekjen}
                     </span>
                   </div>
                 </div>
@@ -246,24 +303,24 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
               <div className="portal-person-grid">
                 <div className="portal-info-box">
                   <div className="portal-info-label"><Calendar size={14} /> WAKTU PELAKSANAAN</div>
-                  <div className="portal-info-val-large">{selectedPerson.hari}, {selectedPerson.tanggal}</div>
+                  <div className="portal-info-val-large">{currentSelectedPerson.hari}, {currentSelectedPerson.tanggal}</div>{connected&&!currentSelectedPerson.liveEntry?.live?.available&&<small>Acuan pemanggilan; jadwal database belum tersedia.</small>}
                   <div className="portal-info-sub">
-                    Sesi <b>{selectedPerson.sesi}</b> · Jam <b>{selectedPerson.jam}</b> ({selectedPerson.durasi} menit)
+                    Sesi <b>{currentSelectedPerson.sesi}</b> · Jam <b>{currentSelectedPerson.jam}</b> ({currentSelectedPerson.durasi} menit)
                   </div>
                 </div>
 
                 <div className="portal-info-box">
                   <div className="portal-info-label"><Building2 size={14} /> RUANG & PEWAWANCARA</div>
-                  <div className="portal-info-val-large">{selectedPerson.room}</div>
+                  <div className="portal-info-val-large">{currentSelectedPerson.room}</div>
                   <div className="portal-info-sub">
-                    Pewawancara Utama: <b>{selectedPerson.petugas}</b><br />
+                    Pewawancara Utama: <b>{currentSelectedPerson.petugas}</b><br />
                     Pengatur Zoom: <b>Dio Fajrul Iman</b>
                   </div>
                 </div>
 
                 <div className="portal-info-box">
                   <div className="portal-info-label"><FileText size={14} /> DOKUMEN & PERSURATAN</div>
-                  <div className="portal-info-val">{selectedPerson.nomorSurat || 'Belum ada nomor surat'}</div>
+                  <div className="portal-info-val">{currentSelectedPerson.nomorSurat || 'Belum ada nomor surat'}</div>
                   <div className="portal-info-sub">
                     Format: Permensos No 5/2023 · TTE & Cap Stempel Faisal
                   </div>
@@ -272,12 +329,12 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                 <div className="portal-info-box">
                   <div className="portal-info-label"><Video size={14} /> TAUTAN ZOOM RESMI</div>
                   <div className="portal-info-val portal-link-text">
-                    {selectedPerson.linkZoom || 'https://bit.ly/TLHP_2 (Kode Sandi: 690971)'}
+                    {currentSelectedPerson.linkZoom || 'https://bit.ly/TLHP_2 (Kode Sandi: 690971)'}
                   </div>
                   <div className="portal-link-actions">
                     <button
                       className="btn secondary sm"
-                      onClick={() => copyToClipboard(selectedPerson.linkZoom || 'https://bit.ly/TLHP_2 (Kode Sandi: 690971)', 'Tautan Zoom')}
+                      onClick={() => copyToClipboard(currentSelectedPerson.linkZoom || 'https://bit.ly/TLHP_2 (Kode Sandi: 690971)', 'Tautan Zoom')}
                     >
                       <Copy size={13} /> Salin Link
                     </button>
@@ -293,15 +350,16 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                 </div>
               </div>
 
+              {connected&&<section className="interview-live-dialog"><h3>{displayInterviewStatus(currentSelectedPerson.liveEntry)}</h3><LiveProgressDetails entry={currentSelectedPerson.liveEntry}/>{onOpenBap&&currentSelectedPerson.liveEntry?.live?.available&&<button className="btn primary" onClick={()=>onOpenBap(currentSelectedPerson.nik)}>Buka BAP / laporkan kendala</button>}</section>}
               <div className="portal-card-footer">
                 <button
                   className="btn secondary"
-                  onClick={() => copyToClipboard(getWaBroadcastMessage(selectedPerson), 'Pesan WhatsApp Peserta')}
+                  onClick={() => copyToClipboard(getWaBroadcastMessage(currentSelectedPerson), 'Pesan WhatsApp Peserta')}
                 >
                   <Copy size={14} /> Salin Format Pesan WhatsApp
                 </button>
                 {onManagePerson && (
-                  <button className="btn primary" onClick={() => onManagePerson(selectedPerson.nip)}>
+                  <button className="btn primary" onClick={() => onManagePerson(currentSelectedPerson.nip)}>
                     Buka di Kertas Kerja Monitoring →
                   </button>
                 )}
@@ -320,7 +378,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                     <th>Jadwal / Sesi</th>
                     <th>Breakout Room</th>
                     <th>Pewawancara</th>
-                    <th>No Surat</th>
+                    <th>{connected?'Status / progres BAP':'No Surat'}</th>
                     <th>Tautan Zoom</th>
                     <th>Aksi</th>
                   </tr>
@@ -336,7 +394,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                     </tr>
                   ) : (
                     filteredParticipants.slice(0, 50).map((p, idx) => (
-                      <tr key={p.nip} className={selectedPerson?.nip === p.nip ? 'selected-row' : ''}>
+                      <tr key={p.nik||p.nip} className={currentSelectedPerson?.nip === p.nip ? 'selected-row' : ''}>
                         <td>{idx + 1}</td>
                         <td>
                           <b>{p.nama}</b>
@@ -344,7 +402,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                           <small>{p.provinsi} · {p.kabKota}</small>
                         </td>
                         <td>
-                          <b>{p.hari}, {p.tanggal}</b>
+                          <b>{p.hari}, {p.tanggal}</b>{connected&&!p.liveEntry?.live?.available&&<small>Acuan pemanggilan; jadwal portal belum tersedia.</small>}
                           <small>{p.jam} (Sesi {p.sesi})</small>
                         </td>
                         <td>
@@ -354,7 +412,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                           <b>{p.petugas}</b>
                         </td>
                         <td>
-                          <small>{p.nomorSurat || '—'}</small>
+                          {connected?<><span className="interview-status">{displayInterviewStatus(p.liveEntry)}</span><LiveProgressDetails entry={p.liveEntry} compact/></>:<small>{p.nomorSurat || '—'}</small>}
                         </td>
                         <td>
                           <button
@@ -371,7 +429,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                             onClick={() => setSelectedPerson(p)}
                           >
                             Rincian
-                          </button>
+                          </button>{connected&&onOpenBap&&p.liveEntry?.live?.available&&<button className="btn secondary sm" onClick={()=>onOpenBap(p.nik)}>BAP</button>}
                         </td>
                       </tr>
                     ))
@@ -400,8 +458,9 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
               </div>
             </div>
             <div className="portal-room-pills">
-              {OFFICIAL_ROOMS_19.map(r => {
-                const count = (participantsByRoom.get(r.name) || []).length
+              {portalRooms.map(r => {
+                const roomList=participantsByRoom.get(r.name)||[]
+                const count=roomList.length,linked=roomList.filter(person=>person.liveEntry?.live?.available).length
                 const isActive = selectedRosterRoom === r.name
                 return (
                   <button
@@ -411,7 +470,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                   >
                     <span className="room-num">{r.name}</span>
                     <b className="room-interviewer">{r.interviewer}</b>
-                    <small className="room-count">{count} ASN Terjadwal</small>
+                    <small className="room-count">{count} ASN {connected?`pada daftar · ${linked} terhubung`:'Terjadwal'}</small>
                   </button>
                 )
               })}
@@ -425,7 +484,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                 <span className="eyebrow">ROSTER PEWAWANCARA RESMI</span>
                 <h2>{selectedRosterRoom} · {currentRoomMeta.interviewer}</h2>
                 <p>
-                  Total <b>{currentRosterList.length} ASN</b> dialokasikan ke room ini selama 4 hari kegiatan (26–29 Oktober 2026).
+                  Total <b>{currentRosterList.length} ASN</b> {connected?`pada daftar room ini; ${currentRosterList.filter(person=>person.liveEntry?.live?.available).length} terhubung ke jadwal database BAP.`:'dialokasikan ke room ini selama 4 hari kegiatan (26–29 Oktober 2026).'}
                   Petugas Lalu Lintas Zoom: <b>{currentRoomMeta.trafficOfficer}</b>.
                 </p>
               </div>
@@ -449,12 +508,12 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                     <th>Wilayah</th>
                     <th>Kategori Pelanggaran</th>
                     <th>Nomor Surat</th>
-                    <th>Kontak HP</th>
+                    <th>{connected?'Status / progres BAP':'Kontak HP'}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {currentRosterList.map((p, idx) => (
-                    <tr key={p.nip}>
+                    <tr key={p.nik||p.nip}>
                       <td>{idx + 1}</td>
                       <td><b>{p.mulai}–{p.selesai}</b></td>
                       <td>{p.hari}, {p.tanggal}</td>
@@ -468,7 +527,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
                         </span>
                       </td>
                       <td><small>{p.nomorSurat || '—'}</small></td>
-                      <td><small className="mono">{p.noHp || '—'}</small></td>
+                      <td>{connected?<><span className="interview-status">{displayInterviewStatus(p.liveEntry)}</span><LiveProgressDetails entry={p.liveEntry} compact/>{onOpenBap&&p.liveEntry?.live?.available&&<button className="btn secondary sm" onClick={()=>onOpenBap(p.nik)}>Buka BAP</button>}</>:<small className="mono">{p.noHp || '—'}</small>}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -485,7 +544,7 @@ Petugas Lalu Lintas Zoom: Dio Fajrul Iman.`
             {/* Kuota 4 Hari */}
             <div className="panel">
               <div className="panel-heading">
-                <h2>Alokasi Harian (26–29 Oktober 2026)</h2>
+                <h2>{connected?'Acuan alokasi resmi 26–29 Oktober 2026':'Alokasi Harian (26–29 Oktober 2026)'}</h2>{connected&&<p>Rekap di bawah adalah acuan jadwal awal. Jadwal terbaru dan status pelaksanaan tercantum pada pencarian, roster, dan Monitoring Wawancara.</p>}
               </div>
               <div className="table-scroll">
                 <table>

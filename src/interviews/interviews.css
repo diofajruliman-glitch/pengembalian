@@ -72,3 +72,31 @@
 .portal-stat-card.is-ringan { background: #f0fdf4; border-color: #bbf7d0; }
 .portal-stat-card.is-ringan strong { color: #16a34a; font-size: 22px; }
 .portal-pagination-note { font-size: 11px; color: #64748b; padding: 10px 14px; border-top: 1px solid #f1f5f9; text-align: right; }
+.interview-live-details{display:flex;flex-direction:column;gap:6px;margin-top:9px;min-width:150px;font-size:12px;overflow-wrap:anywhere}
+.interview-live-details progress{display:block;width:100%;height:8px;accent-color:#0d9488}
+.interview-live-details small{line-height:1.5;color:#526577}
+.interview-live-obstacle{display:flex;flex-direction:column;gap:5px;padding:10px;border:1px solid #fbbf24;border-radius:8px;background:#fffbeb;color:#92400e}
+.interview-live-details .interview-live-obstacle small{color:#92400e}
+.interview-obstacle-resolved{padding:7px;background:#ecfdf5;border-radius:6px}
+.interview-live-participant{border-top:1px solid #d7e4e5;padding-top:14px;margin-top:14px}
+.interview-live-participant h3{margin:9px 0 5px;overflow-wrap:anywhere}
+.interview-live-participant button{margin-top:12px}
+.interview-live-elapsed{font-variant-numeric:tabular-nums;font-weight:700;color:#0f766e;margin:8px 0}
+.interview-live-dialog{padding:15px;border:1px solid #bfdbfe;border-radius:10px;background:#f0f9ff;margin:14px 0}
+.interview-live-dialog h3{margin:0 0 8px}
+.interview-live-dialog .interview-live-details{margin-bottom:12px}
+.interview-live-stale .interview-room{border-style:dashed}
+.interview-portal-live-summary .btn{margin-top:12px}
+.interview-status.status--1{background:#eff6ff;color:#1d4ed8}
+.portal-card-footer{flex-wrap:wrap}
+
+.interview-live-details .interview-live-stale-note{color:#92400e;background:#fffbeb;border-radius:4px;padding:4px 6px}
+
+.interview-live-deferral{display:flex;flex-direction:column;gap:6px;padding:11px;border:1px solid #f5c36e;border-radius:8px;background:#fff8e8;color:#855318}
+.interview-live-details .interview-live-deferral small{color:#855318}
+.interview-status.is-deferred{background:#fff0cc;color:#855318}
+.interview-room.has-deferred{border-color:#e7bd73}
+.interview-room-deferred{padding:12px;border-radius:9px;background:#fffbf0;border:1px solid #f4dbac;margin:8px 0}
+.interview-room-deferred .interview-live-participant{margin-top:9px;padding-top:9px;border-color:#eed9b2}
+.interview-room-deferred h4{font-size:13px;margin:0 0 6px}
+@media(min-width:1251px){.interview-stats.has-shared-status{grid-template-columns:repeat(4,minmax(0,1fr))}}

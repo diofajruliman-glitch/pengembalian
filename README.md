@@ -19,7 +19,7 @@ Aplikasi monitoring pengembalian Tunjangan Kinerja (Tukin) dan Uang Makan PPPK T
 - Rekap Mandiri, BRI, BSI dan cut-off rekonsiliasi.
 - Impor **.xlsx** dari sheet `Tracker_SDM` sumber; ekspor CSV untuk WPS/Excel.
 - Supabase Auth dan RLS 3 peran (`admin`, `editor`, `viewer`), audit perubahan di database.
-- Monitoring Wawancara sementara untuk Dio: populasi Terbukti dari Kategorisasi Disiplin ASN, draft 18 room, 11 responden per room per hari, verifikasi identitas, timer, catatan pimpinan, dan rekap. Catatan modul ini disimpan lokal per browser/akun dengan cadangan JSON; lihat [panduan monitoring](docs/monitoring-wawancara-dio.md).
+- Portal dan Monitoring Wawancara terhubung ke database BAP: pimpinan/viewer melihat BAP dibuka, wawancara berjalan, progres 22 jawaban tersimpan, draf, tertunda beserta alasan, selesai, dan kendala tiap room dengan pembaruan setiap 5 detik. Acuan resmi 1.057 ASN, 19 room, 26–29 Oktober 2026. Jadwal kerja, koordinasi Zoom, dan catatan pimpinan lokal tetap disimpan per browser/akun; laporan kendala bersama dikirim dari BAP. Lihat [panduan monitoring](docs/monitoring-wawancara-dio.md) dan [portal pewawancara](docs/portal-pewawancara.md), termasuk aktivasi database dan batas mode offline.
 - Mode demo/pratinjau tanpa konfigurasi backend, **bukan untuk data riil**.
 
 ## Arsitektur

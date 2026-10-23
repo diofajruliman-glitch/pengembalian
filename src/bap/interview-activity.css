@@ -1,0 +1,34 @@
+.bap-activity-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bap-activity-heading h3{margin:0}
+.bap-activity-badges{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px}
+.bap-activity-badges:empty{display:none}
+.bap-activity-badges .bap-live-badge{background:#d8f3ed;color:#126150}
+.bap-activity-badges .bap-obstacle-badge{background:#fff0cf;color:#835400}
+.bap-activity-help,.bap-activity-time{font-size:13px;line-height:1.6;color:#52677c}
+.bap-activity-panel .bap-activity-time{margin-top:-4px}
+.bap-obstacle-record{margin:14px 0;padding:14px 16px;border:1px solid #d7e3e6;border-radius:8px;background:#f5f9fa;overflow-wrap:anywhere}
+.bap-obstacle-record.is-open{border-color:#e9cf97;background:#fff8e9}
+.bap-obstacle-record p{white-space:pre-wrap;margin:8px 0;line-height:1.6}
+.bap-obstacle-record small{display:block;margin-top:5px;color:#52677c}
+.bap-activity-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.bap-obstacle-form{display:grid;gap:8px;margin-top:14px}
+.bap-obstacle-form textarea{width:100%;box-sizing:border-box}
+.bap-obstacle-form>small{color:#52677c;line-height:1.6}
+.bap-portal .bap-lifecycle-stats{grid-template-columns:repeat(5,minmax(0,1fr))}
+.bap-dialog .bap-start-card{background:#edf8f7;border:2px solid #349287}
+.bap-start-card h3,.bap-deferred-card h3{margin:10px 0}
+.bap-start-card p,.bap-deferred-card p,.bap-completion-help{line-height:1.6}
+.bap-start-card dl{display:flex;gap:24px;flex-wrap:wrap;margin:20px 0}
+.bap-start-card dt{font-size:12px;color:#52677c}
+.bap-start-card dd{margin:6px 0;font-weight:700}
+.bap-start-card .bap-start-button{font-size:16px;padding:14px 24px;min-height:48px}
+.bap-dialog .bap-deferred-card{background:#fff8e9;border:1px solid #e9cf97}
+.bap-deferred-reason{white-space:pre-wrap;overflow-wrap:anywhere;font-weight:600}
+.bap-case .bap-deferred-summary{color:#835400;white-space:pre-wrap;overflow-wrap:anywhere;max-width:680px}
+.bap-badge.bap-obstacle-badge{background:#fff0cf;color:#835400}
+.bap-defer-intro{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.bap-defer-intro p{flex:1 1 260px;margin:0;line-height:1.6}
+.bap-defer-controls form{display:grid;gap:8px}
+.bap-defer-controls textarea{width:100%;box-sizing:border-box}
+.bap-defer-controls small,.bap-completion-help{color:#52677c;font-size:13px;line-height:1.6}
+@media(max-width:640px){.bap-portal .bap-lifecycle-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.bap-start-card dl{gap:14px}.bap-start-card dl>div{flex:1 1 100%}}
