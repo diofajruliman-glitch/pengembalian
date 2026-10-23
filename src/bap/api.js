@@ -12,3 +12,30 @@ export async function act(client,row,action,payload={}){
  if(error)throw error
  return data
 }
+
+// Only reopening a completed, read-only BAP can safely recover this way.
+// Saves keep their original revision so unsaved answers never overwrite a
+// concurrent edit. A lost revise response may already have opened our draft.
+export async function reviseCase(client,row,userId,payload={}){
+ const recoverable=error=>/INTERVIEW_CONFLICT|failed to fetch|fetch failed|network|load failed/i.test(error?.message||'')
+ const ownedDraft=latest=>latest.status==='Draf'&&latest.locked_by===userId&&latest.revision>row.revision
+ async function refresh(){
+  const {data,error}=await client.from('interview_cases').select('*').eq('nik',row.nik).single()
+  if(error)throw error
+  return data
+ }
+ try{return await act(client,row,'revise',payload)}catch(error){
+  if(!recoverable(error))throw error
+  const latest=await refresh()
+  if(ownedDraft(latest))return latest
+  if(latest.status!=='Selesai')throw new Error('BAP sudah dibuka atau diperbarui petugas lain. Tutup lalu buka kembali BAP untuk melihat data terbaru.')
+  try{return await act(client,latest,'revise',payload)}catch(retryError){
+   if(!recoverable(retryError))throw retryError
+   // The first transaction may have committed after our refresh, or the retry
+   // response itself was lost. Reconcile once without issuing a third write.
+   const confirmed=await refresh()
+   if(ownedDraft(confirmed))return confirmed
+   throw retryError
+  }
+ }
+}

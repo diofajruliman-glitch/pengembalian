@@ -8,7 +8,11 @@ import {reportReadiness,sameVersions} from '../src/bap/lhpModel.js'
 const uid=n=>`00000000-0000-4000-8000-00000000000${n}`
 const answers=Object.fromEntries(Array.from({length:22},(_,i)=>[i+1,`Jawaban asli ${i+1}`]))
 const identity={pangkat:'Golongan IX',jabatan:'Penata Layanan Operasional',unitKerja:'PSNK',nomorSurat:'123',tanggalSurat:'2026-10-15',kota:'Jakarta'}
-test('completed BAP can be revised by its assigned interviewer without losing content or history',async()=>{
+for(const {name,revisionMigration,reapplyBase} of [
+ {name:'base portal',revisionMigration:false,reapplyBase:false},
+ {name:'revision migration',revisionMigration:true,reapplyBase:false},
+ {name:'base reapplied after revision migration',revisionMigration:true,reapplyBase:true},
+])test(`completed BAP can be revised without losing content or history (${name})`,async()=>{
  const db=new PGlite()
  try{
   await db.exec(`create role anon;create role authenticated;create role service_role;
@@ -24,7 +28,9 @@ test('completed BAP can be revised by its assigned interviewer without losing co
    await db.query('insert into profiles values($1,$2,$3)',[uid(n),'Petugas',role])
   }
   await db.exec(`insert into interviewer_assignments values('${uid(1)}','room-1'),('${uid(2)}','room-2');grant select on interviewer_assignments to authenticated;`)
-  for(const file of ['interview-portal.sql','interview-categories.sql','interview-statements.sql','interview-reports.sql','interview-revisions.sql'])await db.exec(await readFile(new URL('../supabase/'+file,import.meta.url),'utf8'))
+  const migrations=['interview-portal.sql','interview-categories.sql','interview-statements.sql','interview-reports.sql']
+  if(revisionMigration)migrations.push('interview-revisions.sql')
+  for(const file of migrations)await db.exec(await readFile(new URL('../supabase/'+file,import.meta.url),'utf8'))
   await db.exec(`insert into interview_cases(nik,person,room_id,scheduled_date,scheduled_time) values('1111111111111111','{"nama":"Peserta uji","nip":"123456789012345678"}','room-1','2026-10-26','08:30')`)
   async function actor(n){await db.exec(`reset role;select set_config('request.jwt.claim.sub','${n?uid(n):''}',false);set role authenticated`)}
   async function act(action,revision,payload={}){return (await db.query('select * from interview_action($1,$2,$3,$4)',['1111111111111111',action,revision,payload])).rows[0]}
@@ -32,6 +38,16 @@ test('completed BAP can be revised by its assigned interviewer without losing co
   await assert.rejects(act('revise',1),/NOT_FINALIZED/)
   let row=await act('start',1);const started=row.started_at
   row=await act('finalize',row.revision,{answers,identity});const doneRevision=row.revision
+  if(reapplyBase){
+   await db.exec('reset role')
+   const caseImage=async()=>(await db.query('select to_jsonb(c) as data from interview_cases c')).rows
+   const auditImage=async()=>(await db.query('select to_jsonb(a) as data from interview_private.audit a order by id')).rows
+   const beforeCase=await caseImage(),beforeAudit=await auditImage()
+   await db.exec(await readFile(new URL('../supabase/interview-portal.sql',import.meta.url),'utf8'))
+   assert.deepEqual(await caseImage(),beforeCase)
+   assert.deepEqual(await auditImage(),beforeAudit)
+   await actor(1)
+  }
   await assert.rejects(act('save',doneRevision,{answers,identity}),/FINALIZED/)
   await actor(2);await assert.rejects(act('revise',doneRevision),/FORBIDDEN/)
   await actor(4);await assert.rejects(act('revise',doneRevision),/FORBIDDEN/)

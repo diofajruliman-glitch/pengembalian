@@ -1,6 +1,6 @@
 import React,{useCallback,useEffect,useRef,useState} from 'react'
 import {flushSync} from 'react-dom'
-import {listCases,act} from './api.js'
+import {listCases,act,reviseCase} from './api.js'
 import {QUESTIONS,IDENTITY_FIELDS,INTERVIEWER_FIELDS,initialIdentity,missingFields,dateWords,interviewTimestamp} from './model.js'
 import {buildWord,renderPreview,buildPdf,download} from './documents.js'
 import './portal.css'
@@ -130,7 +130,19 @@ function BapEditor({row:remote,client,profile,userId,onStateChange,onClose,onSav
   return()=>clearTimeout(id)
  },[identity,answers,readOnly])
  function change(kind,key,value){editSeq.current++;dirty.current=true;setWord(null);setPreview(false);setNotice('Perubahan belum tersimpan · otomatis disimpan setelah berhenti mengetik 1 menit');if(kind==='identity')setIdentity(prev=>({...prev,[key]:value}));else setAnswers(prev=>({...prev,[key]:value}))}
- async function action(name,payload={}){setBusy(true);setError('');try{const next=await act(client,current.current.row,name,payload);saved(next);conflict.current=false;setWord(null);setPreview(false);setNotice(name==='revise'?'BAP dibuka untuk diperbarui. Kategori, SPTJM dan LHP perlu ditinjau kembali setelah revisi.':'Data pemeriksaan diperbarui.')}catch(e){setError(e.message)}finally{setBusy(false)}}
+ async function action(name,payload={}){
+  if(saving.current)return
+  saving.current=true;setBusy(true);setError('')
+  try{
+   const next=name==='revise'?await reviseCase(client,current.current.row,userId,payload):await act(client,current.current.row,name,payload)
+   if(!mounted.current)return
+   saved(next)
+   if(name==='revise'){
+    setIdentity(initialIdentity(next,next.locked_by===userId?{nama:profile.nama}:{}));setAnswers(next.answers||{});dirty.current=false
+   }
+   conflict.current=false;setWord(null);setPreview(false);setNotice(name==='revise'?'BAP dibuka untuk diperbarui. Kategori, SPTJM dan LHP perlu ditinjau kembali setelah revisi.':'Data pemeriksaan diperbarui.')
+  }catch(e){if(mounted.current)setError(e.message)}finally{saving.current=false;if(mounted.current)setBusy(false)}
+ }
  async function openPreview(){
   if(dirty.current&&!(await save()))return
   setPreview(true);setPreviewBusy(true);setError('')
