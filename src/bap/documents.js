@@ -1,4 +1,7 @@
 import {unzipSync,zipSync,strFromU8,strToU8} from 'fflate'
+import {renderAsync} from 'docx-preview'
+import html2canvas from 'html2canvas'
+import {jsPDF} from 'jspdf'
 import {templateData} from './model.js'
 const escapeXml=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&apos;').replaceAll('\n','</w:t><w:br/><w:t xml:space="preserve">')
 export async function buildWord(row,identity,answers){return fillWord('/templates/bap-2026.docx',templateData(row,identity,answers))}
@@ -42,7 +45,6 @@ function fillAnswerLeaders(container){
 let previewSequence=0
 export async function renderPreview(blob,target,{draftLabel}={}){
  const className=`interview-doc-${++previewSequence}`
- const {renderAsync}=await import('docx-preview')
  const source=document.createElement('div');source.className='bap-render-source';document.body.appendChild(source)
  try{
   await renderAsync(blob,source,source,{className,ignoreHeight:true,ignoreLastRenderedPageBreak:true,breakPages:false,useBase64URL:true,experimental:true})
@@ -160,7 +162,6 @@ export async function renderPreview(blob,target,{draftLabel}={}){
  }finally{source.remove()}
 }
 export async function buildPdf(target){
- const [{default:html2canvas},{jsPDF}]=await Promise.all([import('html2canvas'),import('jspdf')])
  const pages=[...target.querySelectorAll('.bap-page')]
  if(!pages.length)throw Error('Buka pratinjau terlebih dahulu.')
  await waitForDocumentAssets(target)

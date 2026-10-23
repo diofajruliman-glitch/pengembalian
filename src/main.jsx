@@ -25,10 +25,11 @@ import {productionMasterClient} from './import/productionClient.js'
 import AdjustmentMonitor from './adjustments/AdjustmentMonitor.jsx'
 import {disciplineStorage} from './judol/storage.js'
 import {activeDatasetId,loadDatabaseDisciplineSnapshot,operationalDisciplineSnapshot} from './judol/databaseSource.js'
+import {loadModuleWithRecovery} from './moduleRecovery.jsx'
 const JudolModule=React.lazy(()=>import('./judol/JudolModule.jsx'))
 const LetterManager=React.lazy(()=>import('./letters/LetterManager.jsx'))
 const InterviewMonitor=React.lazy(()=>import('./interviews/InterviewMonitor.jsx'))
-const InterviewerPortal=React.lazy(()=>import('./bap/InterviewerPortal.jsx'))
+const InterviewerPortal=React.lazy(()=>loadModuleWithRecovery(()=>import('./bap/InterviewerPortal.jsx')))
 const PortalWawancara=React.lazy(()=>import('./interviews/PortalWawancara.jsx'))
 
 const url = import.meta.env.VITE_SUPABASE_URL
